@@ -14,8 +14,8 @@ This chapter is a simple example using python
 You can import python librairies using the code
 
 ```{python}
-import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 ```
 
 
@@ -31,7 +31,7 @@ df = pd.read_csv("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784d
 and produce a graph
 
 ```{python}
-df.plot(x="species", y="body_mass_g", kind="bar")
+df.boxplot(by = 'species', column = 'body_mass_g')  
 ```
 
 
