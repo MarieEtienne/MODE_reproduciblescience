@@ -8,7 +8,6 @@ output:
    toc_float: true
 ---
 
-## Installation 
 
 This chapter is a simple example using python
 
