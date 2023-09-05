@@ -1,0 +1,95 @@
+---
+title: "How to contribute"
+author: 
+  - Marie-Pierre Etienne
+format: html
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## One chapter corresponds at least to one branch
+
+* Create a specific branch for your chapter named `an_explicit_name_for_the_branch`  and switch on this branch
+
+` git checkout -b an_explicit_name_for_the_branch` 
+
+In the development of the project, you might find necessary to have several branches per chapter.
+
+*  Create a quarto file for the chapter  `chapter0.qmd` in your branch
+
+` git add chapter0.qmd `
+
+` git commit -m "first commit in the chapter branch" `
+
+* Push everything on the remote repo on Github
+ 
+ For the first push after the branch creation, you have to specify the name of the branch on the remote repo and you can use
+` git  push --set-upstream origin an_explicit_name_for_the_branch` or 
+
+For the push to come after the first one, you will simply push by 
+
+` git  push ` 
+
+
+Once you are quite happy with your production, you will be willing to integrate your production on the main branch. A good practice is to ask the permission to push on the main branch, which is named a pull request (PR).
+
+* Ask for a PR on Github
+
+- If needed, specify in the PR message the package you need and mention MarieEtienne as reviewer of the PR.
+
+A mock rendering of the qmd file will start when you request a PR using the Github Action mechanism (called runner on gitlab). If the action passes (green signal), you can go to the next step. If not, you will have to fix the issue (again you can ask assistance if you don't understand the error).
+
+* Once the PR is checked, mention one of your colleage as reviewer.
+
+
+
+## As a reviewer
+
+Your role is essential as you are responsible for the quality of the submission you were assigned to. Read carefully the production and ask for correction/clarification if needed. One you are happy with the correction you can accept the PR.
+
+
+<!-- ## The Technical dtails -->
+
+
+<!-- ### Docker -->
+
+<!-- Lien vers la fiche pense-bête : [https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf] -->
+
+<!-- Pour créer des images Docker en local sur sa machine, voici une liste de commandes utiles -->
+
+<!-- - Pour construire une image docker, il faut créer un fichier Dockerfile qui contient la recette du Docker. Pour ce site le ficher Dockerfile a la forme suivante -->
+
+<!-- ```{r engine='bash', comment='', echo = FALSE} -->
+<!-- cat Dockerfile -->
+<!-- ``` -->
+
+<!-- puis demander la construction  de  l'image à l'aide de la commande -->
+
+<!-- ```{r docker_build, comment='', echo = TRUE, eval = FALSE} -->
+<!--  docker build -t nom_depot_dockerhub/nom_du_repo:version  . ## avec un nom -->
+<!-- ``` -->
+
+<!-- et enfin pousser sur  Dockerhub -->
+
+<!-- ```{r docker_push, echo = TRUE, eval = FALSE} -->
+
+<!--  docker push nom_depot_dockerhub/nom_du_repo:version -->
+<!-- ``` -->
+
+
+<!-- ### Les actions -->
+
+<!-- Dans les action de Github, on peut spécifier un container docker à utiliser, c'est ce que fait la ligne container du fichier d'action suivant, utiliser pour créer ce site web -->
+
+
+<!-- ```{r engine='bash', comment='', echo = FALSE} -->
+<!-- cat .github/workflows/website.yml  -->
+<!-- ``` -->
+
+
+
