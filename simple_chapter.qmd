@@ -1,0 +1,24 @@
+---
+title: "A simple chapter  with no code"
+execute: 
+  freeze: auto
+output: 
+  html_document:
+   toc: true
+   toc_float: true
+---
+
+
+This chapter is a simple example of qmd format
+
+# section 1
+
+## subsection
+
+a list
+
+* blabla
+
+* blabla 2
+
+* blabla 3
