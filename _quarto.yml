@@ -3,7 +3,6 @@ project:
 
 website:
   title: "The Companion book a M1 MODE student should have!"
-  subtitle: "At least, the one the M2 students wish they had"
   navbar:
     left:
       - icon: github
@@ -12,10 +11,9 @@ website:
       - text: "Instructions"
         href: instructions.qmd
     right:
-      - text: Chapter 0: Introduction
+      - text: Chapter 0 - Introduction
         menu:
-        - text: A simple text file 
-          href: simple_chapter.qmd
+        - href: simple_chapter.qmd
         - text: A chapter using R
           href: r_chapter.qmd
         - text: A chapter using Python

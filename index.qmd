@@ -1,5 +1,6 @@
 ---
 title: "The book we dreamed we had"
+subtitle: "At least, the one the M2 students wish they had"
 format: html
 toc: true
 date: last-modified
