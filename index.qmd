@@ -1,0 +1,22 @@
+---
+title: "The book we dreamed we had"
+format: html
+toc: true
+date: last-modified
+date-format: "[Last Updated on] MMMM, YYYY"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+library(tidyverse)
+```
+
+This website is produced by the M2 MODE student uring year 2023-2024 as part of their assignment in the Online Collaborative Ressources course.
+
+They intend to develop a M1 companion book for the next student generation. 
+
+Big goal ! 
+
+Please take the time to visit their production.
+
+
