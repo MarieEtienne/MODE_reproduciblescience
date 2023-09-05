@@ -1,0 +1,32 @@
+project:
+  type: website
+
+website:
+  title: "The Companion book a M1 MODE student should have!"
+  subtitle: "At least, the one the M2 students wish they had"
+  navbar:
+    left:
+      - icon: github
+        href: https://github.com/MarieEtienne/MODE_reproduciblescience
+        aria-label: GitHub
+      - text: "Instructions"
+        href: instructions.qmd
+    right:
+      - text: Chapter 0 : Inroduction
+        menu:
+        - text: a simple text file 
+          href: simple_chapter.qmd
+        - text: a chapter using R
+          href: r_chapter.qmd
+        - text: a chapter using Python
+          href: python_chapter.qmd
+        aria-label: GitHub
+
+
+
+format:
+  html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    
