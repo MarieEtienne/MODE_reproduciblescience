@@ -12,13 +12,13 @@ website:
       - text: "Instructions"
         href: instructions.qmd
     right:
-      - text: Chapter 0 : Inroduction
+      - text: Chapter 0: Introduction
         menu:
-        - text: a simple text file 
+        - text: A simple text file 
           href: simple_chapter.qmd
-        - text: a chapter using R
+        - text: A chapter using R
           href: r_chapter.qmd
-        - text: a chapter using Python
+        - text: A chapter using Python
           href: python_chapter.qmd
         aria-label: GitHub
 
