@@ -8,6 +8,8 @@ website:
       - icon: github
         href: https://github.com/MarieEtienne/MODE_reproduciblescience
         aria-label: GitHub
+      - text: "Before the class"
+        href: prior_course.qmd
       - text: "Instructions"
         href: instructions.qmd
     right:
@@ -25,6 +27,10 @@ website:
 format:
   html:
     theme: flatly
-    highlight: tango
+    fontcolor: "#2D4200"
+    linkcolor: "#A3BD00"
+    css: styles.css
     toc: true
+
+
     

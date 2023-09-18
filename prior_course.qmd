@@ -1,0 +1,53 @@
+---
+title: "Be ready for the course"
+author: 
+  - Marie-Pierre Etienne
+format: html
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+The Online Collaborative Resources (OCR) class will make intensive use of the Reproducible Science tools. For this class and  as an investment for the future, you will need to:
+
+
+## Git on your computer 
+
+Install Git on your personal computer: Go to the [Git website](https://git-scm.com/downloads) and click on the computer screen on the right, which should offer you the version suitable for your operating system.
+
+## GitHub account 
+
+If you don't have one, you have to create a [GitHub account](https://github.com/) and set up the link between your computer and the GitHub. Be careful with the login you choose, this account will be used professionally  and you may want to avoid pseudo like toto2024, or ladybug288. 
+
+GitHub is just one solution to share git repositories online, you may work later with gitlab with is very similar to GitHub.
+   
+   
+## A SSH connection
+
+To have smooth interactions with Github, you have to use a SSH and to do so, you will to generate SSH key on your computer and copy paste the public SSH key `id_rsa.pub` on your GitHub account. 
+   
+* Open a terminal (any terminal on Mac and Linux, the Git bash program you have installed with git if you are using Windows)
+
+* type the command  
+`ssh-keygen`
+
+* DO NOT ENTER ANY PASSPHRASE while asked, simply press enter (twice generally)
+
+* You should have a directory named .ssh in your main personnal folder. Open the file `id_rsa.pub` with any text basic editor (like notepad, gedit ...) and copy the key.
+
+* Go to the settings of your GitHub account, choose the SSH and GPG keys, then press New SSH key and paste the previously copied key.
+
+## Let me know who you are
+
+Please anter your name and GitHub login on this [spreadsheet](https://lite.framacalc.org/cg8j8s4j6c-a3av) and indicate in the last column whether you are already familiar with some markup languages (markdown, HTML) and if you have prior experience with Git or any version control system.
+
+
+Please try to install all of this as soon as possible, and if you encounter any difficulties, don't hesitate to contact me by email or come to me at the beginning of the class.
+
+It will be easier if you can follow this procedure on your laptop and bring it to the class, but if you don't have any laptop we will able to use the computers in the classroom (however this tedious installation process will have to be repeated on your personal computer)
+
+
