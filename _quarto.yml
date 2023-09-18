@@ -27,8 +27,8 @@ website:
 format:
   html:
     theme: flatly
-    fontcolor: "#2D4200"
-    linkcolor: "#A3BD00"
+    linkcolor: "#c0392b"
+    fontcolor: "#057174"
     css: styles.css
     toc: true
 

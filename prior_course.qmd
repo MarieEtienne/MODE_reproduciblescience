@@ -43,7 +43,7 @@ To have smooth interactions with Github, you have to use a SSH and to do so, you
 
 ## Let me know who you are
 
-Please anter your name and GitHub login on this [spreadsheet](https://lite.framacalc.org/cg8j8s4j6c-a3av) and indicate in the last column whether you are already familiar with some markup languages (markdown, HTML) and if you have prior experience with Git or any version control system.
+Please enter your name and GitHub login on this [spreadsheet](https://lite.framacalc.org/cg8j8s4j6c-a3av) and indicate in the last column whether you are already familiar with some markup languages (markdown, HTML) and if you have prior experience with Git or any version control system.
 
 
 Please try to install all of this as soon as possible, and if you encounter any difficulties, don't hesitate to contact me by email or come to me at the beginning of the class.
