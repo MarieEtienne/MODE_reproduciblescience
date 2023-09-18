@@ -7,6 +7,20 @@
     "text": "This website is produced by the M2 MODE student uring year 2023-2024 as part of their assignment in the Online Collaborative Ressources course.\nThey intend to develop a M1 companion book for the next student generation.\nBig goal !\nPlease take the time to visit their production."
   },
   {
+    "objectID": "simple_chapter.html",
+    "href": "simple_chapter.html",
+    "title": "A simple chapter with no code",
+    "section": "",
+    "text": "This chapter is a simple example of qmd format"
+  },
+  {
+    "objectID": "simple_chapter.html#subsection",
+    "href": "simple_chapter.html#subsection",
+    "title": "A simple chapter with no code",
+    "section": "subsection",
+    "text": "subsection\na list\n\nblabla\nblabla 2\nblabla 3"
+  },
+  {
     "objectID": "r_chapter.html",
     "href": "r_chapter.html",
     "title": "A simple chapter using R",
@@ -14,11 +28,39 @@
     "text": "This chapter is a simple example using R\nYou can import R package using the code\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nand then describe the purpose of your chapter as well as executing R command.\nFor example a basic summary of a dataset is given by\n\ndf &lt;- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n\nand produce a graph\n\ndf %&gt;% ggplot() +\n    aes(x=species, y = body_mass_g) +\n    geom_boxplot()  \n\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`)."
   },
   {
-    "objectID": "python_chapter.html",
-    "href": "python_chapter.html",
-    "title": "A simple chapter using Python",
+    "objectID": "prior_course.html",
+    "href": "prior_course.html",
+    "title": "Be ready for the course",
     "section": "",
-    "text": "This chapter is a simple example using python\nYou can import python librairies using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
+    "text": "The Online Collaborative Resources (OCR) class will make intensive use of the Reproducible Science tools. For this class and as an investment for the future, you will need to:"
+  },
+  {
+    "objectID": "prior_course.html#git-on-your-computer",
+    "href": "prior_course.html#git-on-your-computer",
+    "title": "Be ready for the course",
+    "section": "Git on your computer",
+    "text": "Git on your computer\nInstall Git on your personal computer: Go to the Git website and click on the computer screen on the right, which should offer you the version suitable for your operating system."
+  },
+  {
+    "objectID": "prior_course.html#github-account",
+    "href": "prior_course.html#github-account",
+    "title": "Be ready for the course",
+    "section": "GitHub account",
+    "text": "GitHub account\nIf you don’t have one, you have to create a GitHub account and set up the link between your computer and the GitHub. Be careful with the login you choose, this account will be used professionally and you may want to avoid pseudo like toto2024, or ladybug288.\nGitHub is just one solution to share git repositories online, you may work later with gitlab with is very similar to GitHub."
+  },
+  {
+    "objectID": "prior_course.html#a-ssh-connection",
+    "href": "prior_course.html#a-ssh-connection",
+    "title": "Be ready for the course",
+    "section": "A SSH connection",
+    "text": "A SSH connection\nTo have smooth interactions with Github, you have to use a SSH and to do so, you will to generate SSH key on your computer and copy paste the public SSH key id_rsa.pub on your GitHub account.\n\nOpen a terminal (any terminal on Mac and Linux, the Git bash program you have installed with git if you are using Windows)\ntype the command\nssh-keygen\nDO NOT ENTER ANY PASSPHRASE while asked, simply press enter (twice generally)\nYou should have a directory named .ssh in your main personnal folder. Open the file id_rsa.pub with any text basic editor (like notepad, gedit …) and copy the key.\nGo to the settings of your GitHub account, choose the SSH and GPG keys, then press New SSH key and paste the previously copied key."
+  },
+  {
+    "objectID": "prior_course.html#let-me-know-who-you-are",
+    "href": "prior_course.html#let-me-know-who-you-are",
+    "title": "Be ready for the course",
+    "section": "Let me know who you are",
+    "text": "Let me know who you are\nPlease anter your name and GitHub login on this spreadsheet and indicate in the last column whether you are already familiar with some markup languages (markdown, HTML) and if you have prior experience with Git or any version control system.\nPlease try to install all of this as soon as possible, and if you encounter any difficulties, don’t hesitate to contact me by email or come to me at the beginning of the class.\nIt will be easier if you can follow this procedure on your laptop and bring it to the class, but if you don’t have any laptop we will able to use the computers in the classroom (however this tedious installation process will have to be repeated on your personal computer)"
   },
   {
     "objectID": "instructions.html",
@@ -42,17 +84,10 @@
     "text": "As a reviewer\nYour role is essential as you are responsible for the quality of the submission you were assigned to. Read carefully the production and ask for correction/clarification if needed. One you are happy with the correction you can accept the PR."
   },
   {
-    "objectID": "simple_chapter.html",
-    "href": "simple_chapter.html",
-    "title": "A simple chapter with no code",
+    "objectID": "python_chapter.html",
+    "href": "python_chapter.html",
+    "title": "A simple chapter using Python",
     "section": "",
-    "text": "This chapter is a simple example of qmd format"
-  },
-  {
-    "objectID": "simple_chapter.html#subsection",
-    "href": "simple_chapter.html#subsection",
-    "title": "A simple chapter with no code",
-    "section": "subsection",
-    "text": "subsection\na list\n\nblabla\nblabla 2\nblabla 3"
+    "text": "This chapter is a simple example using python\nYou can import python librairies using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
   }
 ]

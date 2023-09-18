@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Marie-Pierre Etienne">
 
-<title>The Companion book a M1 MODE student should have! - A simple chapter with no code</title>
+<title>The Companion book a M1 MODE student should have! - Be ready for the course</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./prior_course.html" rel="" target="">
+    <a class="nav-link active" href="./prior_course.html" rel="" target="" aria-current="page">
  <span class="menu-text">Before the class</span></a>
   </li>  
   <li class="nav-item">
@@ -130,10 +131,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link active" data-scroll-target="#section-1">section 1</a>
-  <ul class="collapse">
-  <li><a href="#subsection" id="toc-subsection" class="nav-link" data-scroll-target="#subsection">subsection</a></li>
-  </ul></li>
+  <li><a href="#git-on-your-computer" id="toc-git-on-your-computer" class="nav-link active" data-scroll-target="#git-on-your-computer">Git on your computer</a></li>
+  <li><a href="#github-account" id="toc-github-account" class="nav-link" data-scroll-target="#github-account">GitHub account</a></li>
+  <li><a href="#a-ssh-connection" id="toc-a-ssh-connection" class="nav-link" data-scroll-target="#a-ssh-connection">A SSH connection</a></li>
+  <li><a href="#let-me-know-who-you-are" id="toc-let-me-know-who-you-are" class="nav-link" data-scroll-target="#let-me-know-who-you-are">Let me know who you are</a></li>
   </ul>
 </nav>
     </div>
@@ -142,13 +143,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">A simple chapter with no code</h1>
+<h1 class="title">Be ready for the course</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Marie-Pierre Etienne </p>
+          </div>
+  </div>
     
   
     
@@ -157,20 +164,35 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>This chapter is a simple example of qmd format</p>
-<section id="section-1" class="level1">
-<h1>section 1</h1>
-<section id="subsection" class="level2">
-<h2 class="anchored" data-anchor-id="subsection">subsection</h2>
-<p>a list</p>
-<ul>
-<li><p>blabla</p></li>
-<li><p>blabla 2</p></li>
-<li><p>blabla 3</p></li>
-</ul>
-
-
+<p>The Online Collaborative Resources (OCR) class will make intensive use of the Reproducible Science tools. For this class and as an investment for the future, you will need to:</p>
+<section id="git-on-your-computer" class="level2">
+<h2 class="anchored" data-anchor-id="git-on-your-computer">Git on your computer</h2>
+<p>Install Git on your personal computer: Go to the <a href="https://git-scm.com/downloads">Git website</a> and click on the computer screen on the right, which should offer you the version suitable for your operating system.</p>
 </section>
+<section id="github-account" class="level2">
+<h2 class="anchored" data-anchor-id="github-account">GitHub account</h2>
+<p>If you don’t have one, you have to create a <a href="https://github.com/">GitHub account</a> and set up the link between your computer and the GitHub. Be careful with the login you choose, this account will be used professionally and you may want to avoid pseudo like toto2024, or ladybug288.</p>
+<p>GitHub is just one solution to share git repositories online, you may work later with gitlab with is very similar to GitHub.</p>
+</section>
+<section id="a-ssh-connection" class="level2">
+<h2 class="anchored" data-anchor-id="a-ssh-connection">A SSH connection</h2>
+<p>To have smooth interactions with Github, you have to use a SSH and to do so, you will to generate SSH key on your computer and copy paste the public SSH key <code>id_rsa.pub</code> on your GitHub account.</p>
+<ul>
+<li><p>Open a terminal (any terminal on Mac and Linux, the Git bash program you have installed with git if you are using Windows)</p></li>
+<li><p>type the command<br>
+<code>ssh-keygen</code></p></li>
+<li><p>DO NOT ENTER ANY PASSPHRASE while asked, simply press enter (twice generally)</p></li>
+<li><p>You should have a directory named .ssh in your main personnal folder. Open the file <code>id_rsa.pub</code> with any text basic editor (like notepad, gedit …) and copy the key.</p></li>
+<li><p>Go to the settings of your GitHub account, choose the SSH and GPG keys, then press New SSH key and paste the previously copied key.</p></li>
+</ul>
+</section>
+<section id="let-me-know-who-you-are" class="level2">
+<h2 class="anchored" data-anchor-id="let-me-know-who-you-are">Let me know who you are</h2>
+<p>Please anter your name and GitHub login on this <a href="https://lite.framacalc.org/cg8j8s4j6c-a3av">spreadsheet</a> and indicate in the last column whether you are already familiar with some markup languages (markdown, HTML) and if you have prior experience with Git or any version control system.</p>
+<p>Please try to install all of this as soon as possible, and if you encounter any difficulties, don’t hesitate to contact me by email or come to me at the beginning of the class.</p>
+<p>It will be easier if you can follow this procedure on your laptop and bring it to the class, but if you don’t have any laptop we will able to use the computers in the classroom (however this tedious installation process will have to be repeated on your personal computer)</p>
+
+
 </section>
 
 </main> <!-- /main -->
