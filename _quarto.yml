@@ -12,6 +12,12 @@ website:
         href: prior_course.qmd
       - text: "Instructions"
         href: instructions.qmd
+      - text: "Courses Materials"
+        menu:
+        - href: https://marieetienne.github.io/reproductibilite/_presentation/english_version.html
+        
+
+        
     right:
       - text: Chapter 0 - Introduction
         menu:
