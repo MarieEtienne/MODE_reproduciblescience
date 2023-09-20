@@ -14,7 +14,8 @@ website:
         href: instructions.qmd
       - text: "Courses Materials"
         menu:
-        - href: https://marieetienne.github.io/reproductibilite/_presentation/english_version.html
+        - text: Git Intro
+          href: https://marieetienne.github.io/reproductibilite/_presentation/english_version.html
         
 
         
