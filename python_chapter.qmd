@@ -1,5 +1,5 @@
 ---
-title: "Chapter : statistical tests with dependent data"
+title: "A simple chapter using Python"
 execute: 
   freeze: auto
 output: 
