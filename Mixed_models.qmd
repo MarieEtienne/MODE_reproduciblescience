@@ -39,7 +39,7 @@ Pour analyser ces résultats, on veut tenir compte du fait que les mesures faite
 cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait
 utiliser le modèle :
 
-$E(Y_{ijt}) = µ + αi + γt + (αγ)_{it}$
+$$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
 
 avec 
 
@@ -52,8 +52,12 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
 
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
-**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
+**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
 respectives.
+
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
+
+
 
 
 
