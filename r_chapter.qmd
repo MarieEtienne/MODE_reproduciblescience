@@ -1,5 +1,7 @@
 ---
-title: "A complicated chapter using R"
+=======
+title: "Ordinary Differential Equations and their application in Ecology"
+>>>>>>> de1bee4019dbd93e98fb3c4d8940edf9e1078fe4
 bibliography: references.bib
 execute: 
   freeze: auto
