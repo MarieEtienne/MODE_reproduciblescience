@@ -1,7 +1,7 @@
 ---
 title: "Ordinary Differential Equations and their application in Ecology"
 bibliography: references.bib
-author: "Amélie Cocchiara, Anastasia Paupe, Clément Monaury, Laura Martinez Anton, Theo Laguillez"
+author: "Amélie Cocchiara, Theo Laguillez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
 execute: 
   freeze: auto
 output: 
