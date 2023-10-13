@@ -1,7 +1,5 @@
 ---
-
-title: "Linear modelling in ecology Léa "
->>>>>>> 434449d773bc36dfcb28c513b039deeb5fceb9e9
+title: "Linear modelling in ecology"
 bibliography: references.bib
 execute: 
   freeze: auto
