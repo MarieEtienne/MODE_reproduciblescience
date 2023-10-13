@@ -5,7 +5,9 @@ editor: visual
 ---
 
 # PART 1: PCA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -35,7 +37,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 2: CA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -65,7 +69,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 3: RDA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -95,31 +101,76 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 4: RLQ
+
 ## Mathématiques
+
 ## Interprétation
 
-This chapter is a simple example using R
+The use of RLQ analysis is important in ecology to integrate the traits of species with the environmental variables. So here, we don't have 2 tables (environment & specie) as RDA part but 3 tables:
+
+-   environmental variables by sites (R)
+
+-   abundance of species by sites (L)
+
+-   trait values by species (Q)
+
+To perform the RLQ, we need to decompose the analyse by three type of analyses already done in this chapter:
+
+-   we will use a CA analyse on the abundance of species
+
+-   we will use a PCA on the environmental table by taking the sites weight on the CA
+
+-   we will use a PCA on the trait table by taking the species weight on the CA
 
 You can import R package using the code
 
 ```{r}
 library(tidyverse)
+library(ade4)
+library(vegan)
+library(ggplot2)
+library(factoextra)
+library(corrplot)
+library(RVAideMemoire)
+library(PerformanceAnalytics)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
-
-For example a basic summary of a dataset is given by
+Here, we work with a dataset of "*ade4*" package
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+#import the dataset
+data(aviurba)
+
+#create the three tables
+summary(aviurba$mil)    #(R)
+R<-aviurba$mil
+
+summary(aviurba$fau)    #(L)
+L<-aviurba$fau
+
+summary(aviurba$traits) #(Q)
+Q<-aviurba$traits
 ```
 
-and produce a graph
+and explore the tables
 
 ```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
+head(R)  
+head(L)
+head(Q)
 ```
+
+The first part is to perform our CA on specie
+
+```{r}
+afcL <- dudi.coa(log(L+1), scannf = FALSE) 
+afcL  
+
+```
+The first CA is done. 
+We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species.
+
+
+
 
 A citation @bauer2023writing
