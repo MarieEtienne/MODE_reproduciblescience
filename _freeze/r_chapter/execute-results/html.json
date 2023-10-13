@@ -1,0 +1,16 @@
+{
+  "hash": "c86a68dc96947902b5abd1b458aef29f",
+  "result": {
+    "markdown": "---\ntitle: \"A simple chapter using R\"\nbibliography: references.bib  # Fichier bibliographie\nexecute: \n  freeze: auto\noutput: \n  html_document:\n   toc: true\n   toc_float: true\n---\n\n\n\nThis chapter is a simple example using R\n\nYou can import R package using the code\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'tidyverse' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'ggplot2' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'tibble' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'tidyr' a été compilé avec la version R 4.2.2\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'readr' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'purrr' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'dplyr' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'stringr' a été compilé avec la version R 4.2.2\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'forcats' a été compilé avec la version R 4.2.2\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: le package 'lubridate' a été compilé avec la version R 4.2.3\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.3     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n```\n:::\n:::\n\n\n\nand then describe the purpose of your chapter as well as executing R command.\n\n\nFor example a basic summary of a dataset is given by \n\n\n::: {.cell}\n\n```{.r .cell-code}\ndf <- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n```\n:::\n\n\nand produce a graph\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndf %>% ggplot() +\n\taes(x=species, y = body_mass_g) +\n\tgeom_boxplot()  \n```\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`).\n```\n:::\n\n::: {.cell-output-display}\n![](r_chapter_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n\nA citation @bauer2023writing",
+    "supporting": [
+      "r_chapter_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

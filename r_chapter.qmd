@@ -1,6 +1,6 @@
 ---
 title: "A simple chapter using R"
-bibliography: references.bib
+bibliography: references.bib  # Fichier bibliographie
 execute: 
   freeze: auto
 output: 
