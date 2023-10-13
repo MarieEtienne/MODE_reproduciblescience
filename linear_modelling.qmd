@@ -59,3 +59,7 @@ Conclusion #Sarah
 Remarques :
 -ici on ne parle pas de partie Exploration des données
 -on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
+
+Consignes suppl :
+-didactique -> phrases courtes, claires, une phrase = une idée
+-25 pages max
