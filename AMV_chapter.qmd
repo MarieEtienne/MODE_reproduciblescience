@@ -4,7 +4,9 @@ format: html
 editor: visual
 ---
 
-PART 1: PCA
+# PART 1: PCA
+## Mathématiques
+## Interprétation
 
 This chapter is a simple example using R
 
@@ -32,7 +34,9 @@ df %>% ggplot() +
 
 A citation @bauer2023writing
 
-PART 2: CA
+# PART 2: CA
+## Mathématiques
+## Interprétation
 
 This chapter is a simple example using R
 
@@ -60,7 +64,9 @@ df %>% ggplot() +
 
 A citation @bauer2023writing
 
-PART 3: RDA
+# PART 3: RDA
+## Mathématiques
+## Interprétation
 
 This chapter is a simple example using R
 
@@ -88,7 +94,9 @@ df %>% ggplot() +
 
 A citation @bauer2023writing
 
-PART 4: RLQ
+# PART 4: RLQ
+## Mathématiques
+## Interprétation
 
 This chapter is a simple example using R
 
