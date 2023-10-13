@@ -14,6 +14,9 @@ blabla
 WEEEE
 This chapter is a simple example using R
 
+Au sein de chaque groupe, on peut créer des branches pour répartir le travail de rédaction.
+
+
 You can import R package using the code
 
 ```{r}
