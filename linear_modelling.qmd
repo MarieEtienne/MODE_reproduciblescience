@@ -9,13 +9,7 @@ output:
    toc_float: true
 ---
 
-lwskjglm
-blabla 
-WEEEE
 This chapter is a simple example using R
-
-Au sein de chaque groupe, on peut créer des branches pour répartir le travail de rédaction.
-
 
 You can import R package using the code
 
@@ -43,3 +37,24 @@ df %>% ggplot() +
 
 
 A citation @bauer2023writing
+
+Au sein de chaque groupe, on peut créer des branches pour répartir le travail de rédaction.
+
+Intro
+
+I. Modèles linéaires généraux
+1) ANOVA
+2) ANCOVA
+3) Régression
+4) Validation des modèles
+
+II. Modèles linéaires généralisés
+1) Loi binômiale
+2) Loi de Poisson
+3) Loi négative binômiale
+(4) Loi de gamma)
+5) Validation des modèles
+
+Conclusion
+
+Remarques : ici on ne parle pas de partie Exploration des données
