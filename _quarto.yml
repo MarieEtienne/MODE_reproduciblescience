@@ -8,7 +8,7 @@ website:
       - icon: github
         href: https://github.com/MarieEtienne/MODE_reproduciblescience
         aria-label: GitHub
-      - text: "Before the class"
+      - text: "Before the class pouet pouet"
         href: prior_course.qmd
       - text: "Instructions"
         href: instructions.qmd
