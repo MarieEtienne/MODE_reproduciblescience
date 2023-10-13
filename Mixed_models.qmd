@@ -9,19 +9,33 @@ output:
    toc_float: true
 ---
 
-# Odin
 
 
-# Louis
+## Introduction : Louis
 
 
-# Abdou
 
 
-# Antoine
+## Model: création du model : Abdou
 
 
-#Ael
+
+## Calcule matriciel : Antoine
+
+
+
+
+## Structure de dependance : Odin
+
+
+
+
+## Application : Ael
+### Exploration des données
+### Création du model
+### Validation
+### Interpretation
+
 
 
 This chapter is a simple example using R
