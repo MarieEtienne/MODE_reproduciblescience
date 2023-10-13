@@ -1,6 +1,6 @@
 ---
 
-title: "Chapter : Bootstrapping and Resampling""
+title: "Chapter : Bootstrapping and Resampling"
 
 bibliography: references.bib  # Fichier bibliographie
 execute: 
@@ -11,42 +11,34 @@ output:
    toc_float: true
 ---
 
-# Chapitre I
-La bonne pensée est comme une douce brise par une chaude journée d'été. Elle apaise l'esprit, apporte de la clarté à nos pensées et nourrit notre âme. 
-Elle nous pousse à voir le positif, à cultiver la gratitude et à embrasser la bienveillance envers autrui. Lorsque nous laissons la bonne pensée guider nos actions, nous créons un monde meilleur pour nous-mêmes et ceux qui nous entourent. 
-Elle est le phare qui éclaire notre chemin, nous rappelant que la beauté réside dans la simplicité et que la gentillesse est la clé d'une vie épanouissante. 
-Cultivons la bonne pensée, et elle fleurira en une vie emplie de joie et de sérénité.
 
-# Chapitre II
+This chapter is a simple example using R
+
+You can import R package using the code
+
 ```{r}
-plot(rnorm(100))
+library(tidyverse)
 ```
-Vache est le nom de la femelle adulte de l'espèce Bos taurus, un ruminant appartenant à la famille des bovidés.
-
-Par extension, surtout en élevage laitier, ce nom est utilisé pour désigner l'espèce dans son entier, peut-être parce qu'il s'agit du sexe considéré comme productif1, et est dans ce cas synonyme de Bos taurus.
-
-Les individus mâles sont appelés taureaux, ou bœufs s'ils sont castrés ; et les jeunes, veaux2. Une génisse ou vachette, appelée aussi taure au Québec ou dans le Poitou, est une vache qui n'a pas vêlé. Descendant de plusieurs sous-espèces d'aurochs, les bovins actuels (zébus compris) sont élevés pour produire du lait et de la viande, ou comme animaux de trait. En Inde, la vache est sacrée. Le mot vache vient du latin vacca, de même sens3,4.
-
-En dehors de Bos taurus qui comprend aussi le zébu (Bos taurus indicus) et leur ancêtre l'aurochs (Bos taurus primigenius), le mot vache peut désigner la femelle du bison (Bison spp.) de même que bisonne, celle du yack (Bos grunniens) ou « vache de Tartarie » qui peut aussi désigner l'espèce dans son entier, et celle de l'orignal (Alces americanus)5. Par contre la femelle du buffle, qui ressemble beaucoup à une vache, est toujours appelée bufflonne ou bufflesse.
 
 
+and then describe the purpose of your chapter as well as executing R command.
 
-# Chapitre II
 
- Mode de vie
+For example a basic summary of a dataset is given by 
 
-Le paresseux est un animal nocturne et solitaire. Il passe sa vie dans les arbres où il mange, dort, se reproduit et met bas.
 
-Lorsqu’il est menacé, il peut se montrer agressif et se défendre à l’aide de ses longues griffes.
+```{r}
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+```
 
-Signes distinctifs
+and produce a graph
 
-Cette espèce a la réputation d’être l'un des animaux les plus lents du monde. Il est particulièrement vulnérable à terre et peut mettre une heure pour faire quelques mètres en rampant.
+```{r}
+df %>% ggplot() +
+	aes(x=species, y = body_mass_g) +
+	geom_boxplot()  
+```
 
-En revanche, il est capable d’escalader un arbre en quelques minutes pour échapper à un prédateur, et est un excellent nageur.
 
-Anecdote
+A citation @bauer2023writing
 
-Son métabolisme est très lent : il lui faut un mois pour digérer sa nourriture et 48 heures pour s’accoupler !
-
-Faites connaissance avec les paresseux
