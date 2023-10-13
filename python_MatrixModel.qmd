@@ -9,7 +9,7 @@ output:
 ---
 
 
-This chapter is a simple example using python
+Dans ce chapitre nous allons coir les modèles matriciels
 
 You can import python librairies using the code
 
