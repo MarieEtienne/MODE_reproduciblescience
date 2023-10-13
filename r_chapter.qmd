@@ -1,5 +1,5 @@
 ---
-title: "A simple chapter using R"
+title: "Ordinary Differential Equations and their application in Ecology"
 bibliography: references.bib
 execute: 
   freeze: auto
