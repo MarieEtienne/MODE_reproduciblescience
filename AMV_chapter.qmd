@@ -5,7 +5,9 @@ editor: visual
 ---
 
 # PART 1: PCA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -21,7 +23,7 @@ and then describe the purpose of your chapter as well as executing R command.
 For example a basic summary of a dataset is given by
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+hippo <- read.table(data="", sep = "," , header = TRUE)
 ```
 
 and produce a graph
@@ -34,21 +36,37 @@ df %>% ggplot() +
 
 A citation @bauer2023writing
 
-# PART 2: CA
+# PART 2: MCA
+
 ## Mathématiques
+
 ## Interprétation
 
-This chapter is a simple example using R
-
-You can import R package using the code
+Let's have to look to fictive the data set we will be working on:
 
 ```{r}
-library(tidyverse)
+hippo <- read.table(file = "https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/hippo.txt", header=TRUE, stringsAsFactors = TRUE)
+str(hippo)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
+Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "P1", "P2" and "P3".
 
-For example a basic summary of a dataset is given by
+```{r}
+library(FactoMineR)
+res.mca = MCA(hippo, quanti.sup=1)
+plot.MCA(res.mca, invisible=c("var","quali.sup"), cex=0.7)
+plot.MCA(res.mca, invisible=c("ind","quali.sup"), cex=0.7)
+plot.MCA(res.mca, invisible=c("ind"))
+plot.MCA(res.mca, invisible=c("ind", "var"))
+```
+
+## Rappels
+
+MCA is a statistical method adapted to table individuals x quatitative variable. Eingen Value
+
+L'ACM est une méthode adaptée aux tableaux individus × variables qualitatives. Les valeurs propres correspondent aux moyennes des rapports de corrélation mis au carré.
+
+Elle peut être utilisée comme pré-traitement avant une classification ou dans une analyse de cointertie sur les tableaux de variables qualitatives.
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
@@ -65,7 +83,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 3: RDA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -95,7 +115,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 4: RLQ
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
