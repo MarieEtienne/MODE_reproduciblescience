@@ -1,5 +1,7 @@
 ---
+
 title: "Chapter : Bootstrapping and Resampling""
+
 bibliography: references.bib  # Fichier bibliographie
 execute: 
   freeze: auto
