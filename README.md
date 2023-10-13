@@ -1,12 +1,8 @@
 # MODE_reproduciblescience
 
-## Description du chapitre : 
+## Description du chapitre :
+
 Faire des tests lorsqu'on a des données spatialement ou temporellement dépendantes
 
 
-
-## Données spatiales
-
-
-
-## Données temporelles
+#Données spatiales
