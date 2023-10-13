@@ -14,3 +14,13 @@ output:
 # Chapitre I
 
 # Chapitre II
+```{r}
+plot(rnorm(100))
+```
+Vache est le nom de la femelle adulte de l'espèce Bos taurus, un ruminant appartenant à la famille des bovidés.
+
+Par extension, surtout en élevage laitier, ce nom est utilisé pour désigner l'espèce dans son entier, peut-être parce qu'il s'agit du sexe considéré comme productif1, et est dans ce cas synonyme de Bos taurus.
+
+Les individus mâles sont appelés taureaux, ou bœufs s'ils sont castrés ; et les jeunes, veaux2. Une génisse ou vachette, appelée aussi taure au Québec ou dans le Poitou, est une vache qui n'a pas vêlé. Descendant de plusieurs sous-espèces d'aurochs, les bovins actuels (zébus compris) sont élevés pour produire du lait et de la viande, ou comme animaux de trait. En Inde, la vache est sacrée. Le mot vache vient du latin vacca, de même sens3,4.
+
+En dehors de Bos taurus qui comprend aussi le zébu (Bos taurus indicus) et leur ancêtre l'aurochs (Bos taurus primigenius), le mot vache peut désigner la femelle du bison (Bison spp.) de même que bisonne, celle du yack (Bos grunniens) ou « vache de Tartarie » qui peut aussi désigner l'espèce dans son entier, et celle de l'orignal (Alces americanus)5. Par contre la femelle du buffle, qui ressemble beaucoup à une vache, est toujours appelée bufflonne ou bufflesse.
