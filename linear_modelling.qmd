@@ -40,21 +40,22 @@ A citation @bauer2023writing
 
 Au sein de chaque groupe, on peut créer des branches pour répartir le travail de rédaction.
 
-Intro
+Intro #Fanny
 
 I. Modèles linéaires généraux
-1) ANOVA
-2) ANCOVA
-3) Régression
-4) Validation des modèles
+1) ANOVA #Clément
+2) ANCOVA #Lucia
+3) Régression #Fanny
+4) Validation des modèles #Lucia
 
 II. Modèles linéaires généralisés
-1) Loi binômiale
-2) Loi de Poisson
-3) Loi négative binômiale
-(4) Loi de gamma)
-5) Validation des modèles
+1) Loi binômiale #Sarah
+2) Loi de Poisson #Léa
+3) Loi négative binômiale #Léa
+4) Validation des modèles #Clément
 
-Conclusion
+Conclusion #Sarah
 
-Remarques : ici on ne parle pas de partie Exploration des données
+Remarques :
+-ici on ne parle pas de partie Exploration des données
+-on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
