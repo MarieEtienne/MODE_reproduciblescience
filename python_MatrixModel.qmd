@@ -1,5 +1,5 @@
 ---
-title: "A simple chapter using Python"
+title: "Chapter : matrix model"
 execute: 
   freeze: auto
 output: 
