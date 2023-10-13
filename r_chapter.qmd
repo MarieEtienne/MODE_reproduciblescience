@@ -1,5 +1,5 @@
 ---
-title: "A simple chapter using R"
+title: "Bootstraping"
 bibliography: references.bib  # Fichier bibliographie
 execute: 
   freeze: auto
