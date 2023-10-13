@@ -22,7 +22,12 @@ output:
 
 ## Calcule matriciel : Antoine
 
-
+$$
+  M_{2\times2} = \left( {\begin{array}{cc}
+    A & B \\
+    C & D \\
+  \end{array} } \right)
+$$
 
 
 ## Structure de dependance : Odin
