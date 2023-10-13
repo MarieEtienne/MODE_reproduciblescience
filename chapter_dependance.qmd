@@ -9,6 +9,13 @@ output:
    toc_float: true
 ---
 
+
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
+
 ```{r}
 library(tidyverse)
 ```
@@ -20,6 +27,9 @@ We will try to explain to you how to detect time and space dependence in a datas
 # Time dependence
 
 For example a basic summary of a dataset is given by
+and then describe the purpose of your chapter as well as executing R command.
+
+
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
@@ -33,6 +43,7 @@ df %>% ggplot() +
 	geom_boxplot()  
 ```
 
+
 # Space dependence
 
 # Summary
@@ -40,3 +51,4 @@ df %>% ggplot() +
 # Bibliography
 
 A citation @bauer2023writing
+
