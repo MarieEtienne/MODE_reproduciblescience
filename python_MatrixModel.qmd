@@ -11,6 +11,9 @@ modif
 
 Dans ce chapitre nous allons coir les modèles matriciels
 
+bliblablou
+
+
 You can import python librairies using the code
 
 ```{python}
