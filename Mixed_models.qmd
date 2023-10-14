@@ -30,8 +30,14 @@ output:
 
 
 
-## Application : Ael
+### Application : Ael
+--> Se placer dans le contexte d'un modèle générale mixte
+--> Choisir un exemple, l'expliquer, présenter les variables
 ### Exploration des données
+--> Présenter les règles
+--> Les appliquer à notre exemple
+--> Sortir les graphes
+--> Intepréter
 ### Création du model
 ### Validation
 ### Interpretation
