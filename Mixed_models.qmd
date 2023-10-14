@@ -22,10 +22,42 @@ output:
 
 ## Calcule matriciel : Antoine
 
-
+$$
+  M_{2\times2} = \left( {\begin{array}{cc}
+    A & B \\
+    C & D \\
+  \end{array} } \right)
+$$
 
 
 ## Structure de dependance : Odin
+
+### Cas des Mesures répétées
+
+On considère cette fois une expérience visant à évaluer l'effet d'un régime sur la prise de poids d'un animal au cours du temps. Plusieurs animaux (indicés par $j$) reçoivent chaque régime (noté $i$) et un animal ne reçoit qu'un régime au cours de l'expérience. On mesure le poids, noté $Y_{ij}$, de chaque animal au bout de t semaines ($t = 1, . . . , T$). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données *longitudinales*.
+Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au
+cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait
+utiliser le modèle :
+
+$$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
+
+avec 
+
+$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
+  \begin{array}{ll}
+  σ^2ρ \ \ si \ \ (i, j) = (i_0, j_0) \\
+     0 \ sinon \
+   \end{array}
+  \right.$$
+
+Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
+
+**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
+respectives.
+
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
+
+
 
 
 
