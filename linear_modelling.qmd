@@ -9,6 +9,7 @@ output:
    toc_float: true
 ---
 
+
 This chapter is a simple example using R
 
 You can import R package using the code
@@ -16,7 +17,6 @@ You can import R package using the code
 ```{r}
 library(tidyverse)
 ```
-
 
 and then describe the purpose of your chapter as well as executing R command.
 
@@ -51,8 +51,27 @@ fwbdxfv
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
+```{r}
+data <-read.table("Atmo.txt",header=T)
+
+```
+
+
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
+
+Rappels :
+
+Soit X une variable binaire à deux modalités : 1 (succès) et 0 (échec).
+La probabilité de succès est : $$ P(X = 1) = \pi $$
+Alors Y, variable aléatoire correspondant à N tirages de la variable X suit une loi binomiale : 
+Y ~ B(N,p)
+
+La fonction de densité de Y est : $$ f(y;\pi)=\binom{N}{y}.\pi^{y}.(1-\pi)^{(N-y)}$$
+L'espérance et la variance de Y sont telles que : 
+$$E(Y)=N.\pi\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:var(Y)=N.\pi.(1-\pi)$$
+
+
 2) Loi de Poisson #Léa
 
 
