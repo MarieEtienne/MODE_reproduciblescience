@@ -51,6 +51,12 @@ fwbdxfv
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
+```{r}
+data <-read.table("Atmo.txt",header=T)
+
+```
+
+
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
 2) Loi de Poisson #Léa
