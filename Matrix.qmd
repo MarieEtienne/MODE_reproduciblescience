@@ -8,9 +8,21 @@ output:
    toc: true
    toc_float: true
 ---
-plan que l'on pourrait faire : 
+Plan projet : 
 
-1/ rappel, base matrice + calcul matriciel sur R et sur Python
-2/ Comment on peut utiliser les matrices en écologie (leslie)
-3/ épidémiologie 
-4/ chaine de markov 
+I. Calcul de matrice, manipulation de matrice
+1)Notion de base
+2)Sur R
+3)Sur Python
+
+II. A quoi servent les matrices en écologie / Les différents types de matrices
+1)Comment transformer nos populations en matrice ? Pourquoi ?
+2)Matrices de Malthus et Verus
+3)Matrice femelle base, matrice mâle femelle
+4)Matrice de Leslie
+
+III. Matrice en épidémiologie
+1)Introduction aux matrices en épidémiologie
+2)Modèle 
+
+IV. Chaînes de Markov
