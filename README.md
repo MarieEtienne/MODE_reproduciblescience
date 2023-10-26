@@ -17,6 +17,8 @@ How to use Github ?
 3. Discuss changes with other author
 4. Add the end of the week, you can PUSH on the MASTER BRANCH !!! When you pull request, be careful to push on the MASTER branch and not in the teacher's branch.
 
+If you want to recover the master branch then : git merge master
+
 For commits :
 1. Choose a title for you commit
 2. In the comments describe what has been added
