@@ -9,7 +9,6 @@ output:
    toc_float: true
 ---
 
-blablabla 
 
 This chapter is a simple example using R
 
@@ -51,6 +50,14 @@ I. Modèles linéaires généraux
 
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
+
+Rappels :
+
+On fait N tirages aléatoires d'une variable binaire à deux modalités : 1 (succès) et 0 (échec).
+Soit p la probabilité de succès.
+Alors X ~ B(N,p) 
+
+
 2) Loi de Poisson #Léa
 3) Loi négative binômiale #Léa
 4) Validation des modèles #Clément
