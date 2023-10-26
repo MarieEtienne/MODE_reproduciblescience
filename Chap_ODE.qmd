@@ -9,6 +9,24 @@ output:
    toc_float: true
 ---
 
+Introduction to ODE's and their applications in Ecology
+
+Dans cours de Cédric:
+I] Les systèmes dynamiques (notion de chronologie, inconnue, variable, etc.) + Exemple d'un système très simple avec naissances ; migration ; mortalité ;
+
+II] Définition d'une équation différentielle. + un peu d'histoire, ce qui permet de l'intégrer à l'écologie à partir du XXiè siècle.
+
+III] Les différents modèles 
+  * Modèles discrets (Equation aux différences ?)
+  * Modèles continus (EDOs ?)
+  
+Modèle de MAlthus
+Modèle de Verhulst
+
+IV] Les analyses possibles
+
+
+
 
 This chapter is a simple example using R
 
