@@ -1,6 +1,7 @@
 # MODE_reproduciblescience
 
 Chapter: Ordinary Differential Equations and their application in Ecology
+
 Author: Amélie Cocchiara, Anastasia Paupe, Clément Monaury, Laura Martinez Anton, Theo Laguillez
 
 Hi everybody,
@@ -25,10 +26,15 @@ For commits:
 
 Outlines:
 Introduce objectifs of the chapter
+
 I. Dynamics systems (definition)
+
 II. Order 1 ODE & definition of ODE
+
 III. Order 2 ODE
+
 IV. Order 3 ODE
+
 Conclusion & motivation words!
 
 Good Luck!
