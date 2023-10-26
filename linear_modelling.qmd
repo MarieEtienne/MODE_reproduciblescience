@@ -49,9 +49,13 @@ I. Modèles linéaires généraux
 
 fwbdxfv 
 3) Régression #Fanny
+<<<<<<< HEAD
 
 
 blabla bla 
+=======
+blablablablaba
+>>>>>>> regression
 
 4) Validation des modèles #Lucia
 
