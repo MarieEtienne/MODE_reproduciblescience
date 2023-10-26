@@ -40,47 +40,31 @@ A citation @bauer2023writing
 
 ## Mathématiques
 
-## Interprétation
+## Interpretation
 
 Let's have to look to fictive the data set we will be working on:
 
 ```{r}
-hippo <- read.table(file = "https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/hippo.txt", header=TRUE, stringsAsFactors = TRUE)
+library(tidyverse)
+hippo <- read.table(file = "https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/hp.csv", sep=';', header=TRUE)
+hippo=hippo[,-1]
 str(hippo)
 ```
 
-Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "P1", "P2" and "P3".
+Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "G1", "G2" and "G3".
 
 ```{r}
 library(FactoMineR)
-res.mca = MCA(hippo, quanti.sup=1)
+res.mca = MCA(hippo, quanti.sup=1,2)
 plot.MCA(res.mca, invisible=c("var","quali.sup"), cex=0.7)
 plot.MCA(res.mca, invisible=c("ind","quali.sup"), cex=0.7)
 plot.MCA(res.mca, invisible=c("ind"))
 plot.MCA(res.mca, invisible=c("ind", "var"))
 ```
 
-## Rappels
+## Take Home Message
 
-MCA is a statistical method adapted to table individuals x quatitative variable. Eingen Value
-
-L'ACM est une méthode adaptée aux tableaux individus × variables qualitatives. Les valeurs propres correspondent aux moyennes des rapports de corrélation mis au carré.
-
-Elle peut être utilisée comme pré-traitement avant une classification ou dans une analyse de cointertie sur les tableaux de variables qualitatives.
-
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
-A citation @bauer2023writing
+MCA is a statistical method adapted to table of type "individuals x quatitative variable". Eingen Values correspond to means of squered correlation ratios. It could be used a pre-processing before a classification or a coinertia analysis on tables with quantitative.
 
 # PART 3: RDA
 
