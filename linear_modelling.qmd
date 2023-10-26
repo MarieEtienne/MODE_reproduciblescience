@@ -51,6 +51,9 @@ I. Modèles linéaires généraux
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
 2) Loi de Poisson #Léa
+
+
+test 
 3) Loi négative binômiale #Léa
 4) Validation des modèles #Clément
 
