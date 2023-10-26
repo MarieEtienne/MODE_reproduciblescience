@@ -9,6 +9,8 @@ output:
    toc_float: true
 ---
 
+blablabla 
+
 This chapter is a simple example using R
 
 You can import R package using the code
@@ -16,7 +18,6 @@ You can import R package using the code
 ```{r}
 library(tidyverse)
 ```
-
 
 and then describe the purpose of your chapter as well as executing R command.
 
