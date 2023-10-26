@@ -52,12 +52,57 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
 
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
-**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
+**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
 respectives.
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
+**Structure de dépendance** On suppose de plus que toutes les mesures ont la même
+variance
+
+$$ V(Y_{ijt} =  σ^2) $$
+et que la covariance entre elles vaut
+
+$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
+  \begin{array}{ll}
+  σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
+     0 \ sinon \
+   \end{array}
+  \right.$$
+Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que |ρ| < 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
+Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ
+2, soit
+
+$$
+  ψ = \left( {\begin{array}{cc}
+    ρ \\
+    σ^2 \\
+  \end{array} } \right)
+$$
+*Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des
+animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs  mais le bloc R diffère :
+
+$$
+  R = \left( {\begin{array}{cc}
+     σ^2 & σ^2ρ & σ^2ρ^2 & ... & σ^2ρ^{T-1}\\
+     σ^2ρ & ... & ... & ... & ...\\
+     σ^2ρ^2 & ... & σ^2 & ... & σ^2ρ^2\\
+     ... & ... & ... & ... & σ^2ρ\\
+    σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
+  \end{array} } \right)
+$$
+```{r}
+o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
+ 
+
+```
 
 
+
+```{r}
+data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
+    correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
+    method = "REML")
+```
 
 
 
