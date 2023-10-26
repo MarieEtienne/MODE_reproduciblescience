@@ -45,6 +45,9 @@ Intro #Fanny
 I. Modèles linéaires généraux
 1) ANOVA #Clément
 2) ANCOVA #Lucia
+
+
+fwbdxfv 
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
@@ -59,6 +62,9 @@ Alors X ~ B(N,p)
 
 
 2) Loi de Poisson #Léa
+
+
+test 
 3) Loi négative binômiale #Léa
 4) Validation des modèles #Clément
 
@@ -67,3 +73,7 @@ Conclusion #Sarah
 Remarques :
 -ici on ne parle pas de partie Exploration des données
 -on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
+
+Consignes suppl :
+-didactique -> phrases courtes, claires, une phrase = une idée
+-25 pages max
