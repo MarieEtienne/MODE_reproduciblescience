@@ -53,14 +53,44 @@ str(hippo)
 
 Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "G1", "G2" and "G3".
 
-```{r}
+We are performing MCA with the package FactoMineR.
+
+```{r, include=FALSE}
 library(FactoMineR)
-res.mca = MCA(hippo, quanti.sup=1,2)
-plot.MCA(res.mca, invisible=c("var","quali.sup"), cex=0.7)
-plot.MCA(res.mca, invisible=c("ind","quali.sup"), cex=0.7)
-plot.MCA(res.mca, invisible=c("ind"))
-plot.MCA(res.mca, invisible=c("ind", "var"))
+res.mca = MCA(hippo, quanti.sup=1)
 ```
+
+Let's have a look to Eigen Values:
+
+```{r}
+res.mca$eig
+```
+
+The total variance of the data set is divided between four dimensions. The first dimension concentrate 32.6% of the total variance. The first plan gather 58% of the variance.
+
+Here, you can see the results for the individuals, their coordinates, contribution and the quality of their projection.
+
+```{r}
+head(res.mca$ind$coord)
+head(res.mca$ind$cos2)
+head(res.mca$ind$contrib)
+```
+
+Coordonates of the individuals are their position on the first plan. Cos2 represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+
+```{r}
+res.mca$call$Xtot
+
+res.mca$var$coord
+res.mca$var$contrib
+res.mca$var$cos2
+
+res.mca$quanti.sup$coord
+```
+
+Let's see how to interprete these graphs:
+
+The two axis
 
 ## Take Home Message
 
