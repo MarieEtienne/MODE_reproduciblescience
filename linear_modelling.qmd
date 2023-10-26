@@ -45,6 +45,9 @@ Intro #Fanny
 I. Modèles linéaires généraux
 1) ANOVA #Clément
 2) ANCOVA #Lucia
+
+
+fwbdxfv 
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
