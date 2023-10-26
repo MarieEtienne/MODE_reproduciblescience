@@ -12,8 +12,8 @@ Plan projet :
 
 I. Calcul de matrice, manipulation de matrice
 1)Notion de base
-2)Sur R
-3)Sur Python
+2)Sur R (à choisir)
+3)Sur Python (à choisir)
 
 II. A quoi servent les matrices en écologie / Les différents types de matrices
 1)Comment transformer nos populations en matrice ? Pourquoi ?
@@ -26,3 +26,9 @@ III. Matrice en épidémiologie
 2)Modèle 
 
 IV. Chaînes de Markov
+
+
+Chapitre purment technique ? ou bien les modèles matriciels et on prend des exemples d'écologie et on explique en même temps ?
+parler de la dynamique de populations
+
+partir de la population de suricats et on complexifie au fur et à mesure en introduisant les notions 
