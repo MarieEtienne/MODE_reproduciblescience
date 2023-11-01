@@ -71,8 +71,8 @@ We consider a dynamic system. Or in other words, a physical system whose state c
 
 For example, suppose you wanted to study the evolution over time of a population of aliens newly landed on Earth (yes, it's possible, I saw that in men in black 😎).
 
-Your system is: the Alien population.\
-The state of this population is: the number of individuals, noted '👽'.\
+[Your system is]{.underline}: the Alien population.\
+[The state of this population is]{.underline}: the number of individuals, noted '👽'.\
 This state is a function of time (the number of individuals changes over time). We therefore note it: '👽(t)'.
 
 So your aim is to study this system. But as you can imagine, you can't start from scratch! To study the evolution of such a system, you need to know:\
@@ -80,13 +80,11 @@ So your aim is to study this system. But as you can imagine, you can't start fro
 - **the processes underway in the biological system**: the way of gaining (i.e. birth, migration) and/or losing (i.e. mortality) individuals for example. Don't hesitate to draw the system on a piece of paper, to avoid getting lost (*Figure 1*)!\
 - **the parameters associated with these processes**
 
-Let's make it more concrete: 
-```{r}
-# Set drawing settings
-#drawSettings(pageWidth = 5, pageHeight = 5, units = "inches")
+Let's make it more concrete:
 
-# Create a new drawing page
-drawPage()
+```{r, include=TRUE, fig.height=2.8, fig.width=5}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 5, units = "inches")
 
 # Draw the different shapes of the system on the page
 #     * The rectangle
@@ -134,27 +132,108 @@ drawText(x = 1.4, y = 2.35, text = "m")
 drawText(x = 2.5, y = 3.4, text = "Birth")
 drawText(x = 3.2, y = 3.4, text = "b 👽(t)")
 
+# Add the caption
+drawText(x = 2.5, y = 1.5, text = "Figure 1: Diagram of the 'Alien population' dynamic system")
+
 ```
 
-```{r}
-# Set drawing settings
-#drawSettings(pageWidth = 5, pageHeight = 5, units = "inches")
+To keep things simple, we'll take a discrete-time simulation, with a time step of 1.
 
-# Create a new drawing page
-drawPage()
+Let define t like that: $$t \in \mathbb{N}^+$$ This means that t belongs to the set of natural integer numbers. t can therefore take the values 0, 1, 2, 3, 4, 5, etc..
+
+Here, the variable of interest (= the state of the system) is the number of individuals in the population. This number changes over time, and is therefore denoted 👽(t). The biological processes responsible for this change over time are :\
+- **mortality**: noted d (for death). d👽 corresponds to the proportion of individuals that will die in 1 unit of time\
+- **birth**: denoted b. This means that 👽 individuals will produce b👽 new individuals in 1 unit of time\
+- **migration**: denoted m. This means that 👽 increases by m individuals in 1 unit of time.
+
+```{r, include=TRUE, fig.height=5, fig.width=6}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 4, units = "inches")
 
 # Draw the orthogonal plan on the page
 #     * The x axe 
-drawLine(x = c(0.5, 5),
+drawLine(x = c(0.5, 4),
          y = c(0.5, 0.5),
-         lineWidth = 2)
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.4, 0.5),
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.6, 0.5),
+         lineWidth = 2.5)
 #     * The y axe 
-drawLine(x = c(0.5, 5),
-         y = c(0.5, 0.5),
-         lineWidth = 2)
+drawLine(x = c(0.5, 0.5),
+         y = c(0.5, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.4, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.6, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+
+# Draw the 'discret' time lines
+#     * The vertical one 
+drawLine(x = c(2, 2),
+         y = c(0.5, 2),
+         lineWidth = 1)
+#     * The horizontal one
+drawLine(x = c(0.5, 2),
+         y = c(2, 2),
+         lineWidth = 1)
+
+# Draw the 'continuous' time lines
+#     * The vertical one 
+drawLine(x = c(3, 3),
+         y = c(0.5, 3),
+         lineWidth = 1)
+#     * The horizontal one 
+drawLine(x = c(0.5, 3),
+         y = c(3, 3),
+         lineWidth = 1)
+
+# Draw of the lines
+drawCurve(x = c(1.5, 4.1),
+          y = c(1, 3.5),
+          angle = 80, # Angle of the curve
+          open = T, # No link btw starting and ending points
+          inflect = F, # No infection points
+          curvature = -0.5,
+          points = 5,
+          square= F,
+          squareShape = 0,
+          lineWidth = 1.5)
+drawLine(x = c(1, 3.7),
+         y = c(1, 3.7),
+         lineWidth = 1.5,
+         lineColor = "blue")
+drawLine(x = c(1, 3.7),
+         y = c(1, 3.7),
+         lineWidth = 1.5,
+         lineColor = "blue")
+
+# Add the text
+drawText(x = 0.1, y = 4, text = "Number")
+drawText(x = 0, y = 3.8, text = "of individuals")
+drawText(x = 4.2, y = 0.4, text = "Time")
+drawText(x = 3, y = 0.4, text = "(t+Δt)")
+drawText(x = 2, y = 0.4, text = "(t)")
+drawText(x = 0.1, y = 3, text = "👽(t+Δt)")
+drawText(x = 0.1, y = 2, text = "👽(t)")
+
+
+
+# Add the caption
+drawText(x = 2.80, y = 0, text = "Figure 2: Schematic graphic representation of the growth")
+drawText(x = 3.15, y = -0.2, text = "of a population over time")
+
 ```
 
-$$\int_a^b 👽(t) \, \mathrm dt$$
+
+
+
+
+$$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
 
 # II. Order 1 ODE & definition of ODE
 
