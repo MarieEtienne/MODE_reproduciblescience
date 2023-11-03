@@ -9,14 +9,36 @@ output:
    toc_float: true
 ---
 
-
-
 ## Introduction : Louis
 
-
-
-
 ## Model: création du model : Abdou
+
+The linear mixed model can be formulated as follows:
+
+$$
+Y_{ij} = X_{ij}\beta + Z_{ij}b_i + \varepsilon_{ij}
+$$
+
+where $$Y_{ij}$$ is the response variable for observation $$i$$ in group $$j$$, $$X_{ij}$$ is the matrix of fixed predictors for observation $$i$$ in group $$j$$, $$\beta$$ is the vector of fixed coefficients, $$Z_{ij}$$ is the matrix of random predictors for observation $$i$$ in group $$j$$, $$b_i$$ is the vector of random effects for observation $$i$$ and $$\varepsilon_{ij}$$ is the error term for observation $$i$$ in group $$j$$.
+
+
+A mixed effects model incorporates random effects ($$b_i$$), or a combination of both random and fixed effects ($$\beta$$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
+
+When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.
+
+In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.
+
+**RANDOM VARIABLE** = « something that could not be known before sampling/measurement/observation".
+
+
+In matrix form, the mixed model is written as:
+
+$$
+Y \sim \mathcal{N}(X\theta, \Sigma)
+$$ 
+where:
+
+$$Y$$ is the response vector of the observations, $$X\theta$$ is the expectation of the response vector $$Y$$ and $$\Sigma$$ is the variance matrix.
 
 
 
@@ -29,19 +51,15 @@ $$
   \end{array} } \right)
 $$
 
-
 ## Structure de dependance : Odin
 
 ### Cas des Mesures répétées
 
-On considère cette fois une expérience visant à évaluer l'effet d'un régime sur la prise de poids d'un animal au cours du temps. Plusieurs animaux (indicés par $j$) reçoivent chaque régime (noté $i$) et un animal ne reçoit qu'un régime au cours de l'expérience. On mesure le poids, noté $Y_{ij}$, de chaque animal au bout de t semaines ($t = 1, . . . , T$). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données *longitudinales*.
-Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au
-cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait
-utiliser le modèle :
+On considère cette fois une expérience visant à évaluer l'effet d'un régime sur la prise de poids d'un animal au cours du temps. Plusieurs animaux (indicés par $j$) reçoivent chaque régime (noté $i$) et un animal ne reçoit qu'un régime au cours de l'expérience. On mesure le poids, noté $Y_{ij}$, de chaque animal au bout de t semaines ($t = 1, . . . , T$). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données *longitudinales*. Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait utiliser le modèle :
 
 $$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
 
-avec 
+avec
 
 $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
   \begin{array}{ll}
@@ -52,23 +70,19 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
 
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
-**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
-respectives.
+**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances respectives.
 
-$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
-
-
-
-
-
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
 
 ## Application : Ael
+
 ### Exploration des données
+
 ### Création du model
+
 ### Validation
+
 ### Interpretation
-
-
 
 This chapter is a simple example using R
 
@@ -78,11 +92,9 @@ You can import R package using the code
 library(tidyverse)
 ```
 
-
 and then describe the purpose of your chapter as well as executing R command.
 
-
-For example a basic summary of a dataset is given by 
+For example a basic summary of a dataset is given by
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
@@ -95,6 +107,5 @@ df %>% ggplot() +
 	aes(x=species, y = body_mass_g) +
 	geom_boxplot()  
 ```
-
 
 A citation @bauer2023writing
