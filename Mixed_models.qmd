@@ -42,6 +42,12 @@ $$Y$$ is the response vector of the observations, $$X\theta$$ is the expectation
 
 
 
+
+
+
+
+
+
 ## Calcule matriciel : Antoine
 
 $$
@@ -50,6 +56,27 @@ $$
     C & D \\
   \end{array} } \right)
 $$
+Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
+
+
+Pour rappel, un modèle linéaire, de type regression linéaire, avec $$p$$ variables explicatives s'écrivant sous la forme $$Y_i = \beta_0 + \beta_1X_i^{(1)} + \ldots + \beta_pX_i^{p} + \varepsilon_i$$, avec $$\varepsilon_i \sim \mathcal{N}(0,\sigma^2)$$, peut s'écrire sous forme matriciel $$Y=X\theta+\mathrm{E}$$ où $$Y=\begin{pmatrix}
+Y_1\\
+\vdots\\
+Y_n\\
+\end{pmatrix}$$, $$X=\begin{pmatrix}
+1&X_1^{(1)} & \ldots & X_1^{(p)}\\
+\vdots & \vdots & \ldots & \vdots \\
+1 & X_n^{(1)} & \ldots & X_n^{(p)}
+\end{pmatrix}$$, $$\theta=\begin{pmatrix}
+\beta_0\\
+\vdots\\
+\beta_p\\
+\end{pmatrix}$$, et $$\mathrm{E}=\begin{pmatrix}
+\varepsilon_0\\
+\vdots\\
+\varepsilon_n\\
+\end{pmatrix}$$
+
 
 ## Structure de dependance : Odin
 
@@ -70,7 +97,61 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
 
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
-**Modèle.** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances respectives.
+
+**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
+respectives.
+
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
+**Structure de dépendance** On suppose de plus que toutes les mesures ont la même
+variance
+
+$$ V(Y_{ijt} =  σ^2) $$
+et que la covariance entre elles vaut
+
+$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
+  \begin{array}{ll}
+  σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
+     0 \ sinon \
+   \end{array}
+  \right.$$
+Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que |ρ| < 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
+Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ
+2, soit
+
+$$
+  ψ = \left( {\begin{array}{cc}
+    ρ \\
+    σ^2 \\
+  \end{array} } \right)
+$$
+*Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des
+animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs  mais le bloc R diffère :
+
+$$
+  R = \left( {\begin{array}{cc}
+     σ^2 & σ^2ρ & σ^2ρ^2 & ... & σ^2ρ^{T-1}\\
+     σ^2ρ & ... & ... & ... & ...\\
+     σ^2ρ^2 & ... & σ^2 & ... & σ^2ρ^2\\
+     ... & ... & ... & ... & σ^2ρ\\
+    σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
+  \end{array} } \right)
+$$
+```{r}
+o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
+ 
+
+```
+
+
+
+```{r}
+data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
+    correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
+    method = "REML")
+```
+
+
+>>>>>>> 9b4295d8c214c926030dc2d9e99fe1a5df52456a
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
 
