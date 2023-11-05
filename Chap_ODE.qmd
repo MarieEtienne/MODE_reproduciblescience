@@ -11,31 +11,43 @@ output:
 ---
 
 
-This chapter is a simple example using R
-
-You can import R package using the code
-
 ```{r}
+#Add packages
 library(tidyverse)
 ```
+Introduce objectifs of the chapter
+
+I. Dynamics systems (definition)
+
+II. Order 1 ODE & definition of ODE
+
+III. Oder 2 ODE
+
+IV. Order 3 ODE
+1. Definition
+2. Interest of order 3 ODEs in Ecology and examples
+
+In Ecology, third-order ODEs can be used to model systems whose dynamics depend on 3 important factors or processes.
+
+3. Analytic solutions and application to ecological models
+
+An analytic solutions for an ODE is an expression that represents the solution using a finite number of elementary functions (exponential, logarithmic...).
+Analytic solutions provide a precise mathematical formula that describes the behavior of the solution for all values of the independent variable within a certain range.
 
 
-and then describe the purpose of your chapter as well as executing R command.
+#Add example + analytic solution#
+
+(Transfrom third-order ODE on second-order ODE ?)
 
 
-For example a basic summary of a dataset is given by 
+Finding general analytical solutions for third-order ODEs can be complicated and often depends on the specific form of the equation.
+Sometimes, analytic solutions may not exist, and in this case numerical methods might be more appropriate.
 
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
+4. Numerical methods to resolve (Euler's method & Runge-Kutta + solving from a real example)
+a) Introduction to Euler's method & Runge-Kutta
+The choice of numerical method depends on the specific characteristics of the ODE system.
 
-and produce a graph
+b) How to solve third-order ODE with R ?
+(add script with comments) + (add graphs)
 
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
-
-A citation @bauer2023writing
+Conclusion & motivation words
