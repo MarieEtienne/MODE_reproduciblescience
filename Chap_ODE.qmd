@@ -19,35 +19,35 @@ Introduce objectifs of the chapter
 
 I. Dynamics systems (definition)
 
-II. Order 1 ODE & definition of ODE
+II. Ordinary differential equation
+1) Definition
+2) 1-equation system
 
-III. Oder 2 ODE
+III. 2-equations system
 
-IV. Order 3 ODE
+
+
+IV.3-equations system
+
+
+
+V. Ecological example of the use of ODE
+#Model NPZ & Growth model => How the production of the environment affect the growth of an organism ?
+
+
+
+VI. Second & Third-order ODE
 1. Definition
-2. Interest of order 3 ODEs in Ecology and examples
 
-In Ecology, third-order ODEs can be used to model systems whose dynamics depend on 3 important factors or processes.
-
-3. Analytic solutions and application to ecological models
-
+2. How to resolve them ? 
+a) Analytic solutions
 An analytic solutions for an ODE is an expression that represents the solution using a finite number of elementary functions (exponential, logarithmic...).
-Analytic solutions provide a precise mathematical formula that describes the behavior of the solution for all values of the independent variable within a certain range.
-
-
-#Add example + analytic solution#
-
-(Transfrom third-order ODE on second-order ODE ?)
-
-
+It provides a precise mathematical formula that describes the behavior of the solution for all values of the independent variable within a certain range.
 Finding general analytical solutions for third-order ODEs can be complicated and often depends on the specific form of the equation.
-Sometimes, analytic solutions may not exist, and in this case numerical methods might be more appropriate.
+Sometimes, they may not exist, and in this case numerical methods might be more appropriate.
 
-4. Numerical methods to resolve (Euler's method & Runge-Kutta + solving from a real example)
-a) Introduction to Euler's method & Runge-Kutta
+b) Numerical methods : Introduction to Euler's method & Runge-Kutta
 The choice of numerical method depends on the specific characteristics of the ODE system.
 
-b) How to solve third-order ODE with R ?
-(add script with comments) + (add graphs)
 
 Conclusion & motivation words
