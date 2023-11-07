@@ -29,11 +29,14 @@ Introduce objectifs of the chapter
 
 I. Dynamics systems (definition)
 
-II. Order 1 ODE & definition of ODE
+II. Definition of ODE & first-order ODE & 1-equation system
 
-III. Order 2 ODE
+III. 2-equations system
 
-IV. Order 3 ODE
+IV. 3-equations system
+
+V. Order 2 and 3
+- quick definitions and lists of methods used
 
 Conclusion & motivation words!
 
