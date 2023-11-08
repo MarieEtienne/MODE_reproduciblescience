@@ -49,7 +49,162 @@ I. Modèles linéaires généraux
 
 fwbdxfv 
 3) Régression #Fanny
-blablablablaba
+
+# INTRODUCTION
+
+You have certainly used the technique of regression many times in various exercises. It is used to model the relationship between a **quantitative dependent variable** $Y$ (the **response**, that is continuous, and one or several **explanatory quantitative variable(s)** (the **predictors**, that are independant). $X_{1}$,$X_{2}$...$X_{p}$.
+For example, we could use a linear regression to test whether the weight of a dog (i.e. the explanatory variable) is a good predictor of its lifespan (the response variable).
+
+### MODEL WRITING
+
+The general model is written :
+
+$$ Y_{i} = \alpha + \beta_{j}.X{ij}+ \epsilon_{i}$$ 
+$$ i=1,...,n$$
+$$ j=1,...,p$$
+The inclusion of the error term $\epsilon$, also called the stochastic part of the model, makes the model statistical rather than mathematical. The error term is drawn from a statistical distribution that integers the random variability in the response. In standard linear regression, this is assumed to be a **normal (Gaussian) distribution**.
+
+There are two different regression types :
+• the *simple linear regression* includes a single $X$ in your analysis.
+The model takes the form:
+
+$$ Y = \alpha + \beta.X + \epsilon $$ 
+
+where $\alpha$ is the intercept (value of $Y$ when $X$ = 0), $\beta$ is the regression slope (amount of change in $Y$ for each unit of $X$), and $\epsilon$ is the error term (i.e. residuals).
+
+
+• the *multiple linear regression* includes several $X_{s}$ in your analysis.
+The model takes the form :
+
+$$ Y_{i} = \alpha + \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip}+ \epsilon_{i}$$
+
+# EXAMPLE : Human visual system size and Latitudinal light levels
+
+## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
+
+This data was published in 'Latitudinal variation in light levels drives human visual system size'. Eiluned Pearce and Robin Dunbar. Biol. Lett. published online 27 July 2011 ([http://doi:10.1098/rsbl.2011.0570](http://doi:10.1098/rsbl.2011.0570){.uri}).
+Ambient light levels influence visual system size in birds and primates and Pearce and Dunbar (2011) argue that the same is true for humans. Using linear regression techniques, they want to test the relationship between (absolute) latitude and human orbital volume, an index of eyeball size. Pearce and Dunbar (2011) measured cranial capacity (CC), orbital volume and foramen magnum (FM) dimensions for 73 healthy adult crania from the Oxford University Museum of Natural History and Duckworth Collection, University of Cambridge.
+
+List of the variables:  
+- **MeanOrbitalVolume** = Index for eyeball size, continuous variable (the response)
+- **CranialCapacity** = measure of the volume of the interior of the cranium, continuous variable   
+- **Minimum_Illuminance** = log scale of the minimum of illuminance of the sample site, continuous variable  
+- **Minimum_Temperature** = Minimum temperature of the sample site, continuous variable  
+- **AbsoluteLatitude** = Absolute values of latitude of the sample, continuous variable  
+- **Population** = country/region of the sample, Categorical variable
+
+The response variable is mean orbital volume and the rest are assumed covariates. The Population variable is a descriptor of the samples, so not included in the modelling. Each value for orbital volume represents the mean of 3 replicate measurements from the same skull.
+
+Question : ** *which covariates drive the mean orbital volume?* **
+
+```{r global data, echo=TRUE,include=TRUE}
+# Dataset import
+dataHVS <- read.table("HumanVisualSystem.txt", dec=".", header = TRUE)
+dataHVS$Population<-as.factor(dataHVS$Population)
+str(dataHVS)
+
+# Check for presence of missing values
+colSums(is.na(dataHVS))
+#There is no missing value.
+
+# Name size reducing
+dataHVS$Pop<-dataHVS$Population
+dataHVS$Lat<-dataHVS$AbsoluteLatitude
+dataHVS$Capacity<-dataHVS$CranialCapacity
+dataHVS$Illumi<-dataHVS$Minimum_Illuminance
+dataHVS$Temp<-dataHVS$Minimum_Temperature
+dataHVS$Response<-dataHVS$MeanOrbitalVolume      
+```
+
+## DATA EXPLORATION
+
+This won't be detailed here, but keep in mind that it is primordial to any statistical analysis to check your data.
+See an example in a previous chapter !
+
+## STATISTICAL ANALYSIS
+
+### Model building
+
+You need to first analyse the full model containing all the independant variables in order to test their significance (i.e. see if they are relevant in the modelling) and decide whether you keep them or not.
+```{r fullmodel,include=TRUE}
+# Model formulation
+mod1<-lm(Response~Lat+Capacity,data=dataHVS)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+Look at the test statistic, the F value and its associated p-value (Pr). They show that both covariates are significant. So, **the full model is the candidate model**. To understand how covariates influence the response (the orbital volume), we analyse coefficients of the model (i.e. the $\beta_{j}$). 
+
+### Model's coefficients analysis
+
+```{r coeff,include=TRUE}
+# Candidate model formulation
+mod1<-lm(Response~Lat+Capacity,data=dataHVS)
+# Coefficients of the model
+summary(mod1)
+
+#From this listing, you read the coefficients 
+#Coefficients:
+#               Estimate  Std. Error t value Pr(>|t|)    
+#(Intercept)    15.406367   3.063999   5.028 6.24e-06 ***
+#Lat             0.048910   0.014917   3.279  0.00186 ** 
+#Capacity        0.005836   0.002347   2.486  0.01616 *
+```
+
+This table detailed the coefficients of the model with coefficients associated with each covariate. You can deduce the candidate model:
+$$ Orbital\:Volume = 15.4 \:+\: 0.04.Latitude\: +\: 0.005.Cranial\:Capacity  $$
+Those coefficients suggest that the orbital volume increases with the latitude (in relation with Temperature and Illuminance) and the cranial capacity.
+
+### Model explanation: R²
+
+Let's determine the part of the $Y$ variation explained by your model.
+
+```{r R²,include=TRUE}
+# R² of the model
+summary(mod1)
+```
+You can read the adjusted R² = 0.345. That means that about 35% of the variance of the Orbital Volume is explained by its relationship with the Latitude (Temperature & Illuminance) and the Cranial Capacity.
+
+## MODEL VALIDATION: CHECK THE ASSUMPTIONS
+
+The assumptions of regression are the same as for all general linear models (i.e. simple or multiple regressions, ANOVAs, variance-covariance analyses), being *independence*, *normality of residuals* and *homogeneity of variances*. Additionally, you can check presence of influential statistical units (i.e. observations having a too large contribution to model).
+You can find details of this process in part I)4) of this chapter.
+
+## REPRESENTATION OF THE CANDIDATE MODEL
+
+You must want to have the best visual representation of your model !
+```{r ModelGraph, include=TRUE, fig.height=5, fig.width=5}
+
+# set the x, y, and z variables
+x <- dataHVS$Capacity
+y <- dataHVS$Lat
+z <- dataHVS$Response
+
+# Remind the candidate model
+mod1<-lm(z~x+y)
+
+# create a grid from the x and y values (min to max) and predict values for every point
+# this will become the regression plane
+grid.lines = 40
+x.pred <- seq(min(x), max(x), length.out = grid.lines)
+y.pred <- seq(min(y), max(y), length.out = grid.lines)
+xy <- expand.grid( x = x.pred, y = y.pred)
+z.pred <- matrix(predict(mod1, newdata = xy),nrow = grid.lines, ncol = grid.lines)
+
+# create the fitted points for droplines to the surface
+fitpoints <- predict(mod1)
+
+# scatter plot with regression plane
+scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red", 
+          theta = 30, phi = 10, bty="b",
+          xlab = "Cranial Capacity", ylab = "Latitude", zlab = "Response",  
+          surf = list(x = x.pred, y = y.pred, z = z.pred,  
+          facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9),           border="black"), main = " ")
+```
+
+# CONCLUSION
+
+
 
 4) Validation des modèles #Lucia
 
