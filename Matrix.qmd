@@ -34,4 +34,18 @@ parler de la dynamique de populations
 partir de la population de suricats et on complexifie au fur et à mesure en introduisant les notions 
 
 
-h fdyhucb hfbhcbh
+Plan projet : 
+
+I. Modélisation matricielle en écologie -> Laurane
+A quoi servent les matrices en écologie ?
+Transformer une population en matrice
+Modifier une matrice de population (addition de population,soustraction)
+
+II. Les grands exemples de matrices en écologie  -> Alex
+Classes d’âge et reproduction : Matrice de Leslie
+Impact prédateur
+Compétition ?
+
+III. Matrice en épidémiologie -> Jeanne
+
+IV. Chaînes de Markov -> Quentin
