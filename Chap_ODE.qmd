@@ -3,7 +3,6 @@ title: "Ordinary Differential Equations and their application in Ecology"
 author: "Amélie Cocchiara, Théo Laguilliez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
 date: "`r Sys.Date()`"
 bibliography: references.bib
-author: "Amélie Cocchiara, Theo Laguillez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
 execute: 
   freeze: auto
 output: 
