@@ -10,32 +10,6 @@ editor: visual
 
 ## Interprétation
 
-This chapter is a simple example using R
-
-You can import R package using the code
-
-```{r}
-library(tidyverse)
-```
-
-and then describe the purpose of your chapter as well as executing R command.
-
-For example a basic summary of a dataset is given by
-
-```{r}
-hippo <- read.table(data="", sep = "," , header = TRUE)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
-A citation @bauer2023writing
-
 # PART 2: MCA
 
 ## Mathématiques
@@ -68,7 +42,7 @@ res.mca$eig
 
 The total variance of the data set is divided between four dimensions. The first dimension concentrate 32.6% of the total variance. The first plan gather 58% of the variance.
 
-Here, you can see the results for the individuals, their coordinates, contribution and the quality of their projection.
+Here, you can see the results for the individuals, their coordinates ($coord$), contribution ($contrib$) and the quality of their projection ($cos2$ )
 
 ```{r}
 head(res.mca$ind$coord)
@@ -76,21 +50,35 @@ head(res.mca$ind$cos2)
 head(res.mca$ind$contrib)
 ```
 
-Coordonates of the individuals are their position on the first plan. Cos2 represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+Coordonates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+
+You can access the same information for the variable (instead of the individuals):
 
 ```{r}
-res.mca$call$Xtot
-
 res.mca$var$coord
 res.mca$var$contrib
 res.mca$var$cos2
+```
 
+As a supplementary quantitative variable was added, MCA gives its coordinates with the following code:
+
+```{r}
 res.mca$quanti.sup$coord
 ```
 
-Let's see how to interprete these graphs:
+Let's have a look to the plot of this MCA analysis:
 
-The two axis
+```{r}
+plot(res.mca)
+```
+
+As this is a factice data set, some individuals are overlapping. We will not focus on this artefact of the data set.
+
+**How to interprete these graphs?**
+
+***General description*** : The individuals are in black. The variables are in red. The percentage of variance of the first two axis is written on them. Individuals in the center of the cloud are individuals taking a mean value for all of their caracteristics, unlikely individuals far from the middle which are specific individuals, very different from others. Close individuals present close characteristics.
+
+***Interpretation***: Here, we can see that the first axis separates individuals drinking regularly from individuals drinking rarely. The second axis separates individuals drinking at G2 from individuals drinking at G3. Male and female seamed to be separated by the first axis. As we can gather individuals sharing close properties, females seams to drink regularly and male more rarely. It is a bit less clear but male are drinking preferably in pound 1.
 
 ## Take Home Message
 
