@@ -9,7 +9,6 @@ output:
    toc_float: true
 ---
 
-
 This chapter is a simple example using R
 
 You can import R package using the code
@@ -17,6 +16,7 @@ You can import R package using the code
 ```{r}
 library(tidyverse)
 ```
+
 
 and then describe the purpose of your chapter as well as executing R command.
 
@@ -44,42 +44,367 @@ Intro #Fanny
 
 I. Modèles linéaires généraux
 1) ANOVA #Clément
+
+# INTRODUCTION
+ANOVA (Analysis of variance) is one of the most widespread techniques in data analysis. We use it to test the effect of one or more independent quantitative variables (Xs) on a dependent qualitative variable (Y). The categorical qualitative variables are named 'factors', et each factor has different levels that are chosen and fixed.
+
+We consider 2 types of ANOVA: in the presence of a single variable X in the analysis, we follow a *simple factor ANOVA*; in the presence of several variables X, we follow a *multiple factor ANOVA*. 
+
+## Simple factor ANOVA
+The model takes the following form::
+$$ Y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}  $$ 
+where $\mu$ is the overall mean, $\alpha_{i}$ is the effect of the ith level of the single factor and $\epsilon$ is the error term (i.e. residuals).
+
+## Multiple factor ANOVA
+The ANOVA model depends on the experimental design: factorial or nested.  
+
+### Full factorial design
+This design studies the influence of multiple factors and of their interactions on the variable of interest. We frequently want to test for differences in the response variable due to the multiple factors, called 'main effects'. What we do is test the effects of each main effect separately, then whether or not these effects interact with each other ('factor interactions'). 
+Considering a factorial design with two factors, the model takes the form:
+$$ Y_{ijk} = \mu + \alpha_{i} + \beta_{j} + \gamma_{ij} +\epsilon_{ijk}  $$ 
+where $\mu$ is the overall mean, $\alpha_{i}$ is the effect of the ith group of the first factor, and $\beta_{j}$ is the effect of the jth group of the second factor, $\gamma_{ij}$ is the interaction between both factors and $\epsilon$ is the error term (i.e. residuals). 
+
+### Nested ANOVA
+In this design, the levels of a factor are hierarchically nested within the levels of another factor. 
+
+Considering a nested design with two factors in which B factor is nested in A factor, the model takes the form:
+$$ Y_{ijk} = \mu + \alpha_{i} + \beta_{j/i} +\epsilon_{ijk}  $$
+where $\mu$ is the overall mean, $\alpha_{i}$ is the effect of the ith group of the first factor, and $\beta_{j/i}$ is the effect of the jth group of the second factor nested in the ith group of the first factor and $\epsilon$ is the error term (i.e. residuals). 
+
+# ANOVA EXAMPLE
+
+Let's consider an experimental data originated to an ANOVA example developed by James Lavender & Alistair Poore - 2016 (<https://environmentalcomputing.net/statistics/linear-models/anova/anova-factorial/>).
+
+# ANOVA EXAMPLE
+
+Let's consider an experimental data originated to an ANOVA example developed by James Lavender & Alistair Poore in 2016 (<https://environmentalcomputing.net/statistics/linear-models/anova/anova-factorial/>).
+
+## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
+
+In this data analysis, we will focus on experimental data with two factors that are both applied to all statistical individuals. 
+An ecologist wants to test the effects of metal contamination on the number of species found in sessile marine invertebrates (i.e. sponges). This ecologist would precisely like to know whether copper enrichment reduces species richness, but also know that the richness of invertebrates can depend on whether the substrate is vertical or horizontal. In order to do this, they made an experiment where species richness was recorded in replicate samples in each of the six combinations of copper enrichment ($“None”$,$“Low”$,$“High”$) and orientation ($“Vertical”$,$“Horizontal”$). The experimental design is **factorial** because all levels of one treatment are represented in all levels of the other treatment (i.e. crossed factors).
+
+In consequence, the factorial ANOVA will test whether there are:   
+- any differences in species richness among the three levels of copper enrichment
+- any differences in species richness among the two levels of substrate orientation   
+- any interactions between copper and orientation (i.e. the effect of the copper enrichment depends on the substrate orientation and reciprocally)
+
+Given those objectives, we get three null hypotheses:   
+- there is no difference between the means for each level of copper enrichment, H0: $\mu_{None}$=$\mu_{Low}$=$\mu_{High}$   
+- there is no difference between the means for each level of orientation, H0: $\mu_{Vertical}$=$\mu_{Horizontal}$  
+- there is no interaction between both factors (i.e. if factor effects exists, the factors do not interact)
+
+Let's perform a two-factor ANOVA that is far better than running two separate single factor ANOVAs that contrast copper effects for each level of the substrate orientation because (1) you have more statistical power (higher degrees of freedom); (2) you can test whether the main effects interact or not and (3) you reduce the risk of statistical error (i.e. do not forget that each time you perform an separate statistical analysis, you get an $\alpha$ and $\beta$ risks)
+
+```{r global data, echo=TRUE,include=TRUE}
+# Dataset import
+datasessile <- read.table("sessile.txt", dec=".", header = TRUE)
+datasessile$Copper<-as.factor(datasessile$Copper)
+datasessile$Orientation<-as.factor(datasessile$Orientation)
+str(datasessile)
+
+# Check for presence of missing values
+colSums(is.na(datasessile))
+#There is no missing value.
+```
+
+## DATA EXPLORATION
+
+Before any statistical analysis, you **MUST** explore the data in order to prevent any error. Here is the list of explorations to perform before modelling:
+
+1.  Check presence of outliers in $Y$ and distribution of $Y$ values
+2.  If $X$ is a quantitative independent variable, check presence of outliers in X and distribution of X values  
+2b. If $X$ is a qualitative independent variable, analyse the number of levels and the number of individuals per level
+3.  Analyse the potential relationships between $Y$ and the $X_{s}$
+4.  Check presence of interactions between $X_{s}$
+5.  Check presence of collinearity between $X_{s}$
+
+### Outliers in $Y$ and distribution of $Y$
+
+```{r datahist, include=TRUE, fig.height=5, fig.width=5}
+par(mfrow=c(2,2))
+# Boxplot
+boxplot(datasessile$Richness,col='blue',ylab='Species richness')
+# Cleveland plot
+dotchart(datasessile$Richness,pch=16,col='blue',xlab='Species richness')
+# Histogram
+hist(datasessile$Richness,col='blue',xlab="Species richness",main="")
+# Quantile-Quantile plot
+qqnorm(datasessile$Richness,pch=16,col='blue',xlab='')
+qqline(datasessile$Richness,col='red')
+```
+Make conclusions about $Y$ variable values' distribution
+
+### Both $Xs$ are factors : number of levels and number of individuals per level
+
+```{r datafact, include=TRUE}
+# Factor Copper
+summary(datasessile$Copper)
+# Factor Orientation
+summary(datasessile$Orientation)
+```
+Make conclusions about $X$ variable levels
+
+### Analysis of the potential relationships Y vs Xs
+
+We can graphically analyze the possible relationships between Y and Xs. However, this graphical analysis of the relationships between Y and X **does not in any way predict the significance of the relationship**. The only way to identify whether the relationship exists or not remains statistical modeling. 
+
+```{r datagraph, include=TRUE, fig.height=3, fig.width=5}
+# Boxplot 
+par(mfrow=c(1,2))
+boxplot(datasessile$Richness~datasessile$Copper, varwidth = TRUE, ylab = "Species Richness", xlab = "Copper Enrichment", col='grey', main = "")
+boxplot(datasessile$Richness~datasessile$Orientation, varwidth = TRUE, ylab = "Species Richness", xlab = "Orientation", col='brown', main = "")
+```
+Make conclusions about these graphics
+
+### Analysis of the potential interactions between both X factors
+
+The interaction between two factors can be tested only if factors are crossed (i.e. all levels of one treatment are represented in all levels of the other treatment and reciprocally = a full factorial design). To estimate presence of interactive effects, we will develop a graphical approach. 
+
+```{r dataInter, include=TRUE, fig.height=4, fig.width=7}
+# Interaction table
+table(datasessile$Copper,datasessile$Orientation)
+# Interactions graphics
+boxplot(datasessile$Richness~datasessile$Copper*datasessile$Orientation, varwidth = TRUE, ylab = "Species Richness", col='blue', main = "",cex.axis=0.7)
+```
+Make conclusions about those graphics
+
+### Check for colinearity between Xs
+
+As we have here a factorial design (the levels of the factor were fixed by the ecologist and levels are crossed), there is no colinearity.
+
+## STATISTICAL ANALYSIS
+
+### Model building
+
+For the statistical modelling, we first analyse the full model (model containing all independent variables and interactions to test).
+
+```{r fullmodel,include=TRUE}
+# Model formulation
+mod1<-lm(Richness~Copper+Orientation+Copper:Orientation,data=datasessile)
+# Comment : a simplest way to write this
+mod1<-lm(Richness~Copper*Orientation,data=datasessile)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+The test statistic, F value and its associated p-value (Pr(\>F)) is presented here and it shows that the interaction between COPPER and ORIENTATION is significant. A significant interaction means that the effect of one factor depends upon the other. In this example, it would mean that the effect of copper enrichment is not consistent between the vertical and horizontal habitats. Consequently, the interpretation of the main effects becomes more complex.
+As the interaction is significant, the full model is the candidate model (i.e. the model containing only significant terms). To understand how factors and their interaction influence the species richness, we must analyse the coefficients of the model.
+
+### Model's coefficients analysis
+```{r coeff,include=TRUE}
+# Candidate model formulation
+mod1<-lm(Richness~Copper*Orientation,data=datasessile)
+# Coefficients of the model
+summary(mod1)
+
+#From this listing, you read the coefficients table hereafter
+
+#Coefficients: 
+#                                   Estimate Std. Error t value     Proba 
+#Intercept                         55.400    0.930      59.573      2e-16 
+#CopperLow                         0.400     1.315      0.304       0.762
+#CopperNone                        14.200    1.315      10.797      4.22e-15
+#Orientationvertical               -11.700   1.315      -8.896      3.63e-12
+#CopperLow:Orientationvertical     15.100    1.860      8.119       6.35e-11 
+#CopperNone:Orientationvertical    8.000     1.860      4.301       7.17e-05
+```
+
+This table detailed the coefficients of the model with coefficients associated with each level of the significant fixed factor. Remind that for each factor, one level is called 'the baseline' meaning that its coefficient is 0 (also called the reference level). From this table, coefficients are :
+
+**COPPER FACTOR**\
+- $Copper_{High}$ = 0 (the baseline of the factor COPPER)\
+- $Copper_{Low}$ = $0.4^{NS}$\
+- $Copper_{None}$ = $14.2^{***}$
+
+**ORIENTATION FACTOR**\
+- $Orientation_{Horizontal}$ = 0 (the baseline of the factor ORIENTATION)\
+- $Orientation_{Vertical}$= $-11.7^{***}$
+
+**ORIENTATION:COPPER INTERACTION**\
+- $Copper_{Low}$ : $Orientation_{Vertical}$ = $15.1^{***}$\
+- $Copper_{None}$ : $Orientation_{Vertical}$ = $8^{***}$
+
+So, the candidate model is:
+
+$$ Species\:Richness = 55.4  $$
+$$+ [\:Copper_{High}=0;\:Copper_{Low}=0.4^{NS}\:,\:Copper_{None}=14.2^{***} ]  $$
+$$ +[Orientation_{Horizontal}=0.0; \:Orientation_{Vertical}=-11.7^{***}]  $$
+$$ +[Copper_{Low} : Orientation_{Vertical} = 15.1^{***};\:Copper_{None} : Orientation_{Vertical} = 8^{***}]$$  
+
+A quick way to help you understand an interaction if you get one is to examine the interaction plot.
+
+```{r grapheInter, include=TRUE, fig.height=4, fig.width=7}
+# Interactions graphic
+boxplot(datasessile$Richness~datasessile$Copper*datasessile$Orientation, varwidth = TRUE, ylab = "Species Richness", col='blue', main = "",cex.axis=0.7)
+```
+
+### Multiple comparisons
+
+If you detect any significant differences in the ANOVA, we are then interested in knowing exactly which levels of a given factor differ from one another, and which do not. Remember that a significant p value in the F-test you just ran would reject the null hypothesis the means were the same across all factor levels, but not identify which were different from each other. Here, we have two factors with their own coefficients :
+
+**ORIENTATION FACTOR**\
+- $Orientation_{Horizontal}$ = 0 (the baseline of the factor ORIENTATION)\
+- $Orientation_{Vertical}$= $-11.7^{***}$
+
+Those coefficients suggest that the species richness is lowest in vertical habitats.
+
+**COPPER FACTOR**\
+- $Copper_{High}$ = 0 (the baseline of the factor COPPER)\
+- $Copper_{Low}$ = $0.4^{NS}$\
+- $Copper_{None}$ = $14.2^{***}$
+
+Those coefficients suggest that the species richness is highest in absence of Copper enrichment (level $None$ >  $High$). But as the level $High$ is the baseline, we can not detect whether the levels $None$ and $Low$ are different or not. So, we must change the level baseline and re-analyse the coefficients of the model to detect difference or not between those two factor levels.
+
+```{r relevel, echo=TRUE}
+# Change the COPPER factor baseline: put 'Low' level as the baseline
+datasessile$Copper2<-relevel(datasessile$Copper,ref="Low")
+# New model formulation
+mod2<-lm(Richness~Copper2*Orientation,data=datasessile)
+# Coefficients of the model
+summary(mod2)
+```
+
+Now, coefficients of the COPPER factor are
+
+**COPPER FACTOR**\
+- $Copper_{Low}$ = 0 (the new baseline of the factor COPPER)\
+- $Copper_{High}$ = $-0.4^{NS}$\
+- $Copper_{None}$ = $13.8^{***}$
+
+Those coefficients suggest that the species richness is highest in absence of Copper enrichment ($None$ > $Low$). In conclusion, $Richness_{Copper_{High}}$ = $Richness_{Copper_{Low}}$\< $Richness_{Copper_{None}}$
+
+### Model explanation: R²
+
+You can determine the part of the $Y$ variation explained by your model.
+```{r R²,include=TRUE}
+# R² of the model
+summary(mod1)
+```
+
+In this output, you get the adjusted R² = 0.8893. That means that about 89% of the variance of species richness is explained by the model.
+
+## MODEL VALIDATION: CHECK TO ASSUMPTIONS
+See part 4). 
+
 2) ANCOVA #Lucia
-
-
-fwbdxfv 
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
-```{r}
-data <-read.table("Atmo.txt",header=T)
-
-```
-
-
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
-
-Rappels :
-
-On fait N tirages aléatoires d'une variable binaire à deux modalités : 1 (succès) et 0 (échec).
-Soit p la probabilité de succès.
-Alors X ~ B(N,p) 
-
-
 2) Loi de Poisson #Léa
-
-
-test 
 3) Loi négative binômiale #Léa
 4) Validation des modèles #Clément
+
+Unlike General Linear Models, Generalized Linear Models don't require the conditions of homoscedasticity and normality of residuals, but it does require the *independence of residuals*. Additionally, you can check the presence of influential observations (i.e. statistical units having a too large contribution to model).
+
+However, when analyzing a count data, you have to deal with **OVERDISPERSION**. In some data, the variance of the dependent variable $Y$ supposed to follow a Poisson law, that is theoretically fixed by the model, may be higher, multiplied by a scale parameter. If that parameter is greater than 1, there is overdispersion (the standard errors of the coefficient estimates are biased). For count data GLM, one way to check for and deal with overdispersion is to check overdispersion in model.
+
+### Overdispersion checking
+
+Here are the calculation of the model scale parameter
+```{r overdisp, include=TRUE}
+# Scale parameter calculation
+E1 <- resid(mod1, type = "pearson") # (Y - mu) / sqrt(mu)
+N  <- nrow(dataAnts)
+p  <- length(coef(mod1))
+sum(E1^2) / (N - p)
+```
+Index dispersion : 1.02, no overdispersion
+
+If index >> 1 then overdispersion. Why do you have overdispersion  
+A. Outliers                  => Remove them (but subjective)  
+B. Missing covariates        => Add them  
+C. Missing interactions      => Add them   
+D. Zero inflation            => ZIP/ZINB  
+E. Dependency                => GLMM  
+F. Non-linear relationships  => GAM  
+G. Wrong link function       => Change it  
+H. Large variation           => NB GLM
+
+### Checking Poisson distribution of the fitted values
+
+We can check the Poisson distribution of the model prediction
+
+```{r poissonfit, include=TRUE, fig.height=3, fig.width=3}
+
+set.seed(1234)
+mean<-mean(dataAnts$Nsp)
+n<-length(dataAnts$Nsp)
+theoretic_count <-rpois(n,mean)
+
+tc_df <-data.frame(theoretic_count)
+
+ggplot(dataAnts,aes(Nsp))+
+   geom_bar(fill="#1E90FF")+
+   geom_bar(data=tc_df, aes(theoretic_count,fill="#1E90FF", alpha=0.5))+
+   theme_classic()+
+   theme(legend.position="none") 
+```
+Discuss graph.
+
+### Residuals analysis
+
+The assumptions of residuals normality and homogeneity are not expected in GLM. But we can have a look on residuals. By plotting residuals against covariates in the model, we must check absence of patterns in residuals. We do not want to see any patterns in these graphs. If we do, then there is something wrong. This may be due to lack of fit, dependency in data or influential observations. 
+In GLM, we use Pearson residuals as they include variance heterogeneity. Also, Pearson residuals are the easiest to understand, and can easily be calculated.
+
+```{r ResidPoisson, include=TRUE, fig.height=8, fig.width=6}
+resid<-residuals(mod1, type="pearson")
+
+par(mfrow=c(3,2))
+# Histogram
+hist(resid,col='blue',xlab="residuals",main="")
+# Quantile-Quantile plot
+qqnorm(resid,pch=16,col='blue',xlab='')
+qqline(resid,col='red')
+
+# residuals vs fitted
+plot(resid~fitted(mod1)
+      , col='blue'
+      , pch=16)
+abline(h = 0)
+
+# residuals against Location factor
+boxplot(resid~ dataAnts$Location, 
+         varwidth = TRUE,
+         ylab = "Residuals",
+         xlab = "Location",
+         main = "")
+
+# residuals against Latitude
+plot(resid~ dataAnts$Latitude, 
+         pch=16,
+         col="blue",
+         ylab = "Residuals",
+         xlab = "Latitude",
+         main = "")
+abline(h = 0)
+
+# residuals against Elevation
+plot(resid~ dataAnts$Elevation, 
+         pch=16,
+         col="blue",
+         ylab = "Residuals",
+         xlab = "Elevation",
+         main = "")
+abline(h = 0)
+```
+
+Make conclusion about these residuals graphs
+
+### Look at influential observations
+```{r Contri, include=TRUE, fig.height=4, fig.width=4}
+
+par(mfrow = c(1, 1))
+plot(cooks.distance(mod1), type = "h", ylim = c(0, 1))
+abline(h = 1, col = 2,lwd = 3)
+
+```
+Make conclusion about presence of influential observations.
 
 Conclusion #Sarah
 
 Remarques :
 -ici on ne parle pas de partie Exploration des données
 -on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
-
-Consignes suppl :
--didactique -> phrases courtes, claires, une phrase = une idée
--25 pages max
