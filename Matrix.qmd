@@ -10,22 +10,22 @@ output:
 ---
 Plan projet : 
 
-I. Calcul de matrice, manipulation de matrice
-1)Notion de base
-2)Sur R (à choisir)
-3)Sur Python (à choisir)
+Plan projet : 
 
-II. A quoi servent les matrices en écologie / Les différents types de matrices
-1)Comment transformer nos populations en matrice ? Pourquoi ?
-2)Matrices de Malthus et Verus
-3)Matrice femelle base, matrice mâle femelle
-4)Matrice de Leslie
+Modélisation matricielle en écologie
+A quoi servent les matrices en écologie ?
+Transformer une population en matrice
+Modifier une matrice de population (addition de population,soustraction)
 
-III. Matrice en épidémiologie
-1)Introduction aux matrices en épidémiologie
-2)Modèle 
+II. Les grands exemples de matrices en écologie  
+Classes d’âge et reproduction : Matrice de Leslie
+Impact prédateur
+Compétition ?
 
-IV. Chaînes de Markov
+III. Matrice en épidémiologie 
+
+IV. Chaînes de Markov 
+
 
 
 Chapitre purment technique ? ou bien les modèles matriciels et on prend des exemples d'écologie et on explique en même temps ?
