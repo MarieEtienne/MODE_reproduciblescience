@@ -4,96 +4,96 @@ format: html
 editor: visual
 ---
 
-Les données du biologiste, qu'il s'intéresse aux individus, aux populations ou aux communautés, se présentent le plus souvent sous forme de tableaux rectangulaires croisant des observations (n) en lignes et des variables (p) en colonnes.
+Biologists' data, whether on individuals, populations or communities, are usually presented in the form of rectangular tables, with observations (n) in the rows and variables (p) in the columns.
 
-La représentation graphique de ces n observations et p variables est facilement réalisable lorsque l'on a seulement 2 ou 3 variables (dimension). Cependant, quand le nombre de variables augmente la représentation graphique devient compliquée et l'utilisation des Analyses Multivariées prend tout son sens !
+The graphical representation of these n observations and p variables is easily achieved when there are only 2 or 3 variables (dimension). However, when the number of variables increases, the graphical representation becomes complicated, and Multivariate Analyses come into their own!
 
-L'objectif de ces analyses est de réduire le nombre de dimensions et d'examiner la structure des données en répondant aux questions suivantes :
+The aim of these analyses is to reduce the number of dimensions and examine the structure of the data by answering the following questions:
 
--   Quels observations se ressemblent ?
+- Which observations are similar?
 
--   Y-a-t-il des observations qui se distinguent ? Des sous-groupes ?
+- Are there observations that stand out? Subgroups?
 
--   Quelles sont les variables corrélées entre elles ?
+- Which variables are correlated?
 
--   Y-a-t-il des liens particulier entre certains observations et/ou variables ?
+- Are there particular links between certain observations and/or variables?
 
-Les méthodes d'analyse multivariées servent donc à décrire les données et à émettre des hypothèses pouvant être testées par la suite.
+Multivariate analysis methods are therefore used to describe the data and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
 ## Introduction :
 
-L'ACP permet de traiter un tableau de mesure avec :
+PCA can be used to process a measurement table with :
 
--   En ligne : les **n observations**
+- In rows: the **n observations**.
 
--   En colonne : le **p variables quantitatives**
+- In column: the **p quantitative variables**.
 
-Les 2 ensemble (observations et variables) sont **nettement distincts et non interchangeable**. C'est-à-dire que si l'on interchangent les lignes et les colonnes (en lignes les variables et en colonnes les observations), le tableau n'a plus le même sens.
+The 2 sets (observations and variables) are **totally distinct and non-interchangeable**. In other words, if you interchange the rows and columns (with the variables in the rows and the observations in the columns), the table no longer has the same meaning.
 
-Dans les tableaux traiter par l'ACP, la moyenne d'une colonne à un sens alors que la moyenne d'une ligne en n'a pas.
+In PCA tables, the mean of a column has a meaning, while the mean of a row does not.
 
-L'objectif de l'ACP est de réaliser la meilleure représentation géométrique des individus et des variables. Pour cela on cherche à réduire la dimension en trouvant le meilleur plan (sous-espace) de projection permettant de visualiser « au mieux » le nuage de points en espace réduits.
+The aim of PCA is to achieve the best geometric representation of individuals and variables. To achieve this, we seek to reduce the dimension by finding the best projection plane (subspace) for "best" visualization of the point cloud in reduced space.
 
-Cependant, cette réduction doit :
+However, this reduction must :
 
--   Préserver les distances entre individus :
-    -   Deux individus qui se ressemblent doivent être proche dans l'espace de représentation.
--   Préserver les corrélations entre les variables :
-    -   Deux variables qui sont corrélées doivent être représentées par des vecteurs formant un angle aigu.
-    -   Deux variables indépendantes sont représentées par des vecteurs orthogonaux.
+- Preserve distances between individuals:
+    - Two individuals who resemble each other must be close in the representation space.
+- Preserve correlations between variables:
+    - Two variables that are correlated must be represented by vectors forming an acute angle.
+    - Two independent variables are represented by orthogonal vectors.
 
 ## Mathematics
 
 ## Interpretation
 
-Voici un exemple d'application de l'ACP. *presentation jeu de donnee* *package necessaire*
+Here's an example of how PCA can be applied. *dataset presentation* *package needed*
 
-### a) Importation du jeu de donnees :
+### a) Importing the dataset :
 
 ```{r}
-# Chargement du jeu de donnees "iris" disponible sur R :
+# Loading the "iris" dataset available on R :
 data("decathlon2") 
 data=decathlon2[decathlon2$Competition=="OlympicG",c(1:10,12)]
 summary(data)
 ```
 
-Dans ce jeu de donnees, on a donc 14 individus (athletes) sur lesquels ont ete releve 10 variables quantitatives (performances dans differentes disciplines sportives) : - X100m - Long.jump - Shot.put - X400m - X110m.hurdle - Discus - Pole.vault - Javeline - X1500m
+In this data set, we have 14 individuals (athletes) on whom 10 quantitative variables (performances in different sports disciplines) have been recorded: - X100m - Long.jump - Shot.put - X400m - X110m.hurdle - Discus - Pole.vault - Javelin - X1500m
 
-Si on a la presence de NAs dans les donnees. Afin de pouvoir realiser l'ACP sans encombre avec les NAs, on peut les ommetre de l'analyse avec la commande suivante :
+If NAs are present in the data. In order to carry out the PCA without any problems with NAs, they can be omitted from the analysis with the following command:
 
 ```{r}
 # data=na.omit(object = data)
 ```
 
-On cherche a savoir si dans ce jeu de donnees des liens particulier entre certaines observations et/ou variables peuvent etre observes ?
+We want to find out whether particular links between certain observations and/or variables can be observed in this data set.
 
-### b) Etude des correlations :
+### b) Study of correlations :
 
-Obtention de la matrice des correlations entre les variables en utilisant la fonction **cor()** :
+Obtain the correlation matrix between variables using the **cor()** function:
 
 ```{r}
 cor(data)
 ```
 
-Les variables sont correlees si leur valeur est superieur a 0.9 (en regle general) On peut voir ici, qu'aucune variable sont correlees.
+Variables are correlated if their value is greater than 0.9 (as a general rule). Here, we can see that no variables are correlated.
 
-Voici une autre facon de visualiser les correlations entre variable : (utiles lorsque l'on a beaucoup de variables comme ici):
+Here's another way of visualizing correlations between variables: (useful when you have a lot of variables, as here):
 
 ```{r}
 abs(cor(data))>0.9
 ```
 
-Si TRUE (en dehors de la diagonale), alors les deux variables sont correlees. Si deux variables sont correlees, il faut en supprimer une. Le choix de l'elimination d'une des deux variables correlees est arbitraire et depend de la question posee.
+If TRUE (outside the diagonal), then both variables are correct. If two variables are correct, one must be removed. The choice of deleting one of the two correct variables is arbitrary and depends on the question being asked.
 
-Pour supprimer une variable du jeu de donnees (data), on peut utiliser la fonction suivante : **data=data\[,-(colonne_de_la_variable_a_enlever)\]**
+To remove a variable from the data set, use the following function: **data=data\[,-(column_of_the_variable_to_remove)}]**
 
-### c) Réalisation de l'ACP :
+### c) Performing PCA :
 
-Afin de realiser l'ACP, il est necessaire de charger les deux packages suivants : - **factoextra** - **FactoMineR**
+To run the PCA, you need to load the following two packages: - **factoextra** - **FactoMineR**
 
-Ensuite pour realiser l'ACP sur R, on peut utiliser la fonction : **PCA()**. Il faut penser a stocker le resultat de cette ACP dans une nouvelle variable afin de pouvoir recuperer facilement les informations de l'ACP que l'on a besoin par la suite pour l'interpretation.
+Then, to perform the PCA on R, you can use the function : **PCA()**. Remember to store the result of this PCA in a new variable, so that you can easily retrieve the PCA information you need for subsequent interpretation.
 
 ```{r, echo=FALSE, hide=TRUE}
 library(FactoMineR)
@@ -101,9 +101,9 @@ library(factoextra)
 PCA=PCA(data)
 ```
 
-### d) Interpretation des sorties :
+### d) Interpretation of outputs :
 
-#### 1) Inertie et choix des axes :
+#### 1) Inertia and choice of axes :
 
 ```{r}
 # Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
@@ -113,15 +113,15 @@ PCA$eig
 fviz_eig(PCA, addlabels = TRUE)
 ```
 
-Pour savoir le nombre d'axe que l'on prend pour l'analyse de l'ACP, il faut reperer le saut dans la variance expliquee par les differents axes. Ici on peut voir, que le premier axe represente 43.2% de la variance, le second axe 22%, le troisieme axe 14.1%, ... On peut donc voir que le saut dans la variance expliquee par les differents axes s'effectue entre le premier axe et le deuxieme. La difference entre la variance expliquee par les autres axes que le premier est negligeable par rapport a la difference entre le premier axe et les autres.
+To determine the number of axes used in the PCA analysis, we need to identify the jump in variance explained by the different axes. Here we can see that the first axis represents 43.2% of the variance, the second axis 22%, the third axis 14.1%, ... We can therefore see that the jump in variance explained by the different axes is between the first and second axes. The difference between the variance explained by the axes other than the first is negligible compared to the difference between the first axis and the others.
 
-On garde donc pour l'interpretation de la PCA, les deux premiers axes qui explique a eux deux 65.19% de la variance.
+For the PCA interpretation, we therefore retain the first two axes, which together explain 65.19% of the variance.
 
-#### 2) Interpretation du sens biologique des axes :
+#### 2) Interpretation of the biological meaning of the axes :
 
-En ACP, l'interpretion des axes se fait selon les colonnes (\<=\> variables) via le cercle des correlations et les contributions absolues des variables.
+In PCA, the axes are interpreted according to the columns (\<=\> variables) via the correlation circle and the absolute contributions of the variables.
 
-Pour obtenir ces deux informations sur R, on peut utiliser les commandes suivantes :
+To obtain this information in R, use the following commands:
 
 ```{r}
 # Obtention des contributions absolues des variables :
@@ -138,19 +138,19 @@ fviz_contrib(PCA, choice = "var", axes = 1)
 fviz_contrib(PCA, choice = "var", axes = 2)
 ```
 
-La contribution absolue permet de savoir comment la variable initiale contribue a la formation de l'axe. Pour savoir a partir de ces resultats, quelles variables contribuent a la formation de l'axe synthetique, on utilise le seuil de \*\*1/nombre_de_variables)\*100\*\* (en general). Pour que la variable contribue, il faut que sa valeur de contribution soit superieure a ce seuil. Cette valeur de seuil correspond a la ligne en pointille rouge sur les graphiques presentant les contributions absolues des variables selon les axes.
+The absolute contribution shows how the initial variable contributes to the formation of the axis. To find out from these results which variables contribute to the formation of the synthetic axis, we use the threshold of \*1/number_of_variables)\*100\*\* (in general). For a variable to contribute, its contribution value must be greater than this threshold. This threshold value corresponds to the red dotted line on the graphs showing the absolute contributions of the variables along the axes.
 
-D'apres ces resultats, on peut voir que l'axe 1 est represente principalement par les variables : - Points - Discus - Shotput - Long.jump - X100m - High.jump
+From these results, we can see that axis 1 is mainly represented by the following variables: - Points - Discus - Shotput - Long.jump - X100m - High.jump
 
-L'axe 2 est lui represente par les variables : - X1500m - Pole.vault - X110m.hurdle - X100m
+Axis 2 is represented by the variables: - X1500m - Pole.vault - X110m.hurdle - X100m
 
-Par ailleurs, le cercle des correlations nous permet de voir que certaines variables sont liees et d'autres independantes. En effet, deux variables qui sont liees sont representees par des vecteurs formant un angle aigu. Deux variables indépendantes sont représentées par des vecteurs orthogonaux.
+The correlation circle also shows that some variables are related and others independent. Two related variables are represented by vectors forming an acute angle. Two independent variables are represented by orthogonal vectors.
 
-#### 3) Projection des individus afin d'en effectuer une typologie sur la base des axes :
+#### 3) Projection of individuals to create a typology based on the axes:
 
-Pour cela on utilise les contributions relatives des individus. En effet, ces contributions relatives permettent d'effectuer une typologie des individus sur la base des axes. La contribution relative d'un individu correspond à la part d'information de l'axe explique par le point et pris en charge sur l'axe (en pourcentage).
+For this, we use the relative contributions of the individuals. These relative contributions can be used to create a typology of individuals based on the axes. The relative contribution of an individual corresponds to the share of information on the axis explained by the point and supported on the axis (in percentage).
 
-Pour obtenir ces contributions relatives des individus sur R, on utilise les commandes suivantes :
+To obtain the relative contributions of individuals on R, use the following commands:
 
 ```{r}
 # Obtention des contributions relatives des individus :
@@ -163,25 +163,25 @@ fviz_pca_ind(PCA)
 
 ```
 
-Ainsi les individus qui explique le plus l'axe 1 sont : - Sebrle - Clay - Karpov - Schwarzl - Drews - Schoenbeck
+The individuals who most explain Axis 1 are : - Sebrle - Clay - Karpov - Schwarzl - Drews - Schoenbeck
 
-Ceux qui explique le plus l'axe 2 sont : - Macey - Warners - Zsivoczky - Barras
+Those who most explain axis 2 are : - Macey - Warners - Zsivoczky - Barras
 
-### e) Conclusion biologique :
+### e) Biological conclusion :
 
-Ainsi, grace aux resultats des contributions absolues des variables et des contributions relatives des individus, on peut representer la projection des individus et des variables ainsi :
+Thus, thanks to the results of the absolute contributions of the variables and the relative contributions of the individuals, we can represent the projection of the individuals and variables as follows:
 
 ```{r}
 fviz_pca_biplot(PCA)
 ```
 
-Sachant l'interpretation biologique des axes : *IMAGE*
+Knowing the biological interpretation of the axes : *IMAGE*
 
-On peut donc voir que les individus ayant le plus grand score a ce tournoi, sont ceux qui ont eu les meilleurs resultats au epreuves : discus, shot put, long jump et high jump. De plus, avoir de bons resultats dans la course de 100m ne permet pas d'avoir un bon classement.
+We can therefore see that the individuals with the highest scores at this tournament are those who had the best results in the discus, shot put, long jump and high jump events. In addition, having good results in the 100m race doesn't give you a good ranking.
 
-Grace a la PCA, on peut voir que le score final est plus lie au score de certaines disciplines que d'autres. Et donc, que des liens entre certaines variables et individus peuvent etre observes.
+Thanks to PCA, we can see that the final score is more linked to the score of certain disciplines than others. And therefore, that links between certain variables and individuals can be observed.
 
-A citation @bauer2023writing
+
 
 # PART 2: CA
 
