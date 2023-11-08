@@ -4,39 +4,190 @@ format: html
 editor: visual
 ---
 
+Les données du biologiste, qu'il s'intéresse aux individus, aux populations ou aux communautés, se présentent le plus souvent sous forme de tableaux rectangulaires croisant des observations (n) en lignes et des variables (p) en colonnes.
+
+La représentation graphique de ces n observations et p variables est facilement réalisable lorsque l'on a seulement 2 ou 3 variables (dimension). Cependant, quand le nombre de variables augmente la représentation graphique devient compliquée et l'utilisation des Analyses Multivariées prend tout son sens !
+
+L'objectif de ces analyses est de réduire le nombre de dimensions et d'examiner la structure des données en répondant aux questions suivantes :
+
+-   Quels observations se ressemblent ?
+
+-   Y-a-t-il des observations qui se distinguent ? Des sous-groupes ?
+
+-   Quelles sont les variables corrélées entre elles ?
+
+-   Y-a-t-il des liens particulier entre certains observations et/ou variables ?
+
+Les méthodes d'analyse multivariées servent donc à décrire les données et à émettre des hypothèses pouvant être testées par la suite.
+
 # PART 1: PCA
-## MathÃ©matiques
-## InterprÃ©tation
 
-This chapter is a simple example using R
+## Introduction :
 
-You can import R package using the code
+L'ACP permet de traiter un tableau de mesure avec :
+
+-   En ligne : les **n observations**
+
+-   En colonne : le **p variables quantitatives**
+
+Les 2 ensemble (observations et variables) sont **nettement distincts et non interchangeable**. C'est-à-dire que si l'on interchangent les lignes et les colonnes (en lignes les variables et en colonnes les observations), le tableau n'a plus le même sens.
+
+Dans les tableaux traiter par l'ACP, la moyenne d'une colonne à un sens alors que la moyenne d'une ligne en n'a pas.
+
+L'objectif de l'ACP est de réaliser la meilleure représentation géométrique des individus et des variables. Pour cela on cherche à réduire la dimension en trouvant le meilleur plan (sous-espace) de projection permettant de visualiser « au mieux » le nuage de points en espace réduits.
+
+Cependant, cette réduction doit :
+
+-   Préserver les distances entre individus :
+    -   Deux individus qui se ressemblent doivent être proche dans l'espace de représentation.
+-   Préserver les corrélations entre les variables :
+    -   Deux variables qui sont corrélées doivent être représentées par des vecteurs formant un angle aigu.
+    -   Deux variables indépendantes sont représentées par des vecteurs orthogonaux.
+
+## Mathematics
+
+## Interpretation
+
+Voici un exemple d'application de l'ACP. *presentation jeu de donnee* *package necessaire*
+
+### a) Importation du jeu de donnees :
 
 ```{r}
-library(tidyverse)
+# Chargement du jeu de donnees "iris" disponible sur R :
+data("decathlon2") 
+data=decathlon2[decathlon2$Competition=="OlympicG",c(1:10,12)]
+summary(data)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
+Dans ce jeu de donnees, on a donc 14 individus (athletes) sur lesquels ont ete releve 10 variables quantitatives (performances dans differentes disciplines sportives) : - X100m - Long.jump - Shot.put - X400m - X110m.hurdle - Discus - Pole.vault - Javeline - X1500m
 
-For example a basic summary of a dataset is given by
+Si on a la presence de NAs dans les donnees. Afin de pouvoir realiser l'ACP sans encombre avec les NAs, on peut les ommetre de l'analyse avec la commande suivante :
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+# data=na.omit(object = data)
 ```
 
-and produce a graph
+On cherche a savoir si dans ce jeu de donnees des liens particulier entre certaines observations et/ou variables peuvent etre observes ?
+
+### b) Etude des correlations :
+
+Obtention de la matrice des correlations entre les variables en utilisant la fonction **cor()** :
 
 ```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
+cor(data)
 ```
+
+Les variables sont correlees si leur valeur est superieur a 0.9 (en regle general) On peut voir ici, qu'aucune variable sont correlees.
+
+Voici une autre facon de visualiser les correlations entre variable : (utiles lorsque l'on a beaucoup de variables comme ici):
+
+```{r}
+abs(cor(data))>0.9
+```
+
+Si TRUE (en dehors de la diagonale), alors les deux variables sont correlees. Si deux variables sont correlees, il faut en supprimer une. Le choix de l'elimination d'une des deux variables correlees est arbitraire et depend de la question posee.
+
+Pour supprimer une variable du jeu de donnees (data), on peut utiliser la fonction suivante : **data=data\[,-(colonne_de_la_variable_a_enlever)\]**
+
+### c) Réalisation de l'ACP :
+
+Afin de realiser l'ACP, il est necessaire de charger les deux packages suivants : - **factoextra** - **FactoMineR**
+
+Ensuite pour realiser l'ACP sur R, on peut utiliser la fonction : **PCA()**. Il faut penser a stocker le resultat de cette ACP dans une nouvelle variable afin de pouvoir recuperer facilement les informations de l'ACP que l'on a besoin par la suite pour l'interpretation.
+
+```{r, echo=FALSE, hide=TRUE}
+library(FactoMineR)
+library(factoextra)
+PCA=PCA(data)
+```
+
+### d) Interpretation des sorties :
+
+#### 1) Inertie et choix des axes :
+
+```{r}
+# Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
+PCA$eig
+
+# Visualisation graphique de l'inertie de chaque axe : 
+fviz_eig(PCA, addlabels = TRUE)
+```
+
+Pour savoir le nombre d'axe que l'on prend pour l'analyse de l'ACP, il faut reperer le saut dans la variance expliquee par les differents axes. Ici on peut voir, que le premier axe represente 43.2% de la variance, le second axe 22%, le troisieme axe 14.1%, ... On peut donc voir que le saut dans la variance expliquee par les differents axes s'effectue entre le premier axe et le deuxieme. La difference entre la variance expliquee par les autres axes que le premier est negligeable par rapport a la difference entre le premier axe et les autres.
+
+On garde donc pour l'interpretation de la PCA, les deux premiers axes qui explique a eux deux 65.19% de la variance.
+
+#### 2) Interpretation du sens biologique des axes :
+
+En ACP, l'interpretion des axes se fait selon les colonnes (\<=\> variables) via le cercle des correlations et les contributions absolues des variables.
+
+Pour obtenir ces deux informations sur R, on peut utiliser les commandes suivantes :
+
+```{r}
+# Obtention des contributions absolues des variables :
+PCA$var$contrib
+
+# Obtention du cercle des correlations :
+fviz_pca_var(PCA)
+
+# Representation graphique des valeurs de contributions absolues des variables pour un axe : 
+# Cas axe 1 : 
+fviz_contrib(PCA, choice = "var", axes = 1)
+
+# Cas axe 2: 
+fviz_contrib(PCA, choice = "var", axes = 2)
+```
+
+La contribution absolue permet de savoir comment la variable initiale contribue a la formation de l'axe. Pour savoir a partir de ces resultats, quelles variables contribuent a la formation de l'axe synthetique, on utilise le seuil de \*\*1/nombre_de_variables)\*100\*\* (en general). Pour que la variable contribue, il faut que sa valeur de contribution soit superieure a ce seuil. Cette valeur de seuil correspond a la ligne en pointille rouge sur les graphiques presentant les contributions absolues des variables selon les axes.
+
+D'apres ces resultats, on peut voir que l'axe 1 est represente principalement par les variables : - Points - Discus - Shotput - Long.jump - X100m - High.jump
+
+L'axe 2 est lui represente par les variables : - X1500m - Pole.vault - X110m.hurdle - X100m
+
+Par ailleurs, le cercle des correlations nous permet de voir que certaines variables sont liees et d'autres independantes. En effet, deux variables qui sont liees sont representees par des vecteurs formant un angle aigu. Deux variables indépendantes sont représentées par des vecteurs orthogonaux.
+
+#### 3) Projection des individus afin d'en effectuer une typologie sur la base des axes :
+
+Pour cela on utilise les contributions relatives des individus. En effet, ces contributions relatives permettent d'effectuer une typologie des individus sur la base des axes. La contribution relative d'un individu correspond à la part d'information de l'axe explique par le point et pris en charge sur l'axe (en pourcentage).
+
+Pour obtenir ces contributions relatives des individus sur R, on utilise les commandes suivantes :
+
+```{r}
+# Obtention des contributions relatives des individus :
+PCA$ind$cos2
+
+# Obtention de la projection des individus : 
+fviz_pca_ind(PCA)
+
+
+
+```
+
+Ainsi les individus qui explique le plus l'axe 1 sont : - Sebrle - Clay - Karpov - Schwarzl - Drews - Schoenbeck
+
+Ceux qui explique le plus l'axe 2 sont : - Macey - Warners - Zsivoczky - Barras
+
+### e) Conclusion biologique :
+
+Ainsi, grace aux resultats des contributions absolues des variables et des contributions relatives des individus, on peut representer la projection des individus et des variables ainsi :
+
+```{r}
+fviz_pca_biplot(PCA)
+```
+
+Sachant l'interpretation biologique des axes : *IMAGE*
+
+On peut donc voir que les individus ayant le plus grand score a ce tournoi, sont ceux qui ont eu les meilleurs resultats au epreuves : discus, shot put, long jump et high jump. De plus, avoir de bons resultats dans la course de 100m ne permet pas d'avoir un bon classement.
+
+Grace a la PCA, on peut voir que le score final est plus lie au score de certaines disciplines que d'autres. Et donc, que des liens entre certaines variables et individus peuvent etre observes.
 
 A citation @bauer2023writing
 
 # PART 2: CA
-## MathÃ©matiques
-## InterprÃ©tation
+
+## Mathematiques
+
+## Interpretation
 
 This chapter is a simple example using R
 
@@ -65,7 +216,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 3: RDA
+
 ## MathÃ©matiques
+
 ## InterprÃ©tation
 
 This chapter is a simple example using R
@@ -95,7 +248,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 4: RLQ
+
 ## MathÃ©matiques
+
 ## InterprÃ©tation
 
 This chapter is a simple example using R
