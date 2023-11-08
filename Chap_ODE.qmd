@@ -155,27 +155,52 @@ What will the number of individuals at time (t+1) depend on?
 
 Firstly, it depends on the number of individuals at time (t)!
 
-We then note:
-👽(t+1) = 👽(t)
+We then note: 👽(t+1) = 👽(t)
 
 But defined in this way, our population is constant. It doesn't change at all over time.
 
-How can the population increase?
-- Through migration
-- Through births
+How can the population increase? - Through migration - Through births
 
-We then note:
-👽(t+1) = 👽(t) + migrations + births
+We then note: 👽(t+1) = 👽(t) + migrations + births
 
 But at each time step, the population is also subject to mortality (which obviously reduces the number of individuals).
 
-We then note:
-👽(t+1) = 👽(t) + migrations + births - mortality
+We then note: 👽(t+1) = 👽(t) + migrations + births - mortality
 
-Let's replace these words with their notations:
-👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
+Let's replace these words with their notations: 👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
+
+Now, with parameter values and initial values, you can predict what will happen in the population at time (t+1). Great!
+
+Now a question: is time discrete or continuous? Continuous, yes! In reality, the values of t are defined as follows: $$t \in \mathbb{R}^+$$.
+
+We could take the problem from the beginning ... or start again from what we have already done, this time integrating the continuous dimension of time.
+
+So we start from: 👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
+
+We know what happens at each time step of 1. What we don't know is what happens between each of these time steps! Before working with continuous time, we'll try to work with a time step of less than 1.
+
+The time step between each time step of 1 is noted: $$\Delta t < 1$$
+
+We then incorporate this new time step into our formula:
+$$\begin{aligned}[t]
+        & \phantom{=}\left(👽(t+1) = 👽(t) + m + b👽(t) - d👽(t) \right)\\
+        & \Leftrightarrow 👽(t+\Delta t)= 👽(t) + m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
+        & \Leftrightarrow 👽(t+\Delta t) -👽(t) = m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
+        & \Leftrightarrow \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = m + b👽(t) - d👽(t) \\
+        \end{aligned}$$
 
 
+
+
+
+
+
+
+
+
+
+
+$$ f(x) = \begin{cases} \frac{1}{b-a} \\ 0 \end{cases} $$
 
 ```{r, include=TRUE, fig.height=5, fig.width=6}
 # Create a new drawing page and set the drawing settings
@@ -260,7 +285,7 @@ drawText(x = 3.15, y = -0.2, text = "of a population over time")
 
 ```
 
-$$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
+$$\int_a^b 👽(t) \, \mathrm dt$$
 
 # II. Order 1 ODE & definition of ODE
 
