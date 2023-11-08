@@ -8,31 +8,6 @@ output:
    toc: true
    toc_float: true
 ---
-Plan projet : 
-
-Plan projet : 
-
-Modélisation matricielle en écologie
-A quoi servent les matrices en écologie ?
-Transformer une population en matrice
-Modifier une matrice de population (addition de population,soustraction)
-
-II. Les grands exemples de matrices en écologie  
-Classes d’âge et reproduction : Matrice de Leslie
-Impact prédateur
-Compétition ?
-
-III. Matrice en épidémiologie 
-
-IV. Chaînes de Markov 
-
-
-
-Chapitre purment technique ? ou bien les modèles matriciels et on prend des exemples d'écologie et on explique en même temps ?
-parler de la dynamique de populations
-
-partir de la population de suricats et on complexifie au fur et à mesure en introduisant les notions 
-
 
 Plan projet : 
 
