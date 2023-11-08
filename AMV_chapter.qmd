@@ -10,26 +10,25 @@ The graphical representation of these n observations and p variables is easily a
 
 The aim of these analyses is to reduce the number of dimensions and examine the structure of the data by answering the following questions:
 
-- Which observations are similar?
+-   Which observations are similar?
 
-- Are there observations that stand out? Subgroups?
+-   Are there observations that stand out? Subgroups?
 
-- Which variables are correlated?
+-   Which variables are correlated?
 
-- Are there particular links between certain observations and/or variables?
+-   Are there particular links between certain observations and/or variables?
 
 Multivariate analysis methods are therefore used to describe the data and generate hypotheses that can then be tested.
 
 # PART 1: PCA
-<<<<<<< HEAD
 
 ## Introduction :
 
 PCA can be used to process a measurement table with :
 
-- In rows: the **n observations**.
+-   In rows: the **n observations**.
 
-- In column: the **p quantitative variables**.
+-   In column: the **p quantitative variables**.
 
 The 2 sets (observations and variables) are **totally distinct and non-interchangeable**. In other words, if you interchange the rows and columns (with the variables in the rows and the observations in the columns), the table no longer has the same meaning.
 
@@ -39,11 +38,11 @@ The aim of PCA is to achieve the best geometric representation of individuals an
 
 However, this reduction must :
 
-- Preserve distances between individuals:
-    - Two individuals who resemble each other must be close in the representation space.
-- Preserve correlations between variables:
-    - Two variables that are correlated must be represented by vectors forming an acute angle.
-    - Two independent variables are represented by orthogonal vectors.
+-   Preserve distances between individuals:
+    -   Two individuals who resemble each other must be close in the representation space.
+-   Preserve correlations between variables:
+    -   Two variables that are correlated must be represented by vectors forming an acute angle.
+    -   Two independent variables are represented by orthogonal vectors.
 
 ## Mathematics
 
@@ -88,7 +87,7 @@ abs(cor(data))>0.9
 
 If TRUE (outside the diagonal), then both variables are correct. If two variables are correct, one must be removed. The choice of deleting one of the two correct variables is arbitrary and depends on the question being asked.
 
-To remove a variable from the data set, use the following function: **data=data\[,-(column_of_the_variable_to_remove)}]**
+To remove a variable from the data set, use the following function: **data=data\[,-(column_of_the_variable_to_remove)}\]**
 
 ### c) Performing PCA :
 
@@ -182,8 +181,6 @@ We can therefore see that the individuals with the highest scores at this tourna
 
 Thanks to PCA, we can see that the final score is more linked to the score of certain disciplines than others. And therefore, that links between certain variables and individuals can be observed.
 
-
-
 # PART 2: CA
 
 ## Mathematiques
@@ -193,7 +190,6 @@ Thanks to PCA, we can see that the final score is more linked to the score of ce
 This chapter is a simple example using R
 
 You can import R package using the code
-=======
 
 ## Mathématiques
 
@@ -241,8 +237,7 @@ head(res.mca$ind$contrib)
 
 Coordonates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
 
-You can access the same information for the variable (instead of the individuals):
->>>>>>> Lucile
+You can access the same information for the variable (instead of the individuals): \>\>\>\>\>\>\> Lucile
 
 ```{r}
 res.mca$var$coord
@@ -276,7 +271,23 @@ MCA is a statistical method adapted to table of type "individuals x quatitative 
 
 # PART 3: RDA
 
-## Mathématiques
+## Method principle
+
+La République démocratique allemande, en abrégé RDA, est un État qui a existé de 1949 jusqu'à 1990. Elle a été fondée à l'issue de la Seconde Guerre mondiale (en réaction à la fondation quelques mois plus tôt de la République fédérale d'Allemagne sur les zones d'occupation américaine, anglaise et française) par les communistes allemands sur la zone d'occupation soviétique, partie de l'Allemagne occupée par l'Armée rouge.
+
+La RDA était un État socialiste qui se comprenait comme un exemple de « socialisme réel » fondé sur l'idéologie marxiste-léniniste. Les structures politiques du pays (notamment le gouvernement et le parlement) suivent les directives du principal parti du pays, le SED. Suite à l'effondrement du Bloc de l'Est, la RDA disparaît et est intégrée à la République fédérale d'Allemagne, le 3 octobre 1990.
+
+État européen de taille moyenne (108 333 km²), la RDA était divisée en 15 Bezirke (districts). Sa population est passée de 19 millions de personnes après la Seconde Guerre mondiale à 16 millions au moment de la réunification en 1990.
+
+Two table analysis is used when the scientist possesses two data set with expecting the second to explain the first. The first one is called Y, the response variable and the second one is called X, the explanatory variable. For example :
+
+| Table Y                                           | Table X                                                                                              |
+|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
+| a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
+| a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
+
+RDA is used when expecting a linear response from X to Y.
 
 ## Interprétation
 
