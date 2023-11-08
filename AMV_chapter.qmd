@@ -287,7 +287,7 @@ Two table analysis is used when the scientist possesses two data set with expect
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
 
-RDA is used when expecting a linear response from X to Y.
+RDA is used when expecting a linear response from X to Y. Only the variables of X explaining Y would be kept. The canonical axis are a linear combinaison of the explicative variable (Y).
 
 ## Interprétation
 
