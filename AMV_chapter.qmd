@@ -170,7 +170,7 @@ afcL
 
 ```
 
-The first CA is done. We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species.
+The first CA is done. We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species. You must adapt the presence of transformation (or not) to your data.
 
 Now, we can perform the two MCA analysis on the trait table and environmental table
 
@@ -185,7 +185,7 @@ scatter(acmQ)
 
 The scatterplot allows to see the ordination of each table and the repartition of factor on the simple axe of MCA.
 
-But now, we will use the RLQ analyse that creates three co-inertia (R-L, L-Q, R-Q), assembles and compares the co-inertia. We use the rlq function for that.
+But now, we will use the RLQ analyse that creates two co-inertia (R-L, L-Q), assembles and compares the co-inertia. We use the rlq function for that.
 
 ```{r}
 rlq <- rlq(acmR, afcL, acmQ, scannf = FALSE)
@@ -198,7 +198,7 @@ print(paste("The contribution of axe n°",axe, "are", rlq$eig/(sum(rlq$eig))*100
 
 ```
 
-Here, the output of the RLQ is complex but only few information are, at this point important. We see that we have 8 eigenvalues and we have their values. All the differents compounds of the output will be used after in representations or analysis.
+Here, the output of the RLQ is complex but only few information are, at this point important. We see that we have 8 eigenvalues and we have their values. All the different compounds of the output will be used after in representations or analysis.
 
 Nevertheless, we can calculate the contribution of each axis of the RLQ by performing the formule below: METTRE LA FORMULE AU PROPRE rlq$eig/(sum(rlq$eig))\*100
 
@@ -216,5 +216,70 @@ The outputs above corresponds to the permutation test. We see that the number of
 The results of this test shows that the permutation of sites (rows) is the first result (p_value=0.1%) and the permutation of species (columns) is the second result (p_value=1.9%) So each result is significant (5% threshold) and we can conclude that our RLQ result is not linked to random effect.
 
 Finally, the results of the RLQ are plot in the distribution law calculated by the permutation.
+
+
+We can know analyse the result by using different types of plot:
+
+```{r}
+plot(rlq)
+```
+
+The plot above is the complet plot, difficult to understand and that will be resumed step by step afterward. 
+
+
+However, we have here, up the score (the position) of the sites and species in this analyse. Below in the centre, we have the correlation of the environmental variables between them (R Canonical weights) and the correlation of the traits between them (Q Canonical weight). The plots of the R axes and the Q axes represent the reprojection of axis in the RLQ analyse in order to the simple analyses (CA or MCA here).
+
+
+
+Now, we can decompose the result and start with the environmental variables:
+```{r}
+#analyse the environmental variables:
+round(rlq$l1,dig=2)
+s.label(rlq$l1, boxes=FALSE)
+
+#calcul of the absolute contribution
+iner=inertia.dudi(rlq,col.inertia=T,row.inertia=T)
+
+abscoiE=iner$row.abs
+abscoiE
+
+```
+
+The table corresponds to the position of each modality for each environmental variables on the two first axis. You can link this table to the plot. For example, "veg.cover.R100" seems to stand out from the other modalities. In the table, we can see that the position on the first axis is 4.35 and -4.95 on the second axis. Closer to the center of the cloud, we can talk about "veg.cover.R98" that have position of 1.74 on the first axis and -1.64 on the second axis. 
+In addition, we can observe the contribution of this two variables. On the second table we have the absolute contribution of the modalities for each variable. The contribution of the "veg.cover.R100" of the first axis is 17% and 22% on the second axis. This is a high value if we take the threshold to 1/N with N the number of modalities (28 here so 3%). The contribution of "veg.cover.R98" is 4.6% for the first axis and 4.1% for the second axis.
+
+
+We can therefore conclude that this two variables are correlated. This seems to be biologically coherent since these two variables are part of a plant cover gradient and are the two highest values.
+
+We can also see that the variable negatively correlated with the first axis are modalities explaining the urbanization ()
+
+Now we can realise the same analyse for the traits.
+```{r}
+#analyse the traits:
+round(rlq$c1,dig=2)
+s.arrow(rlq$c1, boxes=FALSE)
+
+#absolute contribution
+abscoiV=iner$col.abs
+abscoiV
+
+```
+
+As seen before, the first table is the position of the modalities for the two first axes of the RLQ analyses. The plot is the representation of that and the second table is the absolute contributions. 
+
+Here, we have larger differences between the different variable and modalities. We're going to focus on a few examples, but you can take the time to go into detail about each modality.
+"feed.strat.foliage" (coord= 2.60; -1.97 for first and second axis respectively) and "breeding.scrub" (coord= 1.71: -2.22) break away from the centre of the cloud. In addition their contributions are all greater than 10%. We can conclude that these modalities are correlated and highly contribute of axes.
+
+
+The last point is to observe the species coordinates.
+```{r}
+#analyse the species:
+round(rlq$lQ,dig=2)
+s.label(rlq$lQ, label=aviurba$species.names.fr,boxes=FALSE)
+```
+Here, is to see that we seems to have a gradient of response along the second axis. We will see that we need to link this to the others variables (trait and environment)
+
+
+
 
 A citation @bauer2023writing
