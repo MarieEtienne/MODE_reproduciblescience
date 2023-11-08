@@ -8,46 +8,98 @@ output:
   html_document:
    toc: true
    toc_float: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
-
 
 ```{r}
 #Add packages
 library(tidyverse)
 ```
+
 Introduce objectifs of the chapter
 
 I. Dynamics systems (definition)
 
 II. Ordinary differential equation
-1) Definition
-2) 1-equation system
+
+<!-- -->
+
+1)  Definition
+2)  1-equation system
+
+<!-- -->
 
 III. 2-equations system
 
+\#**IV. 3-equation system : The Prey-Predator-Superpredator model**
+
+Biotic interactions are complex, requiring the interaction of numerous
+parameters. If we take the **Lotka-Volterra** example, it only considers
+the **interactions between two species**, prey and predator. It assumes
+a constant mortality rate among predators, regardless of prey. However,
+**predators are themselves the prey of other super-predators**. Their
+mortality rate should therefore depend on the super-predators they
+encounter. Thus, the **prey-predator-superpredator** extension of the
+Lotka-Volterra model would be a good representation of natural trophic
+interactions.
+
+In this case, we considerer a superpredator, a predator an a prey.
+
+A superpredator is an organism that reaches adulthood at the top of the
+food chain. Thus, by definition, a superpredator is not the prey of any
+other species. The predator is consider to be in the middle of the food
+chain and the prey at the bottom.
+
+The model can be written as the following system of differential
+equations:
+
+$$ PPS=\begin{cases}\frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+dxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator}\end{cases} $$
+
+The model parameters are :
+
+-   *a* : *x* natural growth rate
+
+-   *-f* and *-c* : natural death rate of *y* and *z*
+
+-   The growth rate of y and z depends on the number of prey caught. It
+    is modeled by dxy for y and by gyz for z.
+
+-   The death rate of *x* and *y* depends on the number of top predators
+    : *y* for *x* and *z* for *y*. It is modeled by -*bxy* for *x* and
+    by *-eyz* for y.
+
+This model is only useful for chains of predators. It doesn't take into
+account the presence of several predators with different dynamics on the
+same prey.
 
 
-IV.3-equations system
-
-
-
-V. Ecological example of the use of ODE
-#Model NPZ & Growth model => How the production of the environment affect the growth of an organism ?
-
-
+V. Ecological example of the use of ODE #Model NPZ & Growth model =\>
+How the production of the environment affect the growth of an organism ?
 
 VI. Second & Third-order ODE
-1. Definition
 
-2. How to resolve them ? 
-a) Analytic solutions
-An analytic solutions for an ODE is an expression that represents the solution using a finite number of elementary functions (exponential, logarithmic...).
-It provides a precise mathematical formula that describes the behavior of the solution for all values of the independent variable within a certain range.
-Finding general analytical solutions for third-order ODEs can be complicated and often depends on the specific form of the equation.
-Sometimes, they may not exist, and in this case numerical methods might be more appropriate.
+<!-- -->
 
-b) Numerical methods : Introduction to Euler's method & Runge-Kutta
-The choice of numerical method depends on the specific characteristics of the ODE system.
+1.  Definition
 
+2.  How to resolve them ?
+
+<!-- -->
+
+a)  Analytic solutions An analytic solutions for an ODE is an expression
+    that represents the solution using a finite number of elementary
+    functions (exponential, logarithmic...). It provides a precise
+    mathematical formula that describes the behavior of the solution for
+    all values of the independent variable within a certain range.
+    Finding general analytical solutions for third-order ODEs can be
+    complicated and often depends on the specific form of the equation.
+    Sometimes, they may not exist, and in this case numerical methods
+    might be more appropriate.
+
+b)  Numerical methods : Introduction to Euler's method & Runge-Kutta The
+    choice of numerical method depends on the specific characteristics
+    of the ODE system.
 
 Conclusion & motivation words
