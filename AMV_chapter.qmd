@@ -253,28 +253,115 @@ A citation @bauer2023writing
 
 ## Interprétation
 
-This chapter is a simple example using R
+The use of RLQ analysis is important in ecology to integrate the traits of species with the environmental variables. So here, we don't have 2 tables (environment & specie) as RDA part but 3 tables:
+
+-   environmental variables by sites (R)
+
+-   abundance of species by sites (L)
+
+-   trait values by species (Q)
+
+To perform the RLQ, we need to decompose the analyse by three type of analyses already done in this chapter:
+
+-   we will use a CA analyse on the abundance of species
+
+-   we will use a MCA on the environmental table by taking the sites weight on the CA
+
+-   we will use a MCA on the trait table by taking the species weight on the CA
+
+Here, we use MCA for R and Q because our variables are factors but you can perform a PCA if your variables are quantitatives. Warning, for R and Q you have the obligation to weight by the L table (see below).
 
 You can import R package using the code
 
 ```{r}
 library(tidyverse)
+library(ade4)
+library(vegan)
+library(ggplot2)
+library(factoextra)
+library(corrplot)
+library(RVAideMemoire)
+library(PerformanceAnalytics)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
-
-For example a basic summary of a dataset is given by
+Here, we work with a dataset of "*ade4*" package
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+#import the dataset
+data(aviurba)
+
+#create the three tables
+summary(aviurba$mil)    #(R)
+R<-aviurba$mil
+
+summary(aviurba$fau)    #(L)
+L<-aviurba$fau
+
+summary(aviurba$traits) #(Q)
+Q<-aviurba$traits
 ```
 
-and produce a graph
+and explore the tables
 
 ```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
+head(R)  
+head(L)
+head(Q)
 ```
+
+The first part is to perform our CA on specie table
+
+```{r}
+afcL <- dudi.coa(log(L+1), scannf = FALSE) 
+afcL  
+
+```
+
+The first CA is done. We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species.
+
+Now, we can perform the two MCA analysis on the trait table and environmental table
+
+```{r}
+acmR <- dudi.acm(R, row.w = afcL$lw, scannf = FALSE,nf = 4)
+scatter(acmR)
+
+acmQ <- dudi.acm(Q, row.w = afcL$cw, scannf = FALSE,nf = 4)
+scatter(acmQ)
+
+```
+
+The scatterplot allows to see the ordination of each table and the repartition of factor on the simple axe of MCA.
+
+But now, we will use the RLQ analyse that creates three co-inertia (R-L, L-Q, R-Q), assembles and compares the co-inertia. We use the rlq function for that.
+
+```{r}
+rlq <- rlq(acmR, afcL, acmQ, scannf = FALSE)
+rlq
+axe=c(1:8)
+print(paste("The contribution of axe n°",axe, "are", rlq$eig/(sum(rlq$eig))*100,"%"))
+#randtest(rlq)
+#summary(rlq)
+#plot(rlq)
+
+```
+
+Here, the output of the RLQ is complex but only few information are, at this point important. We see that we have 8 eigenvalues and we have their values. All the differents compounds of the output will be used after in representations or analysis.
+
+Nevertheless, we can calculate the contribution of each axis of the RLQ by performing the formule below: METTRE LA FORMULE AU PROPRE rlq$eig/(sum(rlq$eig))\*100
+
+After that, and before to plot and analyse the result, it is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+
+```{r}
+randtest(rlq)
+plot(randtest(rlq))
+
+
+```
+
+The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+
+The results of this test shows that the permutation of sites (rows) is the first result (p_value=0.1%) and the permutation of species (columns) is the second result (p_value=1.9%) So each result is significant (5% threshold) and we can conclude that our RLQ result is not linked to random effect.
+
+Finally, the results of the RLQ are plot in the distribution law calculated by the permutation.
 
 A citation @bauer2023writing
