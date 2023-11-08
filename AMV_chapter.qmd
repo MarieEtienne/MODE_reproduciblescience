@@ -4,7 +4,194 @@ format: html
 editor: visual
 ---
 
+# PART 1: PCA
+
+## Mathématiques
+
+## Interprétation
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
 ```{r}
 library(tidyverse)
 ```
 
+and then describe the purpose of your chapter as well as executing R command.
+
+For example a basic summary of a dataset is given by
+
+```{r}
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+```
+
+and produce a graph
+
+```{r}
+df %>% ggplot() +
+	aes(x=species, y = body_mass_g) +
+	geom_boxplot()  
+```
+
+A citation @bauer2023writing
+
+# PART 2: CA
+
+## Mathématiques
+
+## Interprétation
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
+```{r}
+library(tidyverse)
+```
+
+and then describe the purpose of your chapter as well as executing R command.
+
+For example a basic summary of a dataset is given by
+
+```{r}
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+```
+
+and produce a graph
+
+```{r}
+df %>% ggplot() +
+	aes(x=species, y = body_mass_g) +
+	geom_boxplot()  
+```
+
+A citation @bauer2023writing
+
+# PART 3: RDA
+
+## Mathématiques
+
+## Interprétation
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
+```{r}
+library(tidyverse)
+```
+
+and then describe the purpose of your chapter as well as executing R command.
+
+For example a basic summary of a dataset is given by
+
+```{r}
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+```
+
+and produce a graph
+
+```{r}
+df %>% ggplot() +
+	aes(x=species, y = body_mass_g) +
+	geom_boxplot()  
+```
+
+A citation @bauer2023writing
+
+# PART 4: RLQ
+
+## Mathématiques
+
+## Interprétation
+
+The use of RLQ analysis is important in ecology to integrate the traits of species with the environmental variables. So here, we don't have 2 tables (environment & specie) as RDA part but 3 tables:
+
+-   environmental variables by sites (R)
+
+-   abundance of species by sites (L)
+
+-   trait values by species (Q)
+
+To perform the RLQ, we need to decompose the analyse by three type of analyses already done in this chapter:
+
+-   we will use a CA analyse on the abundance of species
+
+-   we will use a PCA on the environmental table by taking the sites weight on the CA
+
+-   we will use a PCA on the trait table by taking the species weight on the CA
+
+You can import R package using the code
+
+```{r}
+library(tidyverse)
+library(ade4)
+library(vegan)
+library(ggplot2)
+library(factoextra)
+library(corrplot)
+library(RVAideMemoire)
+library(PerformanceAnalytics)
+```
+
+Here, we work with a dataset of "*ade4*" package
+
+```{r}
+#import the dataset
+data(aviurba)
+
+#create the three tables
+summary(aviurba$mil)    #(R)
+R<-aviurba$mil
+
+summary(aviurba$fau)    #(L)
+L<-aviurba$fau
+
+summary(aviurba$traits) #(Q)
+Q<-aviurba$traits
+```
+
+and explore the tables
+
+```{r}
+head(R)  
+head(L)
+head(Q)
+```
+
+The first part is to perform our CA on specie
+
+```{r}
+afcL <- dudi.coa(log(L+1), scannf = FALSE) 
+afcL  
+
+```
+The first CA is done. 
+We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species.
+
+
+
+
+A citation @bauer2023writing
+
+-ACM-
+
+The ACM stands out from other multivariate analyzes with a single table (PCA, AFC or mix between ACM and PCA, etc.) because it only takes qualitative variables as input. Its goal is to find the relationships between modalities by visualizing the possible associations and producing a quantitative indicator of their relationships.
+
+The data taken by an ACM is a table comprising J qualitative variables to describe I statistical individuals. All individuals have the same weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to the modality taken by individual i for variable j.
+
+To obtain a complete disjunctive table (CDT) and carry out the statistical analysis, it is necessary to subdivide each variable j into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$ of the I individuals for this variable. The table will always have I rows but SS nj columns (we will denote K columns), in which each of the $V_{i,k}$ values is either 1 or 0 depending on the presence or absence of a modality.
+
+The value $V_{i,k}$ is transformed again : the old value of $V_{i,k}$ (1 or 0) is divided by the probability $p_{k}$ of having this modality (i.e. $\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we subtract 1 to center the result.
+
+$V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
+
+We define the distance D between 2 individuals i and i’ as :
+$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})$ (yik-yi’k)^2
+
+So 2 individuals taking the all same modalities are at a distance D = 0, the more similar the responses are over a large number of modalities, the lower the distance D will be and conversely. If two individuals share a rare modality, the distance will be reduced to take into account the common specificity.
+
+The inertia of the point cloud : $N = \frac{K}{J} – 1$.
+The correlation ratio $η^2(x,y)$ between 2 variables $x$ and $y$ is : (sum of squares of deviations)
+$\frac{\sum_{j} \sum_{i \in J_j} (\overline{y}_{.,j}-\overline{y})^2}{\sum_{j} \sum_{i \in J_j} (y_{i,j}-\overline{y})^2}$
