@@ -47,15 +47,265 @@ I. Modèles linéaires généraux
 2) ANCOVA #Lucia
 
 
-fwbdxfv 
-3) Régression #Fanny
-4) Validation des modèles #Lucia
+# ANCOVA 
+##INTRODUCTION
+ANCOVA (i.e. Analysis of Covariance) is a statistical technique widely used in various disciplines like the previous analysis presented, ANOVA and the linear regression . It is used to model the relationship between a quantitative dependent variable Y, called the response variable, and several independant variable X1, X2... called explanatory variables or predictors). The difference between ANOVA and ANCOVA, is that the predictors can be **quantitative** and **qualitative**.
+For example, we could use an ANCOVA to test whether the size (continuous), sex (categorical), reproductive status (categorical), habitat (categorical), age (continuous) of a sperm whale are good predictors of its weight (the response variable). As the ANCOVA includes quantitative and categorical independent variables, this technique represents between linear regression and ANOVA.
 
-```{r}
-data <-read.table("Atmo.txt",header=T)
+
+
+We can give an example and write the model with one continuous and one categorical independent variables, the model takes the form:
+$$ Y_{ij} = \mu + \alpha_{i}+ \beta.X_{ij}+\gamma_{i}.X_{ij}+ \epsilon_{ij}$$
+-  $\mu$ is the overall mean, the intercept
+-  $\alpha_{i}$ is the effect of the modality i of the categorical variable)
+-  $\beta$ is the slope (amount of change in Y for each unit of the quantitative covariate), it is the effect of the quantitative variable$X_{j}$
+-  $\gamma_{i}$ is the interactive coefficient between the modality i of the factor and the quantitative covariate
+-  $\epsilon_{ij}$ is the error term (residuals). The inclusion of the error term $\epsilon_{ij}$, also called the stochastic part of the model, that makes the model statistical rather than mathematical. The error term is drawn from a statistical distribution that integers the random variability in the response. In standard linear model, this is assumed to be **a normal (Gaussian) distribution** with parameter 0 et $\sigma^2$, avec $\sigma$ l'écart type.
+
+## EXAMPLE
+
+### DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
+
+For this example, we will use data from a study performed in 1994 that concerns the fly, *Anatalanta aptera*, a wingless fly living in subantarctic islands, particularly in sea bird colonies. 320 individuals has been collected in the Crozet Island, living either on the coast or inland (i.e. mountain landscape).
+
+The goal of that study is to determine which variables may explain the dry weight of *Anatalanta aptera*. Dry weight represents total organic and inorganic matter in the tissue and is more accurate than measuring wet weight (using dry weight as a measure of animal growth tends to be more reliable). 
+
+Then, the following life-history traits has been measure to try and explain the response variable Y= Dry weight. Those are the predictors.
+
+- **Sex** = the sex of a given individual, categorical variable  
+- **Habitat** = the habitat of a given individual('Coast' or 'Inland'), categorical variable  
+- **Length** = the length of a given individual, continuous variable  
+- **Width** = the width of a given individual, continuous variable  
+- **WaterContent** = the water content of a given individual, continuous variable  
+- **FatContent** = the fat content of a given individual, continuous variable  
+- **DryWeight** = the dry weight of a given individual, continuous variable
+
+The underlying question for this research is simple; variables drive the dry weight in *Anatalanta aptera*? Predictors being continous and categorical, we are gonna perform an ANCOVA. 
+
+
+```{r import data, echo=TRUE,include=TRUE}
+# Dataset import
+dataFly <- read.table("FlyWeight.txt", dec=".", header = TRUE)
+```
+
+Il faut vérifier si les variables sont correctement importé, soit si elles sont du bon type. Sex et Habitat sont de type 'chr', il faut les transformer en facteurs.
+
+```{r data mutation, echo=TRUE,include=TRUE}
+
+dataFly$Sex<-as.factor(dataFly$Sex)
+dataFly$Habitat<-as.factor(dataFly$Habitat)
+str(dataFly)
 
 ```
 
+## Model building
+
+For the statistical modelling, we first analyse the full model (model containing all independent variables to test). We will test the effects of the main effects (3 continuous and 2 categorical independent variables) and their interactions (by excluding interactions between quantitative independent variables).
+
+To get the candidate model we will perform a backward selection. It consist in testing the full model first, then we drop the least significant interaction, we perform this step until all the remaining interaction effect are significant. We do the qsame approach for the main effect. 
+By following these two steps, candidate model is found. We use the function drop (F test) to test the significant at each step and choose the lest significant effect. 
+Keep in mind that if a variable is involved in an interaction effect you must keep it main effect in the model
+
+# Backward selection
+
+```{r}
+# Model formulation
+#Full model
+mod1<-lm(DryWeight~ Sex
+        + Habitat
+        + Width
+        + WaterContent
+        + FatContent
+        + Sex:Habitat
+        + Sex:Width
+        + Habitat:Width
+        + Sex:WaterContent
+        + Habitat:WaterContent  
+        + Sex:FatContent
+        + Habitat:FatContent 
+        ,data=dataFly)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+From this significance output, we will exclude the interaction that is 'the less significant' = 'Sex:Fat Content'
+
+```{r}
+# Model formulation
+mod1<-lm(DryWeight~ Sex
+        + Habitat
+        + Width
+        + WaterContent
+        + FatContent
+        + Sex:Habitat
+        + Sex:Width
+        + Habitat:Width
+        + Sex:WaterContent
+        + Habitat:WaterContent  
+        + Habitat:FatContent 
+        ,data=dataFly)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+From this new significance list, we will exclude the interaction that is 'the less significant'... and so on.
+
+After the non significant interaction deletions, the model contains only 2 significant interactions = 'Habitat:Width' and 'Habitat:WaterContent'. That means that the main effects 'Habitat', 'Width' and 'WaterContent' are maintained in the model as included in significant interactions.
+
+
+```{r}
+# Model formulation
+mod1<-lm(DryWeight~ Sex
+        + Habitat
+        + Width
+        + WaterContent
+        + FatContent
+        + Habitat:Width
+        + Habitat:WaterContent  
+        ,data=dataFly)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+From the previous listing, we decide to first exclude the 'Sex' factor
+```{r}
+# Model formulation
+mod1<-lm(DryWeight~ Habitat
+        + Width
+        + WaterContent
+        + FatContent
+        + Habitat:Width
+        + Habitat:WaterContent  
+        ,data=dataFly)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+As the 'FatContent' is still non significant, we exclude this main effect and we obtain the 'Candidate Model'. This candidate model contains three main effects (we are keeping the main effect because the variables have interaction effects) and two interactions.
+
+Candidate model:
+```{r}
+# Model formulation
+mod1<-lm(DryWeight~ Habitat
+        + Width
+        + WaterContent
+        + Habitat:Width
+        + Habitat:WaterContent  
+        ,data=dataFly)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+ To understand how main effects and interactions influence the dry weight of the flies, we will analyse the coefficients of the model.
+
+
+## Model's coefficients analysis
+```{r}
+# Coefficients of the model
+summary(mod1)
+```
+
+This output presents a table detailing the coefficients of the model with coefficients associated with each significant main effect and interaction. Remind that for a factor, one level is called 'the baseline' meaning that its coefficient is 0 (also called the reference level). From this table, coefficients are :
+
+
+**HABITAT FACTOR**  
+- $Habitat_{Coast}$ = 0 (the baseline of the factor Habitat)  
+- $Habitat_{Inland}$ = $-2.43^{**}$  
+**WIDTH COVARIATE**  
+- $\beta_{Width}$ = $0.21^{NS}$  
+**WATER CONTENT COVARIATE**  
+- $\beta_{WaterContent}$ = $0.31^{***}$  
+**HABITAT:WIDTH INTERACTION**  
+- $\beta_{Width_{Inland}}$ = $2.34^{***}$    
+**HABITAT:WATER CONTENT INTERACTION**  
+- $\beta_{WaterContent_{Inland}}$ = $- 0.21^{***}$
+
+## Model explanation: R²
+
+You can determine the part of the $Y$ variation explained by your model. See the output of the model summary.
+```{r R², include=FALSE}
+# R² of the model
+summary(mod1)
+```
+In this output, you get that the adjusted R² = 0.6067. That means that about 61% of the variance of the dry weight of the flies is explained by its relationship with their habitat, water content and width and the interactions between these predictors.
+
+## Model expression
+You can write the model with the coefficient, be carefull you have a different expression for each modality.
+
+
+$$ Dry\:Weight = 0.05\:+\:(Habitat_{Coast} = 0 \:;\:Habitat_{Inland} = -2.43^{**}) $$
+$$ +\:0.21^{NS}. Width\:+\:0.31^{***}. Water\:Content $$
+$$ + (if\:Habitat=Inland:\:+ 2.34^{***}. Width\: -\: 0.21^{***}.Water\:Content)$$
+## Biological intepretation
+
+Before drawning any conclusions from your result, you have to validate the model (part model validation). The assumptions of ANCOVA's are the same as for all general linear models (i.e. regressions, ANOVAs), you have to check *independence of residuals*, *normality of residuals* and *homogeneity of variances*
+3) Régression #Fanny
+4) Validation des modèles #Lucia
+
+To be abme to conclude with your results you have to validate your model. All general linear model (linear regression, ANOVA, ANCOVA) need to verify 3 criterions.
+
+
+- *normality of residuals* 
+
+The assumption of normality can be checked by producing an histogram and a quantile plot of the residuals. The histogram of residuals should follow a normal distribution. If the points in the quantile plot lie mostly on the red line, the residuals are normally distributed.
+
+```{r normality}
+
+par(mfrow=c(1,2))
+# Histogram
+hist(mod1$residuals,col='blue',xlab="residuals",main="Check Normality")
+# Quantile-Quantile plot
+qqnorm(mod1$residuals,pch=16,col='blue',xlab='')
+qqline(mod1$residuals,col='red')
+```
+As you can see, the residual are lie mostly the red line so we can say the residuals are normally distributed
+
+A FAIIIIIIIIIIIRE: dire quoi faire si pas normal --> F plutot resistant au écart à la normalité
+
+- *homogeneity of variances*
+The assumption of homogeneity of variance, namely that the variation in the residuals is approximately equal across the range of the predictor variables, can be checked by plotting the residuals against the fitted values and the residuals against the significant main effects.
+
+```{r, fig.height=5, fig.width=5}
+par(mfrow=c(2,2))
+
+# residuals vs fitted
+plot(residuals(mod1)~fitted(mod1)
+      , col='blue'
+      , pch=16)
+abline(h = 0)
+
+# residuals against Habitat factor
+boxplot(residuals(mod1)~ dataFly$Habitat, 
+         varwidth = TRUE,
+         ylab = "Residuals",
+         xlab = "Habitat",
+         main = "")
+
+# residuals against Width
+plot(residuals(mod1)~ dataFly$Width, 
+         pch=16,
+         col="blue",
+         ylab = "Residuals",
+         xlab = "Width",
+         main = "")
+abline(h = 0)
+
+# residuals against Water Content
+plot(residuals(mod1)~ dataFly$WaterContent, 
+         pch=16,
+         col="blue",
+         ylab = "Residuals",
+         xlab = "Water Content",
+         main = "")
+abline(h = 0)
+```
+Pas homogène pattern en entonnoir
+Voir quoi faire quand ecart à l'homo
+
+
+- *independence of residuals*
+
+ANCOVA (like other General Linear Models) assumes that all replicate measures (and so, residuals) are independent of each other. This issue needs to be considered at *the design stage*. Given the present design, all flies collected are independent as randomly sampled. This assumption is checked.  
+If data are grouped/depended in any way, then more complex designs are needed to account for additional factors. During the exploratory stage, you can detect spatial dependencies with a Moran test on the response variable or spot time dependencies by ploting the autocorrelogram. 
+Thus, you can include the dependency in your model by using mixed models (cf chapter mixte model). If the dependency is still present in the residual of the model, you can't use general linear model, you need to implement specific time (ARIMA ...) and space (Spatial Lag model ...) model.
 
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
@@ -72,3 +322,14 @@ Remarques :
 Consignes suppl :
 -didactique -> phrases courtes, claires, une phrase = une idée
 -25 pages max
+
+
+
+
+
+CONCLUCION FINALE:
+Dire que si on veut gerer des dépendance il y a mixte, voir chapitre sur les modèles mixtes
+
+Modéle linéaire et statistique classique ne sont parfois pas utilisable si situation et modèle trop complexe. 
+
+D'autre méthode comme le machine learning ou les statistiques Bayesiennes sont d'autre outils qui permettent de faire de la prédiction ou de l'inférence sur des modèles complexes avec de nombreux paramètres et variable.
