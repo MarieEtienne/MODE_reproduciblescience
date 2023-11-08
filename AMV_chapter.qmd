@@ -21,6 +21,7 @@ The aim of these analyses is to reduce the number of dimensions and examine the 
 Multivariate analysis methods are therefore used to describe the data and generate hypotheses that can then be tested.
 
 # PART 1: PCA
+<<<<<<< HEAD
 
 ## Introduction :
 
@@ -192,28 +193,86 @@ Thanks to PCA, we can see that the final score is more linked to the score of ce
 This chapter is a simple example using R
 
 You can import R package using the code
+=======
+
+## Mathématiques
+
+## Interprétation
+
+# PART 2: MCA
+
+## Mathématiques
+
+## Interpretation
+
+Let's have to look to fictive the data set we will be working on:
 
 ```{r}
 library(tidyverse)
+hippo <- read.table(file = "https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/hp.csv", sep=';', header=TRUE)
+hippo=hippo[,-1]
+str(hippo)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
+Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "G1", "G2" and "G3".
 
-For example a basic summary of a dataset is given by
+We are performing MCA with the package FactoMineR.
+
+```{r, include=FALSE}
+library(FactoMineR)
+res.mca = MCA(hippo, quanti.sup=1)
+```
+
+Let's have a look to Eigen Values:
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+res.mca$eig
 ```
 
-and produce a graph
+The total variance of the data set is divided between four dimensions. The first dimension concentrate 32.6% of the total variance. The first plan gather 58% of the variance.
+
+Here, you can see the results for the individuals, their coordinates ($coord$), contribution ($contrib$) and the quality of their projection ($cos2$ )
 
 ```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
+head(res.mca$ind$coord)
+head(res.mca$ind$cos2)
+head(res.mca$ind$contrib)
 ```
 
-A citation @bauer2023writing
+Coordonates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+
+You can access the same information for the variable (instead of the individuals):
+>>>>>>> Lucile
+
+```{r}
+res.mca$var$coord
+res.mca$var$contrib
+res.mca$var$cos2
+```
+
+As a supplementary quantitative variable was added, MCA gives its coordinates with the following code:
+
+```{r}
+res.mca$quanti.sup$coord
+```
+
+Let's have a look to the plot of this MCA analysis:
+
+```{r}
+plot(res.mca)
+```
+
+As this is a factice data set, some individuals are overlapping. We will not focus on this artefact of the data set.
+
+**How to interprete these graphs?**
+
+***General description*** : The individuals are in black. The variables are in red. The percentage of variance of the first two axis is written on them. Individuals in the center of the cloud are individuals taking a mean value for all of their caracteristics, unlikely individuals far from the middle which are specific individuals, very different from others. Close individuals present close characteristics.
+
+***Interpretation***: Here, we can see that the first axis separates individuals drinking regularly from individuals drinking rarely. The second axis separates individuals drinking at G2 from individuals drinking at G3. Male and female seamed to be separated by the first axis. As we can gather individuals sharing close properties, females seams to drink regularly and male more rarely. It is a bit less clear but male are drinking preferably in pound 1.
+
+## Take Home Message
+
+MCA is a statistical method adapted to table of type "individuals x quatitative variable". Eingen Values correspond to means of squered correlation ratios. It could be used a pre-processing before a classification or a coinertia analysis on tables with quantitative.
 
 # PART 3: RDA
 
