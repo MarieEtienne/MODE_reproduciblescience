@@ -59,7 +59,10 @@ Are you interested in population and epidemiological trends and dynamics? Would 
 
 Then this is the chapter for you! Work it as much as you can! You'll end up shining in modelling (and maybe even in society).
 
-At the end, you'll be able to ...
+At the end, you'll:\
+- know how to define an ordinary differential equation\
+- be able to detect a problem involving the need to use differential equations\
+- be able to carry out modelling involving an ODE system in an ecological context
 
 # I. Dynamic systems
 
@@ -146,6 +149,34 @@ Here, the variable of interest (= the state of the system) is the number of indi
 - **birth**: denoted b. This means that 👽 individuals will produce b👽 new individuals in 1 unit of time\
 - **migration**: denoted m. This means that 👽 increases by m individuals in 1 unit of time.
 
+Let's try to predict step by step the number of individuals at time (t+1), based on the information known at time (t).
+
+What will the number of individuals at time (t+1) depend on?
+
+Firstly, it depends on the number of individuals at time (t)!
+
+We then note:
+👽(t+1) = 👽(t)
+
+But defined in this way, our population is constant. It doesn't change at all over time.
+
+How can the population increase?
+- Through migration
+- Through births
+
+We then note:
+👽(t+1) = 👽(t) + migrations + births
+
+But at each time step, the population is also subject to mortality (which obviously reduces the number of individuals).
+
+We then note:
+👽(t+1) = 👽(t) + migrations + births - mortality
+
+Let's replace these words with their notations:
+👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
+
+
+
 ```{r, include=TRUE, fig.height=5, fig.width=6}
 # Create a new drawing page and set the drawing settings
 drawPage(width = 5, height = 4, units = "inches")
@@ -174,21 +205,21 @@ drawLine(x = c(0.6, 0.5),
 
 # Draw the 'discret' time lines
 #     * The vertical one 
-drawLine(x = c(2, 2),
+drawLine(x = c(1.7, 1.7),
          y = c(0.5, 2),
          lineWidth = 1)
 #     * The horizontal one
-drawLine(x = c(0.5, 2),
+drawLine(x = c(0.5, 1.7),
          y = c(2, 2),
          lineWidth = 1)
 
 # Draw the 'continuous' time lines
 #     * The vertical one 
-drawLine(x = c(3, 3),
+drawLine(x = c(2.35, 2.35),
          y = c(0.5, 3),
          lineWidth = 1)
 #     * The horizontal one 
-drawLine(x = c(0.5, 3),
+drawLine(x = c(0.5, 2.35),
          y = c(3, 3),
          lineWidth = 1)
 
@@ -204,20 +235,20 @@ drawCurve(x = c(1.5, 4.1),
           squareShape = 0,
           lineWidth = 1.5)
 drawLine(x = c(1, 3.7),
-         y = c(1, 3.7),
+         y = c(0.9234, 5.076),
          lineWidth = 1.5,
          lineColor = "blue")
-drawLine(x = c(1, 3.7),
-         y = c(1, 3.7),
-         lineWidth = 1.5,
-         lineColor = "blue")
+# drawLine(x = c(1, 3.7),
+#          y = c(1, 3.7),
+#          lineWidth = 1.5,
+#          lineColor = "blue")
 
 # Add the text
 drawText(x = 0.1, y = 4, text = "Number")
 drawText(x = 0, y = 3.8, text = "of individuals")
 drawText(x = 4.2, y = 0.4, text = "Time")
-drawText(x = 3, y = 0.4, text = "(t+Δt)")
-drawText(x = 2, y = 0.4, text = "(t)")
+drawText(x = 2.35, y = 0.4, text = "(t+Δt)")
+drawText(x = 1.7, y = 0.4, text = "(t)")
 drawText(x = 0.1, y = 3, text = "👽(t+Δt)")
 drawText(x = 0.1, y = 2, text = "👽(t)")
 
@@ -228,10 +259,6 @@ drawText(x = 2.80, y = 0, text = "Figure 2: Schematic graphic representation of 
 drawText(x = 3.15, y = -0.2, text = "of a population over time")
 
 ```
-
-
-
-
 
 $$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
 
