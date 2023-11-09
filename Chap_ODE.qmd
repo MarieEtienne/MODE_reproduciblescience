@@ -181,26 +181,20 @@ We know what happens at each time step of 1. What we don't know is what happens 
 
 The time step between each time step of 1 is noted: $$\Delta t < 1$$
 
-We then incorporate this new time step into our formula:
-$$\begin{aligned}[t]
+We then incorporate this new time step into our formula: $$\begin{aligned}[t]
         & \phantom{=}\left(👽(t+1) = 👽(t) + m + b👽(t) - d👽(t) \right)\\
         & \Leftrightarrow 👽(t+\Delta t)= 👽(t) + m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
         & \Leftrightarrow 👽(t+\Delta t) -👽(t) = m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
         & \Leftrightarrow \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = m + b👽(t) - d👽(t) \\
         \end{aligned}$$
 
+Great! Now, what do you have to do to really work in continuous time, and not just be interested in a very small time step?
 
+We need to be interested in a Δt of zero (or very close to 0).
 
+This gives us: $$\lim_{\Delta t \to 0} \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = \frac{d👽}{dt} = 👽'(t) $$
 
-
-
-
-
-
-
-
-
-$$ f(x) = \begin{cases} \frac{1}{b-a} \\ 0 \end{cases} $$
+Graphically, this gives (*Figure 2*):
 
 ```{r, include=TRUE, fig.height=5, fig.width=6}
 # Create a new drawing page and set the drawing settings
@@ -263,10 +257,10 @@ drawLine(x = c(1, 3.7),
          y = c(0.9234, 5.076),
          lineWidth = 1.5,
          lineColor = "blue")
-# drawLine(x = c(1, 3.7),
-#          y = c(1, 3.7),
-#          lineWidth = 1.5,
-#          lineColor = "blue")
+drawLine(x = c(1.2, 3.7),
+         y = c(0.9234, 6.276),
+         lineWidth = 1.5,
+         lineColor = "red")
 
 # Add the text
 drawText(x = 0.1, y = 4, text = "Number")
@@ -277,7 +271,8 @@ drawText(x = 1.7, y = 0.4, text = "(t)")
 drawText(x = 0.1, y = 3, text = "👽(t+Δt)")
 drawText(x = 0.1, y = 2, text = "👽(t)")
 
-
+drawBox(x = 2.5, y = 4.3, width = 2, height = 0.5,
+        fillColor = 'white', lineColor = 'white')
 
 # Add the caption
 drawText(x = 2.80, y = 0, text = "Figure 2: Schematic graphic representation of the growth")
@@ -285,7 +280,19 @@ drawText(x = 3.15, y = -0.2, text = "of a population over time")
 
 ```
 
-$$\int_a^b 👽(t) \, \mathrm dt$$
+The blue line is characterized by the slope: $$\frac{👽(t+\Delta t) -👽(t)}{dt}$$
+
+The red line is characterized by the slope: $$\frac{d👽}{dt}$$
+
+There are 3 behaviors to understand: $$\begin{aligned}[t]
+        & \frac{d👽}{dt}>0\Leftrightarrow\text{👽is increasing around t} \\
+        & \frac{d👽}{dt}=0\Leftrightarrow\text{👽 does not vary around t}\\
+        & \frac{d👽}{dt}<0\Leftrightarrow\text{👽 is decreasing around t}\\
+        \end{aligned}$$
+
+This N'(t) thus represents an 'instantaneous' increase over time in the number of individuals in the Alien population.
+
+And this is what we call a differential equation: $$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$ In other words, it is an equation that relates a variable (here, 👽(t)) to its derivatives (here, only d👽/dt).
 
 # II. Order 1 ODE & definition of ODE
 
