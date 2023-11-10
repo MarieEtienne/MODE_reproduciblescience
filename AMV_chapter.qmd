@@ -282,7 +282,7 @@ La RDA était un État socialiste qui se comprenait comme un exemple de « socia
 Two table analysis is used when the scientist possesses two data set with expecting the second to explain the first. The first one is called Y, the response variable and the second one is called X, the explanatory variable. For example :
 
 | Table Y                                           | Table X                                                                                              |
-|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
+|-------------------------|-----------------------------------------------|
 | a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
@@ -304,7 +304,22 @@ and then describe the purpose of your chapter as well as executing R command.
 For example a basic summary of a dataset is given by
 
 ```{r}
+
+require(ade4)
+require(vegan)
+
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+
+
+###Autres données
+Oak <- read.csv("C:/Users/bbong/Documents/cours/M2_EFCE/OCR/Oak_data.csv", sep=';', header = TRUE) 
+Oak_spp <- read.csv("Oak_species.csv", header = TRUE)
+
+Topo <- Oak %>%
+select(LatAppx, LongAppx, Elev.m, Slope.deg) %>%
+decostand("range")
+
+Oak_sp=Oak[,28:83]
 ```
 
 and produce a graph
@@ -314,6 +329,70 @@ df %>% ggplot() +
 	aes(x=species, y = body_mass_g) +
 	geom_boxplot()  
 ```
+
+We can explore the tables
+
+```{r}
+head(Oak_sp)
+head(Topo)
+```
+
+So here, the first table ("Oak_sp") represents a table of spider abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
+
+As explained above, the CCA objective is to link the abundance of spider by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the spiders.
+
+We have seen in introduction of the part 3 that CCA was used when the respond have a non-linear distribution but rather a gaussian relationship. 
+
+So we begin by performing a CA on the species table:
+```{r}
+caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
+```
+
+Then, we can perform the PCA on the CA that corresponds to the CCA with the ADE4 package:
+```{r}
+ccaoak <- pcaiv(coafau,Topo,scannf=F,nf=2)
+```
+
+You can also realize the CCA with one code row only with the vegan package:
+```{r}
+ccavegan=cca(Oak_sp,Topo,scan=F)
+```
+It is important to use the two methods because each allows us to have different information during the analyse of the result
+
+An we already have completed our analyse, it was no difficult!
+But now, we need analyse the result and test the significant.
+
+To test the significant, we use a bootstrapping test thank you the ADE4 package.It is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+```{r}
+randtest(ccaoak)#with ADE4
+plot(randtest(ccaoak))
+```
+
+The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+
+The results of this test shows that our result is significatively different to the permutation result with a threshold of 5% (p-value = 0.02)
+
+Finally, the results of the RLQ are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the spider distribution.
+
+We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF). 
+```{r}
+test=vif.cca(ccavegan) 
+test
+```
+If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an ordistep function.
+
+Now that we have tested all the conditions, we can look at the results.
+
+
+
+
+
+
+
+
+
+
+
 
 A citation @bauer2023writing
 
