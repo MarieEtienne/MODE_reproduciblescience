@@ -64,7 +64,7 @@ At the end, you'll:\
 - be able to detect a problem involving the need to use differential equations\
 - be able to carry out modelling involving an ODE system in an ecological context
 
-# I. Dynamic systems
+# I. Dynamic systems & ODE definition
 
 Let's start simply!
 
@@ -292,12 +292,65 @@ There are 3 behaviors to understand: $$\begin{aligned}[t]
 
 This N'(t) thus represents an 'instantaneous' increase over time in the number of individuals in the Alien population.
 
-And this is what we call a differential equation: $$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$ In other words, it is an equation that relates a variable (here, 👽(t)) to its derivatives (here, only d👽/dt).
+And this is what we call a differential equation: $$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$ In other words, it is an equation that relates a variable (here, 👽(t)) to its derivatives (here, only d👽/dt). It describes the speed at which a variable (in this case 👽: the number of individuals in the Alien population) varies over time.
 
-# II. Order 1 ODE & definition of ODE
+# II. Single ODE system: examples of exponential & logistic models
 
-# III. Order 2 ODE
+Let's explore two well-known models to better understand the ODE concept.
 
-# IV. Order 3 ODE
+## II-A. The exponential model or Malthus model
+
+The biological hypothesis behind this first model is as follows: The population grows in proportion to its present size.
+
+Let r be defined as follows: $$r \in \mathbb{N}^+$$
+
+This means that a population of N individuals at time t will gain r\*N individuals at the next time.
+
+It could be illustrated as follows (*Figure 3*):
+
+```{r, include=TRUE, fig.height=2.8, fig.width=5}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 5, units = "inches")
+
+# Draw the different shapes of the system on the page
+#     * The rectangle
+drawBox(x = 2.5, y = 2.5, width = 1, height = 1)
+
+
+#     * The r coefficient arrow 
+drawLine(x = c(1, 2),
+         y = c(2.5, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.4, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.6, 2.5))
+
+# Add the text
+#     * For the population
+drawText(x = 2.5, y = 2.5, text = "N")
+
+#     * For the r coefficient
+drawText(x = 1.2, y = 2.65, text = "r * N")
+
+# Add the caption
+drawText(x = 2.5, y = 1.5, text = "Figure 3: The Malthus model dynamic system")
+
+```
+
+We're going to define a discrete and a continuous model here to make things very clear!
+
+### II-A-1. Discrete model
+
+Soit n ...
+
+### II-A-2. Continuous model
+
+Soit t ...
+
+## II-B. The logistic model or Verhulst model
+
+# III. Double ODE system: example of lotka-volterra model
+
+# IV. Triple ODE system: example of ???
 
 # Conclusion & motivation words!
