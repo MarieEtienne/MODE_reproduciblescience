@@ -481,11 +481,21 @@ The last point is to observe the species coordinates.
 ```{r}
 #analyse the species:
 round(rlq$lQ,dig=2)
+s.label(rlq$lQ,boxes=FALSE)
 s.label(rlq$lQ, label=aviurba$species.names.fr,boxes=FALSE)
 ```
-Here, is to see that we seems to have a gradient of response along the second axis. We will see that we need to link this to the others variables (trait and environment)
+Here, is to see that we seems to have a gradient of response along the first axis (i.e. Loriot Jaune/Sp37 [coord=1.18; -1.33] and Alouette des champs/Sp9 [coord=0.99; 1.17]) and along the second axis (i.e. Loriot Jaune/Sp37 [coord=1.18; -1.33] and Fauvette des jardins/Sp21 [coord=0.99; 1.17]). We will see that we need to link this to the others variables (trait and environment)
+For species and sites, we do not have contribution because these variables do not contribute of the axis creation.
 
 
+CONCLUSION 
+To conclude on this analyse, the two first axes were required to explain 86.2% of the total variation with 66.7%, and 19.5% of the total inertia respectively.
+
+The correlations between the environmental variables and the RLQ axes
+showed that the first axis is explained by Veg.cover.R100 (contribution of
+16.95%), veg.cover.R22 (7.43%), noisy.yes (8.82%), small.bui.yes (11.22%),
+field.yes (8.17%), field.no (8.2%) and Veg.cover.R22 (7.43%). 
+The traits variables that contribute to the first axis of the RLQ axes are breeding.ground (28.19%), feed.strat.foliage (19.8%), breeding.scrub (13.3%) and negatively with breeding.building (17.18%) and feed.strat.aerial (7.09%). In other words, breeding.ground, feed.strat.foliage, breeding.scrub, feed.strat.aerial and breeding.building were the most powerful explanatory attributes for this RLQ axis (explained by both the length and the angle between the axes and the vectors).
 
 
 A citation @bauer2023writing
