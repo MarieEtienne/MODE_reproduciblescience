@@ -372,7 +372,7 @@ The outputs above corresponds to the permutation test. We see that the number of
 
 The results of this test shows that our result is significatively different to the permutation result with a threshold of 5% (p-value = 0.02)
 
-Finally, the results of the RLQ are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the spider distribution.
+Finally, the results of the CCA are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the spider distribution.
 
 We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF). 
 ```{r}
@@ -382,14 +382,6 @@ test
 If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an ordistep function.
 
 Now that we have tested all the conditions, we can look at the results.
-
-
-
-
-
-
-
-
 
 
 
