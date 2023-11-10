@@ -379,15 +379,9 @@ We have now to look the collinearity between the environmental variable. It corr
 test=vif.cca(ccavegan) 
 test
 ```
-If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an ordistep function.
 
+If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an ordistep function. 
 Now that we have tested all the conditions, we can look at the results.
-
-
-
-
-A citation @bauer2023writing
-
 # PART 4: RLQ
 
 ## Mathématiques
