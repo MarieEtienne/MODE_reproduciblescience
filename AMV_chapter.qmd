@@ -307,13 +307,14 @@ For example a basic summary of a dataset is given by
 
 require(ade4)
 require(vegan)
+require(tidyverse)
 
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+#df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84#fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , #header = TRUE)
 
 
 ###Autres données
 Oak <- read.csv("C:/Users/bbong/Documents/cours/M2_EFCE/OCR/Oak_data.csv", sep=';', header = TRUE) 
-Oak_spp <- read.csv("Oak_species.csv", header = TRUE)
+#Oak_spp <- read.csv("Oak_species.csv", header = TRUE)
 
 Topo <- Oak %>%
 select(LatAppx, LongAppx, Elev.m, Slope.deg) %>%
@@ -350,7 +351,7 @@ caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
 
 Then, we can perform the PCA on the CA that corresponds to the CCA with the ADE4 package:
 ```{r}
-ccaoak <- pcaiv(coafau,Topo,scannf=F,nf=2)
+ccaoak <- pcaiv(caoak,Topo,scannf=F,nf=2)
 ```
 
 You can also realize the CCA with one code row only with the vegan package:
@@ -380,8 +381,76 @@ test=vif.cca(ccavegan)
 test
 ```
 
-If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an ordistep function. 
+If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an *ordistep* function. 
+
 Now that we have tested all the conditions, we can look at the results.
+```{r}
+ccaoak
+print(paste("The pourcentage of variance explained by topographic variables is: ",sum(ccaoak$eig)/sum(caoak$eig),"%"))
+```
+The first output (by *ADE4*) allows us to see each part of the analyse that could be use to describe the result. We will use especially the last part afterward. You also have, at the beginning, the number of rank that corresponds to the number of eigenvalue with their score below.
+We can calculate the pourcentage of variance explained by topographic variables.
+
+```{r}
+ccavegan
+```
+Here, it is the output with the *vegan* package.We can see the total inertia in the CCA analyse (5.55) and the inertia explained by the topographic variables (0.71) and by the residuals (4.85). We can therefore conclude that our topographic variables explain only 13% of the spider variances (same result that before).
+Below that, we have the eigenvalues for the constrained axes (variance part explained by topographic variables) and for the unconstrained axes (variance part explained by the residuals)
+
+
+We can now, observe the complet plot of the CCA result:
+```{r}
+plot(ccaoak)
+```
+Détailler rapidement les différentes parties du plot.
+
+But this can also be decomposed in different plots and output.
+We can begin by the absolute contribution of species:
+```{r}
+contrib=inertia.dudi(ccaoak, col = TRUE, row = FALSE)
+contrib$col.abs
+```
+The output, here, is the absolute contribution of each species for the axis 1 and the axis 2. This allows us to observe what species contributes the most of the axes.
+
+
+```{r}
+ccaoak$fa
+```
+
+```{r}
+ccaoak$co
+s.label(ccaoak$co,boxes=F)
+```
+
+```{r}
+ccaoak$cor
+s.corcircle(ccaoak$cor)
+```
+
+```{r}
+s.match(ccaoak$ls, ccaoak$li)
+plot(ccavegan,scaling=2) 
+plot(ccavegan,scaling=1) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # PART 4: RLQ
 
 ## Mathématiques
