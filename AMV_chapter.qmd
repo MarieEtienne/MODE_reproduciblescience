@@ -313,7 +313,7 @@ require(tidyverse)
 
 
 ###Autres données
-Oak <- read.csv("C:/Users/bbong/Documents/cours/M2_EFCE/OCR/Oak_data.csv", sep=';', header = TRUE) 
+Oak <- read.csv("C:/Users/bbong/Documents/cours/M2_EFCE/OCR/Oak_data.csv", sep=';', header = TRUE)  
 #Oak_spp <- read.csv("Oak_species.csv", header = TRUE)
 
 Topo <- Oak %>%
@@ -321,14 +321,6 @@ select(LatAppx, LongAppx, Elev.m, Slope.deg) %>%
 decostand("range")
 
 Oak_sp=Oak[,28:83]
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
 ```
 
 We can explore the tables
@@ -426,6 +418,8 @@ s.label(ccaoak$co,boxes=F)
 ccaoak$cor
 s.corcircle(ccaoak$cor)
 ```
+Here, we have the correlation between axes and the topographic variables. We can conclude that the elevation (corr = -0.15[axis1] ; -0.45[axis2]) and the slope (corr = 0.12[axis1] ; 0.65[axis2]) are strongly negatively correlated. The Longitude seems to be positively correlated with the slope and negatively correlated with the elevation.
+
 
 ```{r}
 s.match(ccaoak$ls, ccaoak$li)
@@ -433,7 +427,12 @@ plot(ccavegan,scaling=2)
 plot(ccavegan,scaling=1) 
 ```
 
+The first plot with the arrows represents the real abundances for each site (base of the arrow) and the predictions of abundance calculated by a multiple regression thanks to the topographic variables. 
+We see here that there are some large differences between reality and prediction. 
+Most of the sites are in a center group but some sites differ. It is the case with the sites n°7,40,41,42. We have another group with the sites n°43,44,45,46.
 
+The second plot, with *scaling = 1* preserves euclidian distances between stations.
+The third plot, with *scaling = 2* preserves correlations between species.
 
 
 
