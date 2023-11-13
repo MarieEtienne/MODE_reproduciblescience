@@ -1,5 +1,5 @@
 ---
-title: "Partial derivative equations: modeling of spatial dynamics"
+title: "Introduction to bayesian modeles for ecology"
 author : Coline - Jules - Mathis - Romane 
 bibliography: references.bib
 execute: 
@@ -9,5 +9,21 @@ output:
    toc: true
    toc_float: true
 ---
+```{r setup}
+#| include: false
 
-## 
+library(tidyverse)
+
+```
+
+
+# Introduction 
+
+- History of bayesian paradigme.
+- Phylosophy behind it.
+Frequentist approach : "What is the probability to observe my data given my model."
+
+Bayesian approach : "What  is the probability of my model given my data.
+
+
+
