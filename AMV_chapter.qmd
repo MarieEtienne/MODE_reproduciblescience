@@ -426,6 +426,8 @@ s.label(ccaoak$co,boxes=F)
 ccaoak$cor
 s.corcircle(ccaoak$cor)
 ```
+Here, we have the correlation between axes and the topographic variables. We can conclude that the elevation (corr = -0.15[axis1] ; -0.45[axis2]) and the slope (corr = 0.12[axis1] ; 0.65[axis2]) are strongly negatively correlated. The Longitude seems to be positively correlated with the slope and negatively correlated with the elevation.
+
 
 ```{r}
 s.match(ccaoak$ls, ccaoak$li)
