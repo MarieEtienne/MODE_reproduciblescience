@@ -66,14 +66,30 @@ The model parameters are :
 -   The growth rate of y and z depends on the number of prey caught. It
     is modeled by dxy for y and by gyz for z.
 
--   The death rate of *x* and *y* depends on the number of top predators
-    : *y* for *x* and *z* for *y*. It is modeled by -*bxy* for *x* and
-    by *-eyz* for y.
+-   
+
+    The death rate of *x* and *y* depends on the number of top predators
+
+    :   *y* for *x* and *z* for *y*. It is modeled by -*bxy* for *x* and
+        by *-eyz* for y.
 
 This model is only useful for chains of predators. It doesn't take into
 account the presence of several predators with different dynamics on the
 same prey.
 
+Let's try to solve this system: To do this, the first step is to find
+the balance of the model, that is to say the values (x,y,z) so that:
+
+$$\frac{d_x}{d_t}=\frac{d_y}{d_t}=\frac{d_z}{d_t}=0$$
+
+We take our previous systems that we factored:
+
+$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(dxy-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
+
+The obvious solution is (0,0,0) but is not the only one. Indeed, for the
+derivatives to be equal to 0, then we must find the following solution:
+
+$$(a-by)=(gy-f)=(dx-c-ez)=0$$
 
 V. Ecological example of the use of ODE #Model NPZ & Growth model =\>
 How the production of the environment affect the growth of an organism ?
