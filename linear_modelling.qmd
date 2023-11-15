@@ -317,8 +317,163 @@ See part 4).
 2) ANCOVA #Lucia
 3) Régression #Fanny
 
+<<<<<<< HEAD
 
 blabla bla 
+=======
+# INTRODUCTION
+
+You have certainly used the technique of regression many times in various exercises. It is used to model the relationship between a **quantitative dependent variable** $Y$ (the **response**, that is continuous, and one or several **explanatory quantitative variable(s)** (the **predictors**, that are independant). $X_{1}$,$X_{2}$...$X_{p}$.
+For example, we could use a linear regression to test whether the weight of a dog (i.e. the explanatory variable) is a good predictor of its lifespan (the response variable).
+
+### MODEL WRITING
+
+The general model is written :
+
+$$ Y_{i} = \alpha + \beta_{j}.X{ij}+ \epsilon_{i}$$ 
+$$ i=1,...,n$$
+$$ j=1,...,p$$
+The inclusion of the error term $\epsilon$, also called the stochastic part of the model, makes the model statistical rather than mathematical. The error term is drawn from a statistical distribution that integers the random variability in the response. In standard linear regression, this is assumed to be a **normal (Gaussian) distribution**.
+
+There are two different regression types :
+• the *simple linear regression* includes a single $X$ in your analysis.
+The model takes the form:
+
+$$ Y = \alpha + \beta.X + \epsilon $$ 
+
+where $\alpha$ is the intercept (value of $Y$ when $X$ = 0), $\beta$ is the regression slope (amount of change in $Y$ for each unit of $X$), and $\epsilon$ is the error term (i.e. residuals).
+
+
+• the *multiple linear regression* includes several $X_{s}$ in your analysis.
+The model takes the form :
+
+$$ Y_{i} = \alpha + \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip}+ \epsilon_{i}$$
+
+# EXAMPLE : Human visual system size and Latitudinal light levels
+
+## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
+
+This data was published in 'Latitudinal variation in light levels drives human visual system size'. Eiluned Pearce and Robin Dunbar. Biol. Lett. published online 27 July 2011 ([http://doi:10.1098/rsbl.2011.0570](http://doi:10.1098/rsbl.2011.0570){.uri}).
+Ambient light levels influence visual system size in birds and primates and Pearce and Dunbar (2011) argue that the same is true for humans. Using linear regression techniques, they want to test the relationship between (absolute) latitude and human orbital volume, an index of eyeball size. Pearce and Dunbar (2011) measured cranial capacity (CC), orbital volume and foramen magnum (FM) dimensions for 73 healthy adult crania from the Oxford University Museum of Natural History and Duckworth Collection, University of Cambridge.
+
+List of the variables:  
+- **MeanOrbitalVolume** = Index for eyeball size, continuous variable (the response)
+- **CranialCapacity** = measure of the volume of the interior of the cranium, continuous variable   
+- **Minimum_Illuminance** = log scale of the minimum of illuminance of the sample site, continuous variable  
+- **Minimum_Temperature** = Minimum temperature of the sample site, continuous variable  
+- **AbsoluteLatitude** = Absolute values of latitude of the sample, continuous variable  
+- **Population** = country/region of the sample, Categorical variable
+
+The response variable is mean orbital volume and the rest are assumed covariates. The Population variable is a descriptor of the samples, so not included in the modelling. Each value for orbital volume represents the mean of 3 replicate measurements from the same skull.
+
+Question : ** *which covariates drive the mean orbital volume?* **
+
+```{r global data, echo=TRUE,include=TRUE}
+# Dataset import
+dataHVS <- read.table("HumanVisualSystem.txt", dec=".", header = TRUE)
+dataHVS$Population<-as.factor(dataHVS$Population)
+str(dataHVS)
+
+# Check for presence of missing values
+colSums(is.na(dataHVS))
+#There is no missing value.
+
+# Name size reducing
+dataHVS$Pop<-dataHVS$Population
+dataHVS$Lat<-dataHVS$AbsoluteLatitude
+dataHVS$Capacity<-dataHVS$CranialCapacity
+dataHVS$Illumi<-dataHVS$Minimum_Illuminance
+dataHVS$Temp<-dataHVS$Minimum_Temperature
+dataHVS$Response<-dataHVS$MeanOrbitalVolume      
+```
+
+## DATA EXPLORATION
+
+This won't be detailed here, but keep in mind that it is primordial to any statistical analysis to check your data.
+See an example in a previous chapter !
+
+## STATISTICAL ANALYSIS
+
+### Model building
+
+You need to first analyse the full model containing all the independant variables in order to test their significance (i.e. see if they are relevant in the modelling) and decide whether you keep them or not.
+```{r fullmodel,include=TRUE}
+# Model formulation
+mod1<-lm(Response~Lat+Capacity,data=dataHVS)
+# Then we check for significance
+drop1(mod1,test="F")
+```
+
+Look at the test statistic, the F value and its associated p-value (Pr). They show that both covariates are significant. So, **the full model is the candidate model**. To understand how covariates influence the response (the orbital volume), we analyse coefficients of the model (i.e. the $\beta_{j}$). 
+
+### Model's coefficients analysis
+
+```{r coeff,include=TRUE}
+# Candidate model formulation
+mod1<-lm(Response~Lat+Capacity,data=dataHVS)
+# Coefficients of the model
+summary(mod1)
+
+#From this listing, you read the coefficients 
+#Coefficients:
+#               Estimate  Std. Error t value Pr(>|t|)    
+#(Intercept)    15.406367   3.063999   5.028 6.24e-06 ***
+#Lat             0.048910   0.014917   3.279  0.00186 ** 
+#Capacity        0.005836   0.002347   2.486  0.01616 *
+```
+
+This table detailed the coefficients of the model with coefficients associated with each covariate. You can deduce the candidate model:
+$$ Orbital\:Volume = 15.4 \:+\: 0.04.Latitude\: +\: 0.005.Cranial\:Capacity  $$
+Those coefficients suggest that the orbital volume increases with the latitude (in relation with Temperature and Illuminance) and the cranial capacity.
+
+### Model explanation: R²
+
+Let's determine the part of the $Y$ variation explained by your model.
+
+```{r R²,include=TRUE}
+# R² of the model
+summary(mod1)
+```
+You can read the adjusted R² = 0.345. That means that about 35% of the variance of the Orbital Volume is explained by its relationship with the Latitude (Temperature & Illuminance) and the Cranial Capacity.
+
+## MODEL VALIDATION: CHECK THE ASSUMPTIONS
+
+The assumptions of regression are the same as for all general linear models (i.e. simple or multiple regressions, ANOVAs, variance-covariance analyses), being *independence*, *normality of residuals* and *homogeneity of variances*. Additionally, you can check presence of influential statistical units (i.e. observations having a too large contribution to model).
+You can find details of this process in part I)4) of this chapter.
+
+## REPRESENTATION OF THE CANDIDATE MODEL
+
+You must want to have the best visual representation of your model !
+```{r ModelGraph, include=TRUE, fig.height=5, fig.width=5}
+
+# set the x, y, and z variables
+x <- dataHVS$Capacity
+y <- dataHVS$Lat
+z <- dataHVS$Response
+
+# Remind the candidate model
+mod1<-lm(z~x+y)
+
+# create a grid from the x and y values (min to max) and predict values for every point
+# this will become the regression plane
+grid.lines = 40
+x.pred <- seq(min(x), max(x), length.out = grid.lines)
+y.pred <- seq(min(y), max(y), length.out = grid.lines)
+xy <- expand.grid( x = x.pred, y = y.pred)
+z.pred <- matrix(predict(mod1, newdata = xy),nrow = grid.lines, ncol = grid.lines)
+
+# create the fitted points for droplines to the surface
+fitpoints <- predict(mod1)
+
+# scatter plot with regression plane
+scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red", 
+          theta = 30, phi = 10, bty="b",
+          xlab = "Cranial Capacity", ylab = "Latitude", zlab = "Response",  
+          surf = list(x = x.pred, y = y.pred, z = z.pred,  
+          facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9),           border="black"), main = " ")
+```
+
+>>>>>>> regression
 
 4) Validation des modèles #Lucia
 
@@ -690,11 +845,161 @@ nagelkerke(mod1)
 So here, the model explains 60.4% of the deviance, but with the others estimate, we found the model explain about 75% of the deviance. 
 Now, it is necessary to check the assumptions of the model to validate. See the part dedicated to this at the end.
 
+<<<<<<< HEAD
 =======
 1) Loi binômiale #Sarah
 2) Loi de Poisson #Léa
 >>>>>>> ANOVA
 3) Loi négative binômiale #Léa
+=======
+2) Loi négative binômiale #Léa
+
+The Negative Binomial distribution has been parameterized in a number of different ways in the statistical literature. Perhaps the most common way to parameterize is to see the Negative Binomial distribution arising as a distribution of the number of failures (X) before the r^th success in independent trials, with success probability p in each trial (consequently, r > 0 and 0 < p > 1). In such a case the probability mass function can be expressed as :
+
+$$Pr(X=x|r,p)=\frac {\Gamma(x+r)}{x!.\Gamma(r)}.p^r.(1-p)^x$$
+and the random variable X has the expectation (theoretical mean):
+
+$$\mu =\frac{r.(1 - p)}{p}$$ 
+
+and variance
+
+$$\sigma^2 = \frac{r.(1 – p)}{p^2}$$
+
+In a NB Generalized Linear model, the link function is log so that
+
+$$log(\mu_{y})= \alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip} = \eta $$
+
+The predicted values of Y is obtained by applying the inverse link function to η.
+
+$$\mu_{y}= e^{\alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip}} = e^{\eta} $$
+
+The negative binomial model has a NB error structure. This error structure allows, among other things, to correctly specify the relationship between the mean and the variance. This relationship is used by the maximum likelihood approach to estimate the coefficients and standard errors of the generalized linear model parameters.
+
+Let’s take an example to illustrate the use of the Negative binomial law : 
+
+# Example with the Negative binomial law 
+
+## DATA DESCRIPTION AND OBJECTIVES  
+The study of Timi and Poulin in 2003 is a good example to apply the Negative binomial law. We will use a subset of the original data. At each of 4 stations, fish sample were collected, with a total of 522 individual of anchovy. These fish were examined for parasites in order to understand the parasite community structure across the host population of anchovy. The data are in the file FishParasite.txt
+The response variable is “Number”, which represents the total number of parasites found in the fish. It is a count variable. There are 3 explicative variables: “Sex” (of the fish), “Length” (of the fish) and “Area”. Sex and Length are continuous, and Area is a categorical variable with 4 categories (A, B, C or D). Here we only consider the interaction between Length and Area. 
+
+```{r}
+# Dataset import
+para <- read.table("FishParasites.txt", dec=".", header = TRUE)
+para$Area<-as.factor(para$Area)
+para$Sex<-as.factor(para$Sex)
+str(para)
+# Missing values ? 
+colSums(is.na(para))
+# There is no missing value.
+```
+
+Let’s begin quickly with a Poisson model in order to see the problems and then apply a Negative Binomial model. 
+
+As said previously, before any analysis, you must explore the data, but we are not going to do this here.
+
+We perform a backward selection as explained previously, with a Poisson model : 
+
+```{r}
+# Model formulation
+mod1<-glm(Number~ Sex
+        + Area
+        + Length
+        + Area:Length
+        ,data=para
+        ,family=poisson(link="log"))
+# Then we check for significance
+drop1(mod1,test="Chi")
+summary(mod1)
+```
+
+Here the interaction between Length and Area is significant, so we keep both variables. And Sex is also significant. So the full model is the candidate model. To see if we can apply the Poisson model, we test the overdispersion. Sometimes, the variance of the response variable may be higher than supposed by the Poisson law. If the parameter is greater than 1.5, we can say that there is overdispersion and the standard errors of the coefficient estimates are biased. 
+Let’s check the overdispersion in the model with a DHARMa non parametric dispersion test: 
+
+```{r}
+# Overdisperion checking of the Poisson model
+# Scale parameter calculation
+E1 <- resid(mod1, type = "pearson") # (Y - mu) / sqrt(mu)
+N  <- nrow(para)
+p  <- length(coef(mod1))
+sum(E1^2) / (N - p)
+
+# Use simulations for parameter estimation (package DHARMa)
+testDispersion(mod1)
+```
+
+The overdispersion index is largely over 1.5, which means that there is an overdispersion in the model. So, the Poisson model can’t be apply and analyse. 
+There are some reasons of overdispersion like for example: the presence of outliers, a dependency, a non linear relationship, the use of the wrong link function… 
+
+We will change and use a Negative Binomial model and recalculate the overdispersion once we have found the model. 
+
+```{r}
+# Model formulation
+modNB<-glm.nb(Number~ Sex
+        + Area
+        + Length
+        + Area:Length
+        ,data=para)
+# Then we check for significance
+drop1(modNB,test="Chi")
+```
+We have a significant effect for the interaction between Area and Length but not for the main effect Sex. We need to keep the main factor Area and Length and delete the variable Sex, contrary to the Poisson model. 
+
+```{r}
+# Model formulation
+modNB<-glm.nb(Number~ Area
+        + Length
+        + Area:Length
+        ,data=para)
+# Then we check for significance
+drop1(modNB,test="Chi")
+```
+Here, the interaction is still significant, with the two main effect. So we have found the candidate model. Now we need to test the overdispersion, the same way as before. 
+
+```{r}
+# Overdisperion checking of the NB model
+# Scale parameter calculation
+E1 <- resid(modNB, type = "pearson") # (Y - mu) / sqrt(mu)
+N  <- nrow(para)
+p  <- length(coef(modNB))
+sum(E1^2) / (N - p)
+
+# Use simulations for parameter estimation (package DHARMa)
+testDispersion(modNB)
+```
+We found 1.35, which is below/under 1.5. So we succeed to delete the overdispersion. The DHARMa test validates the absence of overdispersion. 
+
+### Model explanation
+
+Now we can examine the coefficients of the candidate model in order to understand how the number of parasites in fish is influenced.
+
+```{r}
+# Coefficients of the model
+summary(modNB)
+```
+
+
+So, the candidate model is:
+$$ log(Number\:of\:Parasites) = -0.44 + (Area_{A} = 0 ;\:Area_{B} = +1.64;\:Area_{C} = -0.61;\:Area_{D}  = -5.42)$$ 
+$$ +\: 0.028.Length\:+ (if\:Area=B: - 0.010. Length;\:if\:Area=C: + 0.002. Length ;\:if\:Area=C: + 0.029.Length)  $$
+
+Be careful here! As we saw previously, there is always a modality of the factor which is the baseline, and every modality of this factor is compared to the baseline. So if a modality of the factor is significant, it means that there is a difference between this modality and the baseline. So in order to test which modality is different from one another, we need to change the baseline. 
+
+As in every Generalized Linear Models, there is no R2. So we will calculate the pseudo R2 with the formula : 
+
+$$Pseudo\:R^2=100\:.\:\frac{Null\:Deviance- Residual\:Deviance}{Null\:Deviance}$$
+
+On R : it is : 
+
+```{r}
+# Estimate of deviance explained
+(modNB$null.deviance-modNB$deviance)/modNB$null.deviance
+
+# Some others estimates of deviance explained - package 'rcompanion'
+nagelkerke(modNB)
+```
+
+>>>>>>> 0cc6741b0d211ff7d97324260a0930ce02427830
 4) Validation des modèles #Clément
 
 Unlike General Linear Models, Generalized Linear Models don't require the conditions of homoscedasticity and normality of residuals, but it does require the *independence of residuals*. We can also check the presence of influential observations (these are the statistical units that have a too large contribution to the model).
