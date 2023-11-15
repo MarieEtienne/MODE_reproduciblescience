@@ -273,48 +273,32 @@ MCA is a statistical method adapted to table of type "individuals x quatitative 
 
 ## Method principle
 
-La République démocratique allemande, en abrégé RDA, est un État qui a existé de 1949 jusqu'à 1990. Elle a été fondée à l'issue de la Seconde Guerre mondiale (en réaction à la fondation quelques mois plus tôt de la République fédérale d'Allemagne sur les zones d'occupation américaine, anglaise et française) par les communistes allemands sur la zone d'occupation soviétique, partie de l'Allemagne occupée par l'Armée rouge.
-
-La RDA était un État socialiste qui se comprenait comme un exemple de « socialisme réel » fondé sur l'idéologie marxiste-léniniste. Les structures politiques du pays (notamment le gouvernement et le parlement) suivent les directives du principal parti du pays, le SED. Suite à l'effondrement du Bloc de l'Est, la RDA disparaît et est intégrée à la République fédérale d'Allemagne, le 3 octobre 1990.
-
-État européen de taille moyenne (108 333 km²), la RDA était divisée en 15 Bezirke (districts). Sa population est passée de 19 millions de personnes après la Seconde Guerre mondiale à 16 millions au moment de la réunification en 1990.
-
 Two table analysis is used when the scientist possesses two data set with expecting the second to explain the first. The first one is called Y, the response variable and the second one is called X, the explanatory variable. For example :
 
 | Table Y                                           | Table X                                                                                              |
-|-------------------------|-----------------------------------------------|
+|-------------------------|----------------------------------------------|
 | a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
 
-RDA is used when expecting a linear response from X to Y. Only the variables of X explaining Y would be kept. The canonical axis are a linear combinaison of the explicative variable (Y).
+RDA is used when expecting a linear response from $X$ to $Y$. Only the variables of $X$ explaining $Y$ would be kept. The canonical axis are a linear combinaison of the explicative variable ($Y$). The $Y$ table will be ordered with a PCA. Then, a multiple regression of $Y$ on $X$ is done and stored in a new table, $Y'$. The residual matrix correspond to $Y-Y'$, what was not explained by $X$.
 
 ## Interprétation
 
-This chapter is a simple example using R
+Here are the library you will need to perfor the RDA, make sure your import them at the begining of your working document.
 
-You can import R package using the code
-
-```{r}
-library(tidyverse)
-```
-
-and then describe the purpose of your chapter as well as executing R command.
-
-For example a basic summary of a dataset is given by
-
-```{r}
-
+```{r, include=FALSE}
 require(ade4)
 require(vegan)
 require(tidyverse)
+```
 
-#df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84#fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , #header = TRUE)
 
 
-###Autres données
-Oak <- read.csv("C:/Users/bbong/Documents/cours/M2_EFCE/OCR/Oak_data.csv", sep=';', header = TRUE)  
-#Oak_spp <- read.csv("Oak_species.csv", header = TRUE)
+Let's import the data, they are from .... BAPTISTE TIME TO SHINE !
+
+```{r}
+Oak <- read.csv("https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/Oak_data.csv", sep=';', header = TRUE) 
 
 Topo <- Oak %>%
 select(LatAppx, LongAppx, Elev.m, Slope.deg) %>%
@@ -323,39 +307,44 @@ decostand("range")
 Oak_sp=Oak[,28:83]
 ```
 
+
+
 We can explore the tables
 
 ```{r}
 head(Oak_sp)
 head(Topo)
 ```
-
 So here, the first table ("Oak_sp") represents a table of spider abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
 
 As explained above, the CCA objective is to link the abundance of spider by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the spiders.
 
-We have seen in introduction of the part 3 that CCA was used when the respond have a non-linear distribution but rather a gaussian relationship. 
+We have seen in introduction of the part 3 that CCA was used when the respond have a non-linear distribution but rather a gaussian relationship.
 
 So we begin by performing a CA on the species table:
+
 ```{r}
 caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
 ```
 
 Then, we can perform the PCA on the CA that corresponds to the CCA with the ADE4 package:
+
 ```{r}
 ccaoak <- pcaiv(caoak,Topo,scannf=F,nf=2)
 ```
 
 You can also realize the CCA with one code row only with the vegan package:
+
 ```{r}
 ccavegan=cca(Oak_sp,Topo,scan=F)
 ```
+
 It is important to use the two methods because each allows us to have different information during the analyse of the result
 
-An we already have completed our analyse, it was no difficult!
-But now, we need analyse the result and test the significant.
+An we already have completed our analyse, it was no difficult! But now, we need analyse the result and test the significant.
 
 To test the significant, we use a bootstrapping test thank you the ADE4 package.It is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+
 ```{r}
 randtest(ccaoak)#with ADE4
 plot(randtest(ccaoak))
@@ -367,43 +356,46 @@ The results of this test shows that our result is significatively different to t
 
 Finally, the results of the CCA are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the spider distribution.
 
-We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF). 
+We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF).
+
 ```{r}
 test=vif.cca(ccavegan) 
 test
 ```
 
-If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an *ordistep* function. 
+If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an *ordistep* function.
 
 Now that we have tested all the conditions, we can look at the results.
+
 ```{r}
 ccaoak
 print(paste("The pourcentage of variance explained by topographic variables is: ",sum(ccaoak$eig)/sum(caoak$eig),"%"))
 ```
-The first output (by *ADE4*) allows us to see each part of the analyse that could be use to describe the result. We will use especially the last part afterward. You also have, at the beginning, the number of rank that corresponds to the number of eigenvalue with their score below.
-We can calculate the pourcentage of variance explained by topographic variables.
+
+The first output (by *ADE4*) allows us to see each part of the analyse that could be use to describe the result. We will use especially the last part afterward. You also have, at the beginning, the number of rank that corresponds to the number of eigenvalue with their score below. We can calculate the pourcentage of variance explained by topographic variables.
 
 ```{r}
 ccavegan
 ```
-Here, it is the output with the *vegan* package.We can see the total inertia in the CCA analyse (5.55) and the inertia explained by the topographic variables (0.71) and by the residuals (4.85). We can therefore conclude that our topographic variables explain only 13% of the spider variances (same result that before).
-Below that, we have the eigenvalues for the constrained axes (variance part explained by topographic variables) and for the unconstrained axes (variance part explained by the residuals)
 
+Here, it is the output with the *vegan* package.We can see the total inertia in the CCA analyse (5.55) and the inertia explained by the topographic variables (0.71) and by the residuals (4.85). We can therefore conclude that our topographic variables explain only 13% of the spider variances (same result that before). Below that, we have the eigenvalues for the constrained axes (variance part explained by topographic variables) and for the unconstrained axes (variance part explained by the residuals)
 
 We can now, observe the complet plot of the CCA result:
+
 ```{r}
 plot(ccaoak)
 ```
+
 Détailler rapidement les différentes parties du plot.
 
-But this can also be decomposed in different plots and output.
-We can begin by the absolute contribution of species:
+But this can also be decomposed in different plots and output. We can begin by the absolute contribution of species:
+
 ```{r}
 contrib=inertia.dudi(ccaoak, col = TRUE, row = FALSE)
 contrib$col.abs
 ```
-The output, here, is the absolute contribution of each species for the axis 1 and the axis 2. This allows us to observe what species contributes the most of the axes.
 
+The output, here, is the absolute contribution of each species for the axis 1 and the axis 2. This allows us to observe what species contributes the most of the axes.
 
 ```{r}
 ccaoak$fa
@@ -421,6 +413,8 @@ s.corcircle(ccaoak$cor)
 Here, we have the correlation between axes and the topographic variables. We can conclude that the elevation (corr = -0.15[axis1] ; -0.45[axis2]) and the slope (corr = 0.12[axis1] ; 0.65[axis2]) are strongly negatively correlated. The Longitude seems to be positively correlated with the slope and negatively correlated with the elevation.
 
 
+Here, we have the correlation between axes and the topographic variables. We can conclude that the elevation (corr = -0.15\[axis1\] ; -0.45\[axis2\]) and the slope (corr = 0.12\[axis1\] ; 0.65\[axis2\]) are strongly negatively correlated. The Longitude seems to be positively correlated with the slope and negatively correlated with the elevation.
+
 ```{r}
 s.match(ccaoak$ls, ccaoak$li)
 plot(ccavegan,scaling=2) 
@@ -433,6 +427,7 @@ Most of the sites are in a center group but some sites differ. It is the case wi
 
 The second plot, with *scaling = 1* preserves euclidian distances between stations.
 The third plot, with *scaling = 2* preserves correlations between species.
+
 
 
 
