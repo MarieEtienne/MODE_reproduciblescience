@@ -7,6 +7,8 @@ editor_options:
     wrap: 72
 ---
 
+# Introduction to Multivariates Analysis
+
 Biologists' data, whether on individuals, populations or communities,
 are usually presented in the form of rectangular tables, with
 observations (n) in the rows and variables (p) in the columns.
@@ -171,7 +173,7 @@ which together explain 65.19% of the variance.
 
 #### 2) Interpretation of the biological meaning of the axes :
 
-In PCA, the axes are interpreted according to the columns (\<=>
+In PCA, the axes are interpreted according to the columns (\<=\>
 variables) via the correlation circle and the absolute contributions of
 the variables.
 
@@ -893,3 +895,21 @@ RLQ axis (explained by both the length and the angle between the axes
 and the vectors).
 
 A citation @bauer2023writing
+
+# To go further with Multivariate Analysis
+
+Two other methods of two tables analysis were not presented here :
+
+-    **Co-inertia** is used when you have a table with you response
+    variable $Y$ and a second one with *potentially* explaining
+    variables, $X$, **but you do not have any *a priori*** about the
+    effect of $X$ on $Y$.
+
+-   **CCA** is used with two table, where both $Y$ **and** $X$ **are
+    quantitative data**. It works the same as RDA.
+
+Even if this presentation of multivariate analysis was not exhaustive,
+you can have a better view of what you can do when you are to analyse a
+data table. The method chosen will depend on the number of tables and
+the type of the variables (quantitative or qualitative). To help you
+decide what analysis to use, you can have a look to this decision tree !
