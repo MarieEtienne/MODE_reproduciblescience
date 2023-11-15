@@ -10,13 +10,9 @@ output:
 ---
 MERCI DE CHARGER ICI LES PACKAGES QUE VOUS UTILISEE
 ```{r Importation des packages}
-
-```
-
-
-```{r}
 library(nlme)
 ```
+
 
 
 ## Introduction : Louis
