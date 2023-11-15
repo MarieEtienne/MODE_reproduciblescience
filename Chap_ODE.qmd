@@ -37,7 +37,15 @@ III. 2-equations system
 
 ## 1) SIR model :
 
+The most used models in epidemiology are mathematical models of
+infectious diseases such as the SIR model. These models are based on
+compartmentalization that divide the population into various possible
+disease states. The SIR model is composed of 3 compartments: initially
+healthy or susceptible individuals (S), infected individuals (I) and
+cured individuals or resistent (R).
+
 $$ SIR=\begin{cases}\frac{d_S}{d_t}=\alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} $$
+
 We assume a closed population, so :
 $$ S+I+R = 1 \Leftrightarrow R=1-S-I $$
 
@@ -60,13 +68,13 @@ We first focus on solving:
 
 $$\Leftrightarrow I(\alpha S- \beta) =0 \Leftrightarrow  I(\alpha S- \beta) =0 \\ \Leftrightarrow I=0\ or\  S= \frac{\beta}{\alpha}$$
 
-If *I = 0*, We integrate I=0 into our "susceptible" equation to obtain
+If *I = 0*, we integrate I=0 into our "susceptible" equation to obtain
 the solution for S:
 
 $$ \alpha S *0 + \gamma (1-S-0)=0 \\ \Leftrightarrow \gamma (1-S)=0 \\ \Leftrightarrow 1-S=0 \\ \Leftrightarrow S=1$$
 We thus obtain our first solution with:
 $$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} $$
-If *S = b/a*, We integrate S into our "susceptible" equation to obtain
+If *S = b/a*, we integrate S into our "susceptible" equation to obtain
 the solution for I:
 
 $$
@@ -76,7 +84,50 @@ $$
 $$
 
 We thus obtain our first solution with:
+
 $$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} \frac{\beta}{\alpha} \\ \frac{1-\frac{\beta}{\alpha}}{\beta - \gamma} \end{pmatrix} $$
+
+It is then necessary to determine the Jacobian matrix for each
+equilibrium pair determined previously.
+
+$$ J=\begin{bmatrix} \frac{\delta S}{\delta S} & \frac{\delta S}{\delta I} \\ \frac{\delta I}{\delta S} & \frac{\delta I}{\delta I}  \end{bmatrix} \Leftrightarrow \begin{bmatrix} \alpha I- \gamma & \alpha S- \gamma \\ \alpha I & \alpha S- \beta \end{bmatrix} $$
+
+
+For the couple, S=1 and R=0 :
+
+$$ J(1,0)= \begin{bmatrix} -\gamma & \alpha -\gamma \\ 0 & \alpha - \beta) \end{bmatrix} $$
+
+We seek to determine the solutions of the characteristic equation :
+
+$$det(J- \lambda Id)=0$$
+
+with *Id* = identity matrix (cf matrix calculation).
+
+The solutions of the characteristic equation are the eigenvalues :
+
+$$det(1,0)=det \begin{bmatrix} -\gamma -\lambda & \alpha - \gamma \\ 0 & \alpha - \beta - \lambda \end{bmatrix} $$
+$$det \begin{bmatrix} -\gamma -\lambda & \alpha - \gamma \\ 0 & \alpha - \beta - \lambda \end{bmatrix} =0 \\ 
+\text{Les solutions sont les valeurs propres. Ici, la matrice Jacobienne est triangulaire, donc}
+\\ \text{Les valeurs propres sont les éléments diagonaux.}
+\\ sp(J)=\{ -\gamma -\lambda ; \alpha - \beta - \lambda \}  $$
+
+To obtain the solutions of the polynomials :
+
+$$ \begin{align} &\Delta = (\alpha - \beta -\gamma)^2 - 4 \gamma (\beta - \alpha)
+\\ If: \ &\Delta > 0 : \text{two distinct real roots}
+\\ &\Delta = 0 : \text{one real repeated root}
+\\ &\Delta < 0 : \text {two complex conjugate roots} \end{align} $$
+
+$$ J(\frac{\beta}{\alpha}, \frac{1- \frac{\beta}{\alpha}}{\beta -\gamma})= \begin{bmatrix} \frac{\alpha -\beta}{\beta -\gamma}-\gamma & \beta -\gamma \\ \frac{\alpha - \beta}{\beta - \gamma} & 0 \end{bmatrix}
+\\ det(J- \lambda Id)= \begin{bmatrix} \frac{\alpha - \beta}{\beta - \gamma} -\gamma -\lambda & \beta - \gamma \\ \frac{\alpha - \beta}{\beta - \gamma} & -\lambda \end{bmatrix}=0
+\\
+\Leftrightarrow (\frac{\alpha -\beta}{\beta -\gamma})(-\lambda) -( \frac{\alpha - \beta}{\beta - \gamma})(\beta - \gamma)=0 
+\\
+\Leftrightarrow \lambda ^2 + \lambda (\gamma - \frac{\alpha - \beta}{\beta -\gamma})-\frac{(\alpha -\beta)\beta}{\beta - \gamma} + \frac{(\alpha -\beta)\gamma}{\beta - \gamma}=0
+\\ \text{Same logic as before :}
+\\ \Delta = (\gamma - \frac{\alpha - \beta}{\beta -\gamma})^2-4( \frac{( \alpha -\beta) \beta}{\beta -\gamma}+ \frac{(\alpha - \beta) \gamma}{\beta - \gamma})$$
+
+
 
 ## 1) Lotka-Volterra : A three-species model
 
