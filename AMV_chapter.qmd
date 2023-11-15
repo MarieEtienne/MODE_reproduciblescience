@@ -455,7 +455,7 @@ In an analysis where the data are not created randomly, but come from
 different individuals from different populations. This could reveal a
 particular typology of one population in relation to another.
 
-# PART 2: MCA
+# PART 3: MCA
 
 ## Mathematics
 
@@ -600,7 +600,7 @@ quatitative variable". Eingen Values correspond to means of squered
 correlation ratios. It could be used a pre-processing before a
 classification or a coinertia analysis on tables with quantitative.
 
-# PART 3: RDA
+# PART 4: RDA
 
 ## Mathématiques
 
@@ -633,7 +633,7 @@ df %>% ggplot() +
 
 A citation @bauer2023writing
 
-# PART 4: RLQ
+# PART 5: RLQ
 
 ## Mathématiques
 
