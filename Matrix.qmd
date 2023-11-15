@@ -56,4 +56,12 @@ Seulement, ce modèle est largement simplifié. Pourquoi ? Il considère que tou
 n_i (t+1)= ∑_j▒〖a_ij n_j (t)〗  
 
 où a est la contribution et a_ij la contribution d’une classe j à la classe i à l’instant t+1.
+Nous pouvons alors créer un système considérant l’ensemble des classes, qui pourra être traduit en matrice :
+
+n(t+1) = An(t)
+Soit n(t) = A^tn(0)
+
+Où A est ce que nous appelons matrice de projection de la population, représentant donc notre population sous forme matricielle, selon ses différentes caractéristiques (classes, paramètres des classes…). n(t) est un vecteur dépendant du nombre d’individu présents dans notre population, et n(0) est notre vecteur population initiale, duquel nous allons pouvoir partir pour faire évoluer cette population dans le temps.
+
+La dynamique de population est un concept parfois difficile à étudier car dépendant de nombreux paramètres. Une population va varier en taille et en type d’individus selon quatre processus principaux : la naissance de nouveaux individus, dépendant de la fertilité de ceux déjà présent et de leur nombre ; la mortalité, pouvant dépendre du taux de prédation, de maladies ou de vieillesse ; l’immigration, dont les taux vont dépendre des autres populations, de leurs distances avec celle étudiée et de la capacité de dispersion des individus ; et enfin de l’émigration, qui va dépendre du mode de vie de l’espèce observée et de sa tendance à quitter sa population d’origine. Une matrice va permettre de représenter la variation de population selon ces quatre processus.
 
