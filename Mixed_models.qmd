@@ -13,6 +13,8 @@ output:
 
 ## Introduction : Louis
 
+To model the relationships between a dependent variable $Y$ and one or several independent variables $X_1,\ X_2,\ ...,\ X_n$, **general linear models** (e.g. linear regressions, ANOVA, ANCOVA) are often used. In this models, several assumptions are made : homodescasticity of the variance, non-colinearity of the residuals and normality of the residuals. Homoscedasticity and normality hypothesis can be outreached using Generalized Linear Models. These models allow to use data that are drawn from different distributions such as Poisson, binomial or Gamma distributions, which are commonplace in ecology. 
+
 
 
 
