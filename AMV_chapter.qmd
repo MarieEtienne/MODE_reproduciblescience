@@ -293,13 +293,7 @@ require(vegan)
 require(tidyverse)
 ```
 
-<<<<<<< HEAD
 Let's import the data, they are from Thilenius, 1963. However, the data of abundance have been changed to facilitated the interpretation. For access to real data and metadata, please see the JDBakker Git page: [appliedmultivariatestatistics/Oak_data_47x216.csv at main · jon-bakker/appliedmultivariatestatistics (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
-=======
-
-
-Let's import the data, they are from .... BAPTISTE TIME TO SHINE !
->>>>>>> 21502c5e319408d15afd365e4122293291734b78
 
 ```{r}
 Oak <- read.csv("https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/Oak_data.csv", sep=';', header = TRUE) 
@@ -311,23 +305,15 @@ decostand("range")
 Oak_sp=Oak[,28:83]
 ```
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 21502c5e319408d15afd365e4122293291734b78
 We can explore the tables
 
 ```{r}
 head(Oak_sp)
 head(Topo)
 ```
-<<<<<<< HEAD
 
 So here, the first table ("Oak_sp") represents a table of plant abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
-=======
-So here, the first table ("Oak_sp") represents a table of spider abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
->>>>>>> 21502c5e319408d15afd365e4122293291734b78
+
 
 As explained above, the CCA objective is to link the abundance of plant by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the plants.
 
@@ -429,7 +415,9 @@ This line gives you the canonical coefficients on each axis. The circle is expla
 ccaoak$co
 s.label(ccaoak$co,boxes=F)
 ```
-$co$ gives you access to the coordinates of each species on the first plan. The table explicits the coordinates and the plot help you to find close species. Here, there is a group formed by Agse, Agha Avfa and ALL. An other on with two outliers, Abgr.t and Adbi. These groups will be correlated with the environment data further in the analysis.
+$co$ gives you access to the coordinates of each species on the first plan. The table explicits the coordinates and the plot help you to find close species. On the first axis, two species have high negative value : Adbi (-1.97) & Abgr.t (-1.50). They are opposed at species as Coco.t (0.86) & Cato (0.96). You can realize the same for the second axis.
+
+Here, we can highlight that there is a group formed by Agse (coord = 0.31 ; 1.90 respectively for the axis 1 and 2), Agha (coord = -0.38 ; 1.25) Avfa (coord = 0.33 ; 0.88) and ALL (coord = 0.20 ; 1.14). An other on with two outliers, Abgr.t and Adbi. These groups will be correlated with the environment data further in the analysis.
 
 ```{r}
 ccaoak$cor 
@@ -440,8 +428,8 @@ Here, we have the correlation between axes and the topographic variables. We can
 
 ```{r}
 s.match(ccaoak$ls, ccaoak$li)
-plot(ccavegan,scaling=2) 
 plot(ccavegan,scaling=1) 
+plot(ccavegan,scaling=2) 
 ```
 
 
@@ -454,7 +442,11 @@ The third plot, with *scaling = 2* preserves correlations between species.
 
 
 
-To conclude on the CCA analyse, we have seen that the topographic variables explain 13% of the plant variances. The first axis represents 34% of the constrained inertia and is explained by the Latitude (corr = 0.99). 
+To conclude on the CCA analyse, we have seen that the topographic variables explain 13% of the plant variances. The first axis represents 34% of the constrained inertia and is explained by the Latitude (corr = 0.99). We can see that two species have a high coordinate in this axis (Adbi & Abgr.t). \
+The second axis (18% of the constrained inertia) is explained by the Elevation (corr = -0.45), the Slope (corr = 0.65) and the Longitude (corr = 0.33). 
+
+Finally, the sites n°43,44,45,46 are sites with a small latitude value and with a high abundance of species as Abgr.t when other sites as 
+
 
 # PART 4: RLQ
 
