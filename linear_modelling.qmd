@@ -240,8 +240,35 @@ Before drawning any conclusions from your result, you have to validate the model
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
-To be abme to conclude with your results you have to validate your model. All general linear model (linear regression, ANOVA, ANCOVA) need to verify 3 criterions.
+To be able to conclude with your results you have to validate your model. All general linear model (linear regression, ANOVA, ANCOVA) need to verify the 3 following criterions.
+Generalized linear model, due to the hypothetis made on Y, only need to verify the last criterion: the independance of the residuals.
 
+
+```{r, echo=FALSE}
+#Importation of other data for example
+dataHVS <- read.table("HumanVisualSystem.txt", dec=".", header = TRUE)
+dataHVS$Population<-as.factor(dataHVS$Population)
+
+dataHVS$Lat<-dataHVS$AbsoluteLatitude
+dataHVS$Capacity<-dataHVS$CranialCapacity
+dataHVS$Response<-dataHVS$MeanOrbitalVolume
+
+mod2<-lm(Response~Lat+Capacity,data=dataHVS)
+
+# Dataset import
+dataBombus <- read.table("Bumblebees.txt", dec=".", header = TRUE)
+dataBombus$Castes<-as.factor(dataBombus$Castes)
+dataBombus$Species<-as.factor(dataBombus$Species)
+dataBombus$SQRTMites<-sqrt(dataBombus$TotalMites)
+
+mod3<-glm(Acarinarium~ Species
+        + Castes
+        + SQRTMites
+        + Species:SQRTMites
+        ,data=dataBombus
+        ,family=binomial(link="logit"))
+resid<-residuals(mod3, type="pearson")
+```
 
 - *normality of residuals* 
 
@@ -249,27 +276,51 @@ The assumption of normality can be checked by producing an histogram and a quant
 
 ```{r normality}
 
+
+
 par(mfrow=c(1,2))
-# Histogram
-hist(mod1$residuals,col='blue',xlab="residuals",main="Check Normality")
+# Histogram example 1
+hist(mod2$residuals,col='blue',xlab="residuals",main="Check Normality ex 1")
+# Quantile-Quantile plot
+qqnorm(mod2$residuals,pch=16,col='blue',xlab='')
+qqline(mod2$residuals,col='red')
+
+# Histogram example 2
+hist(mod1$residuals,col='blue',xlab="residuals",main="Check Normality ex 2")
 # Quantile-Quantile plot
 qqnorm(mod1$residuals,pch=16,col='blue',xlab='')
 qqline(mod1$residuals,col='red')
-```
-As you can see, the residual are lie mostly the red line so we can say the residuals are normally distributed
 
-A FAIIIIIIIIIIIRE: dire quoi faire si pas normal --> F plutot resistant au écart à la normalité
+
+# Histogram example 3
+hist(resid,col='blue',xlab="residuals",main="Check Normality ex 3")
+# Quantile-Quantile plot
+qqnorm(resid,pch=16,col='blue',xlab='')
+qqline(resid,col='red')
+
+
+```
+As you can see on the first example, the residual are lie mostly the red line so we can say the residuals are normally distributed.
+
+However, if a small deviation from normality is detected as on the second example, the Fisher test is considered fairly resistant to these deviations and you can still validate the model. 
+
+If the residual are not following the red line as one the third example,you can't conclude residual are normally distributed and validate the model. Transformation con be done to solve the problem but the best it to make an other hypothesis on the law of Y.
+Linear models assumed that Y is continuous and is "close" to follow a gaussian law. If Y is semi quantitive,binary, or is proportion the residual are probably not going to follow a normal distribution,so you have to make another hypothesis on Y law and so the use of a GLM is gonna be needed. 
+
+
 
 - *homogeneity of variances*
-The assumption of homogeneity of variance, namely that the variation in the residuals is approximately equal across the range of the predictor variables, can be checked by plotting the residuals against the fitted values and the residuals against the significant main effects.
+The assumption of homogeneity of variance, namely that the variation in the residuals is approximately equal across the range of the predictor variables, can be checked by plotting the residuals against the fitted values and the residuals against the significant main effects.To conclude that the variance is homogeneous, we need to check that it is stable and does not show any patterns. 
+
 
 ```{r, fig.height=5, fig.width=5}
-par(mfrow=c(2,2))
+par(mfrow=c(2,3))
+
 
 # residuals vs fitted
-plot(residuals(mod1)~fitted(mod1)
+plot(residuals(mod2)~fitted(mod2)
       , col='blue'
-      , pch=16)
+      , pch=16, main="Graph1")
 abline(h = 0)
 
 # residuals against Habitat factor
@@ -277,30 +328,43 @@ boxplot(residuals(mod1)~ dataFly$Habitat,
          varwidth = TRUE,
          ylab = "Residuals",
          xlab = "Habitat",
-         main = "")
+          main="Graph2")
 
-# residuals against Width
-plot(residuals(mod1)~ dataFly$Width, 
-         pch=16,
-         col="blue",
-         ylab = "Residuals",
-         xlab = "Width",
-         main = "")
+# residuals vs fitted
+plot(residuals(mod1)~fitted(mod1)
+      , col='blue'
+      , pch=16, main="Graph3")
 abline(h = 0)
 
-# residuals against Water Content
-plot(residuals(mod1)~ dataFly$WaterContent, 
-         pch=16,
-         col="blue",
+
+# residuals against Castes factor
+boxplot(resid~ dataBombus$Castes, 
+         varwidth = TRUE,
          ylab = "Residuals",
-         xlab = "Water Content",
-         main = "")
+         xlab = "Castes",
+         main="Graph4")
 abline(h = 0)
+
+# residuals vs fitted
+plot(resid~fitted(mod3)
+      , col='blue'
+      , pch=16, main="Graph5")
+abline(h = 0)
+
 ```
-Pas homogène pattern en entonnoir
-Voir quoi faire quand ecart à l'homo
 
+As you can see from graph 1, the variation in the residuals is approximately equal across the range of the fitted values and there is no pattern, so we can conclude that the variance is homogeneous.
 
+The variance of a qualitative variable is studied by a boxplot. For the second graph, we can see that the variance is similar, so we can conclude that it is homogeneous.
+
+In the third graph, we can see that the variance is not stable, as we have a funnel shape. So we can't conclude that it's homogeneous.
+
+On the fourth graph, we can see that the variance is not stable, as the boxplots do not have the same height. It is therefore not possible to conclude that they are homogeneous.
+
+The fifth graph shows a linear pattern so we cannot conclude positively on the homogeneity of the variance. 
+
+Statistical tests are rather resistant to deviations from homogeneity, and can tolerate deviations of around 16 units.
+If the variance exceeds this threshold, is not stable or shows a pattern, it can be transformed to solve the problem.
 - *independence of residuals*
 
 ANCOVA (like other General Linear Models) assumes that all replicate measures (and so, residuals) are independent of each other. This issue needs to be considered at *the design stage*. Given the present design, all flies collected are independent as randomly sampled. This assumption is checked.  
