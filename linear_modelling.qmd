@@ -317,10 +317,8 @@ See part 4).
 2) ANCOVA #Lucia
 3) Régression #Fanny
 
-<<<<<<< HEAD
-
 blabla bla 
-=======
+
 # INTRODUCTION
 
 You have certainly used the technique of regression many times in various exercises. It is used to model the relationship between a **quantitative dependent variable** $Y$ (the **response**, that is continuous, and one or several **explanatory quantitative variable(s)** (the **predictors**, that are independant). $X_{1}$,$X_{2}$...$X_{p}$.
@@ -473,12 +471,9 @@ scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red",
           facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9),           border="black"), main = " ")
 ```
 
->>>>>>> regression
-
 4) Validation des modèles #Lucia
 
 II. Modèles linéaires généralisés
-<<<<<<< HEAD
 
 1) Loi binômiale #Sarah
 
@@ -845,14 +840,7 @@ nagelkerke(mod1)
 So here, the model explains 60.4% of the deviance, but with the others estimate, we found the model explain about 75% of the deviance. 
 Now, it is necessary to check the assumptions of the model to validate. See the part dedicated to this at the end.
 
-<<<<<<< HEAD
-=======
-1) Loi binômiale #Sarah
-2) Loi de Poisson #Léa
->>>>>>> ANOVA
 3) Loi négative binômiale #Léa
-=======
-2) Loi négative binômiale #Léa
 
 The Negative Binomial distribution has been parameterized in a number of different ways in the statistical literature. Perhaps the most common way to parameterize is to see the Negative Binomial distribution arising as a distribution of the number of failures (X) before the r^th success in independent trials, with success probability p in each trial (consequently, r > 0 and 0 < p > 1). In such a case the probability mass function can be expressed as :
 
@@ -999,7 +987,6 @@ On R : it is :
 nagelkerke(modNB)
 ```
 
->>>>>>> 0cc6741b0d211ff7d97324260a0930ce02427830
 4) Validation des modèles #Clément
 
 Unlike General Linear Models, Generalized Linear Models don't require the conditions of homoscedasticity and normality of residuals, but it does require the *independence of residuals*. We can also check the presence of influential observations (these are the statistical units that have a too large contribution to the model).
