@@ -13,6 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install R packages
-        uses: Rscrit -e "install.packages('nlme')"
+        uses: Rscript -e "install.packages('nlme')"
       - name: Generate slides
         run: "quarto render"
