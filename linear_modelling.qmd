@@ -41,14 +41,39 @@ A citation @bauer2023writing
 Au sein de chaque groupe, on peut créer des branches pour répartir le travail de rédaction.
 
 Intro #Fanny
+## THE STATISTICAL TEST
+The purpose of statistics is to test a hypothesis. You would need to follow these steps :
+###1. The null and alternative hypotheses
+They define different proposed relationships between dependent and independent variable(s).
+*Null hypothesis H0 = no relationship between dependent and independent variables.*
+*Alternative hypothesis H1 = some expected relationship between the variables.*
+###2. Calcul of the observed value Tobs
+The observed value Tobs of the test statistic T is calculated from data given that the T variable has a probability distribution known under H0.
+###3. The P-value
+To get this value, you need to calculate the probability of observing Tobs value in this T distribution knowing the distribution of the test statistic T under H0. 
+###4. Rejection or validation of the hypothesis
+If the P-value is less than (or equal to) $\alpha$, then the null hypothesis is
+rejected in favor of the alternative hypothesis and if the P-value is greater than $\alpha$ then the null hypothesis is not rejected.
+WARNING : never say that the null hypothesis is validated. You just know that you cannot reject it with the information you have. There could be relationships that have not been detected.
+
+## STATISTICAL MODELLING
+Linear modelling is widely used in statistics to model observed data, by considering their random nature.
+It explains one dependant variable, noted Y (random variable, also called **the response variable**) in function to independent variables (also called **predictors** or **explanatory variables**), also observed/measured on statistical units of the sample.
+In this chapter, you will see different models corresponding to different
+statistical tests.
+It happens that several tests can be conducted for the same dataset and hypothesis ; in this case, you will select the most powerful test. It is the one with the lowest $\beta$-error (given at the end).
 
 I. Modèles linéaires généraux
+First let's get to know the most basic and simple linear models. We also call them *'Gaussian'* because of their allure.
+They are used and validated following three eligibility conditions that you will find in part 'Model validation'.
+
 1) ANOVA #Clément
 2) ANCOVA #Lucia
 3) Régression #Fanny
 4) Validation des modèles #Lucia
 
 II. Modèles linéaires généralisés
+
 1) Loi binômiale #Sarah
 2) Loi de Poisson #Léa
 3) Loi négative binômiale #Léa
