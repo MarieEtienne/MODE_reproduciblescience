@@ -2,54 +2,80 @@
 title: "AMV_chapter"
 format: html
 editor: visual
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
-Biologists' data, whether on individuals, populations or communities, are usually presented in the form of rectangular tables, with observations (n) in the rows and variables (p) in the columns.
+Biologists' data, whether on individuals, populations or communities,
+are usually presented in the form of rectangular tables, with
+observations (n) in the rows and variables (p) in the columns.
 
-The graphical representation of these n observations and p variables is easily achieved when there are only 2 or 3 variables (dimension). However, when the number of variables increases, the graphical representation becomes complicated, and Multivariate Analyses come into their own!
+The graphical representation of these n observations and p variables is
+easily achieved when there are only 2 or 3 variables (dimension).
+However, when the number of variables increases, the graphical
+representation becomes complicated, and Multivariate Analyses come into
+their own!
 
-The aim of these analyses is to reduce the number of dimensions and examine the structure of the data by answering the following questions:
+The aim of these analyses is to reduce the number of dimensions and
+examine the structure of the data by answering the following questions:
 
-- Which observations are similar?
+-   Which observations are similar?
 
-- Are there observations that stand out? Subgroups?
+-   Are there observations that stand out? Subgroups?
 
-- Which variables are correlated?
+-   Which variables are correlated?
 
-- Are there particular links between certain observations and/or variables?
+-   Are there particular links between certain observations and/or
+    variables?
 
-Multivariate analysis methods are therefore used to describe the data and generate hypotheses that can then be tested.
+Multivariate analysis methods are therefore used to describe the data
+and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
 ## Introduction :
+
 You can import R package using the code
 
 PCA can be used to process a measurement table with :
 
-- In rows: the **n observations**.
+-   In rows: the **n observations**.
 
-- In column: the **p quantitative variables**.
+-   In column: the **p quantitative variables**.
 
-The 2 sets (observations and variables) are **totally distinct and non-interchangeable**. In other words, if you interchange the rows and columns (with the variables in the rows and the observations in the columns), the table no longer has the same meaning.
+The 2 sets (observations and variables) are **totally distinct and
+non-interchangeable**. In other words, if you interchange the rows and
+columns (with the variables in the rows and the observations in the
+columns), the table no longer has the same meaning.
 
-In PCA tables, the mean of a column has a meaning, while the mean of a row does not.
+In PCA tables, the mean of a column has a meaning, while the mean of a
+row does not.
 
-The aim of PCA is to achieve the best geometric representation of individuals and variables. To achieve this, we seek to reduce the dimension by finding the best projection plane (subspace) for "best" visualization of the point cloud in reduced space.
+The aim of PCA is to achieve the best geometric representation of
+individuals and variables. To achieve this, we seek to reduce the
+dimension by finding the best projection plane (subspace) for "best"
+visualization of the point cloud in reduced space.
 
 However, this reduction must :
 
-- Preserve distances between individuals:
-    - Two individuals who resemble each other must be close in the representation space.
-- Preserve correlations between variables:
-    - Two variables that are correlated must be represented by vectors forming an acute angle.
-    - Two independent variables are represented by orthogonal vectors.
+-   Preserve distances between individuals:
+
+    -   Two individuals who resemble each other must be close in the
+        representation space.
+
+-   Preserve correlations between variables:
+
+    -   Two variables that are correlated must be represented by vectors
+        forming an acute angle.
+    -   Two independent variables are represented by orthogonal vectors.
 
 ## Mathematics
 
 ## Interpretation
 
-Here's an example of how PCA can be applied. *dataset presentation* *package needed*
+Here's an example of how PCA can be applied. *dataset presentation*
+*package needed*
 
 ### a) Importing the dataset :
 
@@ -60,41 +86,58 @@ data=decathlon2[decathlon2$Competition=="OlympicG",c(1:10,12)]
 summary(data)
 ```
 
-In this data set, we have 14 individuals (athletes) on whom 10 quantitative variables (performances in different sports disciplines) have been recorded: - X100m - Long.jump - Shot.put - X400m - X110m.hurdle - Discus - Pole.vault - Javelin - X1500m
+In this data set, we have 14 individuals (athletes) on whom 10
+quantitative variables (performances in different sports disciplines)
+have been recorded: - X100m - Long.jump - Shot.put - X400m -
+X110m.hurdle - Discus - Pole.vault - Javelin - X1500m
 
-If NAs are present in the data. In order to carry out the PCA without any problems with NAs, they can be omitted from the analysis with the following command:
+If NAs are present in the data. In order to carry out the PCA without
+any problems with NAs, they can be omitted from the analysis with the
+following command:
 
 ```{r}
 # data=na.omit(object = data)
 ```
 
-We want to find out whether particular links between certain observations and/or variables can be observed in this data set.
+We want to find out whether particular links between certain
+observations and/or variables can be observed in this data set.
 
 ### b) Study of correlations :
 
-Obtain the correlation matrix between variables using the **cor()** function:
+Obtain the correlation matrix between variables using the **cor()**
+function:
 
 ```{r}
 cor(data)
 ```
 
-Variables are correlated if their value is greater than 0.9 (as a general rule). Here, we can see that no variables are correlated.
+Variables are correlated if their value is greater than 0.9 (as a
+general rule). Here, we can see that no variables are correlated.
 
-Here's another way of visualizing correlations between variables: (useful when you have a lot of variables, as here):
+Here's another way of visualizing correlations between variables:
+(useful when you have a lot of variables, as here):
 
 ```{r}
 abs(cor(data))>0.9
 ```
 
-If TRUE (outside the diagonal), then both variables are correct. If two variables are correct, one must be removed. The choice of deleting one of the two correct variables is arbitrary and depends on the question being asked.
+If TRUE (outside the diagonal), then both variables are correct. If two
+variables are correct, one must be removed. The choice of deleting one
+of the two correct variables is arbitrary and depends on the question
+being asked.
 
-To remove a variable from the data set, use the following function: **data=data\[,-(column_of_the_variable_to_remove)}]**
+To remove a variable from the data set, use the following function:
+**data=data\[,-(column_of_the_variable_to_remove)}\]**
 
 ### c) Performing PCA :
 
-To run the PCA, you need to load the following two packages: - **factoextra** - **FactoMineR**
+To run the PCA, you need to load the following two packages: -
+**factoextra** - **FactoMineR**
 
-Then, to perform the PCA on R, you can use the function : **PCA()**. Remember to store the result of this PCA in a new variable, so that you can easily retrieve the PCA information you need for subsequent interpretation.
+Then, to perform the PCA on R, you can use the function : **PCA()**.
+Remember to store the result of this PCA in a new variable, so that you
+can easily retrieve the PCA information you need for subsequent
+interpretation.
 
 ```{r, echo=FALSE, hide=TRUE}
 library(FactoMineR)
@@ -114,13 +157,23 @@ PCA$eig
 fviz_eig(PCA, addlabels = TRUE)
 ```
 
-To determine the number of axes used in the PCA analysis, we need to identify the jump in variance explained by the different axes. Here we can see that the first axis represents 43.2% of the variance, the second axis 22%, the third axis 14.1%, ... We can therefore see that the jump in variance explained by the different axes is between the first and second axes. The difference between the variance explained by the axes other than the first is negligible compared to the difference between the first axis and the others.
+To determine the number of axes used in the PCA analysis, we need to
+identify the jump in variance explained by the different axes. Here we
+can see that the first axis represents 43.2% of the variance, the second
+axis 22%, the third axis 14.1%, ... We can therefore see that the jump
+in variance explained by the different axes is between the first and
+second axes. The difference between the variance explained by the axes
+other than the first is negligible compared to the difference between
+the first axis and the others.
 
-For the PCA interpretation, we therefore retain the first two axes, which together explain 65.19% of the variance.
+For the PCA interpretation, we therefore retain the first two axes,
+which together explain 65.19% of the variance.
 
 #### 2) Interpretation of the biological meaning of the axes :
 
-In PCA, the axes are interpreted according to the columns (\<=\> variables) via the correlation circle and the absolute contributions of the variables.
+In PCA, the axes are interpreted according to the columns (\<=>
+variables) via the correlation circle and the absolute contributions of
+the variables.
 
 To obtain this information in R, use the following commands:
 
@@ -139,19 +192,37 @@ fviz_contrib(PCA, choice = "var", axes = 1)
 fviz_contrib(PCA, choice = "var", axes = 2)
 ```
 
-The absolute contribution shows how the initial variable contributes to the formation of the axis. To find out from these results which variables contribute to the formation of the synthetic axis, we use the threshold of \*1/number_of_variables)\*100\*\* (in general). For a variable to contribute, its contribution value must be greater than this threshold. This threshold value corresponds to the red dotted line on the graphs showing the absolute contributions of the variables along the axes.
+The absolute contribution shows how the initial variable contributes to
+the formation of the axis. To find out from these results which
+variables contribute to the formation of the synthetic axis, we use the
+threshold of \*1/number_of_variables)\*100\*\* (in general). For a
+variable to contribute, its contribution value must be greater than this
+threshold. This threshold value corresponds to the red dotted line on
+the graphs showing the absolute contributions of the variables along the
+axes.
 
-From these results, we can see that axis 1 is mainly represented by the following variables: - Points - Discus - Shotput - Long.jump - X100m - High.jump
+From these results, we can see that axis 1 is mainly represented by the
+following variables: - Points - Discus - Shotput - Long.jump - X100m -
+High.jump
 
-Axis 2 is represented by the variables: - X1500m - Pole.vault - X110m.hurdle - X100m
+Axis 2 is represented by the variables: - X1500m - Pole.vault -
+X110m.hurdle - X100m
 
-The correlation circle also shows that some variables are related and others independent. Two related variables are represented by vectors forming an acute angle. Two independent variables are represented by orthogonal vectors.
+The correlation circle also shows that some variables are related and
+others independent. Two related variables are represented by vectors
+forming an acute angle. Two independent variables are represented by
+orthogonal vectors.
 
 #### 3) Projection of individuals to create a typology based on the axes:
 
-For this, we use the relative contributions of the individuals. These relative contributions can be used to create a typology of individuals based on the axes. The relative contribution of an individual corresponds to the share of information on the axis explained by the point and supported on the axis (in percentage).
+For this, we use the relative contributions of the individuals. These
+relative contributions can be used to create a typology of individuals
+based on the axes. The relative contribution of an individual
+corresponds to the share of information on the axis explained by the
+point and supported on the axis (in percentage).
 
-To obtain the relative contributions of individuals on R, use the following commands:
+To obtain the relative contributions of individuals on R, use the
+following commands:
 
 ```{r}
 # Obtention des contributions relatives des individus :
@@ -164,13 +235,17 @@ fviz_pca_ind(PCA)
 
 ```
 
-The individuals who most explain Axis 1 are : - Sebrle - Clay - Karpov - Schwarzl - Drews - Schoenbeck
+The individuals who most explain Axis 1 are : - Sebrle - Clay - Karpov -
+Schwarzl - Drews - Schoenbeck
 
-Those who most explain axis 2 are : - Macey - Warners - Zsivoczky - Barras
+Those who most explain axis 2 are : - Macey - Warners - Zsivoczky -
+Barras
 
 ### e) Biological conclusion :
 
-Thus, thanks to the results of the absolute contributions of the variables and the relative contributions of the individuals, we can represent the projection of the individuals and variables as follows:
+Thus, thanks to the results of the absolute contributions of the
+variables and the relative contributions of the individuals, we can
+represent the projection of the individuals and variables as follows:
 
 ```{r}
 fviz_pca_biplot(PCA)
@@ -178,28 +253,44 @@ fviz_pca_biplot(PCA)
 
 Knowing the biological interpretation of the axes : *IMAGE*
 
-We can therefore see that the individuals with the highest scores at this tournament are those who had the best results in the discus, shot put, long jump and high jump events. In addition, having good results in the 100m race doesn't give you a good ranking.
+We can therefore see that the individuals with the highest scores at
+this tournament are those who had the best results in the discus, shot
+put, long jump and high jump events. In addition, having good results in
+the 100m race doesn't give you a good ranking.
 
-Thanks to PCA, we can see that the final score is more linked to the score of certain disciplines than others. And therefore, that links between certain variables and individuals can be observed.
-
-
+Thanks to PCA, we can see that the final score is more linked to the
+score of certain disciplines than others. And therefore, that links
+between certain variables and individuals can be observed.
 
 # PART 2: CA
+
 ## Introduction :
 
-CA deals with **tables that cross two categorical variables with several modalities**, such as contingency tables, frequency tables, ...
-In these tables, rows and columns are **interchangeable** and the **variables are all in the same units**.
+CA deals with **tables that cross two categorical variables with several
+modalities**, such as contingency tables, frequency tables, ... In these
+tables, rows and columns are **interchangeable** and the **variables are
+all in the same units**.
 
-The aim of CA is to **reveal structures and associations between these qualitative variables** by representing them in a multidimensional space. It **allows us to visualize relationships between categories of different variables, and to highlight trends, groupings or disparities**. It is particularly useful for analyzing categorical data, when you want to understand the underlying structure of the data and identify associations between categories.
+The aim of CA is to **reveal structures and associations between these
+qualitative variables** by representing them in a multidimensional
+space. It **allows us to visualize relationships between categories of
+different variables, and to highlight trends, groupings or
+disparities**. It is particularly useful for analyzing categorical data,
+when you want to understand the underlying structure of the data and
+identify associations between categories.
 
-Unlike PCA, for a CA, we're not interested in the distances between points, but in the distances between profiles of different modalities. 
-A CA is therefore simply a PCA on the profiles, by equipping the space with a suitable distance: **the ??? distance**. With this distance, the weight of rows (or columns) is relativized, but not cancelled out, and the symmetry between rows and columns is preserved.
-
+Unlike PCA, for a CA, we're not interested in the distances between
+points, but in the distances between profiles of different modalities. A
+CA is therefore simply a PCA on the profiles, by equipping the space
+with a suitable distance: **the ??? distance**. With this distance, the
+weight of rows (or columns) is relativized, but not cancelled out, and
+the symmetry between rows and columns is preserved.
 
 ## Mathematiques
 
 ## Interpretation
-Here's an example of how CA can be applied. 
+
+Here's an example of how CA can be applied.
 
 ### a) Importing the dataset :
 
@@ -232,15 +323,22 @@ rownames(data) <- hair_colors
 data
 ```
 
-This table shows the number of people with each eye color (in columns) and hair color (in rows), for a total of 617 people sampled.
+This table shows the number of people with each eye color (in columns)
+and hair color (in rows), for a total of 617 people sampled.
 
-By performing a CA on this dataset, we seek to show the correspondences/oppositions between the different modalities of a variable.
+By performing a CA on this dataset, we seek to show the
+correspondences/oppositions between the different modalities of a
+variable.
 
 ### b) Performing CA :
 
-To run the CA, such as the PCA, you need to load the following two packages: - **factoextra** - **FactoMineR**
+To run the CA, such as the PCA, you need to load the following two
+packages: - **factoextra** - **FactoMineR**
 
-Then, to perform the CA on R, you can use the function : **CA()**. Remember to store the result of this PCA in a new variable, so that you can easily retrieve the PCA information you need for subsequent interpretation.
+Then, to perform the CA on R, you can use the function : **CA()**.
+Remember to store the result of this PCA in a new variable, so that you
+can easily retrieve the PCA information you need for subsequent
+interpretation.
 
 ```{r, echo=FALSE, hide=TRUE}
 library(FactoMineR)
@@ -262,17 +360,26 @@ CA$eig
 fviz_eig(CA, addlabels = TRUE)
 ```
 
-To determine the number of axes used in the CA analysis, we need to identify the jump in variance explained by the different axes. It's the same as for PCA.
-Here we can see that the first axis represents 55.4% of the variance, the second axis 28.7%, the third axis 9.8%, ... We can therefore see that the jump in variance explained by the different axes is between the first and second axes. The difference between the variance explained by the axes other than the first is negligible compared to the difference between the first axis and the others.
+To determine the number of axes used in the CA analysis, we need to
+identify the jump in variance explained by the different axes. It's the
+same as for PCA. Here we can see that the first axis represents 55.4% of
+the variance, the second axis 28.7%, the third axis 9.8%, ... We can
+therefore see that the jump in variance explained by the different axes
+is between the first and second axes. The difference between the
+variance explained by the axes other than the first is negligible
+compared to the difference between the first axis and the others.
 
-For the CA interpretation, we therefore retain the first two axes, which together explain 65.19% of the variance.
+For the CA interpretation, we therefore retain the first two axes, which
+together explain 65.19% of the variance.
 
 #### 2) Interpretation of the biological meaning of the axes :
 
-In CA, in contrast to PCA, axes are interpreted either column-wise or row-wise. The choice depends on the initial biological question.
+In CA, in contrast to PCA, axes are interpreted either column-wise or
+row-wise. The choice depends on the initial biological question.
 
-Here we'll interpret the axes according to the lines, i.e. according to the hair colors.
-To find out which variables contribute to the synthetic axis, we use the threshold of : $\frac{1}{nb\_variables}$
+Here we'll interpret the axes according to the lines, i.e. according to
+the hair colors. To find out which variables contribute to the synthetic
+axis, we use the threshold of : $\frac{1}{nb\_variables}$
 
 The threshold in our case is: $\frac{1}{8}$.
 
@@ -286,20 +393,19 @@ Row_contrib>(1/8)*100
 
 ```
 
-D'apres ces resultats, les lignes expliquant le premier axe sont : 
--   Black
--   Blues
--   Pink
+D'apres ces resultats, les lignes expliquant le premier axe sont : -
+Black - Blues - Pink
 
-Les lignes expliquant le second axe sont : 
--   Chestnut
--   White
+Les lignes expliquant le second axe sont : - Chestnut - White
 
 #### 3) Interpretation of relatives contributions :
-Relative contributions represent the quality of representation of the column/row by the axis.
 
-Either the rows or the columns are interpreted, depending on the choice made in the next step.
-In our case, we chose the columns, since we interpreted the axes with the absolute contributions of the rows.
+Relative contributions represent the quality of representation of the
+column/row by the axis.
+
+Either the rows or the columns are interpreted, depending on the choice
+made in the next step. In our case, we chose the columns, since we
+interpreted the axes with the absolute contributions of the rows.
 
 ```{r}
 # Obtain relative column contribution values :
@@ -307,8 +413,8 @@ CA$col$cos2
 
 ```
 
-Blue and yellow eye colors are well represented by axis 1. Gray eye color is represented by axis 2.
-
+Blue and yellow eye colors are well represented by axis 1. Gray eye
+color is represented by axis 2.
 
 ```{r}
 # Obtention des valeurs des contributions relatives des lignes : 
@@ -316,57 +422,89 @@ CA$row$cos2
 
 ```
 
-This verifies that the modalities that contribute most to the formation of the first two axes all have a good representation quality (not always the case).
+This verifies that the modalities that contribute most to the formation
+of the first two axes all have a good representation quality (not always
+the case).
 
 ### e) Biological conclusion :
-For the question of links between modalities in rows or columns, you need to know that : 
--   If we have a positive sclaire product, i.e. less than 90? difference between the arrows of two different modalities. Then we have a conjunction representing an affinity between these two modalities.
--   If we have a negative scalar product, i.e. more than 90? difference between the arrows of two different modalities. Then we have an opposition of these two modalities. They reject each other.
--   If we have a zero scalar product, i.e. the arrows between two different modalities are perpendicular. Then there is no link between these two modalities.
+
+For the question of links between modalities in rows or columns, you
+need to know that : - If we have a positive sclaire product, i.e. less
+than 90? difference between the arrows of two different modalities. Then
+we have a conjunction representing an affinity between these two
+modalities. - If we have a negative scalar product, i.e. more than 90?
+difference between the arrows of two different modalities. Then we have
+an opposition of these two modalities. They reject each other. - If we
+have a zero scalar product, i.e. the arrows between two different
+modalities are perpendicular. Then there is no link between these two
+modalities.
 
 ```{r}
 fviz_ca_biplot(CA)
 ```
-On this graph, the rows are shown in blue and the columns in red. In other words, hair color in blue and eye color in red.
 
-From this analysis, we can see : 
--   A conjunction between black, pink, brown or blond hair and blue or brown eyes.
--   A conjunction between yellow eyes and blue hair
--   An opposition between these two groups on axis 1.
+On this graph, the rows are shown in blue and the columns in red. In
+other words, hair color in blue and eye color in red.
 
-In an analysis where the data are not created randomly, but come from different individuals from different populations. This could reveal a particular typology of one population in relation to another.
+From this analysis, we can see : - A conjunction between black, pink,
+brown or blond hair and blue or brown eyes. - A conjunction between
+yellow eyes and blue hair - An opposition between these two groups on
+axis 1.
 
+In an analysis where the data are not created randomly, but come from
+different individuals from different populations. This could reveal a
+particular typology of one population in relation to another.
 
 # PART 2: MCA
 
-## Mathématiques
+## Mathematics
 
-The MCA stands out from other multivariate analyzes with a single table (PCA, CA or mix between MCA and PCA, etc.) because it only takes qualitative variables as input. Its goal is to find the relationships between modalities by visualizing the possible associations and producing a quantitative indicator of their relationships.
+The MCA stands out from other multivariate analyzes with a single table
+(PCA, CA or mix between MCA and PCA, etc.) because it only takes
+qualitative variables as input. Its goal is to find the relationships
+between modalities by visualizing the possible associations and
+producing a quantitative indicator of their relationships.
 
-The data taken by an MCA is a table comprising $J$ qualitative variables to describe $I$ statistical individuals. All individuals have the same weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to the modality taken by individual $i$ for variable $j$.
+The data taken by an MCA is a table comprising $J$ qualitative variables
+to describe $I$ statistical individuals. All individuals have the same
+weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to
+the modality taken by individual $i$ for variable $j$.
 
-To obtain a complete disjunctive table (CDT) and carry out the statistical analysis, it is necessary to subdivide each variable $j$ into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$ of the $I$ individuals for this variable. The table will always have $I$ rows but $\sum_{j=1}^J {n_j}$ columns (we will denote K columns), in which each of the $V_{i,k}$ values is either 1 or 0 depending on the presence or absence of the modality.
+To obtain a complete disjunctive table (CDT) and carry out the
+statistical analysis, it is necessary to subdivide each variable $j$
+into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$
+of the $I$ individuals for this variable. The table will always have $I$
+rows but $\sum_{j=1}^J {n_j}$ columns (we will denote K columns), in
+which each of the $V_{i,k}$ values is either 1 or 0 depending on the
+presence or absence of the modality.
 
-The value $V_{i,k}$ is transformed again : the old value of $V_{i,k}$ (1 or 0) is divided by the probability $p_{k}$ of having this modality (i.e. $p_k=\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we subtract 1 to center the result.
+The value $V_{i,k}$ is transformed again : the old value of $V_{i,k}$ (1
+or 0) is divided by the probability $p_{k}$ of having this modality
+(i.e. $p_k=\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we
+subtract 1 to center the result.
 
 $V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
 
 We define the distance D between 2 individuals $i$ and $i’$ as :
 $D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
 
-So 2 individuals taking the all same modalities are at a distance D = 0, the more similar the responses are over a large number of modalities, the lower the distance D will be and conversely. If two individuals share a rare modality, the distance will be reduced to take into account the common specificity.
+So 2 individuals taking the all same modalities are at a distance D = 0,
+the more similar the responses are over a large number of modalities,
+the lower the distance D will be and conversely. If two individuals
+share a rare modality, the distance will be reduced to take into account
+the common specificity.
 
-The inertia of the point cloud : $N = \frac{K}{J} – 1$.
-$η^2(x,y)$ is the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$ is the correlation ratio between the modality $k$ and l'axe $F_s$.
-The axis $F_1$ is the one which maximize its correlation ratio with all the modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
+The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is
+the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$
+is the correlation ratio between the modality $k$ and l'axe $F_s$. The
+axis $F_1$ is the one which maximize its correlation ratio with all the
+modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
 
-## Interprétation
+## Interpretation
 
-This chapter is a simple example using R
-
-You can import R package using the code
-
-Let's have to look to fictive the data set we will be working on:
+This part is a simple example of MCA using R.
+You can import R package using the code.
+Let's have to look to fictive the data set we will be working on :
 
 ```{r}
 library(tidyverse)
@@ -375,7 +513,10 @@ hippo=hippo[,-1]
 str(hippo)
 ```
 
-Water consumption behaviour of Hippopotamus was observed in Penjari National Park, Benin. Drinking frequency was evaluated by a technician and rated "rarely" or "regularly". Sex is indicated with F for female and M for male. As there are 3 lakes in the park, the tree of them are written "G1", "G2" and "G3".
+Water consumption behaviour of Hippopotamus was observed in Penjari
+National Park, Benin. Drinking frequency was evaluated by a technician
+and rated "rarely" or "regularly". Sex is indicated with F for female
+and M for male. As there are 3 lakes in the park which are noted "G1", "G2" and "G3".
 
 We are performing MCA with the package FactoMineR.
 
@@ -384,15 +525,19 @@ library(FactoMineR)
 res.mca = MCA(hippo, quanti.sup=1)
 ```
 
-Let's have a look to Eigen Values:
+Let's have a look to Eigen Values :
 
 ```{r}
 res.mca$eig
 ```
 
-The total variance of the data set is divided between four dimensions. The first dimension concentrate 32.6% of the total variance. The first plan gather 58% of the variance.
+The total variance of the data set is divided between four dimensions.
+The first dimension concentrate 32.6% of the total variance. The first
+plan gather 58% of the variance.
 
-Here, you can see the results for the individuals, their coordinates ($coord$), contribution ($contrib$) and the quality of their projection ($cos2$ )
+Here, you can see the results for the individuals, their coordinates
+($coord$), contribution ($contrib$) and the quality of their projection
+($cos2$ )
 
 ```{r}
 head(res.mca$ind$coord)
@@ -400,10 +545,13 @@ head(res.mca$ind$cos2)
 head(res.mca$ind$contrib)
 ```
 
-Coordonates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+Coordonates of the individuals are their position on the first plan.
+$cos2$ represents the quality of the representation of the individuals
+on the first plan. Contribution is how the point contribute to the
+creation of different axis.
 
-You can access the same information for the variable (instead of the individuals):
->>>>>>> Lucile
+You can access the same information for the variable (instead of the
+individuals) :
 
 ```{r}
 res.mca$var$coord
@@ -411,30 +559,45 @@ res.mca$var$contrib
 res.mca$var$cos2
 ```
 
-As a supplementary quantitative variable was added, MCA gives its coordinates with the following code:
+As a supplementary quantitative variable was added, MCA gives its
+coordinates with the following code :
 
 ```{r}
 res.mca$quanti.sup$coord
 ```
 
-Let's have a look to the plot of this MCA analysis:
+Let's have a look to the plot of this MCA analysis :
 
 ```{r}
 plot(res.mca)
 ```
 
-As this is a factice data set, some individuals are overlapping. We will not focus on this artefact of the data set.
+As this is a factice data set, some individuals are overlapping. We will
+not focus on this artefact of the data set.
 
 **How to interprete these graphs?**
 
-***General description*** : The individuals are in black. The variables are in red. The percentage of variance of the first two axis is written on them. Individuals in the center of the cloud are individuals taking a mean value for all of their caracteristics, unlikely individuals far from the middle which are specific individuals, very different from others. Close individuals present close characteristics.
+***General description*** : The individuals are in black. The variables
+are in red. The percentage of variance of the first two axis is written
+on them. Individuals in the center of the cloud are individuals taking a
+mean value for all of their caracteristics, unlikely individuals far
+from the middle which are specific individuals, very different from
+others. Close individuals present close characteristics.
 
-***Interpretation***: Here, we can see that the first axis separates individuals drinking regularly from individuals drinking rarely. The second axis separates individuals drinking at G2 from individuals drinking at G3. Male and female seamed to be separated by the first axis. As we can gather individuals sharing close properties, females seams to drink regularly and male more rarely. It is a bit less clear but male are drinking preferably in pound 1.
+***Interpretation***: Here, we can see that the first axis separates
+individuals drinking regularly from individuals drinking rarely. The
+second axis separates individuals drinking at G2 from individuals
+drinking at G3. Male and female seamed to be separated by the first
+axis. As we can gather individuals sharing close properties, females
+seams to drink regularly and male more rarely. It is a bit less clear
+but male are drinking preferably in pound 1.
 
 ## Take Home Message
 
-MCA is a statistical method adapted to table of type "individuals x quatitative variable". Eingen Values correspond to means of squered correlation ratios. It could be used a pre-processing before a classification or a coinertia analysis on tables with quantitative.
-
+MCA is a statistical method adapted to table of type "individuals x
+quatitative variable". Eingen Values correspond to means of squered
+correlation ratios. It could be used a pre-processing before a
+classification or a coinertia analysis on tables with quantitative.
 
 # PART 3: RDA
 
@@ -450,7 +613,8 @@ You can import R package using the code
 library(tidyverse)
 ```
 
-and then describe the purpose of your chapter as well as executing R command.
+and then describe the purpose of your chapter as well as executing R
+command.
 
 For example a basic summary of a dataset is given by
 
@@ -474,7 +638,9 @@ A citation @bauer2023writing
 
 ## Interprétation
 
-The use of RLQ analysis is important in ecology to integrate the traits of species with the environmental variables. So here, we don't have 2 tables (environment & specie) as RDA part but 3 tables:
+The use of RLQ analysis is important in ecology to integrate the traits
+of species with the environmental variables. So here, we don't have 2
+tables (environment & specie) as RDA part but 3 tables:
 
 -   environmental variables by sites (R)
 
@@ -482,15 +648,20 @@ The use of RLQ analysis is important in ecology to integrate the traits of speci
 
 -   trait values by species (Q)
 
-To perform the RLQ, we need to decompose the analyse by three type of analyses already done in this chapter:
+To perform the RLQ, we need to decompose the analyse by three type of
+analyses already done in this chapter:
 
 -   we will use a CA analyse on the abundance of species
 
--   we will use a MCA on the environmental table by taking the sites weight on the CA
+-   we will use a MCA on the environmental table by taking the sites
+    weight on the CA
 
--   we will use a MCA on the trait table by taking the species weight on the CA
+-   we will use a MCA on the trait table by taking the species weight on
+    the CA
 
-Here, we use MCA for R and Q because our variables are factors but you can perform a PCA if your variables are quantitatives. Warning, for R and Q you have the obligation to weight by the L table (see below).
+Here, we use MCA for R and Q because our variables are factors but you
+can perform a PCA if your variables are quantitatives. Warning, for R
+and Q you have the obligation to weight by the L table (see below).
 
 You can import R package using the code
 
@@ -530,7 +701,6 @@ head(L)
 head(Q)
 ```
 
-
 The first part is to perform our CA on specie table
 
 ```{r}
@@ -539,9 +709,13 @@ afcL
 
 ```
 
-The first CA is done. We use log transformation because the abundance of species has a large range and we add "+1" to avoid the log(0) for some species. You must adapt the presence of transformation (or not) to your data.
+The first CA is done. We use log transformation because the abundance of
+species has a large range and we add "+1" to avoid the log(0) for some
+species. You must adapt the presence of transformation (or not) to your
+data.
 
-Now, we can perform the two MCA analysis on the trait table and environmental table
+Now, we can perform the two MCA analysis on the trait table and
+environmental table
 
 ```{r}
 acmR <- dudi.acm(R, row.w = afcL$lw, scannf = FALSE,nf = 4)
@@ -552,9 +726,12 @@ scatter(acmQ)
 
 ```
 
-The scatterplot allows to see the ordination of each table and the repartition of factor on the simple axe of MCA.
+The scatterplot allows to see the ordination of each table and the
+repartition of factor on the simple axe of MCA.
 
-But now, we will use the RLQ analyse that creates two co-inertia (R-L, L-Q), assembles and compares the co-inertia. We use the rlq function for that.
+But now, we will use the RLQ analyse that creates two co-inertia (R-L,
+L-Q), assembles and compares the co-inertia. We use the rlq function for
+that.
 
 ```{r}
 rlq <- rlq(acmR, afcL, acmQ, scannf = FALSE)
@@ -567,11 +744,20 @@ print(paste("The contribution of axe n°",axe, "are", rlq$eig/(sum(rlq$eig))*100
 
 ```
 
-Here, the output of the RLQ is complex but only few information are, at this point important. We see that we have 8 eigenvalues and we have their values. All the different compounds of the output will be used after in representations or analysis.
+Here, the output of the RLQ is complex but only few information are, at
+this point important. We see that we have 8 eigenvalues and we have
+their values. All the different compounds of the output will be used
+after in representations or analysis.
 
-Nevertheless, we can calculate the contribution of each axis of the RLQ by performing the formule below: METTRE LA FORMULE AU PROPRE rlq$eig/(sum(rlq$eig))\*100
+Nevertheless, we can calculate the contribution of each axis of the RLQ
+by performing the formule below: METTRE LA FORMULE AU PROPRE
+rlq$eig/(sum(rlq$eig))\*100
 
-After that, and before to plot and analyse the result, it is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+After that, and before to plot and analyse the result, it is important
+to test if the result of the RLQ is not only due to random combination
+of values but that we have a real correlation between are different
+tables. To produce this, we perform a permutation test with the function
+*randtest*.
 
 ```{r}
 randtest(rlq)
@@ -580,12 +766,17 @@ plot(randtest(rlq))
 
 ```
 
-The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+The outputs above corresponds to the permutation test. We see that the
+number of permutation of columns and rows was to 999 (default value).
 
-The results of this test shows that the permutation of sites (rows) is the first result (p_value=0.1%) and the permutation of species (columns) is the second result (p_value=1.9%) So each result is significant (5% threshold) and we can conclude that our RLQ result is not linked to random effect.
+The results of this test shows that the permutation of sites (rows) is
+the first result (p_value=0.1%) and the permutation of species (columns)
+is the second result (p_value=1.9%) So each result is significant (5%
+threshold) and we can conclude that our RLQ result is not linked to
+random effect.
 
-Finally, the results of the RLQ are plot in the distribution law calculated by the permutation.
-
+Finally, the results of the RLQ are plot in the distribution law
+calculated by the permutation.
 
 We can know analyse the result by using different types of plot:
 
@@ -593,14 +784,19 @@ We can know analyse the result by using different types of plot:
 plot(rlq)
 ```
 
-The plot above is the complet plot, difficult to understand and that will be resumed step by step afterward. 
+The plot above is the complet plot, difficult to understand and that
+will be resumed step by step afterward.
 
+However, we have here, up the score (the position) of the sites and
+species in this analyse. Below in the centre, we have the correlation of
+the environmental variables between them (R Canonical weights) and the
+correlation of the traits between them (Q Canonical weight). The plots
+of the R axes and the Q axes represent the reprojection of axis in the
+RLQ analyse in order to the simple analyses (CA or MCA here).
 
-However, we have here, up the score (the position) of the sites and species in this analyse. Below in the centre, we have the correlation of the environmental variables between them (R Canonical weights) and the correlation of the traits between them (Q Canonical weight). The plots of the R axes and the Q axes represent the reprojection of axis in the RLQ analyse in order to the simple analyses (CA or MCA here).
+Now, we can decompose the result and start with the environmental
+variables:
 
-
-
-Now, we can decompose the result and start with the environmental variables:
 ```{r}
 #analyse the environmental variables:
 round(rlq$l1,dig=2)
@@ -614,15 +810,29 @@ abscoiE
 
 ```
 
-The table corresponds to the position of each modality for each environmental variables on the two first axis. You can link this table to the plot. For example, "veg.cover.R100" seems to stand out from the other modalities. In the table, we can see that the position on the first axis is 4.35 and -4.95 on the second axis. Closer to the center of the cloud, we can talk about "veg.cover.R98" that have position of 1.74 on the first axis and -1.64 on the second axis. 
-In addition, we can observe the contribution of this two variables. On the second table we have the absolute contribution of the modalities for each variable. The contribution of the "veg.cover.R100" of the first axis is 17% and 22% on the second axis. This is a high value if we take the threshold to 1/N with N the number of modalities (28 here so 3%). The contribution of "veg.cover.R98" is 4.6% for the first axis and 4.1% for the second axis.
+The table corresponds to the position of each modality for each
+environmental variables on the two first axis. You can link this table
+to the plot. For example, "veg.cover.R100" seems to stand out from the
+other modalities. In the table, we can see that the position on the
+first axis is 4.35 and -4.95 on the second axis. Closer to the center of
+the cloud, we can talk about "veg.cover.R98" that have position of 1.74
+on the first axis and -1.64 on the second axis. In addition, we can
+observe the contribution of this two variables. On the second table we
+have the absolute contribution of the modalities for each variable. The
+contribution of the "veg.cover.R100" of the first axis is 17% and 22% on
+the second axis. This is a high value if we take the threshold to 1/N
+with N the number of modalities (28 here so 3%). The contribution of
+"veg.cover.R98" is 4.6% for the first axis and 4.1% for the second axis.
 
+We can therefore conclude that this two variables are correlated. This
+seems to be biologically coherent since these two variables are part of
+a plant cover gradient and are the two highest values.
 
-We can therefore conclude that this two variables are correlated. This seems to be biologically coherent since these two variables are part of a plant cover gradient and are the two highest values.
-
-We can also see that the variable negatively correlated with the first axis are modalities explaining the urbanization ()
+We can also see that the variable negatively correlated with the first
+axis are modalities explaining the urbanization ()
 
 Now we can realise the same analyse for the traits.
+
 ```{r}
 #analyse the traits:
 round(rlq$c1,dig=2)
@@ -634,32 +844,51 @@ abscoiV
 
 ```
 
-As seen before, the first table is the position of the modalities for the two first axes of the RLQ analyses. The plot is the representation of that and the second table is the absolute contributions. 
+As seen before, the first table is the position of the modalities for
+the two first axes of the RLQ analyses. The plot is the representation
+of that and the second table is the absolute contributions.
 
-Here, we have larger differences between the different variable and modalities. We're going to focus on a few examples, but you can take the time to go into detail about each modality.
-"feed.strat.foliage" (coord= 2.60; -1.97 for first and second axis respectively) and "breeding.scrub" (coord= 1.71: -2.22) break away from the centre of the cloud. In addition their contributions are all greater than 10%. We can conclude that these modalities are correlated and highly contribute of axes.
-
+Here, we have larger differences between the different variable and
+modalities. We're going to focus on a few examples, but you can take the
+time to go into detail about each modality. "feed.strat.foliage" (coord=
+2.60; -1.97 for first and second axis respectively) and "breeding.scrub"
+(coord= 1.71: -2.22) break away from the centre of the cloud. In
+addition their contributions are all greater than 10%. We can conclude
+that these modalities are correlated and highly contribute of axes.
 
 The last point is to observe the species coordinates.
+
 ```{r}
 #analyse the species:
 round(rlq$lQ,dig=2)
 s.label(rlq$lQ,boxes=FALSE)
 s.label(rlq$lQ, label=aviurba$species.names.fr,boxes=FALSE)
 ```
-Here, is to see that we seems to have a gradient of response along the first axis (i.e. Loriot Jaune/Sp37 [coord=1.18; -1.33] and Alouette des champs/Sp9 [coord=0.99; 1.17]) and along the second axis (i.e. Loriot Jaune/Sp37 [coord=1.18; -1.33] and Fauvette des jardins/Sp21 [coord=0.99; 1.17]). We will see that we need to link this to the others variables (trait and environment)
-For species and sites, we do not have contribution because these variables do not contribute of the axis creation.
 
+Here, is to see that we seems to have a gradient of response along the
+first axis (i.e. Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Alouette
+des champs/Sp9 \[coord=0.99; 1.17\]) and along the second axis (i.e.
+Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Fauvette des jardins/Sp21
+\[coord=0.99; 1.17\]). We will see that we need to link this to the
+others variables (trait and environment) For species and sites, we do
+not have contribution because these variables do not contribute of the
+axis creation.
 
-CONCLUSION 
-To conclude on this analyse, the two first axes were required to explain 86.2% of the total variation with 66.7%, and 19.5% of the total inertia respectively.
+CONCLUSION To conclude on this analyse, the two first axes were required
+to explain 86.2% of the total variation with 66.7%, and 19.5% of the
+total inertia respectively.
 
 The correlations between the environmental variables and the RLQ axes
-showed that the first axis is explained by Veg.cover.R100 (contribution of
-16.95%), veg.cover.R22 (7.43%), noisy.yes (8.82%), small.bui.yes (11.22%),
-field.yes (8.17%), field.no (8.2%) and Veg.cover.R22 (7.43%). 
-The traits variables that contribute to the first axis of the RLQ axes are breeding.ground (28.19%), feed.strat.foliage (19.8%), breeding.scrub (13.3%) and negatively with breeding.building (17.18%) and feed.strat.aerial (7.09%). In other words, breeding.ground, feed.strat.foliage, breeding.scrub, feed.strat.aerial and breeding.building were the most powerful explanatory attributes for this RLQ axis (explained by both the length and the angle between the axes and the vectors).
+showed that the first axis is explained by Veg.cover.R100 (contribution
+of 16.95%), veg.cover.R22 (7.43%), noisy.yes (8.82%), small.bui.yes
+(11.22%), field.yes (8.17%), field.no (8.2%) and Veg.cover.R22 (7.43%).
+The traits variables that contribute to the first axis of the RLQ axes
+are breeding.ground (28.19%), feed.strat.foliage (19.8%), breeding.scrub
+(13.3%) and negatively with breeding.building (17.18%) and
+feed.strat.aerial (7.09%). In other words, breeding.ground,
+feed.strat.foliage, breeding.scrub, feed.strat.aerial and
+breeding.building were the most powerful explanatory attributes for this
+RLQ axis (explained by both the length and the angle between the axes
+and the vectors).
 
 A citation @bauer2023writing
-
-
