@@ -10,31 +10,17 @@ output:
 ---
 
 
-This chapter is a simple example using R
+Quick plan :
+  
+# ODE 2 equations
+  
+  Little explanation of what is an ODE 2 equations
+Some examples (a listing ?) of applications in ecology
+including Lotka-Volterra
+--> Focus on Lotka-Volterra : equations and resolution (model) in R code + graphs + 1 or 2 little exercices to understand
 
-You can import R package using the code
-
-```{r}
-library(tidyverse)
-```
-
-
-and then describe the purpose of your chapter as well as executing R command.
-
-
-For example a basic summary of a dataset is given by 
-
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
+## Lotka-Volterra
 
 
-A citation @bauer2023writing
+
+
