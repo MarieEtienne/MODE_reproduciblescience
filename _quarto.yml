@@ -22,7 +22,7 @@ website:
     right:
       - text: M1 MODE Survival book by the M2 students
         menu:
-        - text Dependent data
+        - text: Dependent data
           href: chapter_dependance.qmd
         - text: Mixed models in Ecology
           href: Mixed_models.qmd
