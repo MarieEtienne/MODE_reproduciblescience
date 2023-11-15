@@ -202,9 +202,6 @@ scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red",
           facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9),           border="black"), main = " ")
 ```
 
-# CONCLUSION
-
-
 
 4) Validation des modèles #Lucia
 
