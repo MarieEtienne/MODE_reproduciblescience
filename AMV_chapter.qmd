@@ -460,8 +460,8 @@ particular typology of one population in relation to another.
 ## Mathematics
 
 The MCA stands out from other multivariate analyzes with a single table
-(PCA, CA or mix between MCA and PCA, etc.) because it only takes
-qualitative variables as input. Its goal is to find the relationships
+(PCA, CA or mix between MCA and PCA, etc.) because it ***only takes
+qualitative variables*** as input. Its goal is to find the relationships
 between modalities by visualizing the possible associations and
 producing a quantitative indicator of their relationships.
 
@@ -470,7 +470,7 @@ to describe $I$ statistical individuals. All individuals have the same
 weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to
 the modality taken by individual $i$ for variable $j$.
 
-To obtain a complete disjunctive table (CDT) and carry out the
+To obtain a ***complete disjunctive table (CDT)*** and carry out the
 statistical analysis, it is necessary to subdivide each variable $j$
 into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$
 of the $I$ individuals for this variable. The table will always have $I$
@@ -485,7 +485,7 @@ subtract 1 to center the result.
 
 $V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
 
-We define the distance D between 2 individuals $i$ and $i’$ as :
+We define the ***distance D*** between 2 individuals $i$ and $i’$ as :
 $D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
 
 So 2 individuals taking the all same modalities are at a distance D = 0,
@@ -496,15 +496,15 @@ the common specificity.
 
 The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is
 the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$
-is the correlation ratio between the modality $k$ and l'axe $F_s$. The
-axis $F_1$ is the one which maximize its correlation ratio with all the
-modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
+is the ***correlation ratio*** between the modality $k$ and l'axe $F_s$.
+The axis $F_1$ is the one which maximize its correlation ratio with all
+the modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
 
 ## Interpretation
 
-This part is a simple example of MCA using R.
-You can import R package using the code.
-Let's have to look to fictive the data set we will be working on :
+This part is a simple example of MCA using R. You can import R package
+using the code. Let's have to look to fictive the data set we will be
+working on :
 
 ```{r}
 library(tidyverse)
@@ -516,7 +516,8 @@ str(hippo)
 Water consumption behaviour of Hippopotamus was observed in Penjari
 National Park, Benin. Drinking frequency was evaluated by a technician
 and rated "rarely" or "regularly". Sex is indicated with F for female
-and M for male. As there are 3 lakes in the park which are noted "G1", "G2" and "G3".
+and M for male. As there are 3 lakes in the park which are noted "G1",
+"G2" and "G3".
 
 We are performing MCA with the package FactoMineR.
 
