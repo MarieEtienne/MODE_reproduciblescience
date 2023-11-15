@@ -908,8 +908,15 @@ Two other methods of two tables analysis were not presented here :
 -   **CCA** is used with two table, where both $Y$ **and** $X$ **are
     quantitative data**. It works the same as RDA.
 
+-   PCCA is CCA like but it includes a spacial dependency... Spacial and
+    Temporal dependencies are a great deal in data analysis !
+
 Even if this presentation of multivariate analysis was not exhaustive,
 you can have a better view of what you can do when you are to analyse a
 data table. The method chosen will depend on the number of tables and
 the type of the variables (quantitative or qualitative). To help you
-decide what analysis to use, you can have a look to this decision tree !
+decide what analysis to use regarding to the ones we presented here, you
+can have a look to this decision tree !
+
+![**Decision tree multivariate analysis (from A.
+Pannard)**](decision_tree.jpg)
