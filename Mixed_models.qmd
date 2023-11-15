@@ -173,20 +173,25 @@ summary(o.ar1)
 à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
 Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
 
-$$Cov(Y_i, Y_i{'}) = exp(−δ.d(i,i'))$$
+$$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
 *Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
 
-Σ =
 
+$$
+  Σ = \left( {\begin{array}{cc}
+     σ^2 + γ^2 & ...& ...& ...\\
+     ...& σ^2 + γ^2 & e^{−δ.d(i,i')} &...\\
+     ...& e^{−δ.d(i,i')}  & σ^2 + γ^2 &...\\
+ ...& ...& ... & σ^2 + γ^2\\
+  \end{array} } \right)
+$$
 
 
 ```{r}
-set.seed(3)  #4,8,12,15,16,33,47,49,50
+set.seed(3)  
 n <- 100
-# simgrid <-
-# expand.grid(LAT=runif(10,144,150),LONG=runif(10,-26,-20))
-# n <- nrow(simgrid) library(sp)
+
 loc <- data.frame(LAT = runif(n, 144, 150), LONG = runif(n,
     -26, -20))
 
@@ -194,10 +199,7 @@ library(sp)
 grid <- expand.grid(LAT = seq(144, 150, l = 100), LONG = seq(-26,
     -20, l = 100))
 coordinates(grid) <- ~LAT + LONG
-# loc <- spsample(grid, n=n, type='random') loc <-
-# data.frame(spsample(grid, n=n, type='regular'))
-# names(loc) <- c('LAT','LONG') coordinates(loc) <-
-# ~LAT+LONG
+
 
 # Set up distance matrix
 distance <- as.matrix(dist(as.data.frame(loc)))  #* 1/min(distance[lower.tri(distance)])
@@ -231,7 +233,7 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
 summary(data.spatialCor.glsExp)
 ```
 
-
+## Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?
 
 
 
