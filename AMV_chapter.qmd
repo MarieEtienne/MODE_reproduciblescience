@@ -399,12 +399,15 @@ The output, here, is the absolute contribution of each species for the axis 1 an
 
 ```{r}
 ccaoak$fa
+s.corcircle(ccaoak$fa)
 ```
+This line gives you the cannonical coeficients on each axis. The circle is explain in the "Loadings" part of the main plot of the RDA. On axis 1, the variable with the main contribution of the predrictive power is $LatAppx$. On axis 2, $Slope.deg$ and $Elev.m$ contributes the most of the predictive power.
 
 ```{r}
 ccaoak$co
 s.label(ccaoak$co,boxes=F)
 ```
+$co$ gives you access to the coordinates of each species on the first plan. The table explicits the coordinates and the plot help you to find close species. Here, there is a group formed by Agse, Agha Avfa and ALL. An other on with two outliers, Abgr.t and Adbi. These groups will be correlated with the environment data further in the analysis.
 
 ```{r}
 ccaoak$cor
