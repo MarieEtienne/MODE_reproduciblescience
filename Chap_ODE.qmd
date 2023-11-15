@@ -341,13 +341,93 @@ We're going to define a discrete and a continuous model here to make things very
 
 ### II-A-1. Discrete model
 
-Soit n ...
+Soit $$n \in \mathbb{N}^+$$
+
+Comme dit plus haut, la population croit de r\*N(n) par unité de temps.
+
+Cela signifie qu'entre N(n+1) et N(n), la population croit de r\*N(n).
+
+On a donc: $$N(n+1)-N(n) = r*N(n)$$
+
+Cela donne donc le modele suivant: $$N(n+1) = r*N(n)+N(n)$$
+
+On va représenter graphiquement ce modèle en utilisant r studio.
+
+```{r, include=TRUE, echo=TRUE}
+time <- c(0, 30, 50, 70, 100, 130, 150, 170, 200, 230, 250, 300, 350, 370, 400, 430, 470)
+individuals <- c(2, 3, 5, 10, 18, 25, 38, 50, 61, 79, 95, 115, 138, 142, 143, 143, 144)
+
+plot(time, individuals)
+```
 
 ### II-A-2. Continuous model
 
 Soit t ...
 
+On va essayer de simuler ce modèle en utilisant r studio. Nous allons utiliser un package que vous avez vu ou que vous verrez sans doute très prochainement: le package deSolve.
+
+Installez le et chargez le:
+
+```{r, include=TRUE, echo=FALSE}
+install.packages("deSolve")
+library(deSolve)
+```
+
+Il y a deux points importants à intégrer pour l'utilisation de ce package:
+
+-   La fonction principale que vous utiliserez est la fonction '*ode()*'. Elle suit une syntaxe bien particulière qu'il vous faut retenir:
+
+*ode(y=y0, times=temps, func=fonction, parms=paramètres)*
+
+avec:
+
+-   '*y0*' = valeur initiale de la variable d'intérêt y (pour la première valeur de temps)\
+
+-   '*times*' = les temps sur lesquels vous souhaitez travailler\
+
+-   '*fonction*' = la fonction définissant le système ; cette fonction suit une syntaxe bien particulière qu'il vous faudra aussi retenir (vois plus bas)\
+
+-   '*parms*' = les valeurs de paramètres
+
+-   concernant l'argument '*fonction*' de la fonction '*ode()*'. Celui-ci correspond à une fonction qui, bien que propre à chaque modèle, suit un syntaxe bien particulière, comme précisé plus haut. Cette syntaxe est la suivante:
+
+*fonction \<- function(t,y,paramètres){* *instructions* *list(flux)}* avec:
+
+-   '*t*' = correspond au temps de l'argument 'times' de la fonction ode()\
+-   '*y*' = correspond à la variable d'intérêt\
+-   '*paramètres*' = correspond au paramètres de l'argument 'parms' de la fonction ode()
+
+Sachant tout cela, on peut simuler le modèle exponentiel avec le script suivant:
+
+```{r, include=TRUE, echo=TRUE}
+
+expo <- function(t, N, r){
+  list(r*N)}
+N0 = 5
+r = 0.2
+temps <- seq(from = 0, to = 5, by = 0.02)
+sol <- ode(y = N0, times = temps, func = expo, parms = r)
+plot(sol,main = "Modèle exponentiel / Modèle de Malthus")
+```
+
 ## II-B. The logistic model or Verhulst model
+
+```{r, include=TRUE, echo=TRUE}
+compet<-function(t,N,param){
+r1=param[1]
+r2=param[2]
+c1=param[3]
+c2=param[4]
+N1=N[1]
+N2=N[2]
+list(c(r1*N1-c1*N1*N2,r2*N2-c2*N1*N2))
+}
+parametres <- c(r1=0.4,r2=0.6,c1=0.02,c2=0.015)
+temps <- seq(from = 0, to = 5, by = 0.02)
+N0 = c(10,20)
+sol <- ode(y = N0, times = temps, func = compet, parms = parametres)
+plot(sol,"Modèle compétition")
+```
 
 # III. Double ODE system: example of lotka-volterra model
 
