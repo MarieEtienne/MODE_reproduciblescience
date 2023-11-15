@@ -5,7 +5,19 @@ editor: visual
 ---
 
 # PART 1: PCA
+
 ## Mathématiques
+
+On cherche à définir k nouvelles variables combinaisons linéaires (appelées **composantes principales**) des p variables qui feront perdre le moins d'information possible. Les axes que ces nouvelles variables déterminent sont les **axes principaux** et les formes linéaires qui leur sont associées sont les **facteurs principaux**.
+
+Fk devra être "ajusté" le mieux possible au nuage des individus: la somme des carrés des distances des individus à Fk doit être minimale.
+
+Fk est le sous-espace tel que le nuage projeté ait un inertie (dispersion) maximale.
+
+Problème des unités: centrer-réduire
+
+$\frac{X_i^k-\bar{X}^k}{S_k}$
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -35,7 +47,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 2: CA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -65,7 +79,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 3: RDA
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
@@ -95,7 +111,9 @@ df %>% ggplot() +
 A citation @bauer2023writing
 
 # PART 4: RLQ
+
 ## Mathématiques
+
 ## Interprétation
 
 This chapter is a simple example using R
