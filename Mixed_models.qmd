@@ -15,9 +15,31 @@ library(nlme)
 
 
 
-## Introduction : Louis
+## Introduction:
 
-To model the relationships between a dependent variable $Y$ and one or several independent variables $X_1,\ X_2,\ ...,\ X_n$, **general linear models** (e.g. linear regressions, ANOVA, ANCOVA) are often used. In this models, several assumptions are made : homodescasticity of the variance, non-colinearity of the residuals and normality of the residuals. Homoscedasticity and normality hypothesis can be outreached using Generalized Linear Models. These models allow to use data that are drawn from different distributions such as Poisson, binomial or Gamma distributions, which are commonplace in ecology. 
+**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as \(Y\), and one or more independent variables (\(X_1, X_2, ..., X_n\)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the non-collinearity of residuals.
+
+In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated. This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites. In such cases, it becomes necessary to employ **mixed models**. These models, extensions of both general and generalized linear models, consider the correlation of measurements by introducing individuals, regions, families, or other factors as **random effects** in the models. This incorporation allows for a more accurate representation of the complex dependencies present in the data.
+
+#### What is a random effect, and how do I determine if my effect is random or fixed?
+
+To clarify the distinction between fixed and random effects, let's examine two examples:
+
+- **Example 1: Comparing Individual Cars**
+  
+  Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars. They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns. The dataset consists of one factor with four levels (representing the four cars) and five replicates each. Performing a one-way ANOVA allows them to determine which car is the most economical. In this scenario, the factor "car" is **fixed**, and the analysis provides conclusions specific to the four studied cars.
+
+- **Example 2: Assessing Homogeneity within a Car Model**
+
+  A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption. Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a dataset with one factor and four levels, each with five replicates. Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars. Here, a mixed model with the factor 'car' as a **random factor** should be used.
+
+
+  In summary, a factor is designated as fixed when the experimenter intentionally chooses a limited number of levels for investigation, aiming to assess the impact of each level on the response variable. On the other hand, a factor is considered random when the selected levels represent only a sample from all possible levels. In this case, the objective is to understand the variability in the response variable attributed to this factor.
+
+For example, let's consider a researcher investigating the influence of the number of training sessions per week on the concentration of red blood cells in recreational athletes. The researcher collects data from 50 athletes in a local club who train between 1 and 5 times a week. Initially planning a simple ANOVA with the number of training sessions as the main factor, the researcher discovers that most athletes in the dataset belong to only 10 families, leading to non-independent measurements. To address this issue, the researcher opts for a mixed model, treating the number of training sessions as a fixed factor and the family as a random factor. This approach allows the exploration of variability between families without the intention of directly comparing them.
+  
+  
+ Now that we have a general understanding of what mixed models are, we can delve into the mathematical formalism of these models. In this chapter, you will discover how **matrices** can be employed to create mixed models, explore the various **dependency structures** that exist, and ultimately, find an **implementation** of mixed models in R.
 
 
 
@@ -26,13 +48,20 @@ To model the relationships between a dependent variable $Y$ and one or several i
 The linear mixed model can be formulated as follows:
 
 $$
-Y_{ij} = X_{ij}\beta + Z_{ij}b_i + \varepsilon_{ij}
+Y_{i} = \beta X_{i} + \gamma_i Z_{i} + \varepsilon_{i}
 $$
 
-where $$Y_{ij}$$ is the response variable for observation $$i$$ in group $$j$$, $$X_{ij}$$ is the matrix of fixed predictors for observation $$i$$ in group $$j$$, $$\beta$$ is the vector of fixed coefficients, $$Z_{ij}$$ is the matrix of random predictors for observation $$i$$ in group $$j$$, $$b_i$$ is the vector of random effects for observation $$i$$ and $$\varepsilon_{ij}$$ is the error term for observation $$i$$ in group $$j$$.
+where:
+
+* $Y_i = n_i \times 1$ measurements for subject $i$
+* $X_i = n_i \times p$ matrix of vectors for fixed effects
+* $beta_i= p \times 1$ parameters for fixed effects
+* $Z_i = n_i \times p$ matrix of vectors for random effects
+* $gamma_i = r \times 1$ parameters for random effects
+* $varepsilon_i = n_i \times 1$ residuals for individual $i$
 
 
-A mixed effects model incorporates random effects ($$b_i$$), or a combination of both random and fixed effects ($$\beta$$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
+A mixed effects model incorporates random effects ($\gamma_i$), or a combination of both random and fixed effects ($\beta$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
 
 When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.
 
@@ -44,11 +73,16 @@ In addition, random effects are included in a model when there is a correlation 
 In matrix form, the mixed model is written as:
 
 $$
-Y \sim \mathcal{N}(X\theta, \Sigma)
+Y \sim \mathcal{N{n}}(X\theta, \Sigma)
 $$ 
 where:
 
-$$Y$$ is the response vector of the observations, $$X\theta$$ is the expectation of the response vector $$Y$$ and $$\Sigma$$ is the variance matrix.
+$Y$ is the response vector of the observations, $X\theta$ is the expectation of the response vector $Y$ and $\Sigma$ is the variance matrix. 
+We can note that if the response vector $Y$ is of dimension $n$, the matrix $\Sigma$ is of dimensions $n \times n$. Since $\Sigma$ is symmetric, it comprises $n(n + 1)/2$ parameters. This is because, in a symmetric matrix, the elements above (or below) the main diagonal are the same as those below (or above), reducing the total number of parameters needed to describe the matrix.
+
+However, the limitation of the available data prevents considering models where all these $n(n + 1)/2$ parameters are free. This restriction arises from the need to have a significant amount of data to reliably estimate each parameter, which quickly becomes unrealistic with a limited dataset.
+
+To address this issue, the linear mixed-effects model proposes an approach where a structure is imposed on the variance matrix $\Sigma$. This structure, governed by a limited number of parameters called "variance parameters," denoted $\psi$, reduces the number of parameters needed to describe the covariance matrix. Consequently, the model can be realistically adapted even with a limited amount of data, while accounting for the correlation between observations within the framework of linear mixed-effects models. The model parameters include $\theta$ for the expectation and $\psi$ for the variance.
 
 
 
@@ -69,26 +103,29 @@ $$
 Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
 
 
-Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives s'écrivant sous la forme $$Y_i = \beta_0 + \beta_1X_i^{(1)} + \ldots + \beta_pX_i^{(p)} + \varepsilon_i$$, avec $\varepsilon_i \stackrel{iid}\sim \mathcal{N}(0,\sigma^2)$ pour l'individu $i$, peut s'écrire sous forme matricielle $$Y=X\theta+\mathrm{E}$$ où $$Y=\begin{pmatrix}
-Y_1\\
+Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives peut s'écrire sous la forme $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, où $y_i$ représente une observation de la variable réponse $Y$ pour l'individu $i$, $\beta_0$ l'ordonnée à l'origine, $\beta_1,...,\beta_p$ les coefficients associés à chaque variables explicatives $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ p observations (pour les p variables explicatives) pour l'individu $i$, et $e_i$ un terme d'erreur associé à cet individu $i$. On peut voir $e_i$ comme une réalisation d'une variable aléatoire $E_i$ distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$.
+En notant $$y=\begin{pmatrix}
+y_1\\
 \vdots\\
-Y_n\\
-\end{pmatrix}$$ correspond au vecteur des réponses, $$X=\begin{pmatrix}
-1&X_1^{(1)} & \ldots & X_1^{(p)}\\
+y_n\\
+\end{pmatrix}$$, $$X=\begin{pmatrix}
+1&x_1^{(1)} & \ldots & x_1^{(p)}\\
 \vdots & \vdots & \ldots & \vdots \\
-1 & X_n^{(1)} & \ldots & X_n^{(p)}
+1 & x_n^{(1)} & \ldots & x_n^{(p)}
 \end{pmatrix}$$, $$\theta=\begin{pmatrix}
 \beta_0\\
 \vdots\\
 \beta_p\\
-\end{pmatrix}$$, et $$\mathrm{E}=\begin{pmatrix}
+\end{pmatrix}$$ et $$e=\begin{pmatrix}
 \varepsilon_0\\
 \vdots\\
 \varepsilon_n\\
-\end{pmatrix}$$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
+\end{pmatrix}$$, on peut réécrire le modèle précédent sous la forme $$y=X\theta+e$$.
+Ici, $e$ est un vecteur de n réalisations indépendantes d'une variable aléatoire $E_i$ suivant une loi noramle $\mathcal{N}(0,\sigma^2)$. Ainsi, $e$ est lui même une réalisation d'une variable aléatoire $E$ de distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ est une observation de la variable aléatoire $E_i$  distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$). De la même manière, $y$ est une observation de $Y=X\theta+E$ où $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ est l'observation de $Y_i$ distribuée selon une loi normale $\mathcal{N}((X\theta)_i,\sigma^2)$).
+Ainsi, en introduisant $Y$ et $E$, le modèle précédent peut s'écrire $Y=X\theta+E$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
 
 Par définition, la réponse moyenne est de $X\theta$, plus ou moins un terme d'erreur qui en moyenne vaut 0 mais qui varie de $\sigma^2I_n$. Ainsi, on peut écrire $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$.
-On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques)  car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance ()
+On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques)  car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance (mesures répétées dans le temps, individus groupés par une ascendance commune,...).
 
 
 ## Structure de dependance : Odin
@@ -149,13 +186,79 @@ $$
     σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
   \end{array} } \right)
 $$
-
 ```{r}
-o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
- 
+#Read the data
+d=read.delim(
+"http://dnett.github.io/S510/RepeatedMeasures.txt")
+#Create Factors
+d$Program = factor(d$Program)
+d$Subj = factor(d$Subj)
+d$Timef = factor(d$Time)
 
 ```
 
+
+
+```{r}
+o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 | Subj))
+ 
+```
+
+```{r}
+summary(o.ar1)
+```
+### Cas de l'autocorrelation spatiale
+
+*Structure de dépendance*  Là encore, on veut prendre en compte la dépendance due
+à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
+Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+
+$$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
+
+*Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
+
+
+$$
+  Σ = \left( {\begin{array}{cc}
+     σ^2 + γ^2 & ...& ...& ...\\
+     ...& σ^2 + γ^2 & e^{−δ.d(i,i')} &...\\
+     ...& e^{−δ.d(i,i')}  & σ^2 + γ^2 &...\\
+ ...& ...& ... & σ^2 + γ^2\\
+  \end{array} } \right)
+$$
+
+
+```{r}
+set.seed(3)  
+n <- 100
+
+loc <- data.frame(LAT = runif(n, 144, 150), LONG = runif(n,
+    -26, -20))
+
+library(sp)
+grid <- expand.grid(LAT = seq(144, 150, l = 100), LONG = seq(-26,
+    -20, l = 100))
+coordinates(grid) <- ~LAT + LONG
+
+
+# Set up distance matrix
+distance <- as.matrix(dist(as.data.frame(loc)))  #* 1/min(distance[lower.tri(distance)])
+# Generate random variable
+delta <- 0.5
+Vmat <- function(n, mu = 0, V = matrix(1)) {
+    p <- length(mu)
+    if (any(is.na(match(dim(V), p))))
+        stop("Dimension problem!")
+    D <- chol(V)
+    t(matrix(rnorm(n * p), ncol = p) %*% D + rep(mu,
+        rep(n, p)))
+}
+V <- Vmat(1, rep(0, n), exp(-delta * distance))
+x <- rnorm(n, 30, 10)
+# image(cbind(simgrid, V))
+y <- 50 + 1 * x + 60 * V  #+ rnorm(n,0,1)
+data.spatialCor <- data.frame(y, x, loc)
+```
 
 
 ```{r}
@@ -163,6 +266,15 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
     correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
     method = "REML")
 ```
+
+
+
+```{r}
+summary(data.spatialCor.glsExp)
+```
+
+## Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?
+
 
 
 
