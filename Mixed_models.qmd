@@ -9,6 +9,12 @@ output:
    toc_float: true
 ---
 
+
+```{r}
+library(nlme)
+```
+
+
 ## Introduction : Louis
 
 ## Model: création du model : Abdou
@@ -136,6 +142,7 @@ $$
     σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
   \end{array} } \right)
 $$
+
 ```{r}
 o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
  
