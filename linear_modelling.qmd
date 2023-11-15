@@ -7,6 +7,8 @@ output:
   html_document:
    toc: true
    toc_float: true
+editor_options: 
+  chunk_output_type: inline
 ---
 
 Intro #Fanny
@@ -242,6 +244,14 @@ You have certainly used the technique of regression many times in various exerci
 For example, we could use a linear regression to test whether the weight of a dog (i.e. the explanatory variable) is a good predictor of its lifespan (the response variable).
 
 ### MODEL WRITING
+```{r}
+library(ggplot2) # graph package
+library(tinytex) # Pour la sortie pdf
+library(corrplot)# Correlation matrix calculus
+library(plot3D)# For 3D plot
+library(DescTools)
+```
+
 
 The general model is written :
 
@@ -379,7 +389,7 @@ z.pred <- matrix(predict(mod1, newdata = xy),nrow = grid.lines, ncol = grid.line
 
 # create the fitted points for droplines to the surface
 fitpoints <- predict(mod1)
-
+library(rgl)
 # scatter plot with regression plane
 scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red", 
           theta = 30, phi = 10, bty="b",
@@ -918,6 +928,17 @@ Generalized linear model, due to the hypothetis made on Y, only need to verify t
 
 ```{r, echo=FALSE}
 #Importation of other data for example
+
+dataFly <- read.table("FlyWeight.txt", dec=".", header = TRUE)
+dataFly$Sex<-as.factor(dataFly$Sex)
+dataFly$Habitat<-as.factor(dataFly$Habitat)
+
+mod1<-lm(DryWeight~ Habitat
+         + Width
+         + WaterContent
+         + Habitat:Width
+         + Habitat:WaterContent  
+         ,data=dataFly)
 dataHVS <- read.table("HumanVisualSystem.txt", dec=".", header = TRUE)
 dataHVS$Population<-as.factor(dataHVS$Population)
 
