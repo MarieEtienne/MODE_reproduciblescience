@@ -8,6 +8,10 @@ output:
    toc: true
    toc_float: true
 ---
+MERCI DE CHARGER ICI LES PACKAGES QUE VOUS UTILISEE
+```{r Importation des packages}
+
+```
 
 ## Introduction : Louis
 
