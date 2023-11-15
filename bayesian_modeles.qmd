@@ -1,6 +1,6 @@
 ---
 title: "Introduction to bayesian modeles for ecology"
-author : Coline - Jules - Mathis - Romane 
+author : Coline - Jules - Mathis - Romane - Laura
 bibliography: references.bib
 execute: 
   freeze: auto
@@ -19,7 +19,7 @@ library(deSolve)
 
 # Introduction
 
--   History of Bayesian paradigm.
+-   History of Bayesian concept.
 -   Philosophy behind it. Frequentist approach : "What is the probability to observe my data given my model."
 
 Bayesian approach : "What is the probability of my model given my data."
@@ -36,10 +36,19 @@ The most simple model : Malthusian growth model
 
 ```{r}
 expo.mod <- function(t,N,r){list(N*r)}
-N0 = 1
-r = 1.1
+N0 = c(y=1)
+r = 0.1
 dyna = ode(y = N0, times = 1:100, func = expo.mod, parms = r )
+dyna = data.frame(dyna)
+ 
+ggplot(dyna)+
+  geom_line(aes(time,y))
 ```
+
+```{r}
+
+```
+
 
 
 ## Some math
