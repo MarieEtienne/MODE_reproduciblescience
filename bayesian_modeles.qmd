@@ -9,21 +9,46 @@ output:
    toc: true
    toc_float: true
 ---
+
 ```{r setup}
 #| include: false
 
 library(tidyverse)
+library(deSolve)
+```
 
+# Introduction
+
+-   History of Bayesian paradigm.
+-   Philosophy behind it. Frequentist approach : "What is the probability to observe my data given my model."
+
+Bayesian approach : "What is the probability of my model given my data."
+
+# Genrale theory behind bayesian approach.
+
+Explanation in the special case of conjugation between prior and posterior
+
+## Main objectif, for context
+Our goal is to understand in the most simple way how Bayesian statistic estimate parameters of natural process. To do so, we will use simple dynamical models to produce data. With those models every parameters is known, we will try to find those parameters with the observations.
+
+## An exemple : estimate one varaibles
+The most simple model : Malthusian growth model
+
+```{r}
+expo.mod <- function(t,N,r){list(N*r)}
+N0 = 1
+r = 1.1
+dyna = ode(y = N0, times = 1:100, func = expo.mod, parms = r )
 ```
 
 
-# Introduction 
-
-- History of bayesian paradigme.
-- Phylosophy behind it.
-Frequentist approach : "What is the probability to observe my data given my model."
-
-Bayesian approach : "What  is the probability of my model given my data.
+## Some math
 
 
 
+
+
+
+# When aproximation by computation is needed
+
+## Aproximation with MCMC
