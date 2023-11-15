@@ -414,7 +414,7 @@ s.label(ccaoak$co,boxes=F)
 ```
 
 ```{r}
-ccaoak$cor
+ccaoak$cor 
 s.corcircle(ccaoak$cor)
 ```
 
