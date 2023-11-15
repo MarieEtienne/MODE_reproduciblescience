@@ -8,19 +8,52 @@ output:
    toc: true
    toc_float: true
 ---
+Plan projet : 
 
 Plan projet : 
 
-I. Modélisation matricielle en écologie -> Laurane
+Modélisation matricielle en écologie
 A quoi servent les matrices en écologie ?
 Transformer une population en matrice
 Modifier une matrice de population (addition de population,soustraction)
 
-II. Les grands exemples de matrices en écologie  -> Alex
+II. Les grands exemples de matrices en écologie  
 Classes d’âge et reproduction : Matrice de Leslie
 Impact prédateur
 Compétition ?
 
-III. Matrice en épidémiologie -> Jeanne
+III. Matrice en épidémiologie 
 
-IV. Chaînes de Markov -> Quentin
+IV. Chaînes de Markov 
+
+
+
+Chapitre purment technique ? ou bien les modèles matriciels et on prend des exemples d'écologie et on explique en même temps ?
+parler de la dynamique de populations
+
+partir de la population de suricats et on complexifie au fur et à mesure en introduisant les notions 
+
+
+
+
+I. Modélisation matricielle en écologie
+	A quoi servent les matrices en écologie
+
+Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations durent publiés et utilisés en dynamique des populations.
+
+L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
+
+En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons n(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
+n(t+1) = λn(t)
+
+Si nous voulons écrire cette équation pour la population dans un futur lointain, nous pouvons trouver par récurrence que :
+
+n(t) = λ^nn(0)   avec n(0) la population au début de notre étude.
+
+En fonction du signe de λ, notre population va donc augmenter ou diminuer dans le temps.
+Seulement, ce modèle est largement simplifié. Pourquoi ? Il considère que tous les individus sont identiques, que ce soit par leur capacité de reproduction ou leur capacité de survie. Cela signifie que dans ce modèle, un individu âgé peut tout aussi bien se reproduire et survivre qu’un jeune individu vigoureux et ayant tout juste atteint la maturité sexuelle. Mais alors, comment régler ce problème ? Dans la nature, chaque individu est différent, mais nous pouvons prédire ses qualités selon la moyenne de son espèce et sa position dans la population : par position, nous entendons sa place dans différentes catégories exprimées selon diverses critères tels que l’âge (jeune, adulte, âgé), le sexe (mâle, femelle), ou encore beaucoup d’autres. Ces catégories sont communément appelées « classes ». Plusieurs individus d’une même classe auront les mêmes particularités du point de vue du critère utilisé pour cette classe, et donc les mêmes impacts sur la dynamique de leur population. Ils auront par exemple le même taux de fertilité ou de survie. Ainsi, nous pouvons déterminer la contribution de chaque classe à une autre classe et donc finalement à la population, et cela en fonction de l’effectif de la première classe. L’effectif d’une classe i peut ainsi s’écrire :
+
+n_i (t+1)= ∑_j▒〖a_ij n_j (t)〗  
+
+où a est la contribution et a_ij la contribution d’une classe j à la classe i à l’instant t+1.
+
