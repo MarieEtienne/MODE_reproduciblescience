@@ -251,7 +251,153 @@ nagelkerke(mod1)
 So here, the model explains 60.4% of the deviance, but with the others estimate, we found the model explain about 75% of the deviance. 
 Now, it is necessary to check the assumptions of the model to validate. See the part dedicated to this at the end.
 
-3) Loi négative binômiale #Léa
+2) Loi négative binômiale #Léa
+
+The Negative Binomial distribution has been parameterized in a number of different ways in the statistical literature. Perhaps the most common way to parameterize is to see the Negative Binomial distribution arising as a distribution of the number of failures (X) before the r^th success in independent trials, with success probability p in each trial (consequently, r > 0 and 0 < p > 1). In such a case the probability mass function can be expressed as :
+
+$$Pr(X=x|r,p)=\frac {\Gamma(x+r)}{x!.\Gamma(r)}.p^r.(1-p)^x$$
+and the random variable X has the expectation (theoretical mean):
+
+$$\mu =\frac{r.(1 - p)}{p}$$ 
+
+and variance
+
+$$\sigma^2 = \frac{r.(1 – p)}{p^2}$$
+
+In a NB Generalized Linear model, the link function is log so that
+
+$$log(\mu_{y})= \alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip} = \eta $$
+
+The predicted values of Y is obtained by applying the inverse link function to η.
+
+$$\mu_{y}= e^{\alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip}} = e^{\eta} $$
+
+The negative binomial model has a NB error structure. This error structure allows, among other things, to correctly specify the relationship between the mean and the variance. This relationship is used by the maximum likelihood approach to estimate the coefficients and standard errors of the generalized linear model parameters.
+
+Let’s take an example to illustrate the use of the Negative binomial law : 
+
+# Example with the Negative binomial law 
+
+## DATA DESCRIPTION AND OBJECTIVES  
+The study of Timi and Poulin in 2003 is a good example to apply the Negative binomial law. We will use a subset of the original data. At each of 4 stations, fish sample were collected, with a total of 522 individual of anchovy. These fish were examined for parasites in order to understand the parasite community structure across the host population of anchovy. The data are in the file FishParasite.txt
+The response variable is “Number”, which represents the total number of parasites found in the fish. It is a count variable. There are 3 explicative variables: “Sex” (of the fish), “Length” (of the fish) and “Area”. Sex and Length are continuous, and Area is a categorical variable with 4 categories (A, B, C or D). Here we only consider the interaction between Length and Area. 
+
+```{r}
+# Dataset import
+para <- read.table("FishParasites.txt", dec=".", header = TRUE)
+para$Area<-as.factor(para$Area)
+para$Sex<-as.factor(para$Sex)
+str(para)
+# Missing values ? 
+colSums(is.na(para))
+# There is no missing value.
+```
+
+Let’s begin quickly with a Poisson model in order to see the problems and then apply a Negative Binomial model. 
+
+As said previously, before any analysis, you must explore the data, but we are not going to do this here.
+
+We perform a backward selection as explained previously, with a Poisson model : 
+
+```{r}
+# Model formulation
+mod1<-glm(Number~ Sex
+        + Area
+        + Length
+        + Area:Length
+        ,data=para
+        ,family=poisson(link="log"))
+# Then we check for significance
+drop1(mod1,test="Chi")
+summary(mod1)
+```
+
+Here the interaction between Length and Area is significant, so we keep both variables. And Sex is also significant. So the full model is the candidate model. To see if we can apply the Poisson model, we test the overdispersion. Sometimes, the variance of the response variable may be higher than supposed by the Poisson law. If the parameter is greater than 1.5, we can say that there is overdispersion and the standard errors of the coefficient estimates are biased. 
+Let’s check the overdispersion in the model with a DHARMa non parametric dispersion test: 
+
+```{r}
+# Overdisperion checking of the Poisson model
+# Scale parameter calculation
+E1 <- resid(mod1, type = "pearson") # (Y - mu) / sqrt(mu)
+N  <- nrow(para)
+p  <- length(coef(mod1))
+sum(E1^2) / (N - p)
+
+# Use simulations for parameter estimation (package DHARMa)
+testDispersion(mod1)
+```
+
+The overdispersion index is largely over 1.5, which means that there is an overdispersion in the model. So, the Poisson model can’t be apply and analyse. 
+There are some reasons of overdispersion like for example: the presence of outliers, a dependency, a non linear relationship, the use of the wrong link function… 
+
+We will change and use a Negative Binomial model and recalculate the overdispersion once we have found the model. 
+
+```{r}
+# Model formulation
+modNB<-glm.nb(Number~ Sex
+        + Area
+        + Length
+        + Area:Length
+        ,data=para)
+# Then we check for significance
+drop1(modNB,test="Chi")
+```
+We have a significant effect for the interaction between Area and Length but not for the main effect Sex. We need to keep the main factor Area and Length and delete the variable Sex, contrary to the Poisson model. 
+
+```{r}
+# Model formulation
+modNB<-glm.nb(Number~ Area
+        + Length
+        + Area:Length
+        ,data=para)
+# Then we check for significance
+drop1(modNB,test="Chi")
+```
+Here, the interaction is still significant, with the two main effect. So we have found the candidate model. Now we need to test the overdispersion, the same way as before. 
+
+```{r}
+# Overdisperion checking of the NB model
+# Scale parameter calculation
+E1 <- resid(modNB, type = "pearson") # (Y - mu) / sqrt(mu)
+N  <- nrow(para)
+p  <- length(coef(modNB))
+sum(E1^2) / (N - p)
+
+# Use simulations for parameter estimation (package DHARMa)
+testDispersion(modNB)
+```
+We found 1.35, which is below/under 1.5. So we succeed to delete the overdispersion. The DHARMa test validates the absence of overdispersion. 
+
+### Model explanation
+
+Now we can examine the coefficients of the candidate model in order to understand how the number of parasites in fish is influenced.
+
+```{r}
+# Coefficients of the model
+summary(modNB)
+```
+
+
+So, the candidate model is:
+$$ log(Number\:of\:Parasites) = -0.44 + (Area_{A} = 0 ;\:Area_{B} = +1.64;\:Area_{C} = -0.61;\:Area_{D}  = -5.42)$$ 
+$$ +\: 0.028.Length\:+ (if\:Area=B: - 0.010. Length;\:if\:Area=C: + 0.002. Length ;\:if\:Area=C: + 0.029.Length)  $$
+
+Be careful here! As we saw previously, there is always a modality of the factor which is the baseline, and every modality of this factor is compared to the baseline. So if a modality of the factor is significant, it means that there is a difference between this modality and the baseline. So in order to test which modality is different from one another, we need to change the baseline. 
+
+As in every Generalized Linear Models, there is no R2. So we will calculate the pseudo R2 with the formula : 
+
+$$Pseudo\:R^2=100\:.\:\frac{Null\:Deviance- Residual\:Deviance}{Null\:Deviance}$$
+
+On R : it is : 
+
+```{r}
+# Estimate of deviance explained
+(modNB$null.deviance-modNB$deviance)/modNB$null.deviance
+
+# Some others estimates of deviance explained - package 'rcompanion'
+nagelkerke(modNB)
+```
+
 4) Validation des modèles #Clément
 
 Conclusion #Sarah
