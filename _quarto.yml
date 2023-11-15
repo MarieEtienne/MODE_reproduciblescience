@@ -22,6 +22,8 @@ website:
     right:
       - text: Chapter 0 - Introduction
         menu:
+        - text: Mixed models in Ecology
+          href: Mixed_models.qmd
         - href: simple_chapter.qmd
         - text: A chapter using R
           href: r_chapter.qmd
