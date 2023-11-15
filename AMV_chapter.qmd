@@ -462,8 +462,8 @@ particular typology of one population in relation to another.
 ## Mathematics
 
 The MCA stands out from other multivariate analyzes with a single table
-(PCA, CA or mix between MCA and PCA, etc.) because it ***only takes
-qualitative variables*** as input. Its goal is to find the relationships
+(PCA, CA or mix between MCA and PCA, etc.) because it **only takes
+qualitative variables** as input. Its goal is to find the relationships
 between modalities by visualizing the possible associations and
 producing a quantitative indicator of their relationships.
 
@@ -472,7 +472,7 @@ to describe $I$ statistical individuals. All individuals have the same
 weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to
 the modality taken by individual $i$ for variable $j$.
 
-To obtain a ***complete disjunctive table (CDT)*** and carry out the
+To obtain a **complete disjunctive table (CDT)** and carry out the
 statistical analysis, it is necessary to subdivide each variable $j$
 into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$
 of the $I$ individuals for this variable. The table will always have $I$
@@ -487,7 +487,7 @@ subtract 1 to center the result.
 
 $V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
 
-We define the ***distance D*** between 2 individuals $i$ and $i’$ as :
+We define the **distance D** between 2 individuals $i$ and $i’$ as :
 $D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
 
 So 2 individuals taking the all same modalities are at a distance D = 0,
@@ -498,7 +498,7 @@ the common specificity.
 
 The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is
 the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$
-is the ***correlation ratio*** between the modality $k$ and l'axe $F_s$.
+is the **correlation ratio** between the modality $k$ and l'axe $F_s$.
 The axis $F_1$ is the one which maximize its correlation ratio with all
 the modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
 
@@ -637,9 +637,17 @@ A citation @bauer2023writing
 
 # PART 5: RLQ
 
-## Mathématiques
+## Mathematics
 
-## Interprétation
+The RLQ analysis is a generalized co-inertia with 3 tables :
+environmental variables for each sites (R), species abundances for each
+sites (L) and trait variables for each species (Q). We will have to
+perform a CA on the table L and weighted analysis (MCA or PCA) on tables
+R and Q. Then a function named rlq() perform 3 co-inertia analysis
+between R and L and L and Q and then between the results of each
+co-inertia.
+
+## Interpretation
 
 The use of RLQ analysis is important in ecology to integrate the traits
 of species with the environmental variables. So here, we don't have 2
