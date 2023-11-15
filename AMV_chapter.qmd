@@ -513,4 +513,4 @@ So 2 individuals taking the all same modalities are at a distance D = 0, the mor
 
 The inertia of the point cloud : $N = \frac{K}{J} – 1$.
 The correlation ratio $η^2(x,y)$ between 2 variables $x$ and $y$ is : (sum of squares of deviations)
-$\frac{\sum_{j} \sum_{i \in J_j} (\overline{y}_{.,j}-\overline{y})^2}{\sum_{j} \sum_{i \in J_j} (y_{i,j}-\overline{y})^2}$
+$\frac{\sum_{j} \sum_{i \in J_j} (\overline{y}_{.,j}-\overline{y})^2}{\sum_{j} \sum_{i \in J_j} (y_{i,j}-\overline{y})^2}$ 
