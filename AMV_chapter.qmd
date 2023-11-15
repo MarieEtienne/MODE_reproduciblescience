@@ -293,7 +293,13 @@ require(vegan)
 require(tidyverse)
 ```
 
+<<<<<<< HEAD
 Let's import the data, they are from Thilenius, 1963. However, the data of abundance have been changed to facilitated the interpretation. For access to real data and metadata, please see the JDBakker Git page: [appliedmultivariatestatistics/Oak_data_47x216.csv at main · jon-bakker/appliedmultivariatestatistics (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
+=======
+
+
+Let's import the data, they are from .... BAPTISTE TIME TO SHINE !
+>>>>>>> 21502c5e319408d15afd365e4122293291734b78
 
 ```{r}
 Oak <- read.csv("https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/Oak_data.csv", sep=';', header = TRUE) 
@@ -305,14 +311,23 @@ decostand("range")
 Oak_sp=Oak[,28:83]
 ```
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 21502c5e319408d15afd365e4122293291734b78
 We can explore the tables
 
 ```{r}
 head(Oak_sp)
 head(Topo)
 ```
+<<<<<<< HEAD
 
 So here, the first table ("Oak_sp") represents a table of plant abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
+=======
+So here, the first table ("Oak_sp") represents a table of spider abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
+>>>>>>> 21502c5e319408d15afd365e4122293291734b78
 
 As explained above, the CCA objective is to link the abundance of plant by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the plants.
 
@@ -406,12 +421,15 @@ The output, here, is the absolute contribution of each species for the axis 1 an
 
 ```{r}
 ccaoak$fa
+s.corcircle(ccaoak$fa)
 ```
+This line gives you the canonical coefficients on each axis. The circle is explain in the "Loadings" part of the main plot of the RDA. On axis 1, the variable with the main contribution of the predictive power is $LatAppx$. On axis 2, $Slope.deg$ and $Elev.m$ contributes the most of the predictive power.
 
 ```{r}
 ccaoak$co
 s.label(ccaoak$co,boxes=F)
 ```
+$co$ gives you access to the coordinates of each species on the first plan. The table explicits the coordinates and the plot help you to find close species. Here, there is a group formed by Agse, Agha Avfa and ALL. An other on with two outliers, Abgr.t and Adbi. These groups will be correlated with the environment data further in the analysis.
 
 ```{r}
 ccaoak$cor 
@@ -426,7 +444,10 @@ plot(ccavegan,scaling=2)
 plot(ccavegan,scaling=1) 
 ```
 
-The first plot with the arrows represents the real abundances for each site (base of the arrow) and the predictions of abundance calculated by a multiple regression thanks to the topographic variables. We see here that there are some large differences between reality and prediction. Most of the sites are in a center group but some sites differ. It is the case with the sites n°7,40,41,42. We have another group with the sites n°43,44,45,46.
+
+The first plot with the arrows represents the real abundances for each site (base of the arrow) and the predictions of abundance calculated by a multiple regression thanks to the topographic variables. 
+We see here that there are some large differences between reality and prediction. 
+Most of the sites are in a center group but some sites differ. It is the case with the sites n°7,40,41,42. We have another group with the sites n°43,44,45,46.
 
 The second plot, with *scaling = 1* preserves euclidian distances between stations.\
 The third plot, with *scaling = 2* preserves correlations between species.
@@ -434,7 +455,6 @@ The third plot, with *scaling = 2* preserves correlations between species.
 
 
 To conclude on the CCA analyse, we have seen that the topographic variables explain 13% of the plant variances. The first axis represents 34% of the constrained inertia and is explained by the Latitude (corr = 0.99). 
-
 
 # PART 4: RLQ
 
