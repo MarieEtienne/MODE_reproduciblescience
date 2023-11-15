@@ -49,18 +49,34 @@ I. Modèles linéaires généraux
 
 fwbdxfv 
 3) Régression #Fanny
-<<<<<<< HEAD
 
 
 blabla bla 
-=======
-blablablablaba
->>>>>>> regression
 
 4) Validation des modèles #Lucia
 
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
+<<<<<<< HEAD
+
+Reminders :
+
+X a binary data with two modalities : 1 (success) et 0 (failure).
+The probability of success is : $$ P(X = 1) = \pi $$
+Then Y, a variable corresponding to N random draws of X, follows a binomial law :
+Y ~ B(N,p)
+
+The density function of Y is : $$ f(y;\pi)=\binom{N}{y}.\pi^{y}.(1-\pi)^{(N-y)}$$
+The mean and variance of Y are : 
+$$E(Y)=N.\pi\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:var(Y)=N.\pi.(1-\pi)$$
+
+The link function is the function logit : $$logit(\mu_{y})= \alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip} = \eta$$
+With : 
+$$\mu_{y}= \frac {e^{\eta}}{1+e^{\eta}}\:\:the\:predicted\:value$$
+
+Let's practice with an example. 
+
+
 2) Loi de Poisson #Léa
 ```{r}
 #Load R packages
