@@ -1066,6 +1066,53 @@ Thus, you can include the dependency in your model by using mixed models (cf cha
 
 Conclusion #Sarah
 
+Linear models are sorts of models where a dependent and quantitative variable Y is explained by multiple independent variables X with a linear kind of connexion in the form of : $$ Y = B*X + E $$
+
+Statistical analysis of linear models takes 3 main steps :
+
+I - Data exploration
+
+1 - Verifying that there is no outliers in the distribution of Y and the Xs by using boxplots and Clevelandplots. A transformation of Y and/or the Xs can be performed to settle the potential issues.
+
+2 - Checking the colinearity of the Xs (corrplots, boxplot, VIF)
+
+3 - Checking the relationships between Y and the Xs (plot, boxplot)
+
+4 - Checking if there are potential interactions between the Xs (boxplot, plot, table)
+
+
+II - Model building 
+
+In this chapter, We developped two types of linear models : General linear models and Generalized linear models. 
+
+In general linear models, Y is a continuous quantitative variable whose residuals follow a normal law. The explanatory variables can be : 
+- Only quantitative : Simple (only one explanatory variable) or Multiple regression models
+- Only qualitative : ANOVA models 
+- Qualitative and Quantitative : ANCOVA models
+The estimate method is the least square method. 
+
+In generalized linear models, Y's law (and so its residuals' law) is not normal and can follow, for instance: 
+- A Binomial law when the variable is binary (link function : logit)
+- A Poisson law when the variable is a counting variable with a low expectancy (link function : log)
+- A Negative Binomial law when the variable is a counting variable with a higher expectancy (link function : log)
+
+This time the estimate method is based on the maximum of likelihood (minimum of deviance). The relation between Y and the Xs is not direct and the mean value ?? of Y is estimated through a link function g which associate it to a predicted value ?? so that : ?? = g(??).
+
+
+
+III - Model validation
+
+There are 3 conditions to validate a linear_model : 
+- The residuals must be uncorrelated 
+- Homoscedasticity of the variance (plot residuals vs fitted) (Essential for general linear models but not for generalized linear models)
+- Normality of the residuals (Only for general linear_models)
+
+
+To go further : 
+In general and generalized linear models, all the explanatory variables have fixed effects and are independent. However, it is not always the case. Other models can allow to take into account a dependency 
+between explanatory variables by considering a random effect (see chapter on mixed models) or considering spatial or temporal dependency with spatial and time models. 
+
+
 Remarques :
 -ici on ne parle pas de partie Exploration des données
 -on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
