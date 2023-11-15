@@ -281,7 +281,7 @@ Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un 
 
 ### Analyse des interactions possibles entre les deux variables indépendantes
 
-Ici, nous allons considérer l'interaction entre les trois facteurs étudiés. Pour estimer la présence d'effets interactifs, nous développerons une approche graphique. Rappelons que l'interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c'est-à-dire que tous les niveaux d'un traitement sont représentés dans tous les niveaux de l'autre traitement et réciproquement = un plan factoriel). Ce point doit être testé avant.
+Ici, nous allons considérer l'interaction entre les trois facteurs étudiés. Pour estimer la présence d'effets interactifs, nous développons une approche graphique. Rappelons que l'interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c'est-à-dire que tous les niveaux d'un traitement sont représentés dans tous les niveaux de l'autre traitement et réciproquement = un plan factoriel). Ce point doit être testé avant.
 
 ```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
 
@@ -297,7 +297,36 @@ Explications
 
 ### Vérifier la colinéarité entre les X
 
-Compte tenu de la configuration expérimentale, cette méthode n'est pas appliquée ici.
+La colinéarité fait référence à la situation dans laquelle deux ou plusieurs variables prédictives de colinéarité sont étroitement liées les unes aux autres. La présence de colinéarité peut poser des problèmes dans le contexte de la régression, car il peut être difficile de séparer les effets individuels des variables colinéaires sur la réponse.
+
+Ici, nous allons tester la colinéarité entre nos 3 variables prédictives : 
+
+```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+library(ggplot2)
+library(gridExtra)
+# ploting Species by Island
+ggplot(df, aes(x=species, y=island)) +
+  geom_point() +
+  theme_bw() -> p1
+
+# ploting Species by Sex
+ggplot(df, aes(x=species, y=sex)) +
+  geom_point() +
+  theme_bw() -> p2
+
+# ploting Island by Sex
+ggplot(df, aes(x=island, y=sex)) +
+  geom_point() +
+  theme_bw() -> p3
+
+# Ploting side-by-side
+marrangeGrob(list(p1,p2,p3), nrow=1, ncol=3, top=NULL)
+```
+On peut voir dans notre exemple que pour l'intéraction entre Species et Sex, il y a bien les deux modalités du sexe par espèces, et pour l'intéraction entre Island et Sex, qu'il y a bien les deux modalités du sexe par îles. 
+Seulement, on peut remarquer que pour l'intéraction entre Species et Island, toutes les îles ne comportent pas toutes les espèces! 
+On ne pourra donc pas tester l'influence des îles et des espèces aux vues de ce résultat.
+On décide donc par la suite de supprimer la variable Island de notre analyse.
+On testera l'influence de l'espèce et du sexe sur la masse corporelle des pinguins, avec toujours les années en effet aléatoire.
 
 
 
@@ -317,48 +346,16 @@ Dans cet exemple, on considère une mesure de dépendance au niveau des années 
 ```{r fullmodel,include=TRUE}
 library(nlme)
 # Modèle complet
-mod1<-lme(fixed=body_mass_g~species*island*sex,random=~1|year,data=df)
-lme4::lmer(body_mass_g~species*island*sex + (1|year), data=df)
+#mod1<-lme(fixed=body_mass_g~species*sex,random=~1|year,data=df)
+#lme4::lmer(body_mass_g~species*sex + (1|year), data=df)
+
+mod2<-lme(body_mass_g~species
+              + sex
+              + species:sex
+              ,random=~1|year
+              ,data=df)
+
+# Then we check for significance
+anova(mod2)
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-For example a basic summary of a dataset is given by
-
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-summary(df)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
-A citation @bauer2023writing
