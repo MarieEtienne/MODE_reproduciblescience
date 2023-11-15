@@ -9,16 +9,46 @@ output:
    toc_float: true
 ---
 
-
-
 ## Introduction : Louis
 
 To model the relationships between a dependent variable $Y$ and one or several independent variables $X_1,\ X_2,\ ...,\ X_n$, **general linear models** (e.g. linear regressions, ANOVA, ANCOVA) are often used. In this models, several assumptions are made : homodescasticity of the variance, non-colinearity of the residuals and normality of the residuals. Homoscedasticity and normality hypothesis can be outreached using Generalized Linear Models. These models allow to use data that are drawn from different distributions such as Poisson, binomial or Gamma distributions, which are commonplace in ecology. 
 
 
 
-
 ## Model: création du model : Abdou
+
+The linear mixed model can be formulated as follows:
+
+$$
+Y_{ij} = X_{ij}\beta + Z_{ij}b_i + \varepsilon_{ij}
+$$
+
+where $$Y_{ij}$$ is the response variable for observation $$i$$ in group $$j$$, $$X_{ij}$$ is the matrix of fixed predictors for observation $$i$$ in group $$j$$, $$\beta$$ is the vector of fixed coefficients, $$Z_{ij}$$ is the matrix of random predictors for observation $$i$$ in group $$j$$, $$b_i$$ is the vector of random effects for observation $$i$$ and $$\varepsilon_{ij}$$ is the error term for observation $$i$$ in group $$j$$.
+
+
+A mixed effects model incorporates random effects ($$b_i$$), or a combination of both random and fixed effects ($$\beta$$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
+
+When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.
+
+In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.
+
+**RANDOM VARIABLE** = « something that could not be known before sampling/measurement/observation".
+
+
+In matrix form, the mixed model is written as:
+
+$$
+Y \sim \mathcal{N}(X\theta, \Sigma)
+$$ 
+where:
+
+$$Y$$ is the response vector of the observations, $$X\theta$$ is the expectation of the response vector $$Y$$ and $$\Sigma$$ is the variance matrix.
+
+
+
+
+
+
 
 
 
@@ -30,37 +60,300 @@ $$
     C & D \\
   \end{array} } \right)
 $$
+Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
+
+
+Pour rappel, un modèle linéaire, de type regression linéaire, avec $$p$$ variables explicatives s'écrivant sous la forme $$Y_i = \beta_0 + \beta_1X_i^{(1)} + \ldots + \beta_pX_i^{p} + \varepsilon_i$$, avec $$\varepsilon_i \sim \mathcal{N}(0,\sigma^2)$$, peut s'écrire sous forme matriciel $$Y=X\theta+\mathrm{E}$$ où $$Y=\begin{pmatrix}
+Y_1\\
+\vdots\\
+Y_n\\
+\end{pmatrix}$$, $$X=\begin{pmatrix}
+1&X_1^{(1)} & \ldots & X_1^{(p)}\\
+\vdots & \vdots & \ldots & \vdots \\
+1 & X_n^{(1)} & \ldots & X_n^{(p)}
+\end{pmatrix}$$, $$\theta=\begin{pmatrix}
+\beta_0\\
+\vdots\\
+\beta_p\\
+\end{pmatrix}$$, et $$\mathrm{E}=\begin{pmatrix}
+\varepsilon_0\\
+\vdots\\
+\varepsilon_n\\
+\end{pmatrix}$$
 
 
 ## Structure de dependance : Odin
 
+### Cas des Mesures répétées
+
+On considère cette fois une expérience visant à évaluer l'effet d'un régime sur la prise de poids d'un animal au cours du temps. Plusieurs animaux (indicés par $j$) reçoivent chaque régime (noté $i$) et un animal ne reçoit qu'un régime au cours de l'expérience. On mesure le poids, noté $Y_{ij}$, de chaque animal au bout de t semaines ($t = 1, . . . , T$). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données *longitudinales*. Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait utiliser le modèle :
+
+$$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
+
+avec
+
+$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
+  \begin{array}{ll}
+  σ^2ρ \ \ si \ \ (i, j) = (i_0, j_0) \\
+     0 \ sinon \
+   \end{array}
+  \right.$$
+
+Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
 
+**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
+respectives.
 
-## Application : Ael
-### Exploration des données
-### Création du model
-### Validation
-### Interpretation
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
+**Structure de dépendance** On suppose de plus que toutes les mesures ont la même
+variance
 
+$$ V(Y_{ijt} =  σ^2) $$
+et que la covariance entre elles vaut
 
+$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
+  \begin{array}{ll}
+  σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
+     0 \ sinon \
+   \end{array}
+  \right.$$
+Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que |ρ| < 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
+Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ
+2, soit
 
-This chapter is a simple example using R
+$$
+  ψ = \left( {\begin{array}{cc}
+    ρ \\
+    σ^2 \\
+  \end{array} } \right)
+$$
+*Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des
+animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs  mais le bloc R diffère :
 
-You can import R package using the code
-
+$$
+  R = \left( {\begin{array}{cc}
+     σ^2 & σ^2ρ & σ^2ρ^2 & ... & σ^2ρ^{T-1}\\
+     σ^2ρ & ... & ... & ... & ...\\
+     σ^2ρ^2 & ... & σ^2 & ... & σ^2ρ^2\\
+     ... & ... & ... & ... & σ^2ρ\\
+    σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
+  \end{array} } \right)
+$$
 ```{r}
-library(tidyverse)
+o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
+ 
+
 ```
 
 
-and then describe the purpose of your chapter as well as executing R command.
+
+```{r}
+data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
+    correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
+    method = "REML")
+```
 
 
-For example a basic summary of a dataset is given by 
+
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
+
+
+
+
+
+
+### Application : Ael
+
+Pour cet exemple d'application de modèle mixte, nous allons utiliser un modèle mixte linéaire général. C'est un cas particulier de modèle linéaire général, dans lequel la réponse est quantitative et les variables prédictives sont à la fois quantitatives et qualitatives, et le modèle inclut des facteurs aléatoires pour tenir compte de la dépendance des données. Les modèles mixtes doivent respecter la normalité des résidus et l'homogénéité des variances.
+
+----> Explications du jeu de données pinguins, présenter les variables
+(Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)
+
+----> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
+----> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
+----> Expliquer le graphe (pour les interactions entre les $X_s$)
+----> TESTER LA COLINEARITE CAR LA CONSTRUCTION DU MODELE COMPLET NE MARCHE PAS DU A LA COLINEARITE, LE MODELE AVEC lme4::lmer SEMBLE MARCHER, MAIS IL FAUDRAIT CHECKER ET ENLEVER CETTE COLINEARITE DANS L'EXPLORATION DES DONNES DANS LA PARTIE D'AVANT
+----> Cites Yannick Outreman pour la structure et les lignes de code
+
+
+## IMPORTATION DES DONNEES
+
+```{r}
+# Importation des données
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+# Bien s'assurer que nos variables 'species', 'island' et 'sex' sont des facteurs
+df$species=as.factor(df$species)
+df$island=as.factor(df$island)
+df$sex=as.factor(df$sex)
+
+# On vérifie qu'il n'y a pas de valeurs manquantes
+colSums(is.na(df))
+```
+On voit qu'il y a des valeurs manquantes, dont 2 pour la variable réponse $Y$ "body_mass_g' et 11 pour la variable explicative $X$ 'sex'. On va supprimer les lignes qui présentes les valeurs manquantes.
+
+```{r}
+# On repère les lignes qui présentes les valeurs manquantes.
+which(is.na(df$body_mass_g), arr.ind=TRUE)
+which(is.na(df$sex), arr.ind=TRUE)
+#On supprime les lignes 4, 9, 10, 11, 12, 48, 179, 219, 257, 269, et 272.
+df=df[-c(4,9,10,11,12,48,179,219,257,269,272), ]
+
+# On vérifie qu'il n'y a pas de valeurs manquantes
+colSums(is.na(df))
+#Il n'y a plus de valeurs manquante.
+```
+
+
+## EXPLORATION DES DONNÉES
+
+Avant toute analyse statistique, il est INDISPENSABLE d'explorer les données afin d'éviter toute erreur. Voici la liste des explorations à effectuer avant la modélisation :
+
+1.  Vérifier la présence de valeurs aberrantes dans $Y$ et la distribution des valeurs de $Y$.
+2.  Si $X$ est une variable quantitative indépendante, vérifier la présence de valeurs aberrantes dans X et la distribution des valeurs de X. 2b.
+    2b. Si $X$ est une variable indépendante qualitative, analyser le nombre de niveaux et le nombre d'individus par niveau.
+3.  Analyser les relations potentielles entre $Y$ et les $X_{s}$.
+4.  Vérifier la présence d'interactions entre $X_{s}$.
+5.  Vérifier la présence de colinéarité entre $X_{s}$.
+
+
+
+### 1.Valeurs aberrantes dans $Y$ et distribution de $Y$
+
+```{r datahist, include=TRUE, fig.height=5, fig.width=6}
+par(mfrow=c(2,2))
+# Boxplot
+boxplot(df$body_mass_g,col='blue',ylab='Masse corporel')
+# Cleveland plot
+dotchart(df$body_mass_g,pch=16,col='blue',xlab='Masse corporel')
+# Histogram
+hist(df$body_mass_g,col='blue',xlab="Masse corporel",main="")
+# Quantile-Quantile plot
+qqnorm(df$body_mass_g,pch=16,col='blue',xlab='')
+qqline(df$body_mass_g,col='red')
+```
+Ici, le Boxplot et le Cleveland Plot nous permettent de voir qu'il n'y a pas d'individus présentant des valeurs aberrantes. Le Cleveland Plot nous montre qu'il semble y avoir un groupe d'individus qui présentent une masse corporel entre 5000 et 6000g, alors que le reste du groupe se situe entre 3000 et 4000g.
+L'Histogramme et le QQ Plot nous montre que $Y$ suit difficilement un loi Normale... Ce n'est pas très grave, car la validité de modèle se base entre autre sur la normalité des résidus, que l'on démontrera par la suite.
+
+
+
+### 2.a Pour les $Xs$ qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution
+
+Pas de prédicteur quantitatif ici.
+
+
+
+### 2.b Pour les $Xs$ qui sont catégoriques : nombre de niveaux et nombre d'individus par niveau
+
+```{r datafact, include=TRUE}
+# Factor Species
+summary(df$species)
+# Factor Island
+summary(df$island)
+# Factor Sex
+summary(df$sex)
+```
+La variable 'species' présente 3 niveaux : Adelie, Chinstrap et Gentoo. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'espèce Chinstrap.
+La variable 'island' présente 3 niveaux : Biscoe, Dream et Torgersen. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'île Torgersen.
+La variable 'sex' présente 2 niveaux : female et male. Le nombre d'individus par niveau s'approche de l'équilibre.
+
+
+
+### Analyse des relations potentielles Y vs Xs
+
+Nous pouvons analyser graphiquement les relations possibles entre Y et X. 
+Attention, cette analyse graphique des relations entre Y et X **ne prédit en aucun cas l'importance de la relation**. La modélisation statistique reste le seul moyen d'identifier les relations.
+
+```{r datagraph, include=TRUE, fig.height=4, fig.width=6}
+
+par(mfrow=c(1,1))
+# Espèces
+plot(df$body_mass_g~df$species,pch=16,col='blue',xlab='Espèces',ylab='Masse corporel en g')
+
+# Îles
+plot(df$body_mass_g~df$island,pch=16,col='blue',xlab='Îles',ylab='Masse corporel en g')
+
+# Sexe
+plot(df$body_mass_g~df$sex,pch=16,col='blue',xlab='Sexe',ylab='Masse corporel en g')
+```
+COncernant l'espèce, on peut voir que Gentoo présente une masse corporel plus élevée (entre 5000 et 6000g) que les deux autres espèces (entre 3000 et 4000g).
+Concernant les îles, on peut voir que les individus présents sur Biscoe présentent une masse corporel plus élevée (entre 5000 et 6000g) que les individus présents sur les deux autres îles (entre 3000 et 4000g).
+Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un peu plus importante que les femelles.
+
+
+
+### Analyse des interactions possibles entre les deux variables indépendantes
+
+Ici, nous allons considérer l'interaction entre les trois facteurs étudiés. Pour estimer la présence d'effets interactifs, nous développerons une approche graphique. Rappelons que l'interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c'est-à-dire que tous les niveaux d'un traitement sont représentés dans tous les niveaux de l'autre traitement et réciproquement = un plan factoriel). Ce point doit être testé avant.
+
+```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+
+# Les facteurs sont croisé ? Dépend du design experimental
+
+# Interaction Species:Island:Sex
+par(mfrow=c(1,1))
+boxplot(df$body_mass_g~df$species*df$island*df$sex, varwidth = TRUE, xlab = "Espèces.Îles.sexe", ylab = "Masse corporelle", col='blue2', main = "")
+```
+Explications
+
+
+
+### Vérifier la colinéarité entre les X
+
+Compte tenu de la configuration expérimentale, cette méthode n'est pas appliquée ici.
+
+
+
+## ANALYSE STATISTIQUE
+
+### Construction du modèle
+
+Pour la modélisation statistique, nous analysons d'abord le modèle complet (modèle contenant toutes les variables indépendantes à tester).
+
+Pour obtenir le modèle candidat (modèle ne contenant que les termes significatifs) à partir du modèle complet, nous utiliserons le **MODÈLE DE 'BACKWARD SELECTION'**, c'est-à-dire la sélection du modèle basée sur la significativité des termes. Selon cette approche, on commence par créer le modèle complet avec toutes les variables d'intérêt, puis on abandonne la variable la moins significative, tant qu'elle n'est pas significative. Nous continuons en réajustant successivement des modèles réduits et en appliquant la même règle jusqu'à ce que toutes les variables restantes soient significatives. La suppression des termes non significatifs doit suivre les deux étapes suivantes:
+- Premièrement, on supprime successivement les interactions non significatives.
+- Deuxièmement, on supprime successivement les effets principaux non significatifs. 
+Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est pas contenu dans une interaction significative.
+
+Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007). La présence de l'effet aléatoire de l'année s'intégrera non pas avec la fonction lm, mais lme (du package nlme).
+
+```{r fullmodel,include=TRUE}
+library(nlme)
+# Modèle complet
+mod1<-lme(fixed=body_mass_g~species*island*sex,random=~1|year,data=df)
+lme4::lmer(body_mass_g~species*island*sex + (1|year), data=df)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+For example a basic summary of a dataset is given by
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+summary(df)
 ```
 
 and produce a graph
@@ -70,6 +363,5 @@ df %>% ggplot() +
 	aes(x=species, y = body_mass_g) +
 	geom_boxplot()  
 ```
-
 
 A citation @bauer2023writing
