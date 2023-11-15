@@ -314,7 +314,7 @@ La colinéarité fait référence à la situation dans laquelle deux ou plusieur
 
 Ici, nous allons tester la colinéarité entre nos 3 variables prédictives : 
 
-```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+```{r col, include=TRUE, fig.height=4, fig.width=7}
 library(ggplot2)
 library(gridExtra)
 # ploting Species by Island
@@ -356,19 +356,48 @@ Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est p
 
 Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007). La présence de l'effet aléatoire de l'année s'intégrera non pas avec la fonction lm, mais lme (du package nlme).
 
-```{r fullmodel,include=TRUE}
+```{r anova, include=TRUE}
 library(nlme)
 # Modèle complet
-#mod1<-lme(fixed=body_mass_g~species*sex,random=~1|year,data=df)
-#lme4::lmer(body_mass_g~species*sex + (1|year), data=df)
-
-mod2<-lme(body_mass_g~species
+mod1=lme(body_mass_g~species
               + sex
               + species:sex
               ,random=~1|year
               ,data=df)
 
 # Then we check for significance
-anova(mod2)
+#anova(mod1)
+
+#Anova Output
+#            numDF denDF  F-value p-value
+#(Intercept)     1   325 61569.82  <.0001
+#species         2   325   758.36  <.0001
+#sex             1   325   387.46  <.0001
+#species:sex     2   325     8.76   2e-04
 ```
 
+On peut voir dans l'output de l'anova de notre modèle complet que chaque interactions et chaque variable est significativce (<0.05). Le modèle complet est donc le modèle candidat.
+
+
+### Model's coefficients analysis
+
+```{r coeffm, ,include=TRUE}
+# Coefficients of the model
+summary(mod1)
+```
+A partir de cette table, on peut déterminer les coefficients du modèle tels que :
+
+**Species factor**\
+- $species_{Chin}$ = 0 (the baseline of the factor Habitat)\
+- $Atm_{Wet}$ = $0.216^{NS}$
+
+**Period factor**\
+- $Time_{1}$ = 0 (the baseline of the factor Habitat)\
+- $Time_{2}$ = $1.40^{***}$\
+- $Time_{3}$ = $0.86^{***}$\
+- $Time_{4}$ = $1.27^{***}$
+
+\*\*Interaction\*\
+- $Atm_{Wet}$:$Time_{2}$ = $-1.71^{***}$\
+- $Atm_{Wet}$:$Time_{3}$ = $0.13^{NS}$\
+- $Atm_{Wet}$:$Time_{4}$ = $0.73^{NS}$
