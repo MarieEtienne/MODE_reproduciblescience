@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "The book we dreamt we had",
+    "section": "",
+    "text": "This website is produced by the M2 MODE student uring year 2023-2024 as part of their assignment in the Online Collaborative Ressources course.\nThey intend to develop a M1 companion book for the next student generation.\nBig goal !\nPlease take the time to visit their production."
+  },
+  {
     "objectID": "r_chapter.html",
     "href": "r_chapter.html",
     "title": "A simple chapter using R",
@@ -7,25 +14,25 @@
     "text": "This chapter is a simple example using R\nYou can import R package using the code\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nand then describe the purpose of your chapter as well as executing R command.\nFor example a basic summary of a dataset is given by\n\ndf &lt;- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n\nand produce a graph\n\ndf %&gt;% ggplot() +\n    aes(x=species, y = body_mass_g) +\n    geom_boxplot()  \n\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`).\n\n\n\n\n\nA citation Bauer and Landesvatter (2023)\n\n\n\n\nReferences\n\nBauer, Paul Cornelius, and Camille Landesvatter. 2023. “Writing a Reproducible Paper with RStudio and Quarto.”"
   },
   {
-    "objectID": "instructions.html",
-    "href": "instructions.html",
-    "title": "How to contribute",
+    "objectID": "python_chapter.html",
+    "href": "python_chapter.html",
+    "title": "Chapter : statistical tests with dependent data",
     "section": "",
-    "text": "Create a specific branch for your chapter named an_explicit_name_for_the_branch and switch on this branch\n\ngit checkout -b an_explicit_name_for_the_branch\nIn the development of the project, you might find necessary to have several branches per chapter.\n\nCreate a quarto file for the chapter chapter0.qmd in your branch\n\ngit add chapter0.qmd\ngit commit -m \"first commit in the chapter branch\"\n\nPush everything on the remote repo on Github\n\nFor the first push after the branch creation, you have to specify the name of the branch on the remote repo and you can use git  push --set-upstream origin an_explicit_name_for_the_branch or\nFor the push to come after the first one, you will simply push by\ngit  push\nOnce you are quite happy with your production, you will be willing to integrate your production on the main branch. A good practice is to ask the permission to push on the main branch, which is named a pull request (PR).\n\nAsk for a PR on Github\nIf needed, specify in the PR message the package you need and mention MarieEtienne as reviewer of the PR.\n\nA mock rendering of the qmd file will start when you request a PR using the Github Action mechanism (called runner on gitlab). If the action passes (green signal), you can go to the next step. If not, you will have to fix the issue (again you can ask assistance if you don’t understand the error).\n\nOnce the PR is checked, mention one of your colleage as reviewer."
+    "text": "This chapter is a simple example using python\nYou can import python librairies using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
   },
   {
-    "objectID": "instructions.html#one-chapter-corresponds-at-least-to-one-branch",
-    "href": "instructions.html#one-chapter-corresponds-at-least-to-one-branch",
-    "title": "How to contribute",
+    "objectID": "simple_chapter.html",
+    "href": "simple_chapter.html",
+    "title": "A simple chapter with no code",
     "section": "",
-    "text": "Create a specific branch for your chapter named an_explicit_name_for_the_branch and switch on this branch\n\ngit checkout -b an_explicit_name_for_the_branch\nIn the development of the project, you might find necessary to have several branches per chapter.\n\nCreate a quarto file for the chapter chapter0.qmd in your branch\n\ngit add chapter0.qmd\ngit commit -m \"first commit in the chapter branch\"\n\nPush everything on the remote repo on Github\n\nFor the first push after the branch creation, you have to specify the name of the branch on the remote repo and you can use git  push --set-upstream origin an_explicit_name_for_the_branch or\nFor the push to come after the first one, you will simply push by\ngit  push\nOnce you are quite happy with your production, you will be willing to integrate your production on the main branch. A good practice is to ask the permission to push on the main branch, which is named a pull request (PR).\n\nAsk for a PR on Github\nIf needed, specify in the PR message the package you need and mention MarieEtienne as reviewer of the PR.\n\nA mock rendering of the qmd file will start when you request a PR using the Github Action mechanism (called runner on gitlab). If the action passes (green signal), you can go to the next step. If not, you will have to fix the issue (again you can ask assistance if you don’t understand the error).\n\nOnce the PR is checked, mention one of your colleage as reviewer."
+    "text": "This chapter is a simple example of qmd format"
   },
   {
-    "objectID": "instructions.html#as-a-reviewer",
-    "href": "instructions.html#as-a-reviewer",
-    "title": "How to contribute",
-    "section": "As a reviewer",
-    "text": "As a reviewer\nYour role is essential as you are responsible for the quality of the submission you were assigned to. Read carefully the production and ask for correction/clarification if needed. One you are happy with the correction you can accept the PR."
+    "objectID": "simple_chapter.html#subsection",
+    "href": "simple_chapter.html#subsection",
+    "title": "A simple chapter with no code",
+    "section": "subsection",
+    "text": "subsection\na list\n\nblabla\nblabla 2\nblabla 3"
   },
   {
     "objectID": "prior_course.html",
@@ -67,34 +74,48 @@
     "href": "chapter_dependance.html",
     "title": "Chapter : statistical tests with dependent data",
     "section": "",
-    "text": "This chapter is a simple example using R\nYou can import R package using the code\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\nIntroduction\nWe will try to explain to you how to detect time and space dependence in a dataset.\n\n\nTime dependence\nFor example a basic summary of a dataset is given by and then describe the purpose of your chapter as well as executing R command.\n\ndf &lt;- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n\nand produce a graph\n\ndf %&gt;% ggplot() +\n    aes(x=species, y = body_mass_g) +\n    geom_boxplot()  \n\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`).\n\n\n\n\n\n\n\nSpace dependence\n\n\nSummary\n\n\nBibliography\nA citation Bauer and Landesvatter (2023)\n\n\n\n\n\nReferences\n\nBauer, Paul Cornelius, and Camille Landesvatter. 2023. “Writing a Reproducible Paper with RStudio and Quarto.”"
+    "text": "This chapter is a simple example using R\nYou can import R package using the code\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors"
   },
   {
-    "objectID": "simple_chapter.html",
-    "href": "simple_chapter.html",
-    "title": "A simple chapter with no code",
-    "section": "",
-    "text": "This chapter is a simple example of qmd format"
-  },
-  {
-    "objectID": "simple_chapter.html#subsection",
-    "href": "simple_chapter.html#subsection",
-    "title": "A simple chapter with no code",
-    "section": "subsection",
-    "text": "subsection\na list\n\nblabla\nblabla 2\nblabla 3"
-  },
-  {
-    "objectID": "python_chapter.html",
-    "href": "python_chapter.html",
+    "objectID": "chapter_dependance.html#what-is-autocorrelation",
+    "href": "chapter_dependance.html#what-is-autocorrelation",
     "title": "Chapter : statistical tests with dependent data",
-    "section": "",
-    "text": "This chapter is a simple example using python\nYou can import python librairies using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
+    "section": "What is autocorrelation ?",
+    "text": "What is autocorrelation ?\nStatistical analyses, including many regression methods, often assume that observations are independent of each other. So it is natural to make independence calculations between data X and Y. But there may still be a dependency intrinsic to each data item: this is known as autocorrelation. Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power. Autocorrelation in statistics is a measure of the linear dependence between the values of a single variable itself, at different times or locations. Autocorrelation is only detected on the variable being measured, i.e. the quantitative response variable. Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series. This means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if data 2 can be predicted with what we know about data 1, if they are close in space or time. Correlation between two observations is often expressed as a correlation coefficient, such as Pearson’s correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be positive, indicating that the observations tend to be similar, or negative, indicating that the observations tend to be opposite to each other."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "The book we dreamt we had",
+    "objectID": "chapter_dependance.html#what-types-of-autocorrelation",
+    "href": "chapter_dependance.html#what-types-of-autocorrelation",
+    "title": "Chapter : statistical tests with dependent data",
+    "section": "What types of autocorrelation ?",
+    "text": "What types of autocorrelation ?\nAutocorrelation is commonly used to analyze data where the order or location of observations has an important significance, such as time series (data taken at the same location at several points in time), or spatial data (data taken at a given point in time at several locations in the same geographical area, and therefore close in space).\n\nTime series\nIn time series, there may be seasonal autocorrelation, where values observed at the same time each year (seasons) are correlated. Temporal autocorrelation shows spatial similarities that depend on the scale used. Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes. Spatial dependencies can be linked to several factors: [Image]\n\nExample of temporal autocorrelation\nAn example of temporal autocorrelation in ecology concerns populations of animal or plant species, particularly when studying seasonal variations. Let’s imagine a study of annual fluctuations in the population of migratory birds in a given region. Temporal autocorrelation means that the number of birds observed at a given time of the year is correlated with the number of birds observed at the same time of the previous year. Suppose the data show positive temporal autocorrelation for a migratory bird species. This would mean that if, for example, in April of the current year, a large number of these birds are observed, it is highly likely that in April of the previous year, a large number of these same birds were also observed. This temporal dependence may be due to seasonal bird migrations, the availability of food resources or other cyclical environmental factors.\n\n\n\nSpatial dependence\nIn the case of spatial data, spatial autocorrelation refers to the correlation between observations in close spatial locations. This can be important for understanding the spatial distribution of populations, environmental phenomena and so on. Spatial autocorrelation shows temporal similarities that depend on the scale used. Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales. - It can be due to various factors, such as : - Microclimate effects: (local characteristics of terrain, vegetation or topography can influence temperature on a small scale) - Dispersion phenomena: (the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation) - Biotic interactions: (interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature).\n\nExample of spatial dependence\nAn example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let’s imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar. Suppose the data show positive spatial autocorrelation. This would mean that, if you have two weather stations located close to each other (say, a few meters apart), the temperatures measured at these two stations at any given time are highly positively correlated. In other words, when one of the stations records a high temperature, the other station will also tend to record a high temperature, and vice versa."
+  },
+  {
+    "objectID": "chapter_dependance.html#why-is-this-important",
+    "href": "chapter_dependance.html#why-is-this-important",
+    "title": "Chapter : statistical tests with dependent data",
+    "section": "Why is this important?",
+    "text": "Why is this important?\n…"
+  },
+  {
+    "objectID": "instructions.html",
+    "href": "instructions.html",
+    "title": "How to contribute",
     "section": "",
-    "text": "This website is produced by the M2 MODE student uring year 2023-2024 as part of their assignment in the Online Collaborative Ressources course.\nThey intend to develop a M1 companion book for the next student generation.\nBig goal !\nPlease take the time to visit their production."
+    "text": "Create a specific branch for your chapter named an_explicit_name_for_the_branch and switch on this branch\n\ngit checkout -b an_explicit_name_for_the_branch\nIn the development of the project, you might find necessary to have several branches per chapter.\n\nCreate a quarto file for the chapter chapter0.qmd in your branch\n\ngit add chapter0.qmd\ngit commit -m \"first commit in the chapter branch\"\n\nPush everything on the remote repo on Github\n\nFor the first push after the branch creation, you have to specify the name of the branch on the remote repo and you can use git  push --set-upstream origin an_explicit_name_for_the_branch or\nFor the push to come after the first one, you will simply push by\ngit  push\nOnce you are quite happy with your production, you will be willing to integrate your production on the main branch. A good practice is to ask the permission to push on the main branch, which is named a pull request (PR).\n\nAsk for a PR on Github\nIf needed, specify in the PR message the package you need and mention MarieEtienne as reviewer of the PR.\n\nA mock rendering of the qmd file will start when you request a PR using the Github Action mechanism (called runner on gitlab). If the action passes (green signal), you can go to the next step. If not, you will have to fix the issue (again you can ask assistance if you don’t understand the error).\n\nOnce the PR is checked, mention one of your colleage as reviewer."
+  },
+  {
+    "objectID": "instructions.html#one-chapter-corresponds-at-least-to-one-branch",
+    "href": "instructions.html#one-chapter-corresponds-at-least-to-one-branch",
+    "title": "How to contribute",
+    "section": "",
+    "text": "Create a specific branch for your chapter named an_explicit_name_for_the_branch and switch on this branch\n\ngit checkout -b an_explicit_name_for_the_branch\nIn the development of the project, you might find necessary to have several branches per chapter.\n\nCreate a quarto file for the chapter chapter0.qmd in your branch\n\ngit add chapter0.qmd\ngit commit -m \"first commit in the chapter branch\"\n\nPush everything on the remote repo on Github\n\nFor the first push after the branch creation, you have to specify the name of the branch on the remote repo and you can use git  push --set-upstream origin an_explicit_name_for_the_branch or\nFor the push to come after the first one, you will simply push by\ngit  push\nOnce you are quite happy with your production, you will be willing to integrate your production on the main branch. A good practice is to ask the permission to push on the main branch, which is named a pull request (PR).\n\nAsk for a PR on Github\nIf needed, specify in the PR message the package you need and mention MarieEtienne as reviewer of the PR.\n\nA mock rendering of the qmd file will start when you request a PR using the Github Action mechanism (called runner on gitlab). If the action passes (green signal), you can go to the next step. If not, you will have to fix the issue (again you can ask assistance if you don’t understand the error).\n\nOnce the PR is checked, mention one of your colleage as reviewer."
+  },
+  {
+    "objectID": "instructions.html#as-a-reviewer",
+    "href": "instructions.html#as-a-reviewer",
+    "title": "How to contribute",
+    "section": "As a reviewer",
+    "text": "As a reviewer\nYour role is essential as you are responsible for the quality of the submission you were assigned to. Read carefully the production and ask for correction/clarification if needed. One you are happy with the correction you can accept the PR."
   }
 ]
