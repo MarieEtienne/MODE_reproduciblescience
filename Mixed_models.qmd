@@ -426,7 +426,7 @@ La colinéarité fait référence à la situation dans laquelle deux ou plusieur
 
 Ici, nous allons tester la colinéarité entre nos 3 variables prédictives : 
 
-```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+```{r dataInterFac-2, include=TRUE, fig.height=4, fig.width=7}
 library(ggplot2)
 library(gridExtra)
 # ploting Species by Island
