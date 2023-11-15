@@ -498,19 +498,20 @@ A citation @bauer2023writing
 
 The MCA stands out from other multivariate analyzes with a single table (PCA, CA or mix between MCA and PCA, etc.) because it only takes qualitative variables as input. Its goal is to find the relationships between modalities by visualizing the possible associations and producing a quantitative indicator of their relationships.
 
-The data taken by an MCA is a table comprising J qualitative variables to describe I statistical individuals. All individuals have the same weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to the modality taken by individual $i$ for variable $j$.
+The data taken by an MCA is a table comprising $J$ qualitative variables to describe $I$ statistical individuals. All individuals have the same weight $\frac{1}{I}$. The value $V_{i,j}$ in the table corresponds to the modality taken by individual $i$ for variable $j$.
 
-To obtain a complete disjunctive table (CDT) and carry out the statistical analysis, it is necessary to subdivide each variable $j$ into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$ of the I individuals for this variable. The table will always have I rows but $\sum_{j=1}^J {n_j}$ columns (we will denote K columns), in which each of the $V_{i,k}$ values is either 1 or 0 depending on the presence or absence of the modality.
+To obtain a complete disjunctive table (CDT) and carry out the statistical analysis, it is necessary to subdivide each variable $j$ into $n_{j}$ modalities corresponding to all of the responses $V_{.,j}$ of the $I$ individuals for this variable. The table will always have $I$ rows but $\sum_{j=1}^J {n_j}$ columns (we will denote K columns), in which each of the $V_{i,k}$ values is either 1 or 0 depending on the presence or absence of the modality.
 
 The value $V_{i,k}$ is transformed again : the old value of $V_{i,k}$ (1 or 0) is divided by the probability $p_{k}$ of having this modality (i.e. $p_k=\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we subtract 1 to center the result.
 
 $V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
 
-We define the distance D between 2 individuals i and i’ as :
-$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})$ (yik-yi’k)^2
+We define the distance D between 2 individuals $i$ and $i’$ as :
+$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
 
 So 2 individuals taking the all same modalities are at a distance D = 0, the more similar the responses are over a large number of modalities, the lower the distance D will be and conversely. If two individuals share a rare modality, the distance will be reduced to take into account the common specificity.
 
 The inertia of the point cloud : $N = \frac{K}{J} – 1$.
-The correlation ratio $η^2(x,y)$ between 2 variables $x$ and $y$ is : (sum of squares of deviations)
+$η^2(x,y)$ is the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$ is the correlation ratio between the modality $k$ and l'axe $F_s$.
+
 $\frac{\sum_{j} \sum_{i \in J_j} (\overline{y}_{.,j}-\overline{y})^2}{\sum_{j} \sum_{i \in J_j} (y_{i,j}-\overline{y})^2}$ 
