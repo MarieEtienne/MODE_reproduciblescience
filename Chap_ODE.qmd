@@ -33,7 +33,9 @@ II. Ordinary differential equation
 
 III. 2-equations system
 
-\#**IV. 3-equation system : The Prey-Predator-Superpredator model**
+# **IV. 3-equation system : The Prey-Predator-Superpredator model**
+
+## 1) Lotka-Volterra : A three-species model
 
 Biotic interactions are complex, requiring the interaction of numerous
 parameters. If we take the **Lotka-Volterra** example, it only considers
@@ -63,15 +65,12 @@ The model parameters are :
 
 -   *-f* and *-c* : natural death rate of *y* and *z*
 
--   The growth rate of y and z depends on the number of prey caught. It
-    is modeled by dxy for y and by gyz for z.
+-   The growth rate of *y* and *z* depends on the number of prey caught.
+    It is modeled by *dxy* for *y* and by *gyz* for *z*.
 
--   
-
-    The death rate of *x* and *y* depends on the number of top predators
-
-    :   *y* for *x* and *z* for *y*. It is modeled by -*bxy* for *x* and
-        by *-eyz* for y.
+-   The death rate of *x* and *y* depends on the number of top predators
+    *y* for *x* and *z* for *y* . It is modeled by *-bxy* for *x* and by
+    *-eyz* for *y*.
 
 This model is only useful for chains of predators. It doesn't take into
 account the presence of several predators with different dynamics on the
@@ -90,6 +89,45 @@ The obvious solution is (0,0,0) but is not the only one. Indeed, for the
 derivatives to be equal to 0, then we must find the following solution:
 
 $$(a-by)=(gy-f)=(dx-c-ez)=0$$
+
+We first solve :
+$$a-by=0\Leftrightarrow a=by \Leftrightarrow y=\frac{a}{b}$$
+$$gy-f=0\Leftrightarrow f=by \Leftrightarrow y=\frac{f}{g}$$ So, a
+solution for a yeq is: $$y_{eq}=\frac{a}{b}=\frac{f}{g}$$ Therefore,
+there is an equilibrium when : $$ga=fb$$
+
+In order to determine the other solutions, we must solve the following
+matrix :
+$$ M=\begin{bmatrix}a-by&-bx&0\\dy&-c+dx-ez&-ey\\0&gz&gy-f\end{bmatrix}$$
+
+We invite you to look at the chapter on matrix calculation to determine
+the solutions.
+
+**But don't panic** ! In ecology we are lucky to have a great tool, R,
+which allows us to resolve this type of system.
+
+## 2) Resolution under R
+
+## 3) Generalizations of the three-species model and other examples
+
+The three-species model presented previously is a simplified model that
+models a perfectly linear trophic chain. However, nature is more complex
+and a species can be preyed upon by multiple predators and predators can
+predate multiple prey items.
+
+We invite you to go see the course of Lalith Devireddy (2016) entitled
+"Extending the Lotka-Volterra Equations" which develops this model and
+its resolutions.
+
+Many models with 3-ODE systems exist to model ecological dynamics. Here
+we will present two additional ones to you but we will not develop their
+resolution.
+
+### a) NPZ model
+
+The NPZ model makes it possible to model the lake production of a
+pelagic ecosystem. This model studies variations in nutrients,
+phytoplankton and phytoplankton that are linked to each other.
 
 V. Ecological example of the use of ODE #Model NPZ & Growth model =\>
 How the production of the environment affect the growth of an organism ?
