@@ -57,25 +57,168 @@ blabla bla
 
 II. Modèles linéaires généralisés
 1) Loi binômiale #Sarah
-<<<<<<< HEAD
 
 Reminders :
 
-X a binary data with two modalities : 1 (success) et 0 (failure).
-The probability of success is : $$ P(X = 1) = \pi $$
-Then Y, a variable corresponding to N random draws of X, follows a binomial law :
-Y ~ B(N,p)
+X is a binary variable with two modalities : 1 (success) and 0 (failure).
+The probability of success is :
+$$ P(X = 1) = \pi $$
+Then, Y, a variable corresponding to N randoms and independent draws of X, follows a binomial law :  
+Y ~ B(N,pi)
 
-The density function of Y is : $$ f(y;\pi)=\binom{N}{y}.\pi^{y}.(1-\pi)^{(N-y)}$$
-The mean and variance of Y are : 
+The density function of Y is : 
+$$ f(y;\pi)=\binom{N}{y}.\pi^{y}.(1-\pi)^{(N-y)}$$
+The expectancy and the variance of Y are : 
 $$E(Y)=N.\pi\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:var(Y)=N.\pi.(1-\pi)$$
 
-The link function is the function logit : $$logit(\mu_{y})= \alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip} = \eta$$
-With : 
-$$\mu_{y}= \frac {e^{\eta}}{1+e^{\eta}}\:\:the\:predicted\:value$$
+In the generalized model, the link function for Y is the function "logit" such that : 
+$$logit(\mu_{y})= \alpha+ \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip} = \eta $$
+Thus, the predicted value is : 
+$$\mu_{y}= \frac {e^{\eta}}{1+e^{\eta}} $$
+Let's apply this on the example of the dataset "badger.txt" from the book: Zuur et al. 2009 "Mixed effects models and extensions in ecology with R" - Springer. First, let's import the needed librairies : 
 
-Let's practice with an example. 
+```{=html}
+<style>
+body {
+text-align: justify}
+</style>
+```
+```{r init, include=FALSE}
+library(MASS)# to Perform a GLM
+library(rcompanion)# Model pseudo R²
+```
 
+This dataset comes from a survey carried out on 36 farms in South-West England over 8 consecutive seasons running from autumn 2003 to summer 2005. It contains 277 rows and the columns : 
+-	**year**: Calendar year  
+- **season**: spring, summer, autumn, winter  
+- **farm_code**: farm identifier  
+- **survey**: which of the 8 survey occasions (i.e. a time indicator)  
+- **badger_activity**: presence-absence of signs of badgers activity  
+- **N_setts_in_fields**: number of badger 'homes' observed  
+- **N_buildings**: number of buildings on farm  
+- **N_cattle_in_buildings**: number of cattle housed in the building yard  
+- **accessible_feed_store_present**: presence-absence of a feed's store in farm  
+- **accessible_cattle_house_present**: presence-absence of a direct access to cattle house  
+- **accessible_feed_present**: presence-absence of accessible feed on farm  
+- **grass_silage**: presence-absence of grass_silage  
+- **cereal_silage**: presence-absence of cereal_silage  
+- **hay_straw**: presence-absence of hay_straw  
+- **cereal_grains**: presence-absence of cereal_grains  
+- **concentrates**: presence-absence of concentrates  
+- **sugar_beet**: presence-absence of sugar beet  
+- **molasses**: presence-absence of molasses
+
+For the example, the binary variable that will be explained is the badger activity and any other variables are taken as explanatory variables. 
+The objective is to find a model that predict the occurence of signs of badger activity on farms in order to find a way to reduce the rates of badgers' visits to farms. This objective is motivated by the numerous transmissions of bovine tuberculosis from badgers to cattle.
+
+Let's import the dataset and perform a binomial generalized linear model. 
+
+```{r global data, include=TRUE,echo=TRUE}
+# Dataset import
+dataBadger <- read.table("Badger.txt", dec=".", header = TRUE)
+
+# First, for a question of simplicity we will simplify a few variable names
+dataBadger$Activity<- dataBadger$signs_in_yard
+dataBadger$N_setts<-dataBadger$N_setts_in_fields
+dataBadger$N_cattle<-dataBadger$N_cattle_in_buildings_yard
+
+# Then, we indicate to R which variables are factors 
+dataBadger$season<-as.factor(dataBadger$season)
+dataBadger$feed_store<-as.factor(dataBadger$accessible_feed_store_present)
+dataBadger$cattle_house<-as.factor(dataBadger$accessible_cattle_house_present)
+dataBadger$feed<-as.factor(dataBadger$accessible_feed_present)
+dataBadger$grass<-as.factor(dataBadger$grass_silage)
+dataBadger$cereal<-as.factor(dataBadger$cereal_silage)
+dataBadger$straw<-as.factor(dataBadger$hay_straw)
+dataBadger$grains<-as.factor(dataBadger$cereal_grains)
+dataBadger$concen<-as.factor(dataBadger$concentrates)
+dataBadger$sugar<-as.factor(dataBadger$sugar_beet)
+dataBadger$molasses<-as.factor(dataBadger$molasses)
+str(dataBadger)
+
+# Check for presence of missing values
+colSums(is.na(dataBadger))
+# There is no missing value.
+```
+
+## DATA EXPLORATION
+See in the part dedicated to data exploration
+
+## STATISTICAL ANALYSIS
+
+### Model building
+
+We will use a backward selection with the most complete model, considered here, for a question of simplicity, as the model with all the explanatory variables but no interactions.  
+
+```{r fullmodel,include=TRUE}
+# Let's define the model with the function "glm" with the family "binomial" and the link function "logit" 
+mod1<-glm(Activity~N_setts
+              + N_buildings
+              + N_cattle
+              + season
+              + feed_store
+              + cattle_house
+              + feed
+              + grass
+              + cereal
+              + straw
+              + grains
+              + concen
+              + sugar
+              ,data=dataBadger
+              ,family=binomial(link=logit))
+
+# We can use then the function drop1 to check the significance
+drop1(mod1,test="Chi")
+```
+Some of the coefficient are not significant because their p values are under 0.05 so we will suppress them and test the new model. 
+
+```{r candidatemodelGLM,include=TRUE}
+# Let's write the new model
+mod2<-glm(Activity~N_setts
+              + N_cattle
+              ,data=dataBadger
+              ,family=binomial(link=logit))
+# Then we check for significance
+drop1(mod2,test="Chi")
+```
+
+This time, all of the variables are significant. Let's check the coefficient : 
+
+```{r coeffm, ,include=TRUE}
+# Coefficients of the model
+summary(mod2)
+```
+
+The table of coefficients is : 
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -3.638947   0.408344  -8.911  < 2e-16 ***
+N_setts      0.268288   0.042921   6.251 4.09e-10 ***
+N_cattle     0.003486   0.001766   1.974   0.0483 *
+
+All the coefficients are significant. 
+
+The candidate model is:
+$$  logit(Presence\:of\:badger\:activity) = - 3.64 + 0.27*Number\:of\:Setts\: +\: 0.004* Number\:of\:Cattles $$
+
+### Model explanation
+
+However there is no R² in Generalized Linear Models, we can still calculate a *pseudo R²* to estimate how far the candidate model is from the null model by determining the distance between deviance of the null model and the residual deviance of the candidate model.
+
+```{r deviance, include=TRUE}
+# Estimate of deviance explained
+(mod2$null.deviance-mod2$deviance)/mod2$null.deviance
+
+# Some others estimates of deviance explained - package 'rcompanion'
+nagelkerke(mod2)
+```
+
+From these code lines, we deduce that the estimate of deviance explained is 22 %. We found about the same thing with the $Pseudo\:R^2$ estimate (package 'rcompanion'). 
+
+## MODEL VALIDATION: CHECK TO ASSUMPTIONS
+See the part dedicated to validation of generalized linear models. 
+Nota Bene : For this example, the validation will show a dependency that could be resolved by using a mixed model with "Farm_code" as random factor.
+>>>>>>> binomiale
 
 2) Loi de Poisson #Léa
 ```{r}
