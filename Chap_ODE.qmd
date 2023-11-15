@@ -33,7 +33,50 @@ II. Ordinary differential equation
 
 III. 2-equations system
 
-# **IV. 3-equation system : The Prey-Predator-Superpredator model**
+# **IV. 3-equation system**
+
+## 1) SIR model :
+
+$$ SIR=\begin{cases}\frac{d_S}{d_t}=\alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} $$
+We assume a closed population, so :
+$$ S+I+R = 1 \Leftrightarrow R=1-S-I $$
+
+Thus, we can express R from S and I, so we can remove the equation from
+our system and we end up with a system with 2 equations.
+
+We look for balance points such as:
+
+$$ SIR=\begin{cases}\frac{d_S}{d_t}=0 &\text{Susceptible} \\ \frac{d_I}{d_t}=0&\text{Infected} \end{cases} $$
+
+To do this, we solve :
+
+$$ \begin{cases}\alpha SI-\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases} $$
+
+We change the R :
+
+$$\begin{cases}\alpha SI-\gamma (1-S-I) = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected}\end{cases} $$
+
+We first focus on solving:
+
+$$\Leftrightarrow I(\alpha S- \beta) =0 \Leftrightarrow  I(\alpha S- \beta) =0 \\ \Leftrightarrow I=0\ or\  S= \frac{\beta}{\alpha}$$
+
+If *I = 0*, We integrate I=0 into our "susceptible" equation to obtain
+the solution for S:
+
+$$ \alpha S *0 + \gamma (1-S-0)=0 \\ \Leftrightarrow \gamma (1-S)=0 \\ \Leftrightarrow 1-S=0 \\ \Leftrightarrow S=1$$
+We thus obtain our first solution with:
+$$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} $$
+If *S = b/a*, We integrate S into our "susceptible" equation to obtain
+the solution for I:
+
+$$
+\begin{align} 
+&\alpha \frac{\beta}{\alpha}I + \gamma (1-\frac{\beta}{\alpha} - I)=0 \\ \Leftrightarrow \ &\beta I + \gamma (1-\frac{\beta}{\alpha}-I)=0 \\ \Leftrightarrow \ &\beta I + \gamma - \frac{\beta}{\alpha} \gamma - \gamma I = 0 \\ \Leftrightarrow \ &\beta I - \gamma I = - \gamma + \frac{\beta}{\alpha} \gamma \\ \Leftrightarrow \ &I = \frac{- \gamma + \frac{\beta}{\alpha} \gamma}{\beta - \gamma} \\ \Leftrightarrow \ &I = \frac{1-\frac{\beta}{\alpha}}{b- \gamma} 
+\end{align} 
+$$
+
+We thus obtain our first solution with:
+$$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} \frac{\beta}{\alpha} \\ \frac{1-\frac{\beta}{\alpha}}{\beta - \gamma} \end{pmatrix} $$
 
 ## 1) Lotka-Volterra : A three-species model
 
