@@ -12,15 +12,56 @@ output:
 
 Quick plan :
   
-# ODE 2 equations
-  
-  Little explanation of what is an ODE 2 equations
+AMELIE  
+Little explanation of what is an ODE 2 equations
 Some examples (a listing ?) of applications in ecology
 including Lotka-Volterra
---> Focus on Lotka-Volterra : equations and resolution (model) in R code + graphs + 1 or 2 little exercices to understand
+
+ANASTASIA
+--> Focus on Lotka-Volterra : equations and resolution (model)
+
+AMELIE
+in R code + graphs
+
+?
+1 or 2 little exercices to understand
+
+
+
+# ODE 2 equations
+
+
+introduction ecology : populations interact, there's often competition...
+The outcome of the competition often depends on environmental conditions.
+
+More generally, if we want to quantify the effect of a species over another species... The effect depends of its population size and the level of competitivity of this species.
+
+
+To formalise interactions, we need modelling.
+
+**ODE 2 equations are typically used in ecology to model the dynamic of 2 populations in interaction.**
+
+
+
+
+
+The case of Lotka-Volterra :
+
+equations over time
+A pair of differential equations
+There *can* be a certain point in time where both equations are in equilibrium and the values that are depending on the time remain aproximatively constant.
+
+Why it's useful --> to see that the interactions between populations can create periodic dynamics over time.
+                --> to study how biodiversity interacts with parameters such as competition.
+
+
+
+
+
+
+
+
+
+
 
 ## Lotka-Volterra
-
-
-
-
