@@ -92,7 +92,6 @@ equilibrium pair determined previously.
 
 $$ J=\begin{bmatrix} \frac{\delta S}{\delta S} & \frac{\delta S}{\delta I} \\ \frac{\delta I}{\delta S} & \frac{\delta I}{\delta I}  \end{bmatrix} \Leftrightarrow \begin{bmatrix} \alpha I- \gamma & \alpha S- \gamma \\ \alpha I & \alpha S- \beta \end{bmatrix} $$
 
-
 For the couple, S=1 and R=0 :
 
 $$ J(1,0)= \begin{bmatrix} -\gamma & \alpha -\gamma \\ 0 & \alpha - \beta) \end{bmatrix} $$
@@ -126,8 +125,6 @@ $$ J(\frac{\beta}{\alpha}, \frac{1- \frac{\beta}{\alpha}}{\beta -\gamma})= \begi
 \Leftrightarrow \lambda ^2 + \lambda (\gamma - \frac{\alpha - \beta}{\beta -\gamma})-\frac{(\alpha -\beta)\beta}{\beta - \gamma} + \frac{(\alpha -\beta)\gamma}{\beta - \gamma}=0
 \\ \text{Same logic as before :}
 \\ \Delta = (\gamma - \frac{\alpha - \beta}{\beta -\gamma})^2-4( \frac{( \alpha -\beta) \beta}{\beta -\gamma}+ \frac{(\alpha - \beta) \gamma}{\beta - \gamma})$$
-
-
 
 ## 1) Lotka-Volterra : A three-species model
 
