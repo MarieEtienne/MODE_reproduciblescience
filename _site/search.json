@@ -5,5 +5,40 @@
     "title": "A simple chapter using R",
     "section": "",
     "text": "This chapter is a simple example using R\nYou can import R package using the code\n\nlibrary(tidyverse)\n\nWarning: le package 'tidyverse' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'ggplot2' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'tibble' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'tidyr' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'readr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'purrr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'dplyr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'stringr' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'forcats' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'lubridate' a été compilé avec la version R 4.2.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.3     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nand then describe the purpose of your chapter as well as executing R command.\nFor example a basic summary of a dataset is given by\n\ndf &lt;- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n\nand produce a graph\n\ndf %&gt;% ggplot() +\n    aes(x=species, y = body_mass_g) +\n    geom_boxplot()  \n\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`).\n\n\n\n\n\nA citation Bauer and Landesvatter (2023)\n\n\n\n\nReferences\n\nBauer, Paul Cornelius, and Camille Landesvatter. 2023. “Writing a Reproducible Paper with RStudio and Quarto.”"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html",
+    "href": "r_chapter_boostrapping_resampling.html",
+    "title": "Tests de permutation",
+    "section": "",
+    "text": "title: “Chapter : Bootstrapping and Resampling”\nbibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#introduction",
+    "href": "r_chapter_boostrapping_resampling.html#introduction",
+    "title": "Tests de permutation",
+    "section": "Introduction",
+    "text": "Introduction\nLes tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l’effet d’une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations."
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#fondements-des-tests-de-permutations",
+    "href": "r_chapter_boostrapping_resampling.html#fondements-des-tests-de-permutations",
+    "title": "Tests de permutation",
+    "section": "Fondements des Tests de Permutations",
+    "text": "Fondements des Tests de Permutations\n\nPrincipe Fondamental\nLe principe fondamental des tests de permutations repose sur la distribution nulle de la statistique de test sous l’hypothèse nulle. En d’autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.\n\n\nStatistique de Test\nLa statistique de test pour les tests de permutations dépend du type d’étude. Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :\n[ T = , ]\noù ({X}_1) et ({X}2) sont les moyennes des deux groupes, (s{}) est l’écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons."
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#mise-en-œuvre-des-tests-de-permutations",
+    "href": "r_chapter_boostrapping_resampling.html#mise-en-œuvre-des-tests-de-permutations",
+    "title": "Tests de permutation",
+    "section": "Mise en œuvre des Tests de Permutations",
+    "text": "Mise en œuvre des Tests de Permutations\n\nÉtapes du Test\nLes étapes typiques pour mettre en œuvre un test de permutations comprennent :\n\nFormuler les hypothèses nulle et alternative.\nCalculer la statistique de test à partir des données observées.\nGénérer toutes les permutations possibles des données.\nCalculer la statistique de test pour chaque permutation.\nComparer la statistique observée à la distribution nulle des statistiques de test.\nConclure sur l’acceptation ou le rejet de l’hypothèse nulle."
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#exemples-pratiques",
+    "href": "r_chapter_boostrapping_resampling.html#exemples-pratiques",
+    "title": "Tests de permutation",
+    "section": "Exemples Pratiques",
+    "text": "Exemples Pratiques\n\nTest de Permutations pour la Différence de Moyennes\nConsidérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l’équation ci-dessus.\n\n\nTest de Permutations pour la Corrélation\nDans le cas d’une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman."
   }
 ]
