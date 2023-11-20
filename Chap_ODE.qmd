@@ -35,7 +35,7 @@ III. 2-equations system
 
 # **IV. 3-equation system**
 
-## 1) SIR model :
+## 1) SIR model and resolution by hand
 
 The most used models in epidemiology are mathematical models of
 infectious diseases such as the SIR model. These models are based on
@@ -44,7 +44,11 @@ disease states. The SIR model is composed of 3 compartments: initially
 healthy or susceptible individuals (S), infected individuals (I) and
 cured individuals or resistent (R).
 
-$$ SIR=\begin{cases}\frac{d_S}{d_t}=\alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} $$
+$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
+\\
+\\ \begin{align} With : & - \alpha \text{: disease transmission rate}
+\\ & - \beta \text{: cure rate}
+\\ & - \gamma \text{: coefficient of loss of immunity} \end{align}$$
 
 We assume a closed population, so :
 $$ S+I+R = 1 \Leftrightarrow R=1-S-I $$
@@ -52,81 +56,147 @@ $$ S+I+R = 1 \Leftrightarrow R=1-S-I $$
 Thus, we can express R from S and I, so we can remove the equation from
 our system and we end up with a system with 2 equations.
 
+### Balance points
+
 We look for balance points such as:
 
 $$ SIR=\begin{cases}\frac{d_S}{d_t}=0 &\text{Susceptible} \\ \frac{d_I}{d_t}=0&\text{Infected} \end{cases} $$
 
 To do this, we solve :
 
-$$ \begin{cases}\alpha SI-\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases} $$
-
-We change the R :
-
-$$\begin{cases}\alpha SI-\gamma (1-S-I) = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected}\end{cases} $$
+$$ \begin{align} & \begin{cases} - \alpha SI-\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases}
+\\ \Leftrightarrow & \begin{cases} \alpha SI-\gamma (1-S-I) = 0 \\ \alpha SI-\beta I =0 \end{cases} \end{align} $$
 
 We first focus on solving:
 
-$$\Leftrightarrow I(\alpha S- \beta) =0 \Leftrightarrow  I(\alpha S- \beta) =0 \\ \Leftrightarrow I=0\ or\  S= \frac{\beta}{\alpha}$$
+$$\begin{align} & \alpha SI - \beta I=0
+\\ \Leftrightarrow \ & I(\alpha S- \beta) =0 \\ \Leftrightarrow \ & I=0\ or\ S= \frac{\beta}{\alpha} \end{align}$$
 
 If *I = 0*, we integrate I=0 into our "susceptible" equation to obtain
 the solution for S:
 
-$$ \alpha S *0 + \gamma (1-S-0)=0 \\ \Leftrightarrow \gamma (1-S)=0 \\ \Leftrightarrow 1-S=0 \\ \Leftrightarrow S=1$$
-We thus obtain our first solution with:
-$$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} $$
+$$\begin{align} & \ \ \ \ \ \begin{cases} \alpha S *0 + \gamma (1-S-0)=0 \\ I=0 \end{cases} \\ & \Leftrightarrow \begin{cases} \gamma (1-S)=0 \\ I=O \end{cases} \\ &\text{We thus obtain our first solution:} \\ &\Leftrightarrow \begin{cases} S=1 \\ I=0 \end{cases} \end{align} $$
+
+It's the disease-free equilibrium (DFE).
+
 If *S = b/a*, we integrate S into our "susceptible" equation to obtain
 the solution for I:
 
 $$
-\begin{align} 
-&\alpha \frac{\beta}{\alpha}I + \gamma (1-\frac{\beta}{\alpha} - I)=0 \\ \Leftrightarrow \ &\beta I + \gamma (1-\frac{\beta}{\alpha}-I)=0 \\ \Leftrightarrow \ &\beta I + \gamma - \frac{\beta}{\alpha} \gamma - \gamma I = 0 \\ \Leftrightarrow \ &\beta I - \gamma I = - \gamma + \frac{\beta}{\alpha} \gamma \\ \Leftrightarrow \ &I = \frac{- \gamma + \frac{\beta}{\alpha} \gamma}{\beta - \gamma} \\ \Leftrightarrow \ &I = \frac{1-\frac{\beta}{\alpha}}{b- \gamma} 
-\end{align} 
+\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0
+\\ S = \frac{\beta}{\alpha} \end{cases}
+\\ & \Leftrightarrow \begin{cases} -\beta I + \gamma - \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases}
+\\ & \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}
+\\ & \text{We thus obtain our first solution:}
+\\ & \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\ S=\frac{\beta}{\alpha} \end{cases} \end{align} 
 $$
 
-We thus obtain our first solution with:
+It's the endemic equilibrium (EE).
 
-$$ \begin{pmatrix} S \\ I \end{pmatrix} = \begin{pmatrix} \frac{\beta}{\alpha} \\ \frac{1-\frac{\beta}{\alpha}}{\beta - \gamma} \end{pmatrix} $$
+### Jacobian matrix
 
-It is then necessary to determine the Jacobian matrix for each
-equilibrium pair determined previously.
+Now, let's perform linear stability analysis for each equilibrium point
+by computing the Jacobian matrix :
 
-$$ J=\begin{bmatrix} \frac{\delta S}{\delta S} & \frac{\delta S}{\delta I} \\ \frac{\delta I}{\delta S} & \frac{\delta I}{\delta I}  \end{bmatrix} \Leftrightarrow \begin{bmatrix} \alpha I- \gamma & \alpha S- \gamma \\ \alpha I & \alpha S- \beta \end{bmatrix} $$
+$$ J=\begin{bmatrix} \frac{\delta S}{\delta S} & \frac{\delta S}{\delta I} \\ \frac{\delta I}{\delta S} & \frac{\delta I}{\delta I}  \end{bmatrix} \Leftrightarrow \begin{bmatrix} - \alpha I- \gamma & - \alpha S- \gamma \\ \alpha I & \alpha S- \beta \end{bmatrix} $$
 
-For the couple, S=1 and R=0 :
+Analyze the stability of each equilibrium point by examining the signs
+of the real parts of the eigenvalues. If the real parts are all
+negative, the equilibrium is stable; if any are positive, the
+equilibrium is unstable. The stability will depend on the specific
+values of the parameters **α** and **β**.
 
-$$ J(1,0)= \begin{bmatrix} -\gamma & \alpha -\gamma \\ 0 & \alpha - \beta) \end{bmatrix} $$
+### For the disease-free equilibrium :
 
-We seek to determine the solutions of the characteristic equation :
+$$ J(1,0)= \begin{bmatrix} -\gamma & - \alpha -\gamma \\ 0 & \alpha - \beta \end{bmatrix} $$
 
-$$det(J- \lambda Id)=0$$
+The Jacobian matrix for the pair (1,0) is an upper triangular matrix, so
+the eigenvalues are the diagonal elements :
+$$ \lambda _1 = - \gamma \ \text{and} \ \lambda _2 = \alpha - \beta $$
 
-with *Id* = identity matrix (cf matrix calculation).
+γ is a coefficient representing loss of immunity, so γ\>0.
 
-The solutions of the characteristic equation are the eigenvalues :
+So : $$ \begin{align} & \lambda _1 <0 
+\\ & \text{If:} \ - \alpha > \beta , \ \lambda _2 > 0 \ \text{Unstable equilibrium point}
+\\& \ \ \ \  - \alpha < \beta , \ \lambda _2 < 0 \ \text{Asymptotically stable point}  \end{align} $$
 
-$$det(1,0)=det \begin{bmatrix} -\gamma -\lambda & \alpha - \gamma \\ 0 & \alpha - \beta - \lambda \end{bmatrix} $$
-$$det \begin{bmatrix} -\gamma -\lambda & \alpha - \gamma \\ 0 & \alpha - \beta - \lambda \end{bmatrix} =0 \\ 
-\text{Les solutions sont les valeurs propres. Ici, la matrice Jacobienne est triangulaire, donc}
-\\ \text{Les valeurs propres sont les éléments diagonaux.}
-\\ sp(J)=\{ -\gamma -\lambda ; \alpha - \beta - \lambda \}  $$
+In order to better understand the behavior of the unstable point, we
+look for the sign of the determinant of the matrix:
 
-To obtain the solutions of the polynomials :
+$$ det(J(1,0))= - \gamma (\alpha - \beta ) \\
+\Leftrightarrow \ \gamma (\beta - \alpha)
+\\ \gamma > 0 \ and \ \alpha > \beta
+\\ det(J(1,0)) < 0 \Rightarrow \text{Saddle point} $$
 
-$$ \begin{align} &\Delta = (\alpha - \beta -\gamma)^2 - 4 \gamma (\beta - \alpha)
-\\ If: \ &\Delta > 0 : \text{two distinct real roots}
-\\ &\Delta = 0 : \text{one real repeated root}
-\\ &\Delta < 0 : \text {two complex conjugate roots} \end{align} $$
+Saddle points exhibit a combination of stable and unstable behavior in
+different directions in the state space.
 
-$$ J(\frac{\beta}{\alpha}, \frac{1- \frac{\beta}{\alpha}}{\beta -\gamma})= \begin{bmatrix} \frac{\alpha -\beta}{\beta -\gamma}-\gamma & \beta -\gamma \\ \frac{\alpha - \beta}{\beta - \gamma} & 0 \end{bmatrix}
-\\ det(J- \lambda Id)= \begin{bmatrix} \frac{\alpha - \beta}{\beta - \gamma} -\gamma -\lambda & \beta - \gamma \\ \frac{\alpha - \beta}{\beta - \gamma} & -\lambda \end{bmatrix}=0
+### For the endemic equilibrium
+
+$$ J(\frac{\beta}{\alpha},\frac{\gamma (1-\frac{\beta}{\alpha})}{\beta + \gamma})= \begin{bmatrix} \frac{\gamma (\beta- \alpha)}{\beta + \gamma} - \gamma & - \beta -\gamma \\ \frac{\gamma (\alpha - \beta)}{\beta + \gamma} & 0 \end{bmatrix} $$
+
+Here, we do not have a characteristic matrix so to determine the
+eigenvalues, it will be necessary to solve the characteristic
+polynomial. We will first look at the sign of the determinant of the
+matrix to study the behavior of the system.
+
+So, we calculate the determinant :
+$$\begin{align} & det(J(\frac{\beta}{\alpha},\frac{\gamma (1-\frac{\beta}{\alpha})}{\beta + \gamma})) = - (- \beta - \gamma) * \frac{\gamma (\alpha - \beta)}{\beta + \gamma} = \gamma (\alpha - \beta) \end{align}$$
+
+If **α** \< **β**, det(J) \< 0 : a saddle point.
+
+If **α** \> **β**, det(J) \> 0 : look the trace of the matrix.
+
+$$Tr(J(S,I)) = \frac{\gamma (\beta - \alpha)}{\beta - \gamma} - \gamma
 \\
-\Leftrightarrow (\frac{\alpha -\beta}{\beta -\gamma})(-\lambda) -( \frac{\alpha - \beta}{\beta - \gamma})(\beta - \gamma)=0 
+\\ \gamma > 0 \ \text{and} \ \alpha > \beta
 \\
-\Leftrightarrow \lambda ^2 + \lambda (\gamma - \frac{\alpha - \beta}{\beta -\gamma})-\frac{(\alpha -\beta)\beta}{\beta - \gamma} + \frac{(\alpha -\beta)\gamma}{\beta - \gamma}=0
-\\ \text{Same logic as before :}
-\\ \Delta = (\gamma - \frac{\alpha - \beta}{\beta -\gamma})^2-4( \frac{( \alpha -\beta) \beta}{\beta -\gamma}+ \frac{(\alpha - \beta) \gamma}{\beta - \gamma})$$
+\\ \text{So:} \ Tr(J(S,I)) <0 $$
 
-## 1) Lotka-Volterra : A three-species model
+In this case we have a stable point. The specific type of stability
+depends on the signs and nature of the eigenvalues.
+
+Now, we solve the characteristic polynomial to obtain the eigenvalues:
+
+$$ det(J- \lambda Id) = 0
+\\ \text{with Id : identity matrix}
+\\
+\\ \Leftrightarrow \begin{bmatrix} \frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda 
+& - \beta - \gamma
+\\  \frac{\gamma (\alpha - \beta)}{\beta + \gamma} & - \lambda \end{bmatrix} = 0
+\\ \Leftrightarrow - \lambda (
+\frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda) 
+- (- \beta - \gamma )(
+\frac{\gamma (\alpha - \beta)}{\beta + \gamma}
+) = 0 
+\\ \Leftrightarrow \lambda^2 + \lambda (\gamma +  \frac{\gamma (\alpha- \beta)}{\beta + \gamma})+ \gamma (\alpha - \beta) = 0 $$
+
+The number of solutions is indicated by the value of the discriminant :
+$$ \Delta = (\gamma +  \frac{\gamma (\alpha - \beta)}{\beta + \gamma})^2 - 4 (\gamma (\alpha - \beta))
+\\ \text{With} \ \alpha > \beta
+\\
+\\
+\begin {align} \text{If} \ & \Delta < 0:\ \text{you will have two complex conjugate roots.} \\ &\Delta = 0:\ \text{you will have one real repeated root.} \\ &\Delta>0: \ \text{you will have two distinct real roots.} \end{align} $$
+
+From now,we will assign numerical values:
+$$ \alpha = 4, \ \beta = 2 \ and \ \gamma = 1 
+\\
+\Delta = (1 + \frac{1(4-2)}{1+2})^2 - 4(1(4-2))= -5.22 
+\\ So \ \Delta < 0 $$
+
+$$ \text{Solutions are given by the following formula:}
+\\ \lambda= \frac{-(\gamma + \frac{
+\gamma (\alpha - \beta)}{\beta + \gamma}) \pm \sqrt \Delta}{2}i
+\\ \frac{\sqrt \Delta}{2}i: \ \text{imaginary part.}
+\\ \frac{-(\gamma + \frac{\gamma (\alpha - \beta)}{\beta +\gamma})}{2}: \ \text{real part.} 
+\\
+\\ \text{Real part}= -\frac{5}{3}$$
+
+The stability of a linear system is often determined by the real parts
+of the eigenvalues. In this case, the real part is negative which
+indicates stability.
+
+## 2) Lotka-Volterra : A three-species model
 
 Biotic interactions are complex, requiring the interaction of numerous
 parameters. If we take the **Lotka-Volterra** example, it only considers
@@ -148,7 +218,7 @@ chain and the prey at the bottom.
 The model can be written as the following system of differential
 equations:
 
-$$ PPS=\begin{cases}\frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+dxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator}\end{cases} $$
+$$ PPS=\begin{cases} \frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+dxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator} \end{cases} $$
 
 The model parameters are :
 
@@ -183,9 +253,10 @@ $$(a-by)=(gy-f)=(dx-c-ez)=0$$
 
 We first solve :
 $$a-by=0\Leftrightarrow a=by \Leftrightarrow y=\frac{a}{b}$$
-$$gy-f=0\Leftrightarrow f=by \Leftrightarrow y=\frac{f}{g}$$ So, a
-solution for a yeq is: $$y_{eq}=\frac{a}{b}=\frac{f}{g}$$ Therefore,
-there is an equilibrium when : $$ga=fb$$
+$$gy-f=0\Leftrightarrow f=by \Leftrightarrow y=\frac{f}{g}$$
+
+So, a solution for a yeq is: $$y_{eq}=\frac{a}{b}=\frac{f}{g}$$
+Therefore, there is an equilibrium when : $$ga=fb$$
 
 In order to determine the other solutions, we must solve the following
 matrix :
@@ -197,9 +268,11 @@ the solutions.
 **But don't panic** ! In ecology we are lucky to have a great tool, R,
 which allows us to resolve this type of system.
 
-## 2) Resolution under R
+## 3) Resolution under R
 
-## 3) Generalizations of the three-species model and other examples
+## 4) Generalizations of the three-species model and other examples
+
+### a) Generalizations of the three-species model
 
 The three-species model presented previously is a simplified model that
 models a perfectly linear trophic chain. However, nature is more complex
@@ -214,37 +287,10 @@ Many models with 3-ODE systems exist to model ecological dynamics. Here
 we will present two additional ones to you but we will not develop their
 resolution.
 
-### a) NPZ model
+### b) NPZ model
 
 The NPZ model makes it possible to model the lake production of a
 pelagic ecosystem. This model studies variations in nutrients,
-phytoplankton and phytoplankton that are linked to each other.
-
-V. Ecological example of the use of ODE #Model NPZ & Growth model =\>
-How the production of the environment affect the growth of an organism ?
-
-VI. Second & Third-order ODE
-
-<!-- -->
-
-1.  Definition
-
-2.  How to resolve them ?
-
-<!-- -->
-
-a)  Analytic solutions An analytic solutions for an ODE is an expression
-    that represents the solution using a finite number of elementary
-    functions (exponential, logarithmic...). It provides a precise
-    mathematical formula that describes the behavior of the solution for
-    all values of the independent variable within a certain range.
-    Finding general analytical solutions for third-order ODEs can be
-    complicated and often depends on the specific form of the equation.
-    Sometimes, they may not exist, and in this case numerical methods
-    might be more appropriate.
-
-b)  Numerical methods : Introduction to Euler's method & Runge-Kutta The
-    choice of numerical method depends on the specific characteristics
-    of the ODE system.
+phytoplankton and zooplankton that are linked to each other.
 
 Conclusion & motivation words
