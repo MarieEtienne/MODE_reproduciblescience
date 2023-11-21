@@ -236,24 +236,6 @@ drawText(x = 3.15, y = -0.2, text = "of a population over time")
 
 ```
 
-$$
-\begin{align} & NPZ = \begin{cases} \frac{dP}{dt}= \frac{V_m N}{k_s + N}P -mP -ZR_m(1-e^{-\Lambda P}) & \text{Pythoplankton}
-\\ \frac{dZ}{dt}= \gamma ZR_m(1-e^{- \Lambda P}-dZ) & \text{Zooplakton}
-\\ \frac{dN}{dt}=-\frac{V_m N}{k_s + N}P+mP+dZ+(1- \gamma ) ZR_m (1-e^{- \Lambda P}) & \text{Nutrients} \end{cases}
-\\ 
-\\ & \text{Definitions of variable:}
-\\ & - V_m: \ \text{Maximum phytoplankton growth rate}
-\\ & - N: \ \text{Nutrient concentration}
-\\ & - k_s: \ \text{Half saturation constant for nutrients}
-\\ & - P: \ \text{Phytoplankton stock size}
-\\ & -m: \ \text{Phytoplankton mortality rate}
-\\ & -Z: \ \text{Zooplankton stock size}
-\\ & - \gamma : \ \text{Zooplankton growth efficiency}
-\\ & - R_m : \ \text{Maximum zooplankton ration}
-\\ & - \Lambda : \ \text{Ivlev constant}
-\\ & -d: \ \text{mortality rate} \end{align} $$
-
-
 $$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
 
 # II. Order 1 ODE & definition of ODE
@@ -527,6 +509,22 @@ pelagic ecosystem**. This model studies variations in nutrients,
 phytoplankton and zooplankton that are linked to each other.
 
 Here are the equations of the system, but it will not be worked up here.
+$$
+\begin{align} & NPZ = \begin{cases} \frac{dP}{dt}= \frac{V_m N}{k_s + N}P -mP -ZR_m(1-e^{-\Lambda P}) & \text{Pythoplankton}
+\\ \frac{dZ}{dt}= \gamma ZR_m(1-e^{- \Lambda P}-dZ) & \text{Zooplakton}
+\\ \frac{dN}{dt}=-\frac{V_m N}{k_s + N}P+mP+dZ+(1- \gamma ) ZR_m (1-e^{- \Lambda P}) & \text{Nutrients} \end{cases}
+\\ 
+\\ & \text{Definitions of variable:}
+\\ & - V_m: \ \text{Maximum phytoplankton growth rate}
+\\ & - N: \ \text{Nutrient concentration}
+\\ & - k_s: \ \text{Half saturation constant for nutrients}
+\\ & - P: \ \text{Phytoplankton stock size}
+\\ & -m: \ \text{Phytoplankton mortality rate}
+\\ & -Z: \ \text{Zooplankton stock size}
+\\ & - \gamma : \ \text{Zooplankton growth efficiency}
+\\ & - R_m : \ \text{Maximum zooplankton ration}
+\\ & - \Lambda : \ \text{Ivlev constant}
+\\ & -d: \ \text{mortality rate} \end{align} $$
 
 
 
