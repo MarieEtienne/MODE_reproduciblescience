@@ -1,4 +1,4 @@
-
+--- 
 title: "Ordinary Differential Equations and their application in Ecology"
 author: "Amélie Cocchiara, Théo Laguilliez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
 date: "`r Sys.Date()`"
@@ -12,7 +12,7 @@ output:
 editor: 
   markdown: 
     wrap: 72
-
+---
 
 ```{r}
 #Add packages
