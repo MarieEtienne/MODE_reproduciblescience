@@ -1,7 +1,8 @@
----
+
 title: "Ordinary Differential Equations and their application in Ecology"
+author: "Amélie Cocchiara, Théo Laguilliez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
+date: "`r Sys.Date()`"
 bibliography: references.bib
-author: "Amélie Cocchiara, Anastasia Paupe, Clément Monaury, Laura Martinez Anton, Theo Laguillez"
 execute: 
   freeze: auto
 output: 
@@ -11,27 +12,253 @@ output:
 editor: 
   markdown: 
     wrap: 72
----
+
 
 ```{r}
 #Add packages
+  df_print: paged
+
+
+```{=html}
+<style>
+body {
+text-align: justify}
+</style>
+```
+```{r init, include=FALSE}
+# Configure your session and load R packages
+rm(list=ls()) # Properly clear workspace
+
+# Install packages
+pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools")
+inst.pkg <- row.names(installed.packages())
+pkg2inst <- pmatch(pkg, inst.pkg)
+if (any(is.na(pkg2inst[1:4]))) install.packages(pkg[which(is.na(pkg2inst[1:4]))],
+                                                repos = "http://cran.at.r-project.org")
+# Load packages
+library(knitr)
+opts_chunk$set(echo = FALSE, comment = "", cache = TRUE, fig.align = "center")
+library(ggplot2) # graph package
 library(tidyverse)
+library(draw) # To draw some shapes
+library(devtools)
+devtools::install_github("hadley/emo")
 ```
 
-Introduce objectifs of the chapter
+```{r, include = FALSE}
+# Generation of the needed emoji
+emo::ji("alien")
+emo::ji("goat")
+emo::ji("vomit")
+emo::ji("silly")
+emo::ji("sunglasses")
+```
 
-I. Dynamics systems (definition)
+# Introduction & objectives
 
-II. Ordinary differential equation
+Welcome to you, young Master 1 student!
 
-<!-- -->
+It's now been ?x?(= number of chapters before ours) chapters since you plunged into this adventure full of numbers, formulas and other mathematical oddities (🤢). At the moment, you're probably feeling a strong need for a change of orientation. I mean, we're doing ecology, not maths! And raising goats in Auvergne sounds pretty cool...kinds of...🐐
 
-1)  Definition
-2)  1-equation system
+But don't give up! The first (really interesting 😜) chapter is right there in front of you!
 
-<!-- -->
+Are you interested in population and epidemiological trends and dynamics? Would you like to be able to predict the future (and the past, no kidding) from the present?
 
-III. 2-equations system
+Then this is the chapter for you! Work it as much as you can! You'll end up shining in modelling (and maybe even in society).
+
+At the end, you'll be able to ...
+
+# I. Dynamic systems
+
+Let's start simply!
+
+First of all, let's define the framework of the study (= cadre de l'étude).
+
+We consider a dynamic system. Or in other words, a physical system whose state changes as a function of time. By "state", we mean "physical variables" such as a number of individuals, a position, a temperature, etc., which are functions of time (= which evolve over time).
+
+For example, suppose you wanted to study the evolution over time of a population of aliens newly landed on Earth (yes, it's possible, I saw that in men in black 😎).
+
+[Your system is]{.underline}: the Alien population.\
+[The state of this population is]{.underline}: the number of individuals, noted '👽'.\
+This state is a function of time (the number of individuals changes over time). We therefore note it: '👽(t)'.
+
+So your aim is to study this system. But as you can imagine, you can't start from scratch! To study the evolution of such a system, you need to know:\
+- **its initial state**: values of its characteristic variables at the initial time of the study (t=0).\
+- **the processes underway in the biological system**: the way of gaining (i.e. birth, migration) and/or losing (i.e. mortality) individuals for example. Don't hesitate to draw the system on a piece of paper, to avoid getting lost (*Figure 1*)!\
+- **the parameters associated with these processes**
+
+Let's make it more concrete:
+
+```{r, include=TRUE, fig.height=2.8, fig.width=5}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 5, units = "inches")
+
+# Draw the different shapes of the system on the page
+#     * The rectangle
+drawBox(x = 2.5, y = 2.5, width = 1, height = 1)
+
+#     * The mortality arrow 
+drawLine(x = c(3, 4),
+         y = c(2.5, 2.5))
+drawLine(x = c(3.9, 4),
+         y = c(2.4, 2.5))
+drawLine(x = c(3.9, 4),
+         y = c(2.6, 2.5))
+
+#     * The migration arrow 
+drawLine(x = c(1, 2),
+         y = c(2.5, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.4, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.6, 2.5))
+
+#     * The birth 'arrow' (its a circle) 
+drawCircle(x = 2.5,
+           y = 3.4,
+           radius = 0.4)
+drawLine(x = c(2.5, 2.6),
+         y = c(3, 3.1))
+drawLine(x = c(2.5, 2.6),
+         y = c(3, 2.9))
+
+# Add the text
+#     * For the population
+drawText(x = 2.5, y = 2.5, text = "Population")
+drawText(x = 2.5, y = 2.3, text = "👽(t)")
+
+#     * For the mortality
+drawText(x = 4.45, y = 2.5, text = "Mortality")
+drawText(x = 3.5, y = 2.35, text = "d 👽(t)")
+
+#     * For the migration
+drawText(x = 0.5, y = 2.5, text = "Migration")
+drawText(x = 1.4, y = 2.35, text = "m")
+
+#     * For the birth
+drawText(x = 2.5, y = 3.4, text = "Birth")
+drawText(x = 3.2, y = 3.4, text = "b 👽(t)")
+
+# Add the caption
+drawText(x = 2.5, y = 1.5, text = "Figure 1: Diagram of the 'Alien population' dynamic system")
+
+```
+
+To keep things simple, we'll take a discrete-time simulation, with a time step of 1.
+
+Let define t like that: $$t \in \mathbb{N}^+$$ This means that t belongs to the set of natural integer numbers. t can therefore take the values 0, 1, 2, 3, 4, 5, etc..
+
+Here, the variable of interest (= the state of the system) is the number of individuals in the population. This number changes over time, and is therefore denoted 👽(t). The biological processes responsible for this change over time are :\
+- **mortality**: noted d (for death). d👽 corresponds to the proportion of individuals that will die in 1 unit of time\
+- **birth**: denoted b. This means that 👽 individuals will produce b👽 new individuals in 1 unit of time\
+- **migration**: denoted m. This means that 👽 increases by m individuals in 1 unit of time.
+
+```{r, include=TRUE, fig.height=5, fig.width=6}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 4, units = "inches")
+
+# Draw the orthogonal plan on the page
+#     * The x axe 
+drawLine(x = c(0.5, 4),
+         y = c(0.5, 0.5),
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.4, 0.5),
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.6, 0.5),
+         lineWidth = 2.5)
+#     * The y axe 
+drawLine(x = c(0.5, 0.5),
+         y = c(0.5, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.4, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.6, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+
+# Draw the 'discret' time lines
+#     * The vertical one 
+drawLine(x = c(2, 2),
+         y = c(0.5, 2),
+         lineWidth = 1)
+#     * The horizontal one
+drawLine(x = c(0.5, 2),
+         y = c(2, 2),
+         lineWidth = 1)
+
+# Draw the 'continuous' time lines
+#     * The vertical one 
+drawLine(x = c(3, 3),
+         y = c(0.5, 3),
+         lineWidth = 1)
+#     * The horizontal one 
+drawLine(x = c(0.5, 3),
+         y = c(3, 3),
+         lineWidth = 1)
+
+# Draw of the lines
+drawCurve(x = c(1.5, 4.1),
+          y = c(1, 3.5),
+          angle = 80, # Angle of the curve
+          open = T, # No link btw starting and ending points
+          inflect = F, # No infection points
+          curvature = -0.5,
+          points = 5,
+          square= F,
+          squareShape = 0,
+          lineWidth = 1.5)
+drawLine(x = c(1, 3.7),
+         y = c(1, 3.7),
+         lineWidth = 1.5,
+         lineColor = "blue")
+drawLine(x = c(1, 3.7),
+         y = c(1, 3.7),
+         lineWidth = 1.5,
+         lineColor = "blue")
+
+# Add the text
+drawText(x = 0.1, y = 4, text = "Number")
+drawText(x = 0, y = 3.8, text = "of individuals")
+drawText(x = 4.2, y = 0.4, text = "Time")
+drawText(x = 3, y = 0.4, text = "(t+Δt)")
+drawText(x = 2, y = 0.4, text = "(t)")
+drawText(x = 0.1, y = 3, text = "👽(t+Δt)")
+drawText(x = 0.1, y = 2, text = "👽(t)")
+
+
+
+# Add the caption
+drawText(x = 2.80, y = 0, text = "Figure 2: Schematic graphic representation of the growth")
+drawText(x = 3.15, y = -0.2, text = "of a population over time")
+
+```
+
+$$
+\begin{align} & NPZ = \begin{cases} \frac{dP}{dt}= \frac{V_m N}{k_s + N}P -mP -ZR_m(1-e^{-\Lambda P}) & \text{Pythoplankton}
+\\ \frac{dZ}{dt}= \gamma ZR_m(1-e^{- \Lambda P}-dZ) & \text{Zooplakton}
+\\ \frac{dN}{dt}=-\frac{V_m N}{k_s + N}P+mP+dZ+(1- \gamma ) ZR_m (1-e^{- \Lambda P}) & \text{Nutrients} \end{cases}
+\\ 
+\\ & \text{Definitions of variable:}
+\\ & - V_m: \ \text{Maximum phytoplankton growth rate}
+\\ & - N: \ \text{Nutrient concentration}
+\\ & - k_s: \ \text{Half saturation constant for nutrients}
+\\ & - P: \ \text{Phytoplankton stock size}
+\\ & -m: \ \text{Phytoplankton mortality rate}
+\\ & -Z: \ \text{Zooplankton stock size}
+\\ & - \gamma : \ \text{Zooplankton growth efficiency}
+\\ & - R_m : \ \text{Maximum zooplankton ration}
+\\ & - \Lambda : \ \text{Ivlev constant}
+\\ & -d: \ \text{mortality rate} \end{align} $$
+
+
+$$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
+
+# II. Order 1 ODE & definition of ODE
+
+# III. Order 2 ODE
 
 # **IV. 3-equation system**
 
@@ -301,21 +528,6 @@ phytoplankton and zooplankton that are linked to each other.
 
 Here are the equations of the system, but it will not be worked up here.
 
-$$
-\begin{align} & NPZ = \begin{cases} \frac{dP}{dt}= \frac{V_m N}{k_s + N}P -mP -ZR_m(1-e^{-\Lambda P}) & \text{Pythoplankton}
-\\ \frac{dZ}{dt}= \gamma ZR_m(1-e^{- \Lambda P}-dZ) & \text{Zooplakton}
-\\ \frac{dN}{dt}=-\frac{V_m N}{k_s + N}P+mP+dZ+(1- \gamma ) ZR_m (1-e^{- \Lambda P}) & \text{Nutrients} \end{cases}
-\\ 
-\\ & \text{Definitions of variable:}
-\\ & - V_m: \ \text{Maximum phytoplankton growth rate}
-\\ & - N: \ \text{Nutrient concentration}
-\\ & - k_s: \ \text{Half saturation constant for nutrients}
-\\ & - P: \ \text{Phytoplankton stock size}
-\\ & -m: \ \text{Phytoplankton mortality rate}
-\\ & -Z: \ \text{Zooplankton stock size}
-\\ & - \gamma : \ \text{Zooplankton growth efficiency}
-\\ & - R_m : \ \text{Maximum zooplankton ration}
-\\ & - \Lambda : \ \text{Ivlev constant}
-\\ & -d: \ \text{mortality rate} \end{align} $$
 
-Conclusion & motivation words
+
+# Conclusion & motivation words!
