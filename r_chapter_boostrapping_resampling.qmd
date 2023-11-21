@@ -81,5 +81,5 @@ Dans le cas d'une corrélation, la statistique de test pourrait être basée sur
 ```
 
 
-## Bootstrap et tests de permutation
+
 
