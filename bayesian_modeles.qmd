@@ -15,6 +15,7 @@ output:
 
 library(tidyverse)
 library(deSolve)
+
 ```
 
 # Introduction
@@ -22,41 +23,136 @@ library(deSolve)
 -   History of Bayesian concept.
 -   Philosophy behind it. Frequentist approach : "What is the probability to observe my data given my model."
 
-Bayesian approach : "What is the probability of my model given my data."
+Bayesian approach : "What is the probability of m y model given my data."
 
 # Genrale theory behind bayesian approach.
 
 Explanation in the special case of conjugation between prior and posterior
 
 ## Main objectif, for context
-Our goal is to understand in the most simple way how Bayesian statistic estimate parameters of natural process. To do so, we will use simple dynamical models to produce data. With those models every parameters is known, we will try to find those parameters with the observations.
 
-## An exemple : estimate one varaibles
-The most simple model : Malthusian growth model
+Fist, let's take an simple example to explain the idea behind Bayesian method. We want to the mean abundance per $10 m^2$ of one fungus between different forests. To do that, we set up in each forest some sampling area in which we count the number of mushroom. At the end we keep the mean count number between sample for each forest. We can simulate the data by taking random observations in a poisson distribution. Let's suppose that we studies 100 forest. **We will sample the number of mushroom in each 100 forest in the following distribution :**
 
 ```{r}
-expo.mod <- function(t,N,r){list(N*r)}
-N0 = c(y=1)
-r = 0.1
-dyna = ode(y = N0, times = 1:100, func = expo.mod, parms = r )
-dyna = data.frame(dyna)
+n_forest = 100 # number of forest
+lbda = 5 # mean of poisson distribution
+pois_distr = dpois(1:20, lambda = lbda)
+plot(pois_distr,type ="h",
+     lwd = 2, col = 'blue',
+     xlab = "Mushroom Count", 
+     ylab = expression(paste( 'Density or ','[y]')) )
+
+```
+
+The samples or what we call more often the observation will give us information on this distribution. In our case those will be used to estimate the mean of mushroom in each forest. This mean is ($\lambda = 5$ already known because we simulate the data, but in reality this is an unkwonw).
+
+```{r}
+set.seed(1000)
+
+Y = rpois(n = n_forest, lambda = lbda)
+
+hist(Y)
+```
+
+**So let's pretend that we don't know the $\lambda$.**
+We want to find the the value of the mean number of mushroom in each forest which we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. In fact the bayesian method will give us the multiple estimated mean $\hat{\lambda}$ and the probability of those value to be true knowing the observation $Y$. We can simply write this as follow $[\hat{\lambda} \mid Y]$ which is the probability of hat lambda knowing our observations. This probability can be found with the equation :
+
+$$
+[\hat{\lambda} \mid Y] = [Y \mid \hat{\lambda}  ]\cdot[\hat{\lambda}]
+$$
+The two component of the right hand side of the equation are $[Y \mid \hat{\lambda}  ]$ the likelihood of our data and $[\hat{\lambda}]$ the prior distribution. First lets start with the likelihood. Our data follow a poisson distribution so our likelihood will follow a poisson distribution : 
+
+$$
+L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y}}{y!}
+$$
+This a first good step, but there is a small issue here, this formula isn't completely usable in this form. This is because it can only take one observation. In english words it is the same to ask what is the probability of one observation (one count of mushroom) given a model with a mean $\hat{\lambda}$. It it clear that this form isn't powerful enough because it use only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean $\hat{\lambda}$. To do so we can write the likelihood of all our data $Y$ as the product of the likelihood of each observation $y_i$. (We are allowed to do this only because  observations are independent)
+$$
+\begin{align}
+[Y \mid \hat{\lambda}] &= \prod^{n}_{i=1}[y_i \mid p] \\
+&=\prod^{n}_{i=1}\frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}}{y_i!} \\
+&\propto \prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}\\
+\end{align}
+$$
+As you can see we don't keep the $\frac{1}{y_i!}$, it is because we are only interested in the terms that are impacted by $\hat{\lambda}$. The last form which is proportional to the likelihood function have a more convenient form for the next step.
+Lets rearrange the function in a more convenient form
+$$
+\begin{align}
+\prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}&= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{\sum^{n}_{i=1} y_i}\\
+&= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{n \cdot \bar{y}}\\
+\end{align}
+$$
+The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i} $.
+
+Now we want to find the prior distribution of lambda hat. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify !
+lets try it :
+
+$$
+\begin{align}
+[\hat{\lambda}]&\sim Gamma(\lambda,\alpha_p,\beta_p) \\
+&= \lambda^{\alpha_p -1}\frac{\beta_p^\alpha\cdot e^{-\beta_p \lambda}}{\Gamma(\alpha_p)} \propto \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}
+
+\end{align}
+$$
+
+Same are the likelihood, we are only interested by the term that vary with $\hat{\lambda}$ so we remove $\frac{\beta^\alpha}{\Gamma(\alpha)}$ and keep the proportional formula of the prior.
+We can now find real formula of our posterior distribution.
+
+$$ 
+\begin{align}
+
+[\lambda \mid y] &= [y \mid \lambda]\cdot[\lambda] \\
+[\lambda \mid y] &\propto e^{-n \cdot\lambda} \cdot\lambda^{n \cdot \bar{y}} \cdot \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}\\
+[\lambda \mid y] &\propto e^{-\beta_p \lambda-n\lambda} \cdot\lambda^{n\bar{y}+\alpha_p -1} \\
+[\lambda \mid y] &\propto e^{-\lambda (\beta_p +n)} \cdot\lambda^{n\bar{y}+\alpha_p -1}\\
+\end{align} 
+$$
+Do the last formula remind you something familiar ? That's right it is a Gamma distribution ! This is the magic of the conjugate distributions. We can now write :  
+
+$$
+\begin{align}
+[\lambda \mid y] &\propto e^{-\lambda \beta} \cdot\lambda^{\alpha -1}\\
+[\lambda \mid y] &\sim Gamma(\alpha_p +n\bar{y}, \beta_p +n)
+\end{align}
+
+$$
+We can do some simulations to show the results:
+
+```{r}
+alph = 1
+bet = 1
+lambda <- seq(0,10, by = 0.1)
  
-ggplot(dyna)+
-  geom_line(aes(time,y))
+# prior distribution
+l_prior = dgamma(lambda, shape = alph, rate = bet)
+
+# posterior distribution
+l_post = dgamma(lambda, shape = alph + sum(obs), rate = bet + n_forest)
+
+plot(lambda,l_prior, ylim = c(0,max(c(l_post,l_prior))),
+     type = 'l', lwd = 2, col = 'orange',
+     xlab = expression(lambda), 
+     ylab = expression(paste('[', lambda, '|y]')) )
+
+lines(lambda,l_post, type = 'l', lwd = 2, col = 'purple')
+abline(v = 5, lty = 2, lwd = 2)
+
 ```
-
-```{r}
-
-```
-
-
 
 ## Some math
 
 
 
+We are only interested were by the random terms, this is why we only keep the formal that is proportional to the full poisson likelihood. To compete the Bayesian formula we need to find a prior distribution for $\lambda$, which is base on the knowledge we already have on the mushroom specie. We also want a probability law that have a distribution formula similar to $L(\lambda;y)$ in order to have a prior conjugated law. The conjugated law of poisson likelihood is the gamma distribution, it look like this :
 
 
+
+where we only interested in the terms were $y$ has an impact. As we can see the proportional form of the gamma distribution has the same form that the poisson likelihood. We can now write the posterior law like this :
+
+
+
+We have now a function to calculate the proportional distribution of the posterior probability of $\lambda$. And this function is a gamma law with \$ a = \alpha + y)\$ and $b=\beta +1$.
+
+## An exemple : estimate one varaibles
 
 # When aproximation by computation is needed
 
