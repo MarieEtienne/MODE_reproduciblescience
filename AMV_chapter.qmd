@@ -445,7 +445,9 @@ The third plot, with *scaling = 2* preserves correlations between species.
 To conclude on the CCA analyse, we have seen that the topographic variables explain 13% of the plant variances. The first axis represents 34% of the constrained inertia and is explained by the Latitude (corr = 0.99). We can see that two species have a high coordinate in this axis (Adbi & Abgr.t). \
 The second axis (18% of the constrained inertia) is explained by the Elevation (corr = -0.45), the Slope (corr = 0.65) and the Longitude (corr = 0.33). 
 
+
 Finally, the sites n°43,44,45,46 are sites with a small latitude value and with a high abundance of species as Abgr.t.
+
 
 
 # PART 4: RLQ
