@@ -285,12 +285,6 @@ In this output, the adjusted R² is equal to 0.8893, which means that about 89% 
 ## MODEL VALIDATION: CHECK TO ASSUMPTIONS
 See part 4). 
 
-2) ANCOVA #Lucia
-<<<<<<< HEAD
-3) Régression #Fanny
-
-blabla bla 
-=======
 
 
 
@@ -1409,13 +1403,6 @@ between explanatory variables by considering a random effect (see chapter on mix
 Remarques :
 -ici on ne parle pas de partie Exploration des données
 -on ne parle pas de Gamma mais il faudra la mentionner (signaler qu'elle existe mais pas dans le programme M2)
-<<<<<<< HEAD
-=======
-
-Consignes suppl :
--didactique -> phrases courtes, claires, une phrase = une idée
--25 pages max
-
 
 
 
