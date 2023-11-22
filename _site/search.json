@@ -5,5 +5,47 @@
     "title": "A simple chapter using R",
     "section": "",
     "text": "This chapter is a simple example using R\nYou can import R package using the code\n\nlibrary(tidyverse)\n\nWarning: le package 'tidyverse' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'ggplot2' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'tibble' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'tidyr' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'readr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'purrr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'dplyr' a été compilé avec la version R 4.2.3\n\n\nWarning: le package 'stringr' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'forcats' a été compilé avec la version R 4.2.2\n\n\nWarning: le package 'lubridate' a été compilé avec la version R 4.2.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.3     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nand then describe the purpose of your chapter as well as executing R command.\nFor example a basic summary of a dataset is given by\n\ndf &lt;- read.table(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\", sep = \",\" , header = TRUE)\n\nand produce a graph\n\ndf %&gt;% ggplot() +\n    aes(x=species, y = body_mass_g) +\n    geom_boxplot()  \n\nWarning: Removed 2 rows containing non-finite values (`stat_boxplot()`).\n\n\n\n\n\nA citation Bauer and Landesvatter (2023)\n\n\n\n\nReferences\n\nBauer, Paul Cornelius, and Camille Landesvatter. 2023. “Writing a Reproducible Paper with RStudio and Quarto.”"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html",
+    "href": "r_chapter_boostrapping_resampling.html",
+    "title": "General introduction",
+    "section": "",
+    "text": "title: “Chapter : Bootstrapping and Resampling”\nbibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sample",
+    "href": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sample",
+    "title": "General introduction",
+    "section": "Confidence interval on a sample",
+    "text": "Confidence interval on a sample\nPeut-on estimer la taille de la population française féminine à l’aide de ce jeu de données\n\nsize_W &lt;- size[size$Sexe==\"F\",\"Etudiant_e\"]\nhist(size_W)\n\n\n\nshapiro.test(size_W)\n\n\n    Shapiro-Wilk normality test\n\ndata:  size_W\nW = 0.977, p-value = 0.1235\n\nqqnorm(size_W)\nqqline(size_W)\n\n\n\n#Or iris dataset ? \n\nL’échantillon est normalement distribué, on peut donc calculer l’intervalle de confiance de la moyenne de la manière suivante:\n\nlow &lt;- mean(size_W)-1.96*sd(size_W)/sqrt(length(size_W))\nhigh &lt;- mean(size_W)+1.96*sd(size_W)/sqrt(length(size_W))\nprint(c(low,high))\n\n[1] 165.1479 167.8521\n\n\nrq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après) Not in intervall, pop grow, + ech non représentatif de la pop française"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#confidence-interval-on-multiple-sub-samples-means",
+    "href": "r_chapter_boostrapping_resampling.html#confidence-interval-on-multiple-sub-samples-means",
+    "title": "General introduction",
+    "section": "Confidence interval on multiple sub-samples means",
+    "text": "Confidence interval on multiple sub-samples means\nSi on veut désormais estimer \\(\\mu\\), la taille moyenne des étudiants sur les trois promotions du jeu de données.\n\n(mu &lt;- mean(size$Etudiant_e))\n\n[1] 170.5755\n\n\nmu correspond à la taille moyenne qu’on veut estimer mais dont on ne connait pas la véritable valeur.\nImaginons que nous ayons seulement accès à des moyennes de sous échantillons et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.\n\ngroup &lt;- c()\nsampled_data &lt;- c()\nfor (i in 1:20) { #au total, 100 individus auront été échantillonnés\n  set.seed(i)\n  sample_temp &lt;- sample(setdiff(1:139,sampled_data),5)\n  sampled_data &lt;- c(sampled_data,sample_temp)\n  group &lt;- c(group,mean(size[sample_temp,\"Etudiant_e\"]))\n  \n}\n\nLe vecteur group contient les moyennes de plusieurs sous échantillons de 5 étudiants\n\nhist(group)\n\n\n\nqqnorm(group)\nqqline(group)\n\n\n\nshapiro.test(group)\n\n\n    Shapiro-Wilk normality test\n\ndata:  group\nW = 0.98028, p-value = 0.9377\n\n\nLa distribution des moyennes suit une loi normale -&gt; TCL ????\nOn peut définir l’intervalle de confiance suivant:\n\nmean(group)\n\n[1] 171.12\n\nlow &lt;- mean(group)-1.96*sd(group)\nhigh &lt;- mean(group)+1.96*sd(group)\nprint(c(low,high))\n\n[1] 162.6425 179.5975\n\n\nLa moyenne est dans intervalle, mais intervalle grand !!!!!!!!!!!! JCP si l’exemple est ok. !!!!!!!!!!!!!!"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#a---principe",
+    "href": "r_chapter_boostrapping_resampling.html#a---principe",
+    "title": "General introduction",
+    "section": "a - Principe",
+    "text": "a - Principe"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#b---exemple-dimplémentation",
+    "href": "r_chapter_boostrapping_resampling.html#b---exemple-dimplémentation",
+    "title": "General introduction",
+    "section": "b - exemple d’implémentation",
+    "text": "b - exemple d’implémentation"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#c---avantages-et-inconvénients-de-la-méthode",
+    "href": "r_chapter_boostrapping_resampling.html#c---avantages-et-inconvénients-de-la-méthode",
+    "title": "General introduction",
+    "section": "c - Avantages et inconvénients de la méthode",
+    "text": "c - Avantages et inconvénients de la méthode"
   }
 ]
