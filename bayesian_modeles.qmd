@@ -54,18 +54,20 @@ Y = rpois(n = n_forest, lambda = lbda)
 hist(Y)
 ```
 
-**So let's pretend that we don't know the $\lambda$.**
-We want to find the the value of the mean number of mushroom in each forest which we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. In fact the bayesian method will give us the multiple estimated mean $\hat{\lambda}$ and the probability of those value to be true knowing the observation $Y$. We can simply write this as follow $[\hat{\lambda} \mid Y]$ which is the probability of hat lambda knowing our observations. This probability can be found with the equation :
+**So let's pretend that we don't know the** $\lambda$. We want to find the the value of the mean number of mushroom in each forest which we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. In fact the bayesian method will give us the multiple estimated mean $\hat{\lambda}$ and the probability of those value to be true knowing the observation $Y$. We can simply write this as follow $[\hat{\lambda} \mid Y]$ which is the probability of hat lambda knowing our observations. This probability can be found with the equation :
 
 $$
 [\hat{\lambda} \mid Y] = [Y \mid \hat{\lambda}  ]\cdot[\hat{\lambda}]
 $$
-The two component of the right hand side of the equation are $[Y \mid \hat{\lambda}  ]$ the likelihood of our data and $[\hat{\lambda}]$ the prior distribution. First lets start with the likelihood. Our data follow a poisson distribution so our likelihood will follow a poisson distribution : 
+
+The two component of the right hand side of the equation are $[Y \mid \hat{\lambda} ]$ the likelihood of our data and $[\hat{\lambda}]$ the prior distribution. First lets start with the likelihood. Our data follow a poisson distribution so our likelihood will follow a poisson distribution :
 
 $$
 L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y}}{y!}
 $$
-This a first good step, but there is a small issue here, this formula isn't completely usable in this form. This is because it can only take one observation. In english words it is the same to ask what is the probability of one observation (one count of mushroom) given a model with a mean $\hat{\lambda}$. It it clear that this form isn't powerful enough because it use only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean $\hat{\lambda}$. To do so we can write the likelihood of all our data $Y$ as the product of the likelihood of each observation $y_i$. (We are allowed to do this only because  observations are independent)
+
+This a first good step, but there is a small issue here, this formula isn't completely usable in this form. This is because it can only take one observation. In english words it is the same to ask what is the probability of one observation (one count of mushroom) given a model with a mean $\hat{\lambda}$. It it clear that this form isn't powerful enough because it use only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean $\hat{\lambda}$. To do so we can write the likelihood of all our data $Y$ as the product of the likelihood of each observation $y_i$. (We are allowed to do this only because observations are independent)
+
 $$
 \begin{align}
 [Y \mid \hat{\lambda}] &= \prod^{n}_{i=1}[y_i \mid p] \\
@@ -73,48 +75,47 @@ $$
 &\propto \prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}\\
 \end{align}
 $$
-As you can see we don't keep the $\frac{1}{y_i!}$, it is because we are only interested in the terms that are impacted by $\hat{\lambda}$. The last form which is proportional to the likelihood function have a more convenient form for the next step.
-Lets rearrange the function in a more convenient form
+
+As you can see we don't keep the $\frac{1}{y_i!}$, it is because we are only interested in the terms that are impacted by $\hat{\lambda}$. The last form which is proportional to the likelihood function have a more convenient form for the next step. Lets rearrange the function in a more convenient form
+
 $$
 \begin{align}
 \prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}&= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{\sum^{n}_{i=1} y_i}\\
 &= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{n \cdot \bar{y}}\\
 \end{align}
 $$
-The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i} $.
 
-Now we want to find the prior distribution of lambda hat. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify !
-lets try it :
+The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}$.
+
+Now we want to find the prior distribution of lambda hat. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify ! lets try it :
 
 $$
 \begin{align}
 [\hat{\lambda}]&\sim Gamma(\lambda,\alpha_p,\beta_p) \\
 &= \lambda^{\alpha_p -1}\frac{\beta_p^\alpha\cdot e^{-\beta_p \lambda}}{\Gamma(\alpha_p)} \propto \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}
-
 \end{align}
 $$
 
-Same are the likelihood, we are only interested by the term that vary with $\hat{\lambda}$ so we remove $\frac{\beta^\alpha}{\Gamma(\alpha)}$ and keep the proportional formula of the prior.
-We can now find real formula of our posterior distribution.
+Same are the likelihood, we are only interested by the term that vary with $\hat{\lambda}$ so we remove $\frac{\beta^\alpha}{\Gamma(\alpha)}$ and keep the proportional formula of the prior. We can now find real formula of our posterior distribution.
 
 $$ 
 \begin{align}
-
 [\lambda \mid y] &= [y \mid \lambda]\cdot[\lambda] \\
 [\lambda \mid y] &\propto e^{-n \cdot\lambda} \cdot\lambda^{n \cdot \bar{y}} \cdot \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}\\
 [\lambda \mid y] &\propto e^{-\beta_p \lambda-n\lambda} \cdot\lambda^{n\bar{y}+\alpha_p -1} \\
 [\lambda \mid y] &\propto e^{-\lambda (\beta_p +n)} \cdot\lambda^{n\bar{y}+\alpha_p -1}\\
 \end{align} 
 $$
-Do the last formula remind you something familiar ? That's right it is a Gamma distribution ! This is the magic of the conjugate distributions. We can now write :  
+
+Do the last formula remind you something familiar ? That's right it is a Gamma distribution ! This is the magic of the conjugate distributions. We can now write :
 
 $$
 \begin{align}
 [\lambda \mid y] &\propto e^{-\lambda \beta} \cdot\lambda^{\alpha -1}\\
 [\lambda \mid y] &\sim Gamma(\alpha_p +n\bar{y}, \beta_p +n)
 \end{align}
-
 $$
+
 We can do some simulations to show the results:
 
 ```{r}
@@ -140,17 +141,11 @@ abline(v = 5, lty = 2, lwd = 2)
 
 ## Some math
 
-
-
 We are only interested were by the random terms, this is why we only keep the formal that is proportional to the full poisson likelihood. To compete the Bayesian formula we need to find a prior distribution for $\lambda$, which is base on the knowledge we already have on the mushroom specie. We also want a probability law that have a distribution formula similar to $L(\lambda;y)$ in order to have a prior conjugated law. The conjugated law of poisson likelihood is the gamma distribution, it look like this :
-
-
 
 where we only interested in the terms were $y$ has an impact. As we can see the proportional form of the gamma distribution has the same form that the poisson likelihood. We can now write the posterior law like this :
 
-
-
-We have now a function to calculate the proportional distribution of the posterior probability of $\lambda$. And this function is a gamma law with \$ a = \alpha + y)\$ and $b=\beta +1$.
+We have now a function to calculate the proportional distribution of the posterior probability of $\lambda$. And this function is a gamma law with $a = \alpha + y)$ and $b=\beta +1$.
 
 ## An exemple : estimate one varaibles
 
