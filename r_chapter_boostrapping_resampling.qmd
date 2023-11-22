@@ -11,6 +11,94 @@ output:
    toc_float: true
 ---
 
+# General introduction 
+
+A dataframe:
+
+```{r}
+data <- iris
+head(iris)
+```
+
+## Confidence interval on a sample 
+
+Peut-on estimer la taille moyenne 
+
+```{r}
+
+hist(data$Sepal.Width)
+shapiro.test(data$Sepal.Width)
+qqnorm(data$Sepal.Width)
+qqline(data$Sepal.Width)
+#Or iris dataset ? 
+```
+L'échantillon est normalement distribué, on peut donc calculer l'intervalle de confiance de la moyenne de la manière suivante:
+
+```{r}
+low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
+high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
+print(c(low,high))
+```
+rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après)
+Not in intervall, pop grow, + ech non représentatif de la pop française
+
+
+## Confidence interval on multiple sub-samples means 
+
+Si on veut désormais estimer $\mu$, la taille moyenne des étudiants sur les trois promotions du jeu de données.
+
+```{r}
+(mu <- mean(data$Sepal.Width))
+```
+mu correspond à la taille moyenne qu'on veut estimer mais dont on ne connait pas la véritable valeur.
+
+
+# The Jackknife resampling method
+
+Imaginons mantenant que nous ayons seulement accès à un échantillon et qu'on veuille estimer la taille moyenne des étudiants de ces trois promotions.
+```{r}
+set.seed(121)
+data_sample <- data[sample(1:150,30),]
+mean(data_sample$Sepal.Width)
+hist(data_sample$Sepal.Width)
+shapiro.test(data_sample$Sepal.Width)
+qqnorm(data_sample$Sepal.Width)
+qqline(data_sample$Sepal.Width)
+```
+
+On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant. 
+
+... 
+
+
+## a - Principe
+
+## b - exemple d'implémentation
+
+test pas du tout fini
+
+```{r}
+group <- c()
+sampled_data <- c()
+for (i in 1:20) { #au total, 100 individus auront été échantillonnés
+  set.seed(i)
+  sample_temp <- sample(setdiff(1:139,sampled_data),5)
+  sampled_data <- c(sampled_data,sample_temp)
+  group <- c(group,mean(data[sample_temp,"Sepal.Width"]))
+  
+}
+```
+
+```{r}
+hist(group)
+qqnorm(group)
+qqline(group)
+shapiro.test(group)
+```
+
+## c - Avantages et inconvénients de la méthode
+
+
 # Tests de permutation
 ## Introduction
 Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l'effet d'une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations. Autrement dit, même si les données de notre échantillon ne suive pas une loi classique (e.g. gaussienne), l'inférence statistique reste possible. Ce sont des tests dont le fonctionnement est intuitifs, facile à mettre en place et leur robustenne les rend particulièrement pratique dans un grand nombre de situations.
@@ -68,18 +156,8 @@ Les étapes typiques pour mettre en œuvre un test de permutations comprennent :
 
 Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l'équation ci-dessus.
 
-```{r}
-
-```
-
-
 ### Test de Permutations pour la Corrélation
 
 Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
-```{r}
-
-```
-
-
 
 

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.433">
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,6 +21,42 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+
+ /* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+
 </style>
 
 
@@ -55,9 +92,13 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 
 <link rel="stylesheet" href="styles.css">
@@ -141,25 +182,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#tests-de-permutation" id="toc-tests-de-permutation" class="nav-link active" data-scroll-target="#tests-de-permutation">Tests de permutation</a>
+  <li><a href="#general-introduction" id="toc-general-introduction" class="nav-link active" data-scroll-target="#general-introduction">General introduction</a>
   <ul class="collapse">
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#fondements-des-tests-de-permutations" id="toc-fondements-des-tests-de-permutations" class="nav-link" data-scroll-target="#fondements-des-tests-de-permutations">Fondements des Tests de Permutations</a>
+  <li><a href="#confidence-interval-on-a-sample" id="toc-confidence-interval-on-a-sample" class="nav-link" data-scroll-target="#confidence-interval-on-a-sample">Confidence interval on a sample</a></li>
+  <li><a href="#confidence-interval-on-multiple-sub-samples-means" id="toc-confidence-interval-on-multiple-sub-samples-means" class="nav-link" data-scroll-target="#confidence-interval-on-multiple-sub-samples-means">Confidence interval on multiple sub-samples means</a></li>
+  </ul></li>
+  <li><a href="#the-jackknife-resampling-method" id="toc-the-jackknife-resampling-method" class="nav-link" data-scroll-target="#the-jackknife-resampling-method">The Jackknife resampling method</a>
   <ul class="collapse">
-  <li><a href="#principe-fondamental" id="toc-principe-fondamental" class="nav-link" data-scroll-target="#principe-fondamental">Principe Fondamental</a></li>
-  <li><a href="#statistique-de-test" id="toc-statistique-de-test" class="nav-link" data-scroll-target="#statistique-de-test">Statistique de Test</a></li>
+  <li><a href="#a---principe" id="toc-a---principe" class="nav-link" data-scroll-target="#a---principe">a - Principe</a></li>
+  <li><a href="#b---exemple-dimplémentation" id="toc-b---exemple-dimplémentation" class="nav-link" data-scroll-target="#b---exemple-dimplémentation">b - exemple d’implémentation</a></li>
+  <li><a href="#c---avantages-et-inconvénients-de-la-méthode" id="toc-c---avantages-et-inconvénients-de-la-méthode" class="nav-link" data-scroll-target="#c---avantages-et-inconvénients-de-la-méthode">c - Avantages et inconvénients de la méthode</a></li>
   </ul></li>
-  <li><a href="#mise-en-œuvre-des-tests-de-permutations" id="toc-mise-en-œuvre-des-tests-de-permutations" class="nav-link" data-scroll-target="#mise-en-œuvre-des-tests-de-permutations">Mise en œuvre des Tests de Permutations</a>
-  <ul class="collapse">
-  <li><a href="#étapes-du-test" id="toc-étapes-du-test" class="nav-link" data-scroll-target="#étapes-du-test">Étapes du Test</a></li>
-  </ul></li>
-  <li><a href="#exemples-pratiques" id="toc-exemples-pratiques" class="nav-link" data-scroll-target="#exemples-pratiques">Exemples Pratiques</a>
-  <ul class="collapse">
-  <li><a href="#test-de-permutations-pour-la-différence-de-moyennes" id="toc-test-de-permutations-pour-la-différence-de-moyennes" class="nav-link" data-scroll-target="#test-de-permutations-pour-la-différence-de-moyennes">Test de Permutations pour la Différence de Moyennes</a></li>
-  <li><a href="#test-de-permutations-pour-la-corrélation" id="toc-test-de-permutations-pour-la-corrélation" class="nav-link" data-scroll-target="#test-de-permutations-pour-la-corrélation">Test de Permutations pour la Corrélation</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+
   </ul>
 </nav>
     </div>
@@ -171,58 +205,147 @@ ul.task-list li input[type="checkbox"] {
 <hr>
 <p>title: “Chapter : Bootstrapping and Resampling”</p>
 <p>bibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —</p>
-<section id="tests-de-permutation" class="level1">
-<h1>Tests de permutation</h1>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l’effet d’une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations.</p>
+<section id="general-introduction" class="level1">
+<h1>General introduction</h1>
+<p>For a course in genetic, a teacher gathered the size of the students for three years. We take the size vector as an example in this chapter. The values are sizes in centimeters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/youy0/Desktop/master/S9/OCR"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"taille.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Annee Sexe Etudiant_e Mere Pere Soeur Frere Demi_soeur Demi_frere
+1  2019    F        175  169  186    NA   180         NA         NA
+2  2019    F        163  165  173    NA   178         NA         NA
+3  2019    F        153  160  166    NA    NA         NA         NA
+4  2019    F        162  164  174    NA   178         NA         NA
+5  2019    F        157  158  169    NA   161         NA         NA
+6  2019    F        167  163  180    NA   181         NA         NA</code></pre>
+</div>
+</div>
+<section id="confidence-interval-on-a-sample" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-interval-on-a-sample">Confidence interval on a sample</h2>
+<p>Peut-on estimer la taille de la population française féminine à l’aide de ce jeu de données</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>size_W <span class="ot">&lt;-</span> size[size<span class="sc">$</span>Sexe<span class="sc">==</span><span class="st">"F"</span>,<span class="st">"Etudiant_e"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  size_W
+W = 0.977, p-value = 0.1235</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(size_W)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or iris dataset ? </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>L’échantillon est normalement distribué, on peut donc calculer l’intervalle de confiance de la moyenne de la manière suivante:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>low <span class="ot">&lt;-</span> <span class="fu">mean</span>(size_W)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(size_W)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(size_W))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>high <span class="ot">&lt;-</span> <span class="fu">mean</span>(size_W)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(size_W)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(size_W))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(low,high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 165.1479 167.8521</code></pre>
+</div>
+</div>
+<p>rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&amp;country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après) Not in intervall, pop grow, + ech non représentatif de la pop française</p>
 </section>
-<section id="fondements-des-tests-de-permutations" class="level2">
-<h2 class="anchored" data-anchor-id="fondements-des-tests-de-permutations">Fondements des Tests de Permutations</h2>
-<section id="principe-fondamental" class="level3">
-<h3 class="anchored" data-anchor-id="principe-fondamental">Principe Fondamental</h3>
-<p>Le principe fondamental des tests de permutations repose sur la distribution nulle de la statistique de test sous l’hypothèse nulle. En d’autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.</p>
+<section id="confidence-interval-on-multiple-sub-samples-means" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-interval-on-multiple-sub-samples-means">Confidence interval on multiple sub-samples means</h2>
+<p>Si on veut désormais estimer <span class="math inline">\(\mu\)</span>, la taille moyenne des étudiants sur les trois promotions du jeu de données.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(size<span class="sc">$</span>Etudiant_e))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 170.5755</code></pre>
+</div>
+</div>
+<p>mu correspond à la taille moyenne qu’on veut estimer mais dont on ne connait pas la véritable valeur.</p>
+<p>Imaginons que nous ayons seulement accès à des moyennes de sous échantillons et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sampled_data <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) { <span class="co">#au total, 100 individus auront été échantillonnés</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  sample_temp <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">setdiff</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">139</span>,sampled_data),<span class="dv">5</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  sampled_data <span class="ot">&lt;-</span> <span class="fu">c</span>(sampled_data,sample_temp)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  group <span class="ot">&lt;-</span> <span class="fu">c</span>(group,<span class="fu">mean</span>(size[sample_temp,<span class="st">"Etudiant_e"</span>]))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Le vecteur group contient les moyennes de plusieurs sous échantillons de 5 étudiants</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(group)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  group
+W = 0.98028, p-value = 0.9377</code></pre>
+</div>
+</div>
+<p>La distribution des moyennes suit une loi normale -&gt; TCL ????</p>
+<p>On peut définir l’intervalle de confiance suivant:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 171.12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>low <span class="ot">&lt;-</span> <span class="fu">mean</span>(group)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(group)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>high <span class="ot">&lt;-</span> <span class="fu">mean</span>(group)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(group)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(low,high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 162.6425 179.5975</code></pre>
+</div>
+</div>
+<p>La moyenne est dans intervalle, mais intervalle grand !!!!!!!!!!!! JCP si l’exemple est ok. !!!!!!!!!!!!!!</p>
 </section>
-<section id="statistique-de-test" class="level3">
-<h3 class="anchored" data-anchor-id="statistique-de-test">Statistique de Test</h3>
-<p>La statistique de test pour les tests de permutations dépend du type d’étude. Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :</p>
-<p>[ T = , ]</p>
-<p>où ({X}_1) et ({X}<em>2) sont les moyennes des deux groupes, (s</em>{}) est l’écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons.</p>
 </section>
+<section id="the-jackknife-resampling-method" class="level1">
+<h1>The Jackknife resampling method</h1>
+<p>Imaginons mantenant que nous ayons seulement accès à un échantillon et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">121</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>size_sample <span class="ot">&lt;-</span> size[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">139</span>,<span class="dv">30</span>),]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(size_sample<span class="sc">$</span>Etudiant_e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 167.9333</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(size_sample<span class="sc">$</span>Etudiant_e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C’est là que je Jackknife devient intéressant.</p>
+<p>…</p>
+<section id="a---principe" class="level2">
+<h2 class="anchored" data-anchor-id="a---principe">a - Principe</h2>
 </section>
-<section id="mise-en-œuvre-des-tests-de-permutations" class="level2">
-<h2 class="anchored" data-anchor-id="mise-en-œuvre-des-tests-de-permutations">Mise en œuvre des Tests de Permutations</h2>
-<section id="étapes-du-test" class="level3">
-<h3 class="anchored" data-anchor-id="étapes-du-test">Étapes du Test</h3>
-<p>Les étapes typiques pour mettre en œuvre un test de permutations comprennent :</p>
-<ol type="1">
-<li>Formuler les hypothèses nulle et alternative.</li>
-<li>Calculer la statistique de test à partir des données observées.</li>
-<li>Générer toutes les permutations possibles des données.</li>
-<li>Calculer la statistique de test pour chaque permutation.</li>
-<li>Comparer la statistique observée à la distribution nulle des statistiques de test.</li>
-<li>Conclure sur l’acceptation ou le rejet de l’hypothèse nulle.</li>
-</ol>
+<section id="b---exemple-dimplémentation" class="level2">
+<h2 class="anchored" data-anchor-id="b---exemple-dimplémentation">b - exemple d’implémentation</h2>
 </section>
-</section>
-<section id="exemples-pratiques" class="level2">
-<h2 class="anchored" data-anchor-id="exemples-pratiques">Exemples Pratiques</h2>
-<section id="test-de-permutations-pour-la-différence-de-moyennes" class="level3">
-<h3 class="anchored" data-anchor-id="test-de-permutations-pour-la-différence-de-moyennes">Test de Permutations pour la Différence de Moyennes</h3>
-<p>Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l’équation ci-dessus.</p>
-</section>
-<section id="test-de-permutations-pour-la-corrélation" class="level3">
-<h3 class="anchored" data-anchor-id="test-de-permutations-pour-la-corrélation">Test de Permutations pour la Corrélation</h3>
-<p>Dans le cas d’une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman.</p>
-</section>
-</section>
-</section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
-<p>Les tests de permutations offrent une approche flexible et non paramétrique pour tester des hypothèses statistiques. En comprenant les fondements et en suivant les étapes appropriées, les chercheurs peuvent tirer parti de cette méthode dans divers contextes.</p>
+<section id="c---avantages-et-inconvénients-de-la-méthode" class="level2">
+<h2 class="anchored" data-anchor-id="c---avantages-et-inconvénients-de-la-méthode">c - Avantages et inconvénients de la méthode</h2>
 
 
 </section>
+</section>
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

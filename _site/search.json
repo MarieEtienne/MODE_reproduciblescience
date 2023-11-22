@@ -9,11 +9,14 @@
   {
     "objectID": "r_chapter_boostrapping_resampling.html",
     "href": "r_chapter_boostrapping_resampling.html",
+
     "title": "Tests de permutation",
+
     "section": "",
     "text": "title: “Chapter : Bootstrapping and Resampling”\nbibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —"
   },
   {
+
     "objectID": "r_chapter_boostrapping_resampling.html#introduction",
     "href": "r_chapter_boostrapping_resampling.html#introduction",
     "title": "Tests de permutation",
