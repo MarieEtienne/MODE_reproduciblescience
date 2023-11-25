@@ -1,17 +1,17 @@
----
+------------------------------------------------------------------------
 
 title: "Chapter : Bootstrapping and Resampling"
 
-bibliography: references.bib  # Fichier bibliographie
-execute: 
-  freeze: auto
-output: 
-  html_document:
-   toc: true
-   toc_float: true
----
+bibliography: references.bib \# Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true ---
 
-# General introduction 
+# Packages
+
+```{r, result = F, message = F}
+library(tidyverse)
+library(latex2exp)
+```
+
+# General introduction
 
 A dataframe:
 
@@ -20,9 +20,9 @@ data <- iris
 head(iris)
 ```
 
-## Confidence interval on a sample 
+## Confidence interval on a sample
 
-Peut-on estimer la taille moyenne 
+Peut-on estimer la taille moyenne
 
 ```{r}
 
@@ -32,6 +32,7 @@ qqnorm(data$Sepal.Width)
 qqline(data$Sepal.Width)
 #Or iris dataset ? 
 ```
+
 L'échantillon est normalement distribué, on peut donc calculer l'intervalle de confiance de la moyenne de la manière suivante:
 
 ```{r}
@@ -39,23 +40,23 @@ low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.W
 high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
 print(c(low,high))
 ```
-rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après)
-Not in intervall, pop grow, + ech non représentatif de la pop française
 
+rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=\~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après) Not in intervall, pop grow, + ech non représentatif de la pop française
 
-## Confidence interval on multiple sub-samples means 
+## Confidence interval on multiple sub-samples means
 
 Si on veut désormais estimer $\mu$, la taille moyenne des étudiants sur les trois promotions du jeu de données.
 
 ```{r}
 (mu <- mean(data$Sepal.Width))
 ```
-mu correspond à la taille moyenne qu'on veut estimer mais dont on ne connait pas la véritable valeur.
 
+mu correspond à la taille moyenne qu'on veut estimer mais dont on ne connait pas la véritable valeur.
 
 # The Jackknife resampling method
 
 Imaginons mantenant que nous ayons seulement accès à un échantillon et qu'on veuille estimer la taille moyenne des étudiants de ces trois promotions.
+
 ```{r}
 set.seed(121)
 data_sample <- data[sample(1:150,30),]
@@ -66,10 +67,7 @@ qqnorm(data_sample$Sepal.Width)
 qqline(data_sample$Sepal.Width)
 ```
 
-On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant. 
-
-... 
-
+On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant.
 
 ## a - Principe
 
@@ -98,66 +96,113 @@ shapiro.test(group)
 
 ## c - Avantages et inconvénients de la méthode
 
+# Importation dataset
 
-# Tests de permutation
-## Introduction
-Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l'effet d'une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations. Autrement dit, même si les données de notre échantillon ne suive pas une loi classique (e.g. gaussienne), l'inférence statistique reste possible. Ce sont des tests dont le fonctionnement est intuitifs, facile à mettre en place et leur robustenne les rend particulièrement pratique dans un grand nombre de situations.
+```{r}
+library(datasets)
+orange <- data(Orange)
+iris <- iris
+```
 
+# Permutation Tests
 
-## Fondements des Tests de Permutations
-### Principe Fondamental
+Permutation tests represent a powerful statistical method for comparing groups and assessing the influence of one variable on another. They aimed to produce statistical inferences and a p-value. In contrast to parametric tests, permutation tests do not rely on specific assumptions about the data distribution, making them more robust in certain situations. In other words, even if the data in our sample does not adhere to a classical distribution (e.g., Gaussian), statistical inference remains feasible. These tests operate intuitively, are easy to implement, and their robustness makes them particularly practical in numerous scenarios.
 
-A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$...), les tests de permutations sont basés sur une distribution d'une statistique de test sous l'hypothèse nulle. La distribution sous l'hypothèse nulle correspond à la distribution théorique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dépendante). Dans les tests statistiques classiques, cette distribution correspond à différentes lois connues, la plus connue étant la loi Gaussienne, mais ça peut-être la distribution de Student, la distribution $\chi 2$ etc. La particularité des tests de permutations est que l'on va générer cette distribution théorique de façon empirique directement à partir des données. Les tests de permutation sont des tests non-paramétriques (ils ne font pas d'approximation de distribution) et exacts (basés sur les données uniquement).
+## Foundations of Permutation Tests
 
-Selon les règles du théorème centrale limite, répéter un grand nombre de fois une observation d'une variable aléatoire (ici la statistique de test) ménera à une distribution Gaussienne dans laquelle on pourra placer la statistique de test observée (i.e. calculée sur notre échantillon) et ainsi définir la significativité de l'effet de nos variables explicatives. En d'autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.
+### Fundamental Principle
 
+Similar to other classical statistical tests (e.g., Student's t-test, $\chi^2$ test), permutation tests are grounded in the distribution of a test statistic under the null hypothesis. The distribution under the null hypothesis corresponds to the theoretical distribution of the test statistic, assuming that the tested effect has no impact (i.e., explanatory variables have no effect on the dependent variable). In classical statistical tests, this distribution aligns with various known laws, with the most recognized being the Gaussian distribution, although it could also be the Student's t-distribution, the $\chi^2$ distribution, etc. The distinctiveness of permutation tests lies in empirically generating this theoretical distribution directly from the data, putting them in the category of the **exact tests**. Permutation tests are non-parametric and make no distributional assumptions.
 
-### Statistique de Test
-La statistique d'un test est une mesure numérique utilisée pour évaluer si les différences observées entre les groupes dans une étude sont statistiquement significatives. Elle permet de quantifier l'écart entre les observations observées et celles qui pourraient être attribuées au hasard. Voici quelques exemples de statistiques de tests connues :
+According to the central limit theorem, repeating a large number of observations of a random variable (here, the test statistic) leads to a Gaussian distribution. This distribution allows us to position the observed test statistic (calculated on our sample) and determine the significance of the effect of our explanatory variables. In other words, we generate all possible permutations of observations, calculate the test statistic for each permutation, and then compare the observed statistic to this null distribution.
+
+### **Parametric tests** : test statistic, null distribution and p-value
+
+The test statistic is a numerical measure used to evaluate whether observed differences between groups in a study are statistically significant. It quantifies the gap between observed and randomly attributable observations. Here are some examples of well-known test statistics:
+
 $$
 \begin{align*}
-F [\text{ANOVA}] &: \quad F = \frac{MS_{\text{intergroupes}}}{MS_{\text{intragroupes}}} \quad \sim \mathcal{F(ddl_{\text{intergroupes}}, ddl_{\text{intragroupes}})} &&\\
+F [\text{ANOVA}] &: \quad F = \frac{MS_{\text{between}}}{MS_{\text{within}}} \quad \sim \mathcal{F}(df_{\text{between}}, df_{\text{within}}) \\
 \\
-t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \quad \sim t(ddl) &&\\
+t [\text{Student's t-test}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \quad \sim t(df) \\
 \\
-\chi^2 [\text{Test du } \chi^2] &: \quad \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} \quad \sim \chi^2(ddl) &&\\
+\chi^2 [\text{$\chi^2$ Test}] &: \quad \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} \quad \sim \chi^2(df) \\
 \end{align*}
+$$
+
+With $MS$ as the mean square error, $df$ as the degrees of freedom, $\bar{X}_i$ as the mean of group $i$, $s^2_i$ as the variance of group $i$, $n_i$ as the number of replicates in group $i$, $O_i$ as the observed $\chi^2$ distance, and $E_i$ as the expected $\chi^2$ distance.
+
+These statistics usually follow known distributional laws, allowing us to compare the observed statistic (calculated on the data sample) to the null distribution of that statistic and obtain a p-value by comparing the expected values of the statistic under the null hypothesis with the observed statistic obtained with our data. To illustrate, let's say we want to compare the sepal length between the species *virginica* and *versicolor* using a Student test. First, we conduct the T test assuming all pre-conditions are met :
+
+```{r}
+stat_t <- t.test(
+  x = iris$Sepal.Length[iris$Species == "virginica"],
+  y = iris$Sepal.Length[iris$Species == "versicolor"],
+  paired = F,
+  var.equal = T,
+  alternative = "two.sided"
+)
+
+stat_t
+```
+
+Here we observe a significance difference between the species *virginica* and *versicolor* with *virigina* having bigger sepal length than *versicolor*. Let's define how do we get the p-value associated with this comparison. The Student distribution under null hypothesis is defined according the degree of freedom, here equal to $df = 98$. Let's plot this $H0$ distribution density of our test :
+
+```{r, fig.height=4, fig.width=4}
+# Density distribution of the t statistic
+curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t")
+```
+
+This density distribution represents the probability associated for each value of the $t$ statistic for a degree of freedom of $98$. Now, we have to place in this distribution our $t_{observed}$ calculated from our data, here $t_{observed} = 5.6$. Knowing we have performed a two-sided test (no a priori of the direction of the effect, i.e. the sepal length could have been bigger either for one species or the other), we'll place visually the values of $t$ for which less than $2.5\%$ and more than $97.5\%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5\%$ or above $97.5\%$ threshold, the difference observed is considered statistically significant.
+
+```{r, fig.height=4, fig.width=4}
+# Density distribution of the t statistic
+curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t", lwd = 1.5)
+
+# Quantile function : values of t associated of a two sided test
+threshold <- qt(p = c(0.025, 0.975), df = 98)
+abline(v = c(threshold[1], threshold[2]), lwd = 1.5, lty = 2, col = "red")
+
+
+# Color the area of significance
+x <- seq(-6, 6, length.out = 10000)
+y <- dt(x_values, df = 98)
+polygon(c(x[x<=threshold[1]], threshold[1]), c(y[x<=threshold[1]], y[x == max(x)]), col = "red")
+polygon(c(x[x>=threshold[2]], threshold[2]), c(y[x>=threshold[2]], y[x == max(x)]), col = "red")
+
+
+# Placing the t_obs value
+abline(v = 5.6, lwd = 1.5, col = "blue")
+text(x = 4.5, y = 0.2, labels = TeX("$t_{obs}$"), col = "blue")
+```
+
+Hence $t_{obs}$ is in the significance area (in red) meaning the difference is significant.
+
+### Permutation test : test Statistic, null distribution and p-value
+
+The test statistic for permutation tests depends on the type of study and the relationship between the data. In permutation test, the statistic test $P_{obs}$ have to be defined. For a test of the difference in means between two groups, for example, the test statistic could be defined as follows:
 
 $$
-Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté, $\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$, $n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$ observée, $E_i$ la distance $\chi^2$ attendue. 
+P = \bar{X}_1 - \bar{X}_2
+$$
 
-Ces statistiques suivent des loi de distribution connues, on va donc comparer la statistique observée (calculé sur l'échantillon de données) à la distribution nulle de cette statistique et obtenir ainsi une p-valeur.
+where ($\bar{X}_1$) and ($\bar{X}_2$) are the means of the two groups compared. But where do we place this $P_{obs}$ value ? We have to construct the null distribution. To do so, we will permute randomly each value of both group in one group of each other and calculate the test statistic $P_{H0}$ for this new data set. In other word, each data could randomly be assigned either in group 1 or group 2, characterizing the absence of effect of belonging to one group or the other for the response variable as data has been shuffled randomly. We'll do this procedure a great amount of time and each time extract the $P_{H0}$ obtained. We'll then get a distribution of the test statistic under $H0$ with all the $P_{H0}$ obtained during the iterations. According to the central limit theorem stating the distribution of random variables repeated a large number of time will end up following a bell curve distribution, no matter what shape the original distribution of those variable have. Once we obtained this null distribution, we'll simply follow the same procedure as describe above for the parametric tests and compare our $P_{obs}$ to this null distribution and determine its probability. In permutation test, the p-value corresponds to the number of iteration of $P_{H0}$ above or below (depending of the direction of our hypothesis) the $P_{obs}$ value.
 
+## Implementation of Permutation Tests
 
-Ces staomme La statistique de test pour les tests de permutations dépend du type d'étude et de la relation entre les données (indépendance ou non-indépendance). Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :
+### Test Steps
 
-\[
-T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}} \sqrt{\frac{n_1 n_2}{n_1 + n_2}},
-\]
+Typical steps to implement a permutation test include:
 
-où \(\bar{X}_1\) et \(\bar{X}_2\) sont les moyennes des deux groupes, \(s_{\text{pooled}}\) est l'écart-type combiné des groupes, et \(n_1\) et \(n_2\) sont les tailles des échantillons.
+1.  Formulate null and alternative hypotheses
+2.  Determine and calculate the test statistic from the observed data
+3.  Generate a large ammount permutations of the data
+4.  Calculate the test statistic for each permutation
+5.  Compare the observed statistic to the null distribution of test statistics
+6.  Conclude on accepting or rejecting the null hypothesis
 
-## Mise en œuvre des Tests de Permutations
+### Practical examples
 
-### Étapes du Test
+##### Comparison of means
 
-Les étapes typiques pour mettre en œuvre un test de permutations comprennent :
-
-1. Formuler les hypothèses nulle et alternative.
-2. Calculer la statistique de test à partir des données observées.
-3. Générer toutes les permutations possibles des données.
-4. Calculer la statistique de test pour chaque permutation.
-5. Comparer la statistique observée à la distribution nulle des statistiques de test.
-6. Conclure sur l'acceptation ou le rejet de l'hypothèse nulle.
-
-
-## Exemples Pratiques
-### Test de Permutations pour la Différence de Moyennes
-
-Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l'équation ci-dessus.
-
-### Test de Permutations pour la Corrélation
-
-Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
-
-
+Consider an example where we want to test if the difference in means between two groups is statistically significant. We'll use the statistic for means describe above and use the same question asked for the Student test example : "Is the sepal length of the genra *virginica* and *versicolor* different ?"
