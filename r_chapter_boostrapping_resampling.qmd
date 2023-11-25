@@ -237,6 +237,76 @@ $$ Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} + \epsilon_i, \ \ \ \epsilon_i
 Avec $Y_i$ la $i^{ème}$ valeur de la variable $Y$ et $X_{ij}$ la
 $i^{ème}$ valeur de la $j^{ème}$ variable $X$.
 
-### Tests statistiques sur les coefficients.
+### Test statistique sur les coefficients.
 
+Il faut maintenant s'assurer que les paramètres $b$ et $\alpha$ sont
+différents de 0. Le test par permutation permet de définir l'hypothèse
+nulle (H0 : \$ \alpha = 0\$ et $b = 0$). L'idée est de permuter les
+valeurs de $Y_i$ et les $X_i$.
+
+```{r exemple permutation sepal.width & sepal.length}
+library(kableExtra) # Mettre en 1er chunk si nécessaire
+library(knitr)
+library(dplyr)
+library(tidyverse)
+
+data <- iris[1:10,]
+
+permu <- data.frame(echantillon.1 = rep(NA, nrow(data)),
+                    echantillon.2 = rep(NA, nrow(data)))
+
+samp_ind <- sample(1:nrow(data), nrow(data)/2)
+
+permu$echantillon.1[samp_ind] <- data$Sepal.Length[-samp_ind]
+permu$echantillon.1[-samp_ind] <- data$Sepal.Width[samp_ind]
+permu$echantillon.2[-samp_ind] <- data$Sepal.Length[samp_ind]
+permu$echantillon.2[samp_ind] <- data$Sepal.Width[-samp_ind]
+
+cbind(data[,1:2], permu) %>%
+  kable("html", booktabs =TRUE, align = rep("c", 4)) %>%
+  add_header_above(c("Sepal" = 2, "echantillon" = 2), bold = TRUE)%>%
+  kable_paper("hover", full_width = F)
+  
+```
+
+Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramètres estimés à partir des échantillons permutés forment H0.
+
+```{r}
+
+n_permu <- 1000
+
+hyp_nulle <- matrix(NA, nrow = n_permu, ncol = 2)
+colnames(hyp_nulle) <- c("alpha", "b")
+
+permu_1 <- matrix(NA, ncol = n_permu, nrow = nrow(data))
+permu_2 <- matrix(NA, ncol = n_permu, nrow = nrow(data))
+
+
+for (i in 1:n_permu){
+# Tirages aléatoire
+samp_ind <- sample(1:nrow(data), nrow(data)/2)
+
+# creation des échantillons
+permu_1[samp_ind,i] <- data$Sepal.Length[-samp_ind]
+permu_1[-samp_ind,i] <- data$Sepal.Width[samp_ind]
+permu_2[-samp_ind,i] <- data$Sepal.Length[samp_ind]
+permu_2[samp_ind,i] <- data$Sepal.Width[-samp_ind]
+
+#Estimation des coefficients
+hyp_nulle[i,1] <- lm(permu_1[,i]~permu_2[,i])$coefficients[[1]]
+hyp_nulle[i,2] <- lm(permu_1[,i]~permu_2[,i])$coefficients[[2]]
+}
+
+# Distribution de l'hypothèse nulle
+
+    # Pour alpha 
+par(mfrow = c(1,2))
+hist(hyp_nulle[,1], 
+     main = expression("Distribution empirique de "*alpha*" sous H0"),
+     xlab = expression(""*alpha*"")) 
+hist(hyp_nulle[,2], 
+     main = expression("Distribution empirique de b sous H0"),
+     xlab = "b")
+
+```
 
