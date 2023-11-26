@@ -143,4 +143,30 @@ abline(v = 5, lty = 2, lwd = 2)
 
 # When approximation by computation is needed
 
+En statistiques bayésiennes, comme dit précédemment l'objectif est d'actualiser nos croyances sur les paramètres d'un modèle en combinant une connaissance a priori avec l'information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. C'est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.
+
+### Small recap on Markov Chain 
+
 ## Approximation with MCMC
+
+Il existe de multiple algorithmes de type MCMC ( Metropolis-Hastings, échantillionneur de Gibbs, Hamiltonian Monte Carlo), chacun possèdes ses avantages et ses inconvénients et le choix de l'algorithme dépend de la situation d'application. Cependant ils partent tous de la même base théorique.
+
+L'idée essentielle de la MCMC est que nous pouvons en apprendre davantage sur les paramètres non observés en effectuant de nombreux tirages aléatoires dans leurs distributions marginales a posteriori. L'accumulation de ces nombreux échantillons donne la "forme" de la distribution postérieure. Ces nombreux échantillons nous permettent de calculer les quantités qui nous intéressent : moyennes, variances et quantiles.
+
+Il est maintenant légitime de se demander : Mais ça sert à quoi de tirer un échantillionnage dans une loi inconnu pour ensuite la reconstituer ? Et surtout comment on fait si on ne la connait pas ?
+
+Et bien la loi que l'on reconstitue n'est pas totalement la même que celle qu'on utilise pour obtenir ces tirages. En effet la loi a posteriori n'est pas totalement inconnue. Ses informations sont portées par le produit de vraissemblance et du prior :
+
+$$
+[{\theta} \mid Y] \propto [Y \mid {\theta}  ]\cdot[{\theta}]
+$$
+
+C'est cette loi a priori estimée qui sert de première référence et le tirage aléatoire va permettre de normaliser cette expression pour qu'elle soit égal à un fonction de probabilité dont l'intégral est égal à 1. Cette propriété est normalement donnée par la division du produit par $[Y]$.
+
+L'algorithme MCMC estime donc la loi a posteriori des paramètres non observé en évitant l'étape de calcul d'intégral qui peut s'avérer complexe pour obtenir $[Y]$.
+
+**Step 1 : Initialisation**
+
+### A small example without using JAGS
+
+On reprend l'exemple avec les champignons.
