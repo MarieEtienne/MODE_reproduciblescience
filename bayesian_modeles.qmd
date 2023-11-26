@@ -70,7 +70,7 @@ This a first good step, but there is a small issue here, this formula isn't comp
 
 $$
 \begin{align}
-[Y \mid \hat{\lambda}] &= \prod^{n}_{i=1}[y_i \mid p] \\
+[Y \mid \hat{\lambda}] &= \prod^{n}_{i=1}[y_i \mid \hat{\lambda}] \\
 &=\prod^{n}_{i=1}\frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}}{y_i!} \\
 &\propto \prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}\\
 \end{align}
@@ -152,8 +152,78 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 
 ```
 When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.
-## An example : estimate one variables
 
 # When approximation by computation is needed
 
 ## Approximation with MCMC
+
+```{r}
+# [y | lambda]
+
+likelihood = function(lambda,y){
+  if(lambda < 0){
+    return(0)
+  }else{
+    return( dpois(x = sum(y),lambda = lambda*length(y)))
+  }
+}
+
+# [lambda]
+prior.dist = function(lambda){
+  dunif(lambda,0,1000)
+}
+
+# g([lambda_c(i) | lambda(i-1)])
+dstep <- function(lambda1, lambda2, sd.explore = 0.1){
+  dnorm(lambda2, mean = lambda1, sd = sd.explore)
+}
+
+rstep <- function(lambda, sd.explore = 0.1){
+  rnorm(1, mean = lambda, sd = sd.explore)
+}
+
+MH.ratio <- function(lambda_c,lambda, y){
+  ratio = (likelihood(lambda_c, y) * prior.dist(lambda) * dstep(lambda, lambda_c))/
+    (likelihood(lambda, y) * prior.dist(lambda) * dstep(lambda_c, lambda))
+  
+  return(ratio)
+}
+```
+
+```{r}
+mcmc.function = function(lambda_init, n_iter = 10000, burning = 100, thin = 10){
+  
+  lambda_sample = rep(NA, n_iter)
+  lambda_save = rep(NA, n_iter)
+  lambda_sample[1] = lambda_init
+  i=2
+  for(i in 2:n_iter){
+    lambda = lambda_sample[(i-1)]
+    lambda_c = rstep(lambda)
+    
+    ratio = MH.ratio(lambda_c,lambda, Y)
+    
+
+    if(runif(1)<ratio){
+      lambda_sample[i] = lambda_c
+    }else{
+      lambda_sample[i] = lambda
+    }
+    
+  }
+  lambda_save = lambda_sample[seq(burning,n_iter, by= thin)]
+  return(data.frame(iteration = 1:length(lambda_save),
+                    step = lambda_save))
+}
+
+```
+
+```{r}
+mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 1000000)
+
+plot(step~iteration, mcmc_df, "l")
+```
+
+
+
+
