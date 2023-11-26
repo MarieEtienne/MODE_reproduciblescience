@@ -39,8 +39,9 @@ More generally, if we want to quantify the effect of a species over another spec
 
 To formalise interactions, we need modelling.
 
-**ODE 2 equations are typically used in ecology to model the dynamic of 2 populations in interaction.**
+**ODE 2 equations are typically used in ecology to model the dynamic of predator-prey populations.**
 
+But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)
 
 
 
@@ -57,11 +58,15 @@ Why it's useful --> to see that the interactions between populations can create 
 
 
 
-
-
-
-
-
-
-
 ## Lotka-Volterra
+
+Typically, here's what these equations can look like :
+
+$$ \frac{dx}{dt}=\alpha x - \beta x y $$
+$$ \frac{dx}{dt}=\delta xy - \gamma y $$
+It's important to really understand how equations are constructed and what they do before getting started.  
+Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
+
+
+
+
