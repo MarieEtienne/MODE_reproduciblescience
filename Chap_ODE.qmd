@@ -29,7 +29,7 @@ rm(list=ls())
 ##disclaimer: they are not intended to be ecologically relevant, but to serve as an example
 
 X_init<-10    #starting value for x
-Y_init<-1     #starting value for y
+Y_init<-4     #starting value for y
 
 tend<-50    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
@@ -45,6 +45,13 @@ h<-0.4
 
 X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
 Y<-c(Y_init)    #idem with Y
+
+
+```
+
+For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be weeks. But we could have chosen days or years, and then chose consistent coefficient values
+
+```{r}
 
 t<-c(0)   #this vector will be filled up with all the time steps
 
@@ -71,16 +78,21 @@ while (t[length(t)]<tend)
 
 }
 
+```
+
+
+```{r}
 ####PLOTTING#####
 
 par(mfrow=c(2,1))
-plot(x=t, y=X, xlab="Time", ylab="Prey") #to plot the evolution of prey over time
-plot(x=t, y=Y, xlab="Time", ylab="Predator")#to plot the evolution of predator over time
+plot(x=t, y=X, xlab="Time(weeks)", ylab="Prey(nb of individuals)") #to plot the evolution of prey over time
+plot(x=t, y=Y, xlab="Time(weeks)", ylab="Predator(nb of individuals)")#to plot the evolution of predator over time
 
 #to plot a phase space plot, i.e the level of predator as a function of the prey level
-plot (x=X, y=Y, xlab="Prey", ylab="Predator")
+plot (x=X, y=Y, xlab="Prey(nb of individuals)", ylab="Predator (nb of individuals)")
 
 ```
+
 
 *** passer les plot en ggplot2 pour faire plus jolis (les rejoindre + couleurs, etc.)
 
