@@ -10,26 +10,11 @@ output:
 ---
 
 
-Quick plan :
-  
-AMELIE  
+# ODE 2 equations
+
 Little explanation of what is an ODE 2 equations
 Some examples (a listing ?) of applications in ecology
 including Lotka-Volterra
-
-ANASTASIA
---> Focus on Lotka-Volterra : equations and resolution (model)
-
-AMELIE
-in R code + graphs
-
-?
-1 or 2 little exercices to understand
-
-
-
-# ODE 2 equations
-
 
 introduction ecology : populations interact, there's often competition...
 The outcome of the competition often depends on environmental conditions.
@@ -67,7 +52,8 @@ Asumptions :
 
 Typically, here's what these equations can look like :
 
-$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= c x y - d y &\text{Predator} \end{cases}$$
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= c x y - h y &\text{Predator} \end{cases}$$
+**** voir avec Laura pour mettre autre chose que "d" en coefficient pour pas confondre avec les dérivées + voir aussi comment on s'accorde pour les signes
 
 It's important to really understand how equations are constructed and what they do before getting started.  
 Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
@@ -90,4 +76,20 @@ b>0 and d>0 the coefficients of interaction between the two populations
 
 
 
+Then :
+solving the LV PP equations with R (numerical application and graphs)
 
+Opening : adding a carying capacity to make it more realistic -> reaching an equilibrium instead of going in circles
+
+*** finding equilibrium points by solving the equations for dx/dt=0 & dy/dt = 0 + interpreting the equilibriums in ecological terms
+
++ limitations of such modelling
+
+
+
+Exercices to understand :
+
+- changing the parameters and finding the ones that have the greater impacts on the system
+- what other factors could be added that would have ecological significance ?
+
+--> solutions written upside-down !
