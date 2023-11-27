@@ -60,6 +60,11 @@ Why it's useful --> to see that the interactions between populations can create 
 
 ## Lotka-Volterra
 
+Asumptions :
+- The prey and predator live in a limited space
+- The preys have unlimited resources
+
+
 Typically, here's what these equations can look like :
 
 $$ \frac{dx}{dt}=\alpha x - \beta x y $$
