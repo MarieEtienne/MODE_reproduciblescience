@@ -9,54 +9,62 @@ output:
    toc_float: true
 ---
 
-Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Volterra prey-predator model.
-To simulate this population dynamic, we will use  given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.
+*In amelie's branch, title:*
+## Lotka-Volterra
+
+Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Volterra prey-predator model.  
+To simulate this population dynamic, we will use given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.  
 
 What you will have to keep in mind:
-In this Euler method, we will think of dt as deltat
+In this Euler method, we will think of $$dt$$ as $$\Delta t$$
 
 Thus, we can make this approximation:
 $$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d_y}{d_t} = -cy + hxy \\ => dy = (-cy + hxy) * \Delta t $$
 
 ## R demonstration
 
+### Defining the terms
+
+Disclaimer: terms' values are not intended to be ecologically relevant, but to serve as an example.  
+
+To make it more telling, let's say that our prey population is a zebra population, whereas the predator population are a group of lions. Obviously, we would think that the zebra population starts at a higher population size than a simple group of lions. That's what we tell to our model:
 ```{r}
+rm(list=ls()) #to clear all the environment
 
-#to clear all the environment
-rm(list=ls())
+X_init<-20    #starting value for x
+Y_init<-8     #starting value for y
+```
 
-####DEFINING THE COEFFICIENTS AND VARIABLES####
-##disclaimer: they are not intended to be ecologically relevant, but to serve as an example
+The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 50 months.  
+  
+For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
 
-X_init<-10    #starting value for x
-Y_init<-4     #starting value for y
-
+```{r}
 tend<-50    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
-#coefficients of the model
-a<-1.1
-b<-0.4
-c<-0.1
-h<-0.4
+# Model coefficients
+a<-0.8 #prey
+b<-0.4 #prey
+c<-0.6 #predator
+h<-0.2 #predator
+```
 
-####DEFINING THE VECTORS####
-#We create some vectors to keep track of the variables, as we are moving through time
 
+### Defining the vectors
+
+We create some vectors to keep track of the variables, as we are moving through time. Then those vectors will prove useful when we will want to plot the dynamics:
+
+```{r}
 X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
 Y<-c(Y_init)    #idem with Y
 
-
+t<-c(0)   #this vector will be filled up with all the time steps
 ```
 
-For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be weeks. But we could have chosen days or years, and then chose consistent coefficient values
+### Simulation
 
 ```{r}
-
-t<-c(0)   #this vector will be filled up with all the time steps
-
-####SIMULATION####
-
 while (t[length(t)]<tend) 
 {
   current_X<-X[length(X)]   #we define current_X as the most recent value of X
@@ -77,24 +85,35 @@ while (t[length(t)]<tend)
   t<-append(t,next_t)
 
 }
-
 ```
 
+
+### Plotting
 
 ```{r}
-####PLOTTING#####
+library(ggplot2)
 
-par(mfrow=c(2,1))
-plot(x=t, y=X, xlab="Time(weeks)", ylab="Prey(nb of individuals)") #to plot the evolution of prey over time
-plot(x=t, y=Y, xlab="Time(weeks)", ylab="Predator(nb of individuals)")#to plot the evolution of predator over time
+LV <- data.frame(time = t, prey = X, predator = Y)
 
-#to plot a phase space plot, i.e the level of predator as a function of the prey level
-plot (x=X, y=Y, xlab="Prey(nb of individuals)", ylab="Predator (nb of individuals)")
+ggplot(LV, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+```
+*** jouer avec les valeurs pour avoir un truc cyclique adéquat
+Je vais mentir en attendant : you can see the cyclic nature of this dynamic as explained earlier: the prey thrives when the predator declines, the predator thrives when there's a lot of prey...  
 
+This dynamic can be seen in a phase space plot i.e. the level of predator as a function of the prey level :
+
+```{r}
+ggplot(LV, aes(x = prey, y = predator)) +
+  geom_point() +
+  labs(x = "Prey (nb of individuals)", y = "Predator (nb of individuals)") +
+  theme_classic()
 ```
 
-
-*** passer les plot en ggplot2 pour faire plus jolis (les rejoindre + couleurs, etc.)
 
 
 
