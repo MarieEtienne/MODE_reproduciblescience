@@ -67,10 +67,26 @@ Asumptions :
 
 Typically, here's what these equations can look like :
 
-$$ \frac{dx}{dt}=\alpha x - \beta x y $$
-$$ \frac{dx}{dt}=\delta xy - \gamma y $$
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= c x y - d y &\text{Predator} \end{cases}$$
+
 It's important to really understand how equations are constructed and what they do before getting started.  
 Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
+
+Here we have a system with two ordinary differential equations, each one depicting the evolution of a population (number of individuals) over time.  
+
+x(t) and y(t) follows a malthusian model:  
+The prey population follows an exponential growth in the absence of predators. This growth is represented in the equation with the term ax(t).  
+The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
+
+The prey grows at a linear rate (a) and gets eaten by the predator at the rate of (b). Indeed, the rate of predation on prey is assumed to be proportional to the frequency of encounters between predators and prey; it is equal to bx(t)y(t).  
+The predator gains a certain amount of vitality by eating the prey at a rate (c), while dying off at another rate (d).  
+
+With:  
+a>0, the natural birth rate of the preys  
+c>0, the natural death rate of the predators  
+b>0 and d>0 the coefficients of interaction between the two populations  
+
+
 
 
 
