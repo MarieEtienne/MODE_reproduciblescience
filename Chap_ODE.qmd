@@ -12,47 +12,41 @@ output:
 
 # ODE 2 equations
 
-Little explanation of what is an ODE 2 equations
-Some examples (a listing ?) of applications in ecology
-including Lotka-Volterra
+An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.  (exactitude à vérifier)
 
-introduction ecology : populations interact, there's often competition...
-The outcome of the competition often depends on environmental conditions.
+ODE 2 equations are widely used in different disciplines. We will only concentrate on the ecology field to not be overwhelmed by all the possibilities... and also because it's the most interesting one duh.  
 
-More generally, if we want to quantify the effect of a species over another species... The effect depends of its population size and the level of competitivity of this species.
+In ecology, they are mainly used to model dynamics of populations interacting.  
+Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that the effect depends of its population size and the level of competitivity of this species.  
 
-
-To formalise interactions, we need modelling.
-
-**ODE 2 equations are typically used in ecology to model the dynamic of predator-prey populations.**
+You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**
 
 But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)
 
 
 
+## Lotka-Volterra  
 
-The case of Lotka-Volterra :
-
-equations over time
-A pair of differential equations
-There *can* be a certain point in time where both equations are in equilibrium and the values that are depending on the time remain aproximatively constant.
-
-Why it's useful --> to see that the interactions between populations can create periodic dynamics over time.
-                --> to study how biodiversity interacts with parameters such as competition.
+A LV prey-predator model represents both equations over time. Although we will mostly focus on the cyclic patterns between those equations, keep in mind that there *can* be a certain point in time where both equations are in equilibrium and the values that are depending on the time remain approximately constant.  
+  
+**Why LV is useful:**
+- To see that the interactions between populations can create periodic dynamics over time;  
+- To study how biodiversity interacts with the parameters put into the model, such as the interaction coefficients between populations.  
 
 
-
-
-## Lotka-Volterra
-
-Asumptions :
+**Assumptions for LV:**  
 - The prey and predator live in a limited space
 - The preys have unlimited resources
+(à vérifier)  
+  
+
+**Biological intuition:**  
+In this model, the predator population thrives when prey are plentiful, but eventually exhaust their resources and the population declines. When the predator population has declined sufficiently, the prey can reproduce more, and the population increases again. This dynamic continues in a cycle of growth and decline.
 
 
 Typically, here's what these equations can look like :
 
-$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= c x y - h y &\text{Predator} \end{cases}$$
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
 **** voir avec Laura pour mettre autre chose que "d" en coefficient pour pas confondre avec les dérivées + voir aussi comment on s'accorde pour les signes
 
 It's important to really understand how equations are constructed and what they do before getting started.  
@@ -93,3 +87,4 @@ Exercices to understand :
 - what other factors could be added that would have ecological significance ?
 
 --> solutions written upside-down !
+
