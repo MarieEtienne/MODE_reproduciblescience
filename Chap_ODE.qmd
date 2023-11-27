@@ -9,7 +9,7 @@ output:
    toc_float: true
 ---
 
-Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Voltera prey-predator model.
+Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Volterra prey-predator model.
 To simulate this population dynamic, we will use  given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.
 
 What you will have to keep in mind:
@@ -34,7 +34,7 @@ Y_init<-1     #starting value for y
 tend<-50    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
-#coefFicients of the model
+#coefficients of the model
 a<-1.1
 b<-0.4
 c<-0.1
