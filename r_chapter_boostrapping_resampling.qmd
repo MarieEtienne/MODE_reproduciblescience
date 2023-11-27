@@ -250,17 +250,15 @@ library(knitr)
 library(dplyr)
 library(tidyverse)
 
-data <- iris[1:10,]
+data <- iris[1:10,] # sous échantillon de iris
 
-permu <- data.frame(echantillon.1 = rep(NA, nrow(data)),
-                    echantillon.2 = rep(NA, nrow(data)))
+permu <- data.frame(echantillon.y = rep(NA, nrow(data)),
+                    echantillon.x = rep(NA, nrow(data)))
 
-samp_ind <- sample(1:nrow(data), nrow(data)/2)
+samp_ind <- sample(1:nrow(data), nrow(data))
 
-permu$echantillon.1[samp_ind] <- data$Sepal.Length[-samp_ind]
-permu$echantillon.1[-samp_ind] <- data$Sepal.Width[samp_ind]
-permu$echantillon.2[-samp_ind] <- data$Sepal.Length[samp_ind]
-permu$echantillon.2[samp_ind] <- data$Sepal.Width[-samp_ind]
+permu$echantillon.y <- data$Sepal.Length[samp_ind]
+permu$echantillon.x <- data$Sepal.Width
 
 cbind(data[,1:2], permu) %>%
   kable("html", booktabs =TRUE, align = rep("c", 4)) %>%
@@ -273,33 +271,29 @@ Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramèt
 
 ```{r}
 
-n_permu <- 1000
+n_permu <- 5000 # choix du nombre de permutations
 
 hyp_nulle <- matrix(NA, nrow = n_permu, ncol = 2)
 colnames(hyp_nulle) <- c("alpha", "b")
 
-permu_1 <- matrix(NA, ncol = n_permu, nrow = nrow(data))
-permu_2 <- matrix(NA, ncol = n_permu, nrow = nrow(data))
+permu <- matrix(NA, ncol = n_permu, nrow = nrow(data))
 
 
 for (i in 1:n_permu){
 # Tirages aléatoire
-samp_ind <- sample(1:nrow(data), nrow(data)/2)
+samp_ind <- sample(1:nrow(data), nrow(data))
 
-# creation des échantillons
-permu_1[samp_ind,i] <- data$Sepal.Length[-samp_ind]
-permu_1[-samp_ind,i] <- data$Sepal.Width[samp_ind]
-permu_2[-samp_ind,i] <- data$Sepal.Length[samp_ind]
-permu_2[samp_ind,i] <- data$Sepal.Width[-samp_ind]
+# creation des échantillons, on permute les Y par rapport aux Xi
+permu[,i] <- data$Sepal.Length[samp_ind]
+
 
 #Estimation des coefficients
-hyp_nulle[i,1] <- lm(permu_1[,i]~permu_2[,i])$coefficients[[1]]
-hyp_nulle[i,2] <- lm(permu_1[,i]~permu_2[,i])$coefficients[[2]]
+hyp_nulle[i,1] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[1]]
+hyp_nulle[i,2] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[2]]
 }
 
 # Distribution de l'hypothèse nulle
 
-    # Pour alpha 
 par(mfrow = c(1,2))
 hist(hyp_nulle[,1], 
      main = expression("Distribution empirique de "*alpha*" sous H0"),
