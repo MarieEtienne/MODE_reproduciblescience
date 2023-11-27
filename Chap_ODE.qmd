@@ -9,3 +9,80 @@ output:
    toc_float: true
 ---
 
+Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Voltera prey-predator model.
+To simulate this population dynamic, we will use  given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.
+
+What you will have to keep in mind:
+In this Euler method, we will think of dt as deltat
+
+Thus, we can make this approximation:
+$$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d_y}{d_t} = -cy + hxy \\ => dy = (-cy + hxy) * \Delta t $$
+
+## R demonstration
+
+```{r}
+
+#to clear all the environment
+rm(list=ls())
+
+####DEFINING THE COEFFICIENTS AND VARIABLES####
+##disclaimer: they are not intended to be ecologically relevant, but to serve as an example
+
+X_init<-10    #starting value for x
+Y_init<-1     #starting value for y
+
+tend<-50    #how long the simulation is going to run for
+delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
+
+#coefFicients of the model
+a<-1.1
+b<-0.4
+c<-0.1
+h<-0.4
+
+####DEFINING THE VECTORS####
+#We create some vectors to keep track of the variables, as we are moving through time
+
+X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
+Y<-c(Y_init)    #idem with Y
+
+t<-c(0)   #this vector will be filled up with all the time steps
+
+####SIMULATION####
+
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a*current_X-current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+
+}
+
+####PLOTTING#####
+
+par(mfrow=c(2,1))
+plot(x=t, y=X, xlab="Time", ylab="Prey") #to plot the evolution of prey over time
+plot(x=t, y=Y, xlab="Time", ylab="Predator")#to plot the evolution of predator over time
+
+#to plot a phase space plot, i.e the level of predator as a function of the prey level
+plot (x=X, y=Y, xlab="Prey", ylab="Predator")
+
+```
+
+*** passer les plot en ggplot2 pour faire plus jolis (les rejoindre + couleurs, etc.)
+
+
+
