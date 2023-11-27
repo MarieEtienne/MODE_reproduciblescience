@@ -1,7 +1,0 @@
----
-title: "Partial derivative equations: modeling of spatial dynamics"
-author: Coline - Jules - Mathis - Romane 
-editor: visual
----
-
-## 

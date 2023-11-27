@@ -123,6 +123,7 @@ lambda_hat <- seq(0,10, by = 0.01)
 ```
 
 And now, in order to compare them, we compute the distribution of the prior and the posterior (which are both following a gamma distribution) with an increasing amount of sample:
+
 ```{r}
 alph = 1
 bet= 1
@@ -151,13 +152,14 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 }
 
 ```
+
 When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.
 
 # When approximation by computation is needed
 
 En statistiques bayésiennes, comme dit précédemment l'objectif est d'actualiser nos croyances sur les paramètres d'un modèle en combinant une connaissance a priori avec l'information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. C'est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.
 
-### Small recap on Markov Chain 
+### Small recap on Markov Chain
 
 ## Approximation with MCMC
 
@@ -182,6 +184,7 @@ L'algorithme MCMC estime donc la loi a posteriori des paramètres non observé e
 ### A small example without using JAGS
 
 On reprend l'exemple avec les champignons.
+
 ```{r}
 # [y | lambda]
 
@@ -248,4 +251,3 @@ mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 1000000)
 
 plot(step~iteration, mcmc_df, "l")
 ```
-
