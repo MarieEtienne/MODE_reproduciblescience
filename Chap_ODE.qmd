@@ -12,34 +12,36 @@ output:
 
 # ODE 2 equations
 
-An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.  (exactitude à vérifier)
-
+An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.  (exactitude à vérifier)  
+  
 ODE 2 equations are widely used in different disciplines. We will only concentrate on the ecology field to not be overwhelmed by all the possibilities... and also because it's the most interesting one duh.  
-
+  
 In ecology, they are mainly used to model dynamics of populations interacting.  
-Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that the effect depends of its population size and the level of competitivity of this species.  
-
-You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**
-
-But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)
-
-
+Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that the effect depends of its population size and the "level" of competitivity of this species.  
+  
+You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**  
+  
+But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)  
+  
+  
 
 ## Lotka-Volterra  
 
 A LV prey-predator model represents both equations over time. Although we will mostly focus on the cyclic patterns between those equations, keep in mind that there *can* be a certain point in time where both equations are in equilibrium and the values that are depending on the time remain approximately constant.  
   
+  
 **Why LV is useful:**
 - To see that the interactions between populations can create periodic dynamics over time;  
 - To study how biodiversity interacts with the parameters put into the model, such as the interaction coefficients between populations.  
-
-
-**Assumptions for LV:**  
-- The prey and predator live in a limited space
-- The preys have unlimited resources
-(à vérifier)  
   
-
+  
+**Assumptions for LV:**  
+- The prey and predator live in a limited space;  
+-	The encounters are random;  
+-	The prey is only limited by the predator;  
+-	A predator can consume an infinite number of preys  
+  
+  
 **Biological intuition:**  
 In this model, the predator population thrives when prey are plentiful, but eventually exhaust their resources and the population declines. When the predator population has declined sufficiently, the prey can reproduce more, and the population increases again. This dynamic continues in a cycle of growth and decline.
 
@@ -51,9 +53,7 @@ $$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_
 
 It's important to really understand how equations are constructed and what they do before getting started.  
 Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
-
-Here we have a system with two ordinary differential equations, each one depicting the evolution of a population (number of individuals) over time.  
-
+  
 x(t) and y(t) follows a malthusian model:  
 The prey population follows an exponential growth in the absence of predators. This growth is represented in the equation with the term ax(t).  
 The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
@@ -81,7 +81,7 @@ Opening : adding a carying capacity to make it more realistic -> reaching an equ
 
 
 
-Exercices to understand :
+### Exercices to understand :
 
 - changing the parameters and finding the ones that have the greater impacts on the system
 - what other factors could be added that would have ecological significance ?
