@@ -1,14 +1,21 @@
-------------------------------------------------------------------------
-
+---
 title: "Chapter : Bootstrapping and Resampling"
 
-bibliography: references.bib \# Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true ---
+bibliography: references.bib
+execute: 
+  freeze: auto
+output: 
+  html_document:
+   toc: true
+   toc_float: true
+---
 
 # Packages
 
 ```{r, result = F, message = F}
 library(tidyverse)
 library(latex2exp)
+library(datasets)
 ```
 
 # General introduction
@@ -96,25 +103,17 @@ shapiro.test(group)
 
 ## c - Avantages et inconvénients de la méthode
 
-# Importation dataset
-
-```{r}
-library(datasets)
-orange <- data(Orange)
-iris <- iris
-```
-
 # Permutation Tests
 
-Permutation tests represent a powerful statistical method for comparing groups and assessing the influence of one variable on another. They aimed to produce statistical inferences and a p-value. In contrast to parametric tests, permutation tests do not rely on specific assumptions about the data distribution, making them more robust in certain situations. In other words, even if the data in our sample does not adhere to a classical distribution (e.g., Gaussian), statistical inference remains feasible. These tests operate intuitively, are easy to implement, and their robustness makes them particularly practical in numerous scenarios.
+Permutation tests represent a powerful statistical method for comparing groups and assessing the influence of one variable on another. They aimed to produce statistical inferences and a p-value. In contrast to parametric tests, permutation tests do not rely on specific assumptions about the data distribution, making them more robust in certain situations especially when the number of replicates is low. Furthermore, even if the data in our sample does not adhere to a classical distribution (e.g., Gaussian), statistical inference remains feasible. These tests operate intuitively, are easy to implement, and their robustness makes them particularly practical in numerous scenarios.
 
 ## Foundations of Permutation Tests
 
 ### Fundamental Principle
 
-Similar to other classical statistical tests (e.g., Student's t-test, $\chi^2$ test), permutation tests are grounded in the distribution of a test statistic under the null hypothesis. The distribution under the null hypothesis corresponds to the theoretical distribution of the test statistic, assuming that the tested effect has no impact (i.e., explanatory variables have no effect on the dependent variable). In classical statistical tests, this distribution aligns with various known laws, with the most recognized being the Gaussian distribution, although it could also be the Student's t-distribution, the $\chi^2$ distribution, etc. The distinctiveness of permutation tests lies in empirically generating this theoretical distribution directly from the data, putting them in the category of the **exact tests**. Permutation tests are non-parametric and make no distributional assumptions.
+Similar to other classical statistical tests (e.g., Student's t-test, $\chi^2$ test), permutation tests are grounded in the distribution of a test statistic under the null hypothesis. The distribution under the null hypothesis corresponds to the theoretical distribution of the test statistic, assuming that the tested effect has no impact (i.e., explanatory variables have no effect on the response variable). In classical statistical tests, this distribution aligns with various known laws, with the most recognized being the Gaussian distribution, although it could also be the Student's t-distribution, the $\chi^2$ distribution, etc. The distinctiveness of permutation tests lies in empirically generating this theoretical distribution directly from the data, putting them in the category of the **exact tests** et **non-parametrics tests**.
 
-According to the central limit theorem, repeating a large number of observations of a random variable (here, the test statistic) leads to a Gaussian distribution. This distribution allows us to position the observed test statistic (calculated on our sample) and determine the significance of the effect of our explanatory variables. In other words, we generate all possible permutations of observations, calculate the test statistic for each permutation, and then compare the observed statistic to this null distribution.
+According to the central limit theorem, repeating a large number of observations of a random variable (here, the test statistic) leads to a Gaussian distribution. This distribution allows us to position the observed test statistic (calculated on our sample) and determine the significance of the effect of our explanatory variables. In other words, we generate a large number of permutations of the observations, calculate the test statistic for each permutation, and then compare the observed statistic to this null distribution.
 
 ### **Parametric tests** : test statistic, null distribution and p-value
 
@@ -132,10 +131,18 @@ $$
 
 With $MS$ as the mean square error, $df$ as the degrees of freedom, $\bar{X}_i$ as the mean of group $i$, $s^2_i$ as the variance of group $i$, $n_i$ as the number of replicates in group $i$, $O_i$ as the observed $\chi^2$ distance, and $E_i$ as the expected $\chi^2$ distance.
 
-These statistics usually follow known distributional laws, allowing us to compare the observed statistic (calculated on the data sample) to the null distribution of that statistic and obtain a p-value by comparing the expected values of the statistic under the null hypothesis with the observed statistic obtained with our data. To illustrate, let's say we want to compare the sepal length between the species *virginica* and *versicolor* using a Student test. First, we conduct the T test assuming all pre-conditions are met :
+These statistics usually follow known distributional laws, allowing us to compare the observed statistic (calculated on the data sample) to the null distribution of that statistic and obtain a p-value by comparing the expected values of the statistic under the null hypothesis with the observed statistic obtained with our data. To illustrate, let's say we want to compare the sepal length between the species *I. virginica* and *I. versicolor* using a Student test. First, we plot the data :
+
+```{r, echo = F, out.width="50%", fig.show='hold'}
+par(mfrow = c(1, 2))
+boxplot(iris$Sepal.Length[iris$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Sepal Length", xlab = "", main = "Virginica", ylim = c(4, 8))
+boxplot(iris$Sepal.Length[iris$Species == "versicolor"], col = rgb(1, 0, 0, alpha = .5), ylab = "Sepal Length", xlab = "", main = "Versicolor", ylim = c(4, 8))
+```
+
+*I. virginica* seems to have slightly bigger sepal length than *I. versicolor*. Assuming all conditions are met, we perform a Student test to determine the significance of the difference observed :
 
 ```{r}
-stat_t <- t.test(
+t.test(
   x = iris$Sepal.Length[iris$Species == "virginica"],
   y = iris$Sepal.Length[iris$Species == "versicolor"],
   paired = F,
@@ -143,17 +150,18 @@ stat_t <- t.test(
   alternative = "two.sided"
 )
 
-stat_t
 ```
 
-Here we observe a significance difference between the species *virginica* and *versicolor* with *virigina* having bigger sepal length than *versicolor*. Let's define how do we get the p-value associated with this comparison. The Student distribution under null hypothesis is defined according the degree of freedom, here equal to $df = 98$. Let's plot this $H0$ distribution density of our test :
+Here we observe a significance difference between the species *I. virginica* and *I. versicolor* with *I. virigina* having bigger sepal length than *I. versicolor*.
+
+Let's get more precise on how do we get the p-value associated with this comparison. The Student distribution under null hypothesis is defined according the degree of freedom, here equal to $df = 98$. Let's plot this $H0$ distribution density of our test :
 
 ```{r, fig.height=4, fig.width=4}
 # Density distribution of the t statistic
 curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t")
 ```
 
-This density distribution represents the probability associated for each value of the $t$ statistic for a degree of freedom of $98$. Now, we have to place in this distribution our $t_{observed}$ calculated from our data, here $t_{observed} = 5.6$. Knowing we have performed a two-sided test (no a priori of the direction of the effect, i.e. the sepal length could have been bigger either for one species or the other), we'll place visually the values of $t$ for which less than $2.5\%$ and more than $97.5\%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5\%$ or above $97.5\%$ threshold, the difference observed is considered statistically significant.
+This density distribution represents the probability associated for each value of the $t$ statistic for a degree of freedom of $98$. Now, we have to place in this distribution the $t_{obs}$ calculated from our data, here $t_{obs} = 5.6$. Knowing we have performed a two-sided test (i.e. no *a priori* of the direction of the effect, i.e. the sepal length could have been bigger either for one species or the other), we'll place visually the values of $t$ for which less than $2.5\%$ and more than $97.5\%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5\%$ or above $97.5\%$ threshold, the difference observed is considered statistically significant.
 
 ```{r, fig.height=4, fig.width=4}
 # Density distribution of the t statistic
@@ -165,8 +173,8 @@ abline(v = c(threshold[1], threshold[2]), lwd = 1.5, lty = 2, col = "red")
 
 
 # Color the area of significance
-x <- seq(-6, 6, length.out = 10000)
-y <- dt(x_values, df = 98)
+x <- seq(-6, 6, length.out = 100000)
+y <- dt(x, df = 98)
 polygon(c(x[x<=threshold[1]], threshold[1]), c(y[x<=threshold[1]], y[x == max(x)]), col = "red")
 polygon(c(x[x>=threshold[2]], threshold[2]), c(y[x>=threshold[2]], y[x == max(x)]), col = "red")
 
@@ -196,13 +204,124 @@ Typical steps to implement a permutation test include:
 
 1.  Formulate null and alternative hypotheses
 2.  Determine and calculate the test statistic from the observed data
-3.  Generate a large ammount permutations of the data
+3.  Generate a large amount of permutations of the data
 4.  Calculate the test statistic for each permutation
 5.  Compare the observed statistic to the null distribution of test statistics
 6.  Conclude on accepting or rejecting the null hypothesis
 
 ### Practical examples
 
-##### Comparison of means
+#### Comparison of means
 
-Consider an example where we want to test if the difference in means between two groups is statistically significant. We'll use the statistic for means describe above and use the same question asked for the Student test example : "Is the sepal length of the genra *virginica* and *versicolor* different ?"
+Consider an example where we want to test if the difference in means between two groups is statistically significant. We'll use the statistic for means described above and use the same question asked for the Student test example : "Is the sepal length of the genra *I. virginica* and *I. versicolor* different ?" but only with 20 random chosen observations.
+
+```{r}
+set.seed(123)
+
+# SELECT THE VARIABLES OF INTEREST
+filter_data <- iris %>% 
+  filter(Species == "virginica" | Species == "versicolor") %>% 
+  droplevels()
+
+# TAKE A SUBSET
+sub_data <- filter_data[sample(1:nrow(filter_data), size = 20),]
+```
+
+Let's plot the sub-dataset.
+
+```{r, echo = F, out.width="50%", fig.show='hold'}
+hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
+hist(sub_data$Sepal.Length[sub_data$Species == "versicolor"], col = rgb(1, 0, 0, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Versicolor")
+```
+
+Here we can clearly see that the data does not follow a Gaussian distribution like we could have expect with such a few dataset. Furtheremore, neither of the test for comparison of means show a significant differences between sepal length of the two species neither with a Student test or the Mann-Whitney non-parametrical test (note that we used a Student test here even if the normal condition is not met. This serves as illustration and comparison with previous test with the full dataset).
+
+```{r, warnings = F}
+# T TEST
+t.test(
+  x = sub_data$Sepal.Length[sub_data$Species == "virginica"],
+  y = sub_data$Sepal.Length[sub_data$Species == "versicolor"],
+  paired = F,
+  var.equal = T,
+  alternative = "two.sided"
+)
+
+# MANN-WHITNEY TEST
+wilcox.test(sub_data$Sepal.Length[sub_data$Species == "virginica"],
+  sub_data$Sepal.Length[sub_data$Species == "versicolor"],
+  paired = F)
+```
+
+This is where permutation test becomes interesting. They have a great power even when the number of replicates is low. Let's see how we proceed.
+
+Permuted data can be generated (among many other ways) by randomly assign levels of the variable 'species' to sepal length values using the `sample` function. Then, the difference of means will be computed to calculate `p_h0` the statistic for the permuted data (the difference of means of sepal length of the permuted data). We'll do this for $i$ `iterations` yielding $i$ $P_{H0}$ resulting in the `null_distribution`.
+
+```{r}
+# INITIAL PARAMETERS
+iteration <- 10000  # number of iteration
+null_distribution <- c()  # storage of the statistic for permuted data
+
+
+# ALGORITHM
+for (i in 1:iteration)
+{
+  # --- Randomly assign a specie level to each observation 
+  permuted_species <- with(sub_data, sample(Species, replace = F))
+
+  # --- Difference of means of both species under h0
+  p_h0 <- tapply(X = sub_data$Sepal.Length, INDEX = permuted_species, FUN = mean)["virginica"] - 
+  tapply(X = sub_data$Sepal.Length, INDEX = permuted_species, FUN = mean)["versicolor"]
+  
+  # --- Add to null distribution
+  null_distribution <- c(null_distribution, p_h0)
+}
+
+# CALCULATION OF THE OBSERVED STATISTIC
+p_obs <- with(iris, mean(Sepal.Length[Species == "virginica"]) - mean(Sepal.Length[Species == "versicolor"]))
+paste0("P_obs = ", p_obs)
+```
+
+> Note : here we use `replace = F` in the `sample` function to keep the same number of replicates n each levels of species.
+
+So here we have a $P_{obs}$ value of 0.652. We can now plot the null distribution we generated with the permuted data and place visually $P_{obs}$.
+
+```{r}
+# VISUALISATION
+hist(null_distribution,
+     xlim = c(min(null_distribution) - 0.15, 1),
+     breaks = 20,
+     main = "",
+     xlab = "Statistic value",
+     ylab = "Frequency",
+     col = rgb(.5, .5, .5, alpha = .2)
+     )
+
+abline(v = p_obs, lwd = 1.5, col = "blue", lty = 2)
+text(x = .55, y = 1000, labels = TeX("$P_{obs}$"), col = "blue")
+```
+
+As expected by the central limit theorem, the distribution of the statistic we use and repeated 10000 times follow a normal distribution. We can clearly see that our statistic calculated on the data $P_{obs}$ stands out of the null distribution. Considering we didn't suppose any direction of the difference, we can determine the p-value as the absolute value of the number of permuted observations $P_{H0}$ greater than the absolute value of $P_{obs}$ divided by the number of iteration :
+
+$$
+\text{p-value} = \frac{\text{Nombre de } P_{H0} > P_{obs}}{\text{Nombre d'itération}}
+$$
+
+```{r}
+sum(abs(null_distribution) > abs(p_obs)) / iteration
+```
+
+Here, the p-value of the test is 0.0041. We conclude the difference between both means is significant.
+
+#### Comparison of correlation
+
+```{r}
+orange <- Orange
+
+ggplot(data = orange, mapping = aes(x = age, y = circumference, col = Tree)) +
+  geom_point() +
+  geom_line() +
+  theme_classic()
+
+```
+
+## Conclusion on permutation tests
