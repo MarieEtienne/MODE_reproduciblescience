@@ -350,9 +350,9 @@ In other words, between N(n+1) and N(n), the population increases/decreases by r
 
 We therefore have: $$N(n+1)-N(n) = r*N(n)$$
 
-Cela donne donc le modele suivant: $$N(n+1) = r*N(n)+N(n)$$
+This gives the following model: $$N(n+1) = r*N(n)+N(n)$$
 
-This gives the following model: $$N(n) = (1+r)^n * N(0)$$
+Which gives us the following solution: $$N(n) = (1+r)^n * N(0)$$
 
 We're going to graphically represent this model using r studio. Here are the lines of code to achieve this (*Figure 4*):
 
@@ -369,6 +369,9 @@ for(n in t){
 plot(t, pop, main = "",
      xlab = "t",
      ylab = "N(t)") # Display it all in a beautiful graph (feel free to make prettier ones using ggplot2 ^^) 
+
+title(main = "Exponential evolution of population as a function of discrete time", adj=0.75)
+title(sub = "Figure 4")
 ```
 
 ### II-A-2. Continuous model
@@ -433,7 +436,9 @@ N0 = 10
 r = 0.7
 temps <- seq(from = 0, to = 10, by = 0.01)
 sol <- ode(y = N0, times = temps, func = expo, parms = r)
-plot(sol,main = "Exponential model / Malthus model")
+plot(sol,main = "")
+title(main = "Exponential evolution of population as a function of continuous time", adj=0.65)
+title(sub = "Figure 5")
 ```
 
 ### II-A-2. Summary
@@ -445,20 +450,29 @@ Try changing the parameters to vary the trajectories! Try, for example, r = 0; r
 ## II-B. The logistic model or Verhulst model
 
 ```{r, include=TRUE, echo=TRUE}
-compet<-function(t,N,param){
-r1=param[1]
-r2=param[2]
-c1=param[3]
-c2=param[4]
-N1=N[1]
-N2=N[2]
-list(c(r1*N1-c1*N1*N2,r2*N2-c2*N1*N2))
-}
-parametres <- c(r1=0.4,r2=0.6,c1=0.02,c2=0.015)
-temps <- seq(from = 0, to = 5, by = 0.02)
-N0 = c(10,20)
-sol <- ode(y = N0, times = temps, func = compet, parms = parametres)
-plot(sol,"Competition model")
+
+logi <- function(t, N, param){
+  r = param[1]
+  K = param[2]
+  list(r*N*(1-N/K))}
+N0 = 100
+r = 0.7
+K = 100
+temps <- seq(from = 0, to = 10, by = 0.01)
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r, K))
+plot(sol, main = "",
+     xlim = c(0,10),
+     ylim = c(0,200),
+     col = 'green')
+title(main = "Logistic evolution of population as a function of continuous time", adj=0.65)
+title(sub = "Figure 6")
+N0 = 200
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r,K))
+lines(sol, col = 'red')
+N0 = 2
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r,K))
+lines(sol, col = 'blue')
+
 ```
 
 # Conclusion & motivation words!
