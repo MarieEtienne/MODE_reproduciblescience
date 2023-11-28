@@ -12,12 +12,12 @@ output:
 
 # ODE 2 equations
 
-An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.  (exactitude à vérifier)  
+An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.
   
-ODE 2 equations are widely used in different disciplines. We will only concentrate on the ecology field to not be overwhelmed by all the possibilities... and also because it's the most interesting one duh.  
+ODE systems with 2 equations are widely used in different disciplines. We will only concentrate on the ecology field to not be overwhelmed by all the possibilities... and also because it's the most interesting one duh.  
   
 In ecology, they are mainly used to model dynamics of populations interacting.  
-Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that the effect depends of its population size and the "level" of competitivity of this species.  
+Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that it all depends ob the population size and the "level" of competitivity of this species.  
   
 You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**  
   
@@ -54,37 +54,62 @@ $$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_
 It's important to really understand how equations are constructed and what they do before getting started.  
 Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
   
-x(t) and y(t) follows a malthusian model:  
-The prey population follows an exponential growth in the absence of predators. This growth is represented in the equation with the term ax(t).  
-The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
+The main distinction to make in those equation is with “x” and “y” : make sure to recognize that “x” is referring to the prey population (as written in the $$ \frac{d_x}{d_t} $$ at the beginning of the line) and that “y” is referring to the predator population (as written in the $$ \frac{d_y}{d_t} $$ ).
+*ax* : Growth term for the prey population: constant a * current prey population.
+*bxy* : Death term for the prey population. Depends on the size of the prey population and the size of the predator’s population. The death of the prey population depends partly on the predator eating them.
+It’s the same logic the other way around for the second equation because it includes the growth rate of the predator population with cy and the death rate of the predator population with hxy.
 
+In other terms:
 The prey grows at a linear rate (a) and gets eaten by the predator at the rate of (b). Indeed, the rate of predation on prey is assumed to be proportional to the frequency of encounters between predators and prey; it is equal to bx(t)y(t).  
 The predator gains a certain amount of vitality by eating the prey at a rate (c), while dying off at another rate (d).  
 
-With:  
-a>0, the natural birth rate of the preys  
-c>0, the natural death rate of the predators  
-b>0 and d>0 the coefficients of interaction between the two populations  
+More precisely, x(t) and y(t) functions follow a malthusian model:  
+The prey population follows an exponential growth in the absence of predators. This growth is represented in the equation with the term ax(t).  
+The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
+ 
 
 
 
+------------------ ANASTASIA'S BRANCH HERE ------------------
 
-
-Then :
 solving the LV PP equations with R (numerical application and graphs)
 
-Opening : adding a carying capacity to make it more realistic -> reaching an equilibrium instead of going in circles
+------------------ ANASTASIA'S BRANCH HERE ------------------
 
-*** finding equilibrium points by solving the equations for dx/dt=0 & dy/dt = 0 + interpreting the equilibriums in ecological terms
 
-+ limitations of such modelling
+### Adding a parameter to make in more realistic
 
+At that point, the model doesn't contain a lot of terms. It is a great mathematical setting, we can understand how it works and what is it's point. However, in nature, there are a lot more parameters controlling our populations. Adding some of these parameters would allow the model to be more realistic.  
+To cite only one parameter, we can talk about the carrying capacity of the environment. It defines how the environment can tolerate the species, according to the resources it contains. The more individuals from a species there is, the less the environment can keep up, until a certain point where there is too much individuals for a limited resource so the population declines...  
+  
+Actually, this notion of carrying capacity (K) can bring us to an unaddressed point: reaching an equilibrium for both prey and predator populations, instead of endlessly going in circles.
+
+The equations become:
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
 
 
 ### Exercices to understand :
 
-- changing the parameters and finding the ones that have the greater impacts on the system
-- what other factors could be added that would have ecological significance ?
+1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 1.1. 
 
---> solutions written upside-down !
+Answer:
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+solving the LV PP equations with R (numerical application and graphs)
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+
+2. What factors, other than the carrying capacity of the environment, could be added that would have ecological significance ?
+
+Answer:
+
+- sǝʇɐɹ uoᴉʇɔnpoɹdǝɹ ɟo ʎʇᴉlɐuosɐǝS
+- ǝʇɐɹ uoᴉʇɐpǝɹd ɟo ʎʇᴉlɐuosɐǝS
+- uoᴉʇɐɹɓᴉꟽ
+- uoᴉʇᴉʇǝdɯoɔ ɔᴉɟᴉɔǝdsɐɹʇuI
+- .ɔʇǝ
+
+You can use a online generator to flip the text back up, or just take a picture and turn it !
 
