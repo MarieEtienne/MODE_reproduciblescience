@@ -251,8 +251,6 @@ We will now make the system more complex by adding an additional equation. To so
 
 ## 1) SIR model and resolution by hand
 
-### a) Résolution théorique
-
 The most used **models in epidemiology** are mathematical models of infectious diseases such as the SIR model. These models are based on compartmentalization that divide the population into various possible disease states. The **SIR model** is composed of 3 compartments: initially healthy or **susceptible individuals** (S), **infected individuals** (I) and cured individuals or **resistent** (R).
 
 $$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
@@ -385,21 +383,7 @@ $$ \text{Solutions are given by the following formula:}
 
 The stability of a linear system is often determined by the real parts of the eigenvalues. In this case, the real part is negative which indicates a **stable attractive node**.
 
-This sounds complicated, **but don't panic** ! In ecology we are lucky to have a great tool, R, which allows us to resolve this type of system.
-
-### b) Résolution avec R
-
-Dans cette partie nous allons voir comment l'aide des outils disponibles sous R nous pouvons résoudre des systèmes à 3 équations. L'avantage de R par rapport à la partie calculatoire présenté ci dessus c'est qu'elle ne demande pas de capacité de niveau mathématique.
-
-Nous allons commencer par définir notre modèle et
-
-```{r}
-SIR<-function(){}
-
-
-```
-
-Si les méthodes présentés ci dessus semblent magique il faut avoir conscience de plusieurs problèmes. Déjà il faut noter que fait des approximations dans ses calculs. Quand c'est possible il est intéressant de vérifier nos résultats avec la méthode présente avant.
+This sounds complicated, **but don't panic** ! In ecology we are lucky to have a great tool, R, which allows us to resolve this type of system. We will see how can R help us with an harder example.
 
 ## 2) Lotka-Volterra : A three-species model
 
@@ -444,6 +428,96 @@ So, a solution for a yeq is: $$y_{eq}=\frac{a}{b}=\frac{f}{g}$$ Therefore, there
 In order to determine the other solutions, we must solve the following jacobian matrix : $$ J=\begin{bmatrix}a-by&-bx&0\\dy&-c+dx-ez&-ey\\0&gz&gy-f\end{bmatrix}$$
 
 The steps are the same as for the SIR model but here the matrix is 3x3. We invite you to look at the chapter on matrix calculation to determine the solutions.
+
+Finding equilibrum point and their behaviour is a little bit harder than before so it's time to use R.
+
+presentation librair
+
+The most famous library to solve and study ODE is DeSolve you can also compute yourself if you want but it will be a harsh task. A great point of desolve it's this simplicity tu use and we hope you would agree with us a the end of this chapter. We will also use ggplot to made beautifull. ggplot can be present as more a more intuative way to create and manipulate plot than using basic ploting system in r
+
+```{r}
+library(ggplot2)
+library(deSolve)
+```
+
+Definition de la fonction
+
+Ordre important pour t y mais nous verrons après pourquoi
+
+```{r}
+PPS <- function(t , y , parameters){
+  b <- parameters[1]
+  d <- parameters[2]
+  e <- parameters[3]
+  c <- parameters[4]
+  g <- parameters[5]
+  
+  dx <- x(a - by)
+  dy <- y(dxy -ez -c)
+  dz <- z(gy - z)
+  
+  return(list(dx , dy , dz))
+}
+
+```
+
+Présenation du comportement de l'équation
+
+et fonctionnement ODE
+
+```{r}
+ode()
+```
+
+Maintenant analyse point d'équilibre
+
+Plusieurs fonctions importantes
+
+one présente pas tout argument
+
+trajectory()
+
+```{r}
+
+numericalSolution()
+flowfield()
+
+
+```
+
+```{r}
+flowfield()
+```
+
+```{r}
+nullclines()
+```
+
+Présentation graphique avec 1 trajectoires
+
+```{r}
+trajectory()
+```
+
+Maintenant que se passe t'il dans cas à 10 trajectoires
+
+```{r}
+trajectory()
+```
+
+De manière générale il est important de tracer plusieurs trajectoires pour comprendre comportemement modèles
+
+```{r}
+drawManifolds()
+```
+
+Problemes d'affichage
+
+-   Présentation en dim
+
+Présentation en 3 dim
+
+ZOOM + DEZOMM
 
 ## 3) Generalizations of the three-species model and other examples
 
