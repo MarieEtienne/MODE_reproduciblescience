@@ -341,74 +341,106 @@ We're going to define a discrete and a continuous model here to make things very
 
 ### II-A-1. Discrete model
 
-Soit $$n \in \mathbb{N}^+$$
+Let\
+$$n \in \mathbb{N}^+$$
 
-Comme dit plus haut, la population croit de r\*N(n) par unité de temps.
+As mentioned above, the population grows by r\*N(n) per unit time.
 
-Cela signifie qu'entre N(n+1) et N(n), la population croit de r\*N(n).
+In other words, between N(n+1) and N(n), the population increases/decreases by r\*N(n).
 
-On a donc: $$N(n+1)-N(n) = r*N(n)$$
+We therefore have: $$N(n+1)-N(n) = r*N(n)$$
 
 Cela donne donc le modele suivant: $$N(n+1) = r*N(n)+N(n)$$
 
-On va représenter graphiquement ce modèle en utilisant r studio.
+This gives the following model: $$N(n) = (1+r)^n * N(0)$$
+
+We're going to graphically represent this model using r studio. Here are the lines of code to achieve this (*Figure 4*):
 
 ```{r, include=TRUE, echo=TRUE}
-time <- c(0, 30, 50, 70, 100, 130, 150, 170, 200, 230, 250, 300, 350, 370, 400, 430, 470)
-individuals <- c(2, 3, 5, 10, 18, 25, 38, 50, 61, 79, 95, 115, 138, 142, 143, 143, 144)
+r = 0.7 # r corresponds to the population growth rate; it ranges from -1 to 1; here, it's positive, so the population is growing.
+N0 = 10 # N0 corresponds to the initial number of individuals. There are 10 here.
+t = seq(0,10,1) # We simply define the duration of the simulation. Here, we start from time 0, up to time 10, with a step of 1.
+pop = c() # We create a list to store the values of N(t)
+for(n in t){
+  N = ((1+r)^n) * N0 # Model solution
+  pop = append(pop,N) # Storing results in the 'pop' list
+}
 
-plot(time, individuals)
+plot(t, pop, main = "",
+     xlab = "t",
+     ylab = "N(t)") # Display it all in a beautiful graph (feel free to make prettier ones using ggplot2 ^^) 
 ```
 
 ### II-A-2. Continuous model
 
-Soit t ...
+Let $$t \in \mathbb{R}^+$$
 
-On va essayer de simuler ce modèle en utilisant r studio. Nous allons utiliser un package que vous avez vu ou que vous verrez sans doute très prochainement: le package deSolve.
+We had: $$N(n+1)-N(n) = r*N(n)$$
 
-Installez le et chargez le:
+Which gives:\
+$$\begin{aligned}[t]
+        & \phantom{=}\left(N(n+1)-N(n) = r*N(n)\right)\\
+        & \Leftrightarrow N(t+\Delta t)-N(t) = r * \Delta t * N(t)\\
+        & \Leftrightarrow \frac{N(t+\Delta t)-N(t)}{\Delta t} = r * N(t) \\
+        \end{aligned}$$
+
+This gives us: $$\lim_{\Delta t \to 0} \frac{N(t+\Delta t)-N(t)}{\Delta t} = \frac{dN(t)}{dt} = N'(t) = r*N(t)$$
+
+This gives the following model: $$\frac{dN(t)}{dt} = r * N(t)$$
+
+The solution of this model is: $$N(t) = \exp(r * t) * N_0$$
+
+We're going to try to simulate this model using r studio. We're going to use a package you've seen or will no doubt be seeing very soon: the 'deSolve' package.
+
+Install and load it:
 
 ```{r, include=TRUE, echo=FALSE}
 install.packages("deSolve")
 library(deSolve)
 ```
 
-Il y a deux points importants à intégrer pour l'utilisation de ce package:
+There are two important points to bear in mind when using this package:
 
--   La fonction principale que vous utiliserez est la fonction '*ode()*'. Elle suit une syntaxe bien particulière qu'il vous faut retenir:
+-   The main function you'll be using is the 'ode()' function. It follows a very specific syntax that you need to remember:
 
-*ode(y=y0, times=temps, func=fonction, parms=paramètres)*
+*ode(y=y0, times=time, func=function, parms=parameters)*
 
-avec:
+with:
 
--   '*y0*' = valeur initiale de la variable d'intérêt y (pour la première valeur de temps)\
+-   'y0' = initial value of the variable of interest y (for the first time value)
 
--   '*times*' = les temps sur lesquels vous souhaitez travailler\
+-   'times' = the times you wish to work on
 
--   '*fonction*' = la fonction définissant le système ; cette fonction suit une syntaxe bien particulière qu'il vous faudra aussi retenir (vois plus bas)\
+-   'function' = the function defining the system; this function follows a very specific syntax that you'll also need to remember (see below).
 
--   '*parms*' = les valeurs de paramètres
+-   'parms' = parameter values
 
--   concernant l'argument '*fonction*' de la fonction '*ode()*'. Celui-ci correspond à une fonction qui, bien que propre à chaque modèle, suit un syntaxe bien particulière, comme précisé plus haut. Cette syntaxe est la suivante:
+-   concerning the 'function' argument of the 'ode()' function. This corresponds to a function which, although specific to each model, follows a very particular syntax, as explained above. The syntax is as follows:
 
-*fonction \<- function(t,y,paramètres){* *instructions* *list(flux)}* avec:
+*name_of_function\<- function(t,y,parameters){* *instructions* *list(flux)}* with:
 
--   '*t*' = correspond au temps de l'argument 'times' de la fonction ode()\
--   '*y*' = correspond à la variable d'intérêt\
--   '*paramètres*' = correspond au paramètres de l'argument 'parms' de la fonction ode()
+-   't' = corresponds to the 'times' argument of the 'ode()' function\
+-   'y' = corresponds to the variable of interest\
+-   'parameters' = corresponds to the parameters of the 'parms' argument of the 'ode()' function
 
-Sachant tout cela, on peut simuler le modèle exponentiel avec le script suivant:
+Knowing all this, we can simulate the exponential model with the following script (*Figure 5*):
 
 ```{r, include=TRUE, echo=TRUE}
 
 expo <- function(t, N, r){
   list(r*N)}
-N0 = 5
-r = 0.2
-temps <- seq(from = 0, to = 5, by = 0.02)
+N0 = 10
+r = 0.7
+temps <- seq(from = 0, to = 10, by = 0.01)
 sol <- ode(y = N0, times = temps, func = expo, parms = r)
-plot(sol,main = "Modèle exponentiel / Modèle de Malthus")
+plot(sol,main = "Exponential model / Malthus model")
 ```
+
+### II-A-2. Summary
+
+We can see that, whether using the discrete or continuous model, the population is growing. And it's growing exponentially!
+
+Try changing the parameters to vary the trajectories! Try, for example, r = 0; r \< 0; N0 = 0, etc. This will enable you to fully understand the model!
 
 ## II-B. The logistic model or Verhulst model
 
@@ -426,11 +458,7 @@ parametres <- c(r1=0.4,r2=0.6,c1=0.02,c2=0.015)
 temps <- seq(from = 0, to = 5, by = 0.02)
 N0 = c(10,20)
 sol <- ode(y = N0, times = temps, func = compet, parms = parametres)
-plot(sol,"Modèle compétition")
+plot(sol,"Competition model")
 ```
-
-# III. Double ODE system: example of lotka-volterra model
-
-# IV. Triple ODE system: example of ???
 
 # Conclusion & motivation words!
