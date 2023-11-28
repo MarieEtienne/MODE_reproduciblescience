@@ -292,7 +292,9 @@ There are 3 behaviors to understand: $$\begin{aligned}[t]
 
 This N'(t) thus represents an 'instantaneous' increase over time in the number of individuals in the Alien population.
 
-And this is what we call a differential equation: $$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$ In other words, it is an equation that relates a variable (here, 👽(t)) to its derivatives (here, only d👽/dt). It describes the speed at which a variable (in this case 👽: the number of individuals in the Alien population) varies over time.
+And this is what we call a differential equation: $$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$
+
+In other words, it is an equation that relates a variable (here, 👽(t)) to its derivatives (here, only d👽/dt). It describes the speed at which a variable (in this case 👽: the number of individuals in the Alien population) varies over time.
 
 # II. Single ODE system: examples of exponential & logistic models
 
@@ -449,6 +451,24 @@ Try changing the parameters to vary the trajectories! Try, for example, r = 0; r
 
 ## II-B. The logistic model or Verhulst model
 
+The biological assumptions behind this second model are:
+
+-   The population grows in proportion to its present size.
+
+-   A density-dependency factor (noted K) is introduced to take account of the limiting effect of resources (which are not infinite): this is intraspecific competition!
+
+Let defined: $$r \in \mathbb{N}^+ ; K \in \mathbb{R}^+ ; t \in \mathbb{R}^+  $$
+
+This means that a population of N individuals at time t will gain r\*(1-(N/K))\*N individuals at the next time.
+
+This gives the following model: $$\frac{dN(t)}{dt} = r * (1-\frac{N(t)}{K}) * N(t)$$
+
+The solution of this model is:
+
+$$N(t) = \frac{K}{1 + \frac{K - N_0}{N_0}\exp(-rt)}$$
+
+Using the explanations about 'deSolve', you can illustrate this as follows (*Figure 6*):
+
 ```{r, include=TRUE, echo=TRUE}
 
 logi <- function(t, N, param){
@@ -475,4 +495,10 @@ lines(sol, col = 'blue')
 
 ```
 
-# Conclusion & motivation words!
+There are a number of different situations here, which can be summarized as follows:
+
+-   If K \> N0 \> 0, then ∀t \> 0, N(t) tends towards K (increase; blue trajectory on *Figure 6*)
+-   If N0 = K, then for ∀t \>0, N(t) = N0 (green trajectory on *Figure 6*)
+-   If N0 \> K, then for ∀t \>0, N(t) tends towards K (decrease; red trajectory on *Figure 6*)
+
+Once again, try changing the parameters to vary the trajectories! This will enable you to fully understand the model!
