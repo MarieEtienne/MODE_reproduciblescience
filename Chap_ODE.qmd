@@ -146,6 +146,7 @@ drawText(x = 2.5, y = 1.5, text = "Figure 1: Diagram of the 'Alien population' d
 
 To keep things simple, we'll take a discrete-time simulation, with a time step of 1.
 
+
 Let define t like that: $$t \in \mathbb{N}^+$$ This means that t belongs to the set of natural integer numbers. t can therefore take the values 0, 1, 2, 3, 4, 5, etc..
 
 Here, the variable of interest (= the state of the system) is the number of individuals in the population. This number changes over time, and is therefore denoted 👽(t). The biological processes responsible for this change over time are :\
@@ -241,6 +242,111 @@ $$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
 # II. Order 1 ODE & definition of ODE
 
 # III. Order 2 ODE
+
+# ODE 2 equations
+
+An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.
+  
+ODE systems with 2 equations are widely used in different disciplines. We will only concentrate on the ecology field to not be overwhelmed by all the possibilities... and also because it's the most interesting one duh.  
+  
+In ecology, they are mainly used to model dynamics of populations interacting.  
+Generally, if we want to quantify the effect of a species on another species... What easily comes to mind is that it all depends ob the population size and the "level" of competitivity of this species.  
+  
+You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**  
+  
+But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)  
+  
+  
+
+## Lotka-Volterra  
+
+A LV prey-predator model represents both equations over time. Although we will mostly focus on the cyclic patterns between those equations, keep in mind that there *can* be a certain point in time where both equations are in equilibrium and the values that are depending on the time remain approximately constant.  
+  
+  
+**Why LV is useful:**
+- To see that the interactions between populations can create periodic dynamics over time;  
+- To study how biodiversity interacts with the parameters put into the model, such as the interaction coefficients between populations.  
+  
+  
+**Assumptions for LV:**  
+- The prey and predator live in a limited space;  
+-	The encounters are random;  
+-	The prey is only limited by the predator;  
+-	A predator can consume an infinite number of preys  
+  
+  
+**Biological intuition:**  
+In this model, the predator population thrives when prey are plentiful, but eventually exhaust their resources and the population declines. When the predator population has declined sufficiently, the prey can reproduce more, and the population increases again. This dynamic continues in a cycle of growth and decline.
+
+
+Typically, here's what these equations can look like :
+
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+**** voir avec Laura pour mettre autre chose que "d" en coefficient pour pas confondre avec les dérivées + voir aussi comment on s'accorde pour les signes
+
+It's important to really understand how equations are constructed and what they do before getting started.  
+Don't be afraid by the looks of all those letters, we'll gonna break it down to you quite simply:  
+  
+The main distinction to make in those equation is with “x” and “y” : make sure to recognize that “x” is referring to the prey population (as written in the $$ \frac{d_x}{d_t} $$ at the beginning of the line) and that “y” is referring to the predator population (as written in the $$ \frac{d_y}{d_t} $$ ).
+*ax* : Growth term for the prey population: constant a * current prey population.
+*bxy* : Death term for the prey population. Depends on the size of the prey population and the size of the predator’s population. The death of the prey population depends partly on the predator eating them.
+It’s the same logic the other way around for the second equation because it includes the growth rate of the predator population with cy and the death rate of the predator population with hxy.
+
+In other terms:
+The prey grows at a linear rate (a) and gets eaten by the predator at the rate of (b). Indeed, the rate of predation on prey is assumed to be proportional to the frequency of encounters between predators and prey; it is equal to bx(t)y(t).  
+The predator gains a certain amount of vitality by eating the prey at a rate (c), while dying off at another rate (d).  
+
+More precisely, x(t) and y(t) functions follow a malthusian model:  
+The prey population follows an exponential growth in the absence of predators. This growth is represented in the equation with the term ax(t).  
+The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
+ 
+
+
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+solving the LV PP equations with R (numerical application and graphs)
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+
+### Adding a parameter to make in more realistic
+
+At that point, the model doesn't contain a lot of terms. It is a great mathematical setting, we can understand how it works and what is it's point. However, in nature, there are a lot more parameters controlling our populations. Adding some of these parameters would allow the model to be more realistic.  
+To cite only one parameter, we can talk about the carrying capacity of the environment. It defines how the environment can tolerate the species, according to the resources it contains. The more individuals from a species there is, the less the environment can keep up, until a certain point where there is too much individuals for a limited resource so the population declines...  
+  
+Actually, this notion of carrying capacity (K) can bring us to an unaddressed point: reaching an equilibrium for both prey and predator populations, instead of endlessly going in circles.
+
+The equations become:
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+
+
+### Exercices to understand :
+
+1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 1.1. 
+
+Answer:
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+solving the LV PP equations with R (numerical application and graphs)
+
+------------------ ANASTASIA'S BRANCH HERE ------------------
+
+
+2. What factors, other than the carrying capacity of the environment, could be added that would have ecological significance ?
+
+Answer:
+
+- sǝʇɐɹ uoᴉʇɔnpoɹdǝɹ ɟo ʎʇᴉlɐuosɐǝS
+- ǝʇɐɹ uoᴉʇɐpǝɹd ɟo ʎʇᴉlɐuosɐǝS
+- uoᴉʇɐɹɓᴉꟽ
+- uoᴉʇᴉʇǝdɯoɔ ɔᴉɟᴉɔǝdsɐɹʇuI
+- .ɔʇǝ
+
+You can use a online generator to flip the text back up, or just take a picture and turn it !
+
+
 
 # **IV. 3-equation system**
 
@@ -529,3 +635,4 @@ $$
 
 
 # Conclusion & motivation words!
+
