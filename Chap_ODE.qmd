@@ -14,6 +14,7 @@ editor:
     wrap: 72
 ---
 
+
 ```{r}
 #Add packages
   df_print: paged
@@ -141,7 +142,6 @@ drawText(x = 3.2, y = 3.4, text = "b 👽(t)")
 
 # Add the caption
 drawText(x = 2.5, y = 1.5, text = "Figure 1: Diagram of the 'Alien population' dynamic system")
-
 ```
 
 To keep things simple, we'll take a discrete-time simulation, with a time step of 1.
@@ -301,13 +301,105 @@ The prey population follows an exponential growth in the absence of predators. T
 The term cy(t) is the natural death of the predators, it is an exponential decrease of the population, in absence of preys.  
  
 
+### Demonstration
+
+Let's dive into R, to simulate and plot the evolution of the two populations, using the Lotka-Volterra prey-predator model.  
+To simulate this population dynamic, we will use given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.  
+
+What you will have to keep in mind:
+In this Euler method, we will think of $$dt$$ as $$\Delta t$$
+
+Thus, we can make this approximation:
+$$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d_y}{d_t} = -cy + hxy \\ => dy = (-cy + hxy) * \Delta t $$
 
 
------------------- ANASTASIA'S BRANCH HERE ------------------
+#### Defining the terms
 
-solving the LV PP equations with R (numerical application and graphs)
+Disclaimer: terms' values are not intended to be ecologically relevant, but to serve as an example.  
 
------------------- ANASTASIA'S BRANCH HERE ------------------
+To make it more telling, let's say that our prey population is a zebra population, whereas the predator population are a group of lions. Obviously, we would think that the zebra population starts at a higher population size than a simple group of lions. That's what we tell to our model:
+```{r}
+rm(list=ls()) #to clear all the environment
+
+X_init<- 10     #starting value for x
+Y_init<- 4     #starting value for y
+```
+
+The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 50 months.  
+  
+For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
+
+```{r}
+tend<-50    #how long the simulation is going to run for
+delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
+
+# Model coefficients
+a<-1.1 #prey
+b<-0.4 #prey
+c<-0.1 #predator
+h<-0.4 #predator
+```
+
+
+#### Defining the vectors
+
+We create some vectors to keep track of the variables, as we are moving through time. Then those vectors will prove useful when we will want to plot the dynamics:
+
+```{r}
+X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
+Y<-c(Y_init)    #idem with Y
+
+t<-c(0)   #this vector will be filled up with all the time steps
+```
+
+#### Simulation
+
+```{r}
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a*current_X-current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+
+}
+```
+#### Plotting
+
+```{r}
+library(ggplot2)
+
+LV <- data.frame(time = t, prey = X, predator = Y)
+
+ggplot(LV, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+```
+You can see the cyclic nature of this dynamic as explained earlier: the prey thrives when the predator declines, the predator thrives when there's a lot of prey...  
+
+This dynamic can be seen in a phase space plot i.e. the level of predator as a function of the prey level :
+
+```{r}
+ggplot(LV, aes(x = prey, y = predator)) +
+  geom_point() +
+  labs(x = "Prey (nb of individuals)", y = "Predator (nb of individuals)") +
+  theme_classic()
+```
 
 
 ### Adding a parameter to make in more realistic
@@ -327,11 +419,75 @@ $$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Pr
 
 Answer:
 
------------------- ANASTASIA'S BRANCH HERE ------------------
 
-solving the LV PP equations with R (numerical application and graphs)
+```{r}
+rm(list=ls())
 
------------------- ANASTASIA'S BRANCH HERE ------------------
+####DEFINING THE COEFFICIENTS AND VARIABLES####
+X_init<-10
+Y_init<-4
+tend<-50
+delta_t<-0.01
+
+
+####DEFINING THE VECTORS####
+X<-c(X_init)   
+Y<-c(Y_init)
+
+t<-c(0)   #this vector will be filled up with all the time steps
+
+###coefficients of the model
+#function to describe the variation of a among time
+a_seasonal_variation <- function(t) {
+  amplitude <- 0.6  #amplitude of the seaonal variation
+  period <- 12      #seasonal period
+  mean <- 1.1     #mean value of the growth rate
+  return(mean + amplitude * sin(2 * pi * t / period))
+}
+
+b<-0.4
+c<-0.1
+h<-0.4
+
+####SIMULATION####
+
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a_seasonal_variation(current_t)*current_X-current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+  
+}
+
+####PLOTTING#####
+
+library(ggplot2)
+
+LV_exercice <- data.frame(time = t, prey = X, predator = Y)
+
+ggplot(LV_exercice, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+
+
+```
+
 
 
 2. What factors, other than the carrying capacity of the environment, could be added that would have ecological significance ?
@@ -635,4 +791,5 @@ $$
 
 
 # Conclusion & motivation words!
+
 
