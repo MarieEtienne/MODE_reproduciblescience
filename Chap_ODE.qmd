@@ -31,8 +31,8 @@ To make it more telling, let's say that our prey population is a zebra populatio
 ```{r}
 rm(list=ls()) #to clear all the environment
 
-X_init<-20    #starting value for x
-Y_init<-8     #starting value for y
+X_init<- 10     #starting value for x
+Y_init<- 4     #starting value for y
 ```
 
 The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 50 months.  
@@ -44,10 +44,10 @@ tend<-50    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
 # Model coefficients
-a<-0.8 #prey
+a<-1.1 #prey
 b<-0.4 #prey
-c<-0.6 #predator
-h<-0.2 #predator
+c<-0.1 #predator
+h<-0.4 #predator
 ```
 
 
@@ -102,8 +102,7 @@ ggplot(LV, aes(x = time)) +
   scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
   theme_classic()
 ```
-*** jouer avec les valeurs pour avoir un truc cyclique adéquat
-Je vais mentir en attendant : you can see the cyclic nature of this dynamic as explained earlier: the prey thrives when the predator declines, the predator thrives when there's a lot of prey...  
+You can see the cyclic nature of this dynamic as explained earlier: the prey thrives when the predator declines, the predator thrives when there's a lot of prey...  
 
 This dynamic can be seen in a phase space plot i.e. the level of predator as a function of the prey level :
 
@@ -114,6 +113,81 @@ ggplot(LV, aes(x = prey, y = predator)) +
   theme_classic()
 ```
 
+
+
+
+
+### Exercices
+
+1. [...]
+
+Answer:
+
+```{r}
+rm(list=ls())
+
+####DEFINING THE COEFFICIENTS AND VARIABLES####
+X_init<-10
+Y_init<-4
+tend<-50
+delta_t<-0.01
+
+
+####DEFINING THE VECTORS####
+X<-c(X_init)   
+Y<-c(Y_init)
+
+t<-c(0)   #this vector will be filled up with all the time steps
+
+###coefficients of the model
+#function to describe the variation of a among time
+a_seasonal_variation <- function(t) {
+  amplitude <- 0.6  #amplitude of the seaonal variation
+  period <- 12      #seasonal period
+  mean <- 1.1     #mean value of the growth rate
+  return(mean + amplitude * sin(2 * pi * t / period))
+}
+
+b<-0.4
+c<-0.1
+h<-0.4
+
+####SIMULATION####
+
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a_seasonal_variation(current_t)*current_X-current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+  
+}
+
+####PLOTTING#####
+
+library(ggplot2)
+
+LV_exercice <- data.frame(time = t, prey = X, predator = Y)
+
+ggplot(LV_exercice, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+```
 
 
 
