@@ -252,3 +252,31 @@ mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 1000000)
 
 plot(step~iteration, mcmc_df, "l")
 ```
+
+
+
+# IV) Prior Selection in Ecology
+
+
+## IV-1) The role of prior knowledge and beliefs
+
+In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.
+
+Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.
+
+## IV-2) Informative and non-informative priors
+
+## IV-3) Incorporating expert opinions and literature data
+
+
+
+
+# V) Case Studies in Bayesian Ecology
+
+
+## V-1) Highlighting specific ecological studies that employed Bayesian methods
+
+## V-2) Illustrative examples from different ecological sub-disciplines
+
+
+
