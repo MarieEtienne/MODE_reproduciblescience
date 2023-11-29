@@ -9,8 +9,6 @@ editor_options:
 
 # Introduction to Multivariates Analysis
 
-@van2001comparison
-
 Biologists' data, whether on individuals, populations or communities,
 are usually presented in the form of rectangular tables, with
 observations (n) in the rows and variables (p) in the columns.
@@ -169,6 +167,7 @@ Here's an example of how PCA can be applied. *dataset presentation*
 
 ```{r}
 # Loading the "iris" dataset available on R :
+library(factoextra)
 data("decathlon2") 
 data=decathlon2[decathlon2$Competition=="OlympicG",c(1:10,12)]
 summary(data)
