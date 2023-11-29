@@ -153,7 +153,7 @@ La dépendance entre les mesures détermine la structure de dépendance (mesures
 
 ## Dependency structure
 
-### Repeted measurements
+### Repeted measurements in time
 
 We want to evaluate the effect of different diet on weight gain in champanzee. Several animals $j$ follow each diet $i$ and they kept the same diet accross all the experiment. Each week animal weight ($Y_{ij}$) is measured, during T weeks. In this case, measures are repeated accross time, such measurements are called *longitudinal data*. To analyse this data, the temporal dependency must be taken into account, for this, the following can be used: 
 
@@ -183,7 +183,8 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
   σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
-  \right.$$ Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes.
+  \right.$$ 
+Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes.
 On suppose de plus que \|ρ\| \< 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand.
 Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
 Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ 2, soit
@@ -193,7 +194,8 @@ $$
     ρ \\
     σ^2 \\
   \end{array} } \right)
-$$ *Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs mais le bloc R diffère :
+$$ 
+*Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs mais le bloc R diffère :
 
 $$
   R = \left( {\begin{array}{cc}
@@ -205,29 +207,24 @@ $$
   \end{array} } \right)
 $$
 
-```{r}
-#Read the data
-d=read.delim(
-"http://dnett.github.io/S510/RepeatedMeasures.txt")
-#Create Factors
-d$Program = factor(d$Program)
-d$Subj = factor(d$Subj)
-d$Timef = factor(d$Time)
+We are going to use the BodyWeight dataset from the nlme package. In this dataset, weight is measured on 16 rats every 7 days during 64 days (which gives 11 measurements for each rats). Three diets are tested with 88 rats following diet 1 and 44 following diet 2 and 3. 
 
+The reasearch question is: Is weight gain different depending on the diet? The model will be a mixed model with diet and time as fixed factor and individuals as random factor: weight ~ Diet * Time | Rat. 
+
+
+```{r}
+head(BodyWeight, 10)
 ```
 
 ```{r}
-o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 | Subj))
- 
+time_model = gls(weight ~ Diet * Time, data = BodyWeight,correlation = corAR1(form = ~1 | Rat))
+summary(time_model)
 ```
 
-```{r}
-summary(o.ar1)
-```
+interpretation des results
 
 ### Cas de l'autocorrelation spatiale
 
-<<<<<<< HEAD
 *Structure de dépendance* Là encore, on veut prendre en compte la dépendance due à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
 
 Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
@@ -249,7 +246,6 @@ $$
 
 
 ```{r, include=FALSE, echo=FALSE}
->>>>>>> 4a005b60a7bfc23afd1421e0a74fb24cb006139d
 set.seed(3)  
 n <- 100
 
