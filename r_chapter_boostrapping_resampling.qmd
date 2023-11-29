@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------
 
-title: "Chapter : Bootstrapping and Resampling"
+\-\-- title: "Chapter : Bootstrapping and Resampling"
 
-bibliography: references.bib \# Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true ---
+bibliography: references.bib execute: freeze: auto output: html_document: toc: true toc_float: true \-\--
 
 # General introduction
 
@@ -95,13 +95,111 @@ shapiro.test(group)
 
 ## Introduction and principle
 
-Mantenant que nous avons découvert en détail lors de la partie précédente la méthode de rééchantillonnage par Jacknife, nous allons pouvoir nous pencher sur une seconde méthode de rééchantillonnage : la méthode par Bootstrap. Celle-ci présente le même objectif que précédemment, réaliser des estimations des paramètres descriptifs d'un échantillon et évaluer la précision de ces estimations, pour inférer ces informations à la population réelle. En d'autres termes, comme lors de la partie précédente, notre objectif ici est d'obtenir des paramètres d'intérêt à partir de notre échantillon (tels que la moyenne, la médiane ou même le $R^2$ d'une régression et une multitude d'autres) et de construire des intervales de confiance autour de ces derniers.
+Mantenant que nous avons découvert en détail lors de la partie précédente la méthode de rééchantillonnage par Jacknife, nous allons pouvoir nous pencher sur une seconde méthode de rééchantillonnage : la méthode par Bootstrap. Celle-ci présente le même objectif que précédemment : réaliser des estimations des paramètres descriptifs d'un échantillon et évaluer la précision de ces estimations, pour inférer ces informations à la population réelle. C'est donc de même, une méthode d'inférence statistique par réplication multiple des données à partir du jeu de données initial. En d'autres termes, comme lors de la partie précédente, notre objectif ici est d'obtenir des paramètres d'intérêt à partir de notre échantillon (tels que la moyenne, la médiane ou même le $R^2$ d'une régression et une multitude d'autres) et de construire des intervales de confiance autour de ces derniers.
 
-L'élément clef distinguant la méthode par Jacknife à celle par Bootstrap est qu'à chacune de ses $i$ itérations, nous allons rééchantillonner par tirage aléatoire $n$ éléments avec remise, dans un échantillon intial de $n$ données. Autrement dit, à chaque itération de la méthode, les éléments sont prélevés de l'échantillon initial, puis directement remis à chaque sélection aléatoire. Ceci implique deux différences importantes avec le rééchantillonnage que nous obtenions avec la méthode par Jacknife : i) les nouveaux échantillons sont de même taille $n$ que le jeu de données initiales, ii) un élément donné peut-être présent plusieurs fois dans un nouvel échantillon, ou ne pas l'être du tout.
+L'élément clef distinguant la méthode par Jacknife à celle par Bootstrap est qu'à chacune de ses $i$ itérations, nous allons rééchantillonner par tirage aléatoire $n$ éléments avec remise, dans un échantillon intial de $n$ données. Autrement dit, à chaque itération de la méthode, les éléments sont prélevés de l'échantillon initial, puis directement remis à chaque sélection aléatoire. Ceci implique deux différences importantes avec le rééchantillonnage que nous obtenions avec la méthode par Jacknife : i) les nouveaux échantillons sont de même taille $n$ que le jeu de données initiale, ii) un élément donné peut-être présent plusieurs fois dans un nouvel échantillon, ou ne pas l'être du tout.
 
-*Une fois ces échantillons bootstrap créés, les estimations statistiques telles que la moyenne, l'écart-type, l'intervalle de confiance, etc., sont calculées pour chacun de ces échantillons. Enfin, en analysant la distribution des valeurs obtenues à partir de ces estimations bootstrap, on peut estimer la précision de l'estimation de la statistique sur l'échantillon initial.*
+Une fois ces $i$ échantillons créés par boostrap, les paramètres statistiques souhaités sont alors calculés pour chacun des échantillions. On obtient ainsi une distribution de ces échantillons, composée de $i$ données. Enfin, c'est en analysant cette distribution que nous pourrons estimer la précision et notamment l'intervale de confiance de nos paramètres statistiques.
 
 ## Applications
+
+Tentons maintenant d'illustrer ces propos et de leur donner du sens au travers de quelques exemples. Nous allons illustrer comme précédemment différentes applications de la méthode de Bootstrap en fonction des potentiels jeux de données qui peuvent se présenter à vous.
+
+### La base : Calcule de l'intervalle de confiance autour de la moyenne
+
+Comme précédemment réalisé pour illustrer la méthode de Jacknife, nous utiliserons les données de largeur de sépales issues du jeu de données Iris de R base.
+
+```{r}
+## Importation des données Iris
+dataPetal <- iris$Petal.Width
+```
+
+**Calcule de l'intervalle de confiance autour de la moyenne sous hypothèse de normalité :** Nous allons pour le moment considérer le jeu de données entier et calculer l'intervalle de confiance autour de sa moyenne.
+
+```{r}
+## Calcule de la moyenne de l'échantillon
+m_petalW = mean(dataPetal)
+cat("Moyenne de l'échantillon :", m_petalW)
+```
+
+On obtient donc une moyenne $\overline{x} \approx 1.20$ pour la largeur des pétales. En faisant l'hypothèse, comme vu précédemment pour la méthode de Jacknife, que nos données suivent la loi normale, nous allons pouvoir calculer l'intervalle de confiance autour de la moyenne d'un échantillon tel que :
+
+$$
+IC = \overline{x} \pm t \cdot (\frac{s}{\sqrt{n}})
+$$
+
+Avec comme valeurs :
+
+-   $\overline{x}$ : la moyenne de l'échantillon
+
+-   $t$ : le score de t de Student correspondant à l'intervale de confiance choisi et à un degré de liberté $(n-1)$.
+
+-   $s$ : l'écart-type de la l'échantillon.
+
+-   $n$ : la taille de l'échantillon.
+
+```{r}
+## Calcule de l'intervalle de confiance 
+# Calcul de l'écart type de l'échantillon
+et_petalW <- sd(dataPetal)
+
+# Calcul du coefficient de Student pour un niveau de confiance à 95%
+coef_t <- qt(0.995, df = length(dataPetal) - 1)
+
+# Calcul de l'intervalle de confiance
+IC <- coef_t * (et_petalW / sqrt(length(dataPetal)))
+borne_inferieure <- m_petalW - IC
+borne_superieure <- m_petalW + IC
+
+# Affichage de l'intervalle de confiance
+cat("Valeur de l'intervale de confiance à 95%: ",IC,"\n")
+cat("Intervalle de confiance à 95% autour de la moyenne :", borne_inferieure, "-", borne_superieure, "\n")
+```
+
+On obtient donc avec cette méthode une moyenne avec intervalle de confiance à 95% de $120 \pm 0.16$.
+
+**Calcule de l'intervalle de confiance avec méthode par Bootstrap :** Comme réalisé précédemment pour la méthode par Jacknife, nous allons utiliser la méthode de rééchantillonnage pour estimer l'intervalle de confiance autour de la moyenne à partir d'une petite portion du jeu de données seulement. Ceci nous servira de cas d'école pour comparer les estimations de la méthode avec le jeu de données original que l'on considérera comme une réalité connue.
+
+```{r}
+## Récupération d'une partie seulement du jeu de données
+set.seed(42)
+data_sample <- dataPetal[sample(1:150,15)]
+```
+
+On va donc commencer par réaliser les $i$ itérations du rééchantillonnage. On fixera ici une valeur de $i=1000$ itérations, où pour chacune d'entre elles on tirera aléatoirement avec remise l'ensemble des données et on calculera la moyenne.
+
+```{r}
+## Création d'un vecteur qui contiendra les itérations
+boots = numeric(1000)
+
+## Boucle des iérations avec calcule de la moyenne
+for (i in 1:1000) {
+  boots[i] = mean(sample(data_sample, replace=T))
+}
+```
+
+Maintenant que l'on a $i=1000$ moyennes calculées à partir de nos rééchantillonnages par Bootstrap, on va pouvoir représenter leur distribution.
+
+```{r}
+# Création du graphique avec ggplot2
+ggplot(data = data.frame(boots), aes(x = boots)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y = ..density..)) +
+  geom_density(alpha = 0.5, fill = "orange") +
+  labs(title = "Distribution des valeurs",
+       x = "Valeurs",
+       y = "Densité") +
+  theme_minimal()
+```
+
+De cette distribution de densité, on va pouvoir récupérer les percentiles correspondants à notre intervalle de confiance. Dans notre exemple on souhaitera obtenir un intervalle de confiance à 95%, on répartira donc les 5% d'erreur de part et d'autre de la distribution, ce qui nous donne les percentiles à 2.5% et 97.5%.
+
+```{r}
+## Obtention des percentiles à 2.5 et 97.5%
+limBoot1=quantile(boots,c(.025,.975))
+limBoot1
+```
+
+L'intervalle de confiance n'est pas parfaitement équivalent, ce qui est normal car le jeu de données sur lequel nous avons travaillé n'est qu'une très petite portion du jeu de données initial. Cependant, on constate qu'à partir de cette méthode, on obtient un intervalle de confiance qui inclue la moyenne du jeu de données de base.
 
 ## Strenghts and weaknesses
 
