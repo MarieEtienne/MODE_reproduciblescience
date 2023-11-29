@@ -136,13 +136,14 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
   # prior distribution
   l_prior = dgamma(lambda_hat, shape = alph, rate = bet)
   
+  # posterior distribution
+  l_post = dgamma(lambda_hat, shape =  alph + sum(Y[n_obs]), rate = bet + max(n_obs))
+  
   plot(lambda_hat,l_prior, ylim = c(0,max(c(l_post,l_prior))),
        type = 'l', lwd = 2, col = 'orange',
        xlab = expression(lambda), 
        ylab = expression(paste('[', lambda, '|y]')) )
   
-  # posterior distribution
-  l_post = dgamma(lambda_hat, shape =  alph + sum(Y[n_obs]), rate = bet + max(n_obs))
   
   lines(lambda_hat,l_post, type = 'l',lty = 3, lwd = 2, col = 'purple')
   abline(v = 5, lty = 2, lwd = 2)

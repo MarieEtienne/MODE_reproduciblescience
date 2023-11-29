@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Coline - Jules - Mathis - Romane - Laura">
+
+<title>The Companion book a M1 MODE student should have! - Introduction to bayesian modeles for ecology</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The Companion book a M1 MODE student should have!</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/MarieEtienne/MODE_reproduciblescience" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./prior_course.html" rel="" target="">
+ <span class="menu-text">Before the class</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./instructions.html" rel="" target="">
+ <span class="menu-text">Instructions</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-courses-materials" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Courses Materials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-courses-materials">    
+        <li>
+    <a class="dropdown-item" href="https://marieetienne.github.io/reproductibilite/_presentation/english_version.html" rel="" target="">
+ <span class="dropdown-text">Git Intro</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-0---introduction" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Chapter 0 - Introduction</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-0---introduction">    
+        <li>
+    <a class="dropdown-item" href="./simple_chapter.html" rel="" target="">
+ <span class="dropdown-text">A simple chapter with no code</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./r_chapter.html" rel="" target="">
+ <span class="dropdown-text">A chapter using R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./python_chapter.html" rel="" target="">
+ <span class="dropdown-text">A chapter using Python</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#general-theory-behind-bayesian-approach." id="toc-general-theory-behind-bayesian-approach." class="nav-link" data-scroll-target="#general-theory-behind-bayesian-approach.">General theory behind Bayesian approach.</a>
+  <ul class="collapse">
+  <li><a href="#main-objective-for-context" id="toc-main-objective-for-context" class="nav-link" data-scroll-target="#main-objective-for-context">Main objective, for context</a></li>
+  </ul></li>
+  <li><a href="#when-approximation-by-computation-is-needed" id="toc-when-approximation-by-computation-is-needed" class="nav-link" data-scroll-target="#when-approximation-by-computation-is-needed">When approximation by computation is needed</a>
+  <ul class="collapse">
+  <li><a href="#small-recap-on-markov-chain" id="toc-small-recap-on-markov-chain" class="nav-link" data-scroll-target="#small-recap-on-markov-chain">Small recap on Markov Chain</a></li>
+  <li><a href="#approximation-with-mcmc" id="toc-approximation-with-mcmc" class="nav-link" data-scroll-target="#approximation-with-mcmc">Approximation with MCMC</a>
+  <ul class="collapse">
+  <li><a href="#a-small-example-without-using-jags" id="toc-a-small-example-without-using-jags" class="nav-link" data-scroll-target="#a-small-example-without-using-jags">A small example without using JAGS</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to bayesian modeles for ecology</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Coline - Jules - Mathis - Romane - Laura </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<ul>
+<li>History of Bayesian concept.</li>
+<li>Philosophy behind it. Frequentist approach : “What is the probability to observe my data given my model.”</li>
+</ul>
+<p>Bayesian approach : “What is the probability of m y model given my data.”</p>
+</section>
+<section id="general-theory-behind-bayesian-approach." class="level1">
+<h1>General theory behind Bayesian approach.</h1>
+<p>Explanation in the special case of conjugation between prior and posterior</p>
+<section id="main-objective-for-context" class="level2">
+<h2 class="anchored" data-anchor-id="main-objective-for-context">Main objective, for context</h2>
+<p>First, let’s take an simple example to explain the idea behind Bayesian method. We want to estimate the mean abundance per <span class="math inline">\(m^2\)</span> of one fungus in a forests. To do that, we set up it some sampling area in which we count the number of mushroom. We can simulate the data by taking random observations in a poisson distribution. Let’s suppose that our studies as 200 sampling area. <strong>Because it is count data, number of mushroom that we will count should follow a poisson distribution :</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n_sample <span class="ot">=</span> <span class="dv">200</span> <span class="co"># sampling area</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lbda <span class="ot">=</span> <span class="dv">5</span> <span class="co"># mean of poisson distribution</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pois_distr <span class="ot">=</span> <span class="fu">dpois</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">lambda =</span> lbda)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pois_distr,<span class="at">type =</span><span class="st">"h"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'blue'</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Mushroom Count"</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(<span class="fu">paste</span>( <span class="st">'Density or '</span>,<span class="st">'[y]'</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To simulate the sampling campaign we are taking values in this poisson distribution . In our case those will be used to estimate the mean number of mushroom in the forest.(<span class="math inline">\(\lambda = 5\)</span> is already known because we simulate the data, but in reality this is an unknown).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">rpois</span>(<span class="at">n =</span> n_sample, <span class="at">lambda =</span> lbda)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>So let’s pretend that we don’t know the</strong> <span class="math inline">\(\lambda\)</span>. We want to find the the value of the mean number of mushroom we will call <span class="math inline">\(\hat{\lambda}\)</span> and we also want to know the probability of this <span class="math inline">\(\hat{\lambda}\)</span>. In fact the Bayesian method will give us the multiple estimated mean <span class="math inline">\(\hat{\lambda}\)</span> and the probability of those value to be true knowing the observation <span class="math inline">\(Y\)</span>. We can simply write this as follow <span class="math inline">\([\hat{\lambda} \mid Y]\)</span> which is the probability of hat lambda knowing our observations. This probability can be found with the equation :</p>
+<p><span class="math display">\[
+[\hat{\lambda} \mid Y] = [Y \mid \hat{\lambda}  ]\cdot[\hat{\lambda}]
+\]</span></p>
+<p>The two component of the right hand side of the equation are <span class="math inline">\([Y \mid \hat{\lambda} ]\)</span> the likelihood of our data and <span class="math inline">\([\hat{\lambda}]\)</span> the prior distribution. First lets start with the likelihood. Our data follow a poisson distribution so our likelihood will follow a poisson distribution :</p>
+<p><span class="math display">\[
+L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y}}{y!}
+\]</span></p>
+<p>This a first good step, but there is a small issue here, this formula isn’t completely usable in this form. This is because it can only take one observation. In english words it is like asking what is the probability of one observation (one count of mushroom) given a model with a mean <span class="math inline">\(\hat{\lambda}\)</span>. It it clear that this form isn’t powerful enough because it use only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean <span class="math inline">\(\hat{\lambda}\)</span>. To do so we can write the likelihood of all our data <span class="math inline">\(Y\)</span> as the product of the likelihood of each observation <span class="math inline">\(y_i\)</span>. (We are allowed to do this only because observations are independent)</p>
+<p><span class="math display">\[
+\begin{align}
+[Y \mid \hat{\lambda}] &amp;= \prod^{n}_{i=1}[y_i \mid \hat{\lambda}] \\
+&amp;=\prod^{n}_{i=1}\frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}}{y_i!} \\
+&amp;\propto \prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}\\
+\end{align}
+\]</span></p>
+<p>As you can see we don’t keep the <span class="math inline">\(\frac{1}{y_i!}\)</span>, it is because we are only interested in the terms that are impacted by <span class="math inline">\(\hat{\lambda}\)</span>. The last form which is proportional to the likelihood function have a more convenient form for the next step. Lets rearrange the function in a more convenient form</p>
+<p><span class="math display">\[
+\begin{align}
+\prod^{n}_{i=1}e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y_i}&amp;= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{\sum^{n}_{i=1} y_i}\\
+&amp;= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{n \cdot \bar{y}}\\
+\end{align}
+\]</span></p>
+<p>The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, <span class="math inline">\(mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}\)</span>.</p>
+<p>Now we want to find the prior distribution of <span class="math inline">\(\hat{\lambda}\)</span>. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify ! lets try it :</p>
+<p><span class="math display">\[
+\begin{align}
+[\hat{\lambda}]&amp;\sim Gamma(\lambda,\alpha_p,\beta_p) \\
+&amp;= \lambda^{\alpha_p -1}\frac{\beta_p^\alpha\cdot e^{-\beta_p \lambda}}{\Gamma(\alpha_p)} \propto \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}
+\end{align}
+\]</span></p>
+<p>Same as the likelihood, we are only interested by the term that vary with <span class="math inline">\(\hat{\lambda}\)</span> so we remove <span class="math inline">\(\frac{\beta^\alpha}{\Gamma(\alpha)}\)</span> and keep the proportional formula of the prior. We can now find real formula of our posterior distribution.</p>
+<p><span class="math display">\[
+\begin{align}
+[\lambda \mid y] &amp;= [y \mid \lambda]\cdot[\lambda] \\
+[\lambda \mid y] &amp;\propto e^{-n \cdot\lambda} \cdot\lambda^{n \cdot \bar{y}} \cdot \lambda^{\alpha_p -1} \cdot e^{-\beta_p \lambda}\\
+[\lambda \mid y] &amp;\propto e^{-\beta_p \lambda-n\lambda} \cdot\lambda^{n\bar{y}+\alpha_p -1} \\
+[\lambda \mid y] &amp;\propto e^{-\lambda (\beta_p +n)} \cdot\lambda^{n\bar{y}+\alpha_p -1}\\
+\end{align}
+\]</span></p>
+<p>Do the last formula remind you something familiar ? That’s right it is a Gamma distribution ! This is the magic of the conjugate distributions. We can now write :</p>
+<p><span class="math display">\[
+\begin{align}
+[\lambda \mid y] &amp;\propto e^{-\lambda \beta} \cdot\lambda^{\alpha -1}\\
+[\lambda \mid y] &amp;\sim Gamma(\alpha_p +n\bar{y}, \beta_p +n)
+\end{align}
+\]</span></p>
+<p>We can do some simulations to show the results. We are looking for the probability of <span class="math inline">\(\hat{\lambda}\)</span>, so for the computation we create a vector of all <span class="math inline">\(\hat{\lambda}\)</span> for which we want to know the probability:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lambda_hat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now, in order to compare them, we compute the distribution of the prior and the posterior (which are both following a gamma distribution) with an increasing amount of sample:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>alph <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>bet<span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(n_obs <span class="cf">in</span> <span class="fu">list</span>(<span class="dv">0</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>)){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prior distribution</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  l_prior <span class="ot">=</span> <span class="fu">dgamma</span>(lambda_hat, <span class="at">shape =</span> alph, <span class="at">rate =</span> bet)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># posterior distribution</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  l_post <span class="ot">=</span> <span class="fu">dgamma</span>(lambda_hat, <span class="at">shape =</span>  alph <span class="sc">+</span> <span class="fu">sum</span>(Y[n_obs]), <span class="at">rate =</span> bet <span class="sc">+</span> <span class="fu">max</span>(n_obs))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(lambda_hat,l_prior, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(<span class="fu">c</span>(l_post,l_prior))),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'orange'</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="fu">expression</span>(lambda), </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">'['</span>, lambda, <span class="st">'|y]'</span>)) )</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(lambda_hat,l_post, <span class="at">type =</span> <span class="st">'l'</span>,<span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'purple'</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">5</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"n = "</span>,<span class="fu">max</span>(n_obs)))</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>When we add no data in the computation of the posterior, it is normal that we don’t see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true <span class="math inline">\(\lambda\)</span>. Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.</p>
+</section>
+</section>
+<section id="when-approximation-by-computation-is-needed" class="level1">
+<h1>When approximation by computation is needed</h1>
+<p>En statistiques bayésiennes, comme dit précédemment l’objectif est d’actualiser nos croyances sur les paramètres d’un modèle en combinant une connaissance a priori avec l’information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. C’est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.</p>
+<section id="small-recap-on-markov-chain" class="level3">
+<h3 class="anchored" data-anchor-id="small-recap-on-markov-chain">Small recap on Markov Chain</h3>
+</section>
+<section id="approximation-with-mcmc" class="level2">
+<h2 class="anchored" data-anchor-id="approximation-with-mcmc">Approximation with MCMC</h2>
+<p>Il existe de multiple algorithmes de type MCMC ( Metropolis-Hastings, échantillionneur de Gibbs, Hamiltonian Monte Carlo), chacun possèdes ses avantages et ses inconvénients et le choix de l’algorithme dépend de la situation d’application. Cependant ils partent tous de la même base théorique.</p>
+<p>L’idée essentielle de la MCMC est que nous pouvons en apprendre davantage sur les paramètres non observés en effectuant de nombreux tirages aléatoires dans leurs distributions marginales a posteriori. L’accumulation de ces nombreux échantillons donne la “forme” de la distribution postérieure. Ces nombreux échantillons nous permettent de calculer les quantités qui nous intéressent : moyennes, variances et quantiles.</p>
+<p>Il est maintenant légitime de se demander : Mais ça sert à quoi de tirer un échantillionnage dans une loi inconnu pour ensuite la reconstituer ? Et surtout comment on fait si on ne la connait pas ?</p>
+<p>Et bien la loi que l’on reconstitue n’est pas totalement la même que celle qu’on utilise pour obtenir ces tirages. En effet la loi a posteriori n’est pas totalement inconnue. Ses informations sont portées par le produit de vraissemblance et du prior :</p>
+<p><span class="math display">\[
+[{\theta} \mid Y] \propto [Y \mid {\theta}  ]\cdot[{\theta}]
+\]</span></p>
+<p>C’est cette loi a priori estimée qui sert de première référence et le tirage aléatoire va permettre de normaliser cette expression pour qu’elle soit égal à un fonction de probabilité dont l’intégral est égal à 1. Cette propriété est normalement donnée par la division du produit par <span class="math inline">\([Y]\)</span>.</p>
+<p>L’algorithme MCMC estime donc la loi a posteriori des paramètres non observé en évitant l’étape de calcul d’intégral qui peut s’avérer complexe pour obtenir <span class="math inline">\([Y]\)</span>.</p>
+<p><strong>Step 1 : Initialisation</strong></p>
+<section id="a-small-example-without-using-jags" class="level3">
+<h3 class="anchored" data-anchor-id="a-small-example-without-using-jags">A small example without using JAGS</h3>
+<p>On reprend l’exemple avec les champignons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># [y | lambda]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">=</span> <span class="cf">function</span>(lambda,y){</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(lambda <span class="sc">&lt;</span> <span class="dv">0</span>){</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">0</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="fu">dpois</span>(<span class="at">x =</span> <span class="fu">sum</span>(y),<span class="at">lambda =</span> lambda<span class="sc">*</span><span class="fu">length</span>(y)))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [lambda]</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>prior.dist <span class="ot">=</span> <span class="cf">function</span>(lambda){</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dunif</span>(lambda,<span class="dv">0</span>,<span class="dv">1000</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># g([lambda_c(i) | lambda(i-1)])</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>dstep <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda1, lambda2, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(lambda2, <span class="at">mean =</span> lambda1, <span class="at">sd =</span> sd.explore)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>rstep <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> lambda, <span class="at">sd =</span> sd.explore)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>MH.ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda_c,lambda, y){</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">=</span> (<span class="fu">likelihood</span>(lambda_c, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">dstep</span>(lambda, lambda_c))<span class="sc">/</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">likelihood</span>(lambda, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">dstep</span>(lambda_c, lambda))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ratio)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mcmc.function <span class="ot">=</span> <span class="cf">function</span>(lambda_init, <span class="at">n_iter =</span> <span class="dv">10000</span>, <span class="at">burning =</span> <span class="dv">100</span>, <span class="at">thin =</span> <span class="dv">10</span>){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  lambda_sample <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  lambda_sample[<span class="dv">1</span>] <span class="ot">=</span> lambda_init</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  i<span class="ot">=</span><span class="dv">2</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n_iter){</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    lambda <span class="ot">=</span> lambda_sample[(i<span class="dv">-1</span>)]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    lambda_c <span class="ot">=</span> <span class="fu">rstep</span>(lambda)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    ratio <span class="ot">=</span> <span class="fu">MH.ratio</span>(lambda_c,lambda, Y)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>)<span class="sc">&lt;</span>ratio){</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda_c</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> lambda_sample[<span class="fu">seq</span>(burning,n_iter, <span class="at">by=</span> thin)]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">iteration =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(lambda_save),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">step =</span> lambda_save))</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mcmc_df <span class="ot">=</span> <span class="fu">mcmc.function</span>(<span class="at">lambda_init =</span> <span class="dv">10</span>,<span class="at">burning =</span> <span class="dv">200</span>, <span class="at">n_iter =</span> <span class="dv">1000000</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(step<span class="sc">~</span>iteration, mcmc_df, <span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
