@@ -25,9 +25,17 @@ library(sp)
 
 Mise en forme ::: {style="text-align: justify"} Teste :::
 
+
 ## Introduction
 
-**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ((X_1, X_2, ..., X_n)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. **Generalized Linear Models (GLMs)** can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the **non-collinearity of residuals**.
+The chapter is based on the "Modèle mixte, modélisation de la variance" section of the course “Le Modèle Linéaire et ses Extensions” (L. Bel et al. 2016), uses its examples to illustrate the various aspects of mixed models.
+
+**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as \(Y\), and one or more independent variables (\(X_1, X_2, ..., X_n\)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the non-collinearity of residuals.
+
+**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ((X_1, X_2, ..., X_n)).
+These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals.
+Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology.
+However, it is crucial to validate the non-collinearity of residuals.
 
 In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated.
 This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites.
@@ -159,34 +167,15 @@ Par définition, la réponse moyenne est de $X\theta$, plus ou moins un terme d'
 
 ## 3 Dependency structure
 
-<<<<<<< HEAD
 ### 3.1 Case of repeated measurements
-=======
-## Dependency structure
-
-### Repeted measurements
->>>>>>> 79216e6e0cd81d47dd5b1f8869245e2cf3512920
 
 We want to evaluate the effect of different diet on weight gain in champanzee. Several animals $j$ follow each diet $i$ and they kept the same diet accross all the experiment. Each week animal weight ($Y_{ij}$) is measured, during T weeks. In this case, measures are repeated accross time, such measurements are called *longitudinal data*. To analyse this data, the temporal dependency must be taken into account, for this, the following can be used: 
 
-$$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
-
-with
-
-$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
-  \begin{array}{ll}
-  σ^2ρ \ \ si \ \ (i, j) = (i', j') \\
-     0 \ sinon \
-   \end{array}
-  \right.$$
-
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
-
 
 **Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare.
 Une telle dépendance n'admet pas de représentation simple sous la forme d'un effet aléatoire.
 On suppose donc que les poids sont gaussiens d'espérances respectives.
->>>>>>> 79216e6e0cd81d47dd5b1f8869245e2cf3512920
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ **Structure de dépendance** On suppose de plus que toutes les mesures ont la même variance
 
@@ -197,7 +186,7 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
   σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
-<<<<<<< HEAD
+
   \right.$$ Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que \|ρ\| \< 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1). Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ 2, soit
 
 
@@ -238,7 +227,7 @@ o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 
 summary(o.ar1)
 ```
 
-<<<<<<< HEAD
+
 
 ### 3.2 Case of spatial autocorrelation
 
@@ -249,7 +238,7 @@ Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
 
 $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
-<<<<<<< HEAD
+
 *Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
 
 
@@ -307,8 +296,12 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
 summary(data.spatialCor.glsExp)
 ```
 
+In spatially correlated data, variance increases with increasing distance up to a point *the sill*. The span of distances over which points are correlated is called *the range*.
 
-$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
+While we might expect the value of variance at a distance of zero to be zero, in reality we rarely have sampling units that approach such a small distance from one another. The value of variance when distance is equal to zero is *the nugget*. Typically this is the result of unexpected variability in your data that spatial patterns alone cannot account for.
+
+Here, in our example, the value of the sill, the range and the nugget are respectively 47.68, 1.69 and 0.12.
+
 
 
 ## 4 Application
