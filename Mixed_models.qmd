@@ -104,26 +104,29 @@ $$
 Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
 
 
-Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives s'écrivant sous la forme $$Y_i = \beta_0 + \beta_1X_i^{(1)} + \ldots + \beta_pX_i^{(p)} + \varepsilon_i$$, avec $\varepsilon_i \stackrel{iid}\sim \mathcal{N}(0,\sigma^2)$ pour l'individu $i$, peut s'écrire sous forme matricielle $$Y=X\theta+\mathrm{E}$$ où $$Y=\begin{pmatrix}
-Y_1\\
+Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives peut s'écrire sous la forme $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, où $y_i$ représente une observation de la variable réponse $Y$ pour l'individu $i$, $\beta_0$ l'ordonnée à l'origine, $\beta_1,...,\beta_p$ les coefficients associés à chaque variables explicatives $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ p observations (pour les p variables explicatives) pour l'individu $i$, et $e_i$ un terme d'erreur associé à cet individu $i$. On peut voir $e_i$ comme une réalisation d'une variable aléatoire $E_i$ distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$.
+En notant $$y=\begin{pmatrix}
+y_1\\
 \vdots\\
-Y_n\\
-\end{pmatrix}$$ correspond au vecteur des réponses, $$X=\begin{pmatrix}
-1&X_1^{(1)} & \ldots & X_1^{(p)}\\
+y_n\\
+\end{pmatrix}$$, $$X=\begin{pmatrix}
+1&x_1^{(1)} & \ldots & x_1^{(p)}\\
 \vdots & \vdots & \ldots & \vdots \\
-1 & X_n^{(1)} & \ldots & X_n^{(p)}
+1 & x_n^{(1)} & \ldots & x_n^{(p)}
 \end{pmatrix}$$, $$\theta=\begin{pmatrix}
 \beta_0\\
 \vdots\\
 \beta_p\\
-\end{pmatrix}$$, et $$\mathrm{E}=\begin{pmatrix}
+\end{pmatrix}$$ et $$e=\begin{pmatrix}
 \varepsilon_0\\
 \vdots\\
 \varepsilon_n\\
-\end{pmatrix}$$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
+\end{pmatrix}$$, on peut réécrire le modèle précédent sous la forme $$y=X\theta+e$$.
+Ici, $e$ est un vecteur de n réalisations indépendantes d'une variable aléatoire $E_i$ suivant une loi noramle $\mathcal{N}(0,\sigma^2)$. Ainsi, $e$ est lui même une réalisation d'une variable aléatoire $E$ de distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ est une observation de la variable aléatoire $E_i$  distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$). De la même manière, $y$ est une observation de $Y=X\theta+E$ où $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ est l'observation de $Y_i$ distribuée selon une loi normale $\mathcal{N}((X\theta)_i,\sigma^2)$).
+Ainsi, en introduisant $Y$ et $E$, le modèle précédent peut s'écrire $Y=X\theta+E$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
 
 Par définition, la réponse moyenne est de $X\theta$, plus ou moins un terme d'erreur qui en moyenne vaut 0 mais qui varie de $\sigma^2I_n$. Ainsi, on peut écrire $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$.
-On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques)  car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance ()
+On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques)  car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance (mesures répétées dans le temps, individus groupés par une ascendance commune,...).
 
 
 ## Structure de dependance : Odin
@@ -184,13 +187,79 @@ $$
     σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
   \end{array} } \right)
 $$
-
 ```{r}
-o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~ 1 | Subj))
- 
+#Read the data
+d=read.delim(
+"http://dnett.github.io/S510/RepeatedMeasures.txt")
+#Create Factors
+d$Program = factor(d$Program)
+d$Subj = factor(d$Subj)
+d$Timef = factor(d$Time)
 
 ```
 
+
+
+```{r}
+o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 | Subj))
+ 
+```
+
+```{r}
+summary(o.ar1)
+```
+### Cas de l'autocorrelation spatiale
+
+*Structure de dépendance*  Là encore, on veut prendre en compte la dépendance due
+à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
+Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+
+$$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
+
+*Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
+
+
+$$
+  Σ = \left( {\begin{array}{cc}
+     σ^2 + γ^2 & ...& ...& ...\\
+     ...& σ^2 + γ^2 & e^{−δ.d(i,i')} &...\\
+     ...& e^{−δ.d(i,i')}  & σ^2 + γ^2 &...\\
+ ...& ...& ... & σ^2 + γ^2\\
+  \end{array} } \right)
+$$
+
+
+```{r}
+set.seed(3)  
+n <- 100
+
+loc <- data.frame(LAT = runif(n, 144, 150), LONG = runif(n,
+    -26, -20))
+
+library(sp)
+grid <- expand.grid(LAT = seq(144, 150, l = 100), LONG = seq(-26,
+    -20, l = 100))
+coordinates(grid) <- ~LAT + LONG
+
+
+# Set up distance matrix
+distance <- as.matrix(dist(as.data.frame(loc)))  #* 1/min(distance[lower.tri(distance)])
+# Generate random variable
+delta <- 0.5
+Vmat <- function(n, mu = 0, V = matrix(1)) {
+    p <- length(mu)
+    if (any(is.na(match(dim(V), p))))
+        stop("Dimension problem!")
+    D <- chol(V)
+    t(matrix(rnorm(n * p), ncol = p) %*% D + rep(mu,
+        rep(n, p)))
+}
+V <- Vmat(1, rep(0, n), exp(-delta * distance))
+x <- rnorm(n, 30, 10)
+# image(cbind(simgrid, V))
+y <- 50 + 1 * x + 60 * V  #+ rnorm(n,0,1)
+data.spatialCor <- data.frame(y, x, loc)
+```
 
 
 ```{r}
@@ -198,6 +267,15 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
     correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
     method = "REML")
 ```
+
+
+
+```{r}
+summary(data.spatialCor.glsExp)
+```
+
+## Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?
+
 
 
 
@@ -218,7 +296,6 @@ Pour cet exemple d'application de modèle mixte, nous allons utiliser un modèle
 ----> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
 ----> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
 ----> Expliquer le graphe (pour les interactions entre les $X_s$)
-----> TESTER LA COLINEARITE CAR LA CONSTRUCTION DU MODELE COMPLET NE MARCHE PAS DU A LA COLINEARITE, LE MODELE AVEC lme4::lmer SEMBLE MARCHER, MAIS IL FAUDRAIT CHECKER ET ENLEVER CETTE COLINEARITE DANS L'EXPLORATION DES DONNES DANS LA PARTIE D'AVANT
 ----> Cites Yannick Outreman pour la structure et les lignes de code
 
 
@@ -349,7 +426,7 @@ La colinéarité fait référence à la situation dans laquelle deux ou plusieur
 
 Ici, nous allons tester la colinéarité entre nos 3 variables prédictives : 
 
-```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+```{r col, include=TRUE, fig.height=4, fig.width=7}
 library(ggplot2)
 library(gridExtra)
 # ploting Species by Island
@@ -391,19 +468,135 @@ Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est p
 
 Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007). La présence de l'effet aléatoire de l'année s'intégrera non pas avec la fonction lm, mais lme (du package nlme).
 
-```{r fullmodel,include=TRUE}
+```{r anova, include=TRUE}
 library(nlme)
 # Modèle complet
-#mod1<-lme(fixed=body_mass_g~species*sex,random=~1|year,data=df)
-#lme4::lmer(body_mass_g~species*sex + (1|year), data=df)
-
-mod2<-lme(body_mass_g~species
+mod1=lme(body_mass_g~species
               + sex
               + species:sex
               ,random=~1|year
               ,data=df)
 
 # Then we check for significance
-anova(mod2)
+#anova(mod1)
+
+#Anova Output
+#            numDF denDF  F-value p-value
+#(Intercept)     1   325 61569.82  <.0001
+#species         2   325   758.36  <.0001
+#sex             1   325   387.46  <.0001
+#species:sex     2   325     8.76   2e-04
 ```
 
+On peut voir dans l'output de l'anova de notre modèle complet que chaque interactions et chaque variable est significativce (<0.05). Le modèle complet est donc le modèle candidat.
+
+
+### Model's coefficients analysis
+
+```{r coeffm, ,include=TRUE}
+# Coefficients of the model
+summary(mod1)
+
+# The output is:
+#Fixed effects:  body_mass_g ~ species + sex + species:sex 
+#                            Value Std.Error  DF  t-value p-value
+#(Intercept)              3368.836  36.21222 325 93.03036  0.0000
+#speciesChinstrap          158.370  64.24029 325  2.46528  0.0142
+#speciesGentoo            1310.906  54.42228 325 24.08767  0.0000
+#sexmale                   674.658  51.21181 325 13.17387  0.0000
+#speciesChinstrap:sexmale -262.893  90.84950 325 -2.89372  0.0041
+#speciesGentoo:sexmale     130.437  76.43559 325  1.70650  0.0889
+
+
+```
+A partir de cette table, on peut déterminer les coefficients du modèle tels que :
+
+**Species factor**\
+- $species_{Adelie}$ = 0 (the baseline of the factor Habitat)
+- $Species_{Chinstrap}$ = $158.370$
+- $Species_{Gentoo}$ = $1310.906$
+
+**Sex factor**\
+- $Sex_{female}$ = 0 (the baseline of the factor Habitat)
+- $Sex_{male}$ = $674.658$
+
+\*\*Interaction\*\
+- $Species_{Chinstrap}$:$Sex_{male}$ = $-262.893$
+- $Species_{Gentoo}$:$Sex_{male}$ = $130.437^{NS}$
+
+So, the candidate model is: $$  Species = 3369 + (Adelie = 0, Chinstrap = 158, Gentoo = 1311)  + (Female = 0,\: Male = 675)$$ $$       + (Adelie_{Male} = 0, \:Chinstrap_{Male} = -263,\: Gentoo_{Male} = 130^{NS}) $$
+
+
+For sake of simplicity, we can write the model depending on the sexe :
+
+The model for the *Female* pinguin is : $$ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)$$ 
+
+The model for the *Male* pinguin is : $$Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)$$
+
+Ainsi, le sexe, l'espèce et l'interaction de ces deux variables (sauf entre Male et Gentoo) ont bien un impact significatif sur la masse corporelle des pingouins.
+Par exemple, chez les pingouins Adélie, la femelle va avoir une masse corporelle de 3369g, alors qu'un mâle aura une masse corporelle de 4043g et chez les Chinstrap, la femelle va avoir une masse corporelle de 3527g, alors qu'un mâle aura une masse corporelle de 3938g.
+
+
+
+
+## MODEL VALIDATION: CHECK TO ASSUMPTIONS
+
+Pour valider le modèle, il faut :
+- Valider la normalité des résidus - Histogramme et QQplot des résidus
+- Valider l'homogénéité des variances
+- En addition, vérifier la présence d'observations qui auraient trop de contribution dans le modèle
+
+
+### Normality of the residuals
+
+```{r ResidNorm, include=TRUE, fig.height=3, fig.width=6}
+par(mfrow=c(1,2))
+# Histogram
+hist(mod1$residuals,col='blue',xlab="residuals",main="Check Normality")
+# Quantile-Quantile plot
+qqnorm(mod1$residuals,pch=16,col='blue',xlab='')
+qqline(mod1$residuals,col='red')
+```
+On voit bien que l'histogramme suit une loi normale, et les points du quantile plot suivent bien la ligne rouge : la normalité des résidus est validée.
+
+
+### Homogeneity of the variance
+
+```{r Residhomo, include=TRUE, fig.height=3, fig.width=9}
+par(mfrow=c(1,3))
+
+# residuals vs fitted
+plot(residuals(mod1)~fitted(mod1)
+      , col='blue'
+      , pch=16)
+abline(h = 0)
+
+# residuals against Species
+boxplot(residuals(mod1)~ df$species, 
+         varwidth = TRUE,
+         ylab = "Residuals",
+         xlab = "Species",
+         main = "")
+abline(h = 0)
+
+# residuals against Sex
+boxplot(residuals(mod1)~ df$sex, 
+         varwidth = TRUE,
+         ylab = "Residuals",
+         xlab = "Sex",
+         main = "")
+abline(h = 0)
+
+```
+On voit ici que pour chaque graphe, la variance des résidus est distribuée de façon homogène autour de la droite horizontale. L'homogénéité de la variance est validée.
+
+
+### Look at influential observations
+
+```{r Contri, include=TRUE, fig.height=4, fig.width=4}
+par(mfrow = c(1, 1))
+library(predictmeans)
+
+CookD(mod1,newwd=TRUE)
+```
+On voit que l'individu 314, 315 et 325 ont une contribution un peu plus forte dans le modèle, mais ce n'est pas un résultat aberrant. 
