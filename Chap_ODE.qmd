@@ -1105,7 +1105,7 @@ chain and the prey at the bottom.
 The model can be written as the following system of differential
 equations:
 
-$$ PPS=\begin{cases} \frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+dxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator} \end{cases} $$
+$$ PPS=\begin{cases} \frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+hxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator} \end{cases} $$
 
 The model parameters are :
 
@@ -1114,7 +1114,7 @@ The model parameters are :
 -   *-f* and *-c* : natural death rate of *y* and *z*
 
 -   The growth rate of *y* and *z* depends on the number of prey caught.
-    It is modeled by *dxy* for *y* and by *gyz* for *z*.
+    It is modeled by *hxy* for *y* and by *gyz* for *z*.
 
 -   The death rate of *x* and *y* depends on the number of top predators
     *y* for *x* and *z* for *y* . It is modeled by *-bxy* for *x* and by
@@ -1131,12 +1131,12 @@ $$\frac{d_x}{d_t}=\frac{d_y}{d_t}=\frac{d_z}{d_t}=0$$
 
 We take our previous systems that we factored:
 
-$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(dxy-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
+$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(hxy-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
 
 The obvious solution is (0,0,0) but is not the only one. Indeed, for the
 derivatives to be equal to 0, then we must find the following solution:
 
-$$(a-by)=(gy-f)=(dx-c-ez)=0$$
+$$(a-by)=(gy-f)=(hx-c-ez)=0$$
 
 We first solve :
 $$a-by=0\Leftrightarrow a=by \Leftrightarrow y=\frac{a}{b}$$
@@ -1147,7 +1147,7 @@ Therefore, there is an equilibrium when : $$ga=fb$$
 
 In order to determine the other solutions, we must solve the following
 jacobian matrix :
-$$ J=\begin{bmatrix}a-by&-bx&0\\dy&-c+dx-ez&-ey\\0&gz&gy-f\end{bmatrix}$$
+$$ J=\begin{bmatrix}a-by&-bx&0\\hy&-c+hx-ez&-ey\\0&gz&gy-f\end{bmatrix}$$
 
 The steps are the same as for the SIR model but here the matrix is 3x3.
 We invite you to look at the chapter on matrix calculation to determine
