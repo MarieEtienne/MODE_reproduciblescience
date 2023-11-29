@@ -790,7 +790,7 @@ particular typology of one population in relation to another.
 ## Introduction
 
 MCA is a statistical method adapted to table of type "individuals x
-quatitative variable". Eingen Values correspond to means of squered
+quatitative variable". Eingen Values correspond to means of squared
 correlation ratios. It could be used a pre-processing before a
 classification or a coinertia analysis on tables with quantitative.
 
@@ -867,15 +867,16 @@ Let's have a look to Eigen Values :
 
 ```{r}
 res.mca$eig
+fviz_eig(res.mca, addlabels = TRUE)
 ```
 
 The total variance of the data set is divided between four dimensions.
 The first dimension concentrate 32.6% of the total variance. The first
-plan gather 58% of the variance.
+plan gather 58% of the variance. You can better visualize the repartition of variance with the plot.
 
 Here, you can see the results for the individuals, their coordinates
-($coord$), contribution ($contrib$) and the quality of their projection
-($cos2$ )
+($coord$), absolute contributions ($contrib$), and the quality of their projection
+($cos2$). 
 
 ```{r}
 head(res.mca$ind$coord)
@@ -895,13 +896,6 @@ individuals):
 res.mca$var$coord
 res.mca$var$contrib
 res.mca$var$cos2
-```
-
-As a supplementary quantitative variable was added, MCA gives its
-coordinates with the following code :
-
-```{r}
-res.mca$quanti.sup$coord
 ```
 
 Let's have a look to the plot of this MCA analysis :
@@ -929,6 +923,8 @@ drinking at G3. Male and female seamed to be separated by the first
 axis. As we can gather individuals sharing close properties, females
 seams to drink regularly and male more rarely. It is a bit less clear
 but male are drinking preferably in pound 1.
+
+Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitatives, they would not participate to the creation of axis but they may be ploted on the final graph. 
 
 # PART 4: CCA
 
