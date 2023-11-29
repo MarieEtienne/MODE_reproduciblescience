@@ -239,11 +239,8 @@ drawText(x = 3.15, y = -0.2, text = "of a population over time")
 
 $$\Delta$$ $$\int_a^b 👽(t) \, \mathrm dt$$
 
-# II. Order 1 ODE & definition of ODE
 
-# III. Order 2 ODE
-
-# ODE 2 equations
+# III. 2-equation ODE systems : Lotka Volterra model
 
 An ordinary differential equation system with 2 equations represents the simultaneous rates of change of two related functions, where each equation typically involves the other one, expressing their mutual dependence.
   
@@ -255,8 +252,6 @@ Generally, if we want to quantify the effect of a species on another species... 
 You've surely already heard about Lotka-Volterra (LV) prey-predator model. You may not know this but it IS an ODE system with 2 equations ! **LV is the most known way to model the dynamic of predator-prey populations.**  
   
 But Lotka-Volterra also has applications in microbiology (see https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)  
-  
-  
 
 ## Lotka-Volterra  
 
@@ -504,7 +499,7 @@ You can use a online generator to flip the text back up, or just take a picture 
 
 
 
-# **IV. 3-equation system**
+# IV. 3-equation system
 
 We will now make the system more complex by adding an additional
 equation. To solve these systems, two methods are possible. If we are in
@@ -674,7 +669,7 @@ of the eigenvalues. In this case, the real part is negative which
 indicates a **stable attractive node**.
 
 This sounds complicated, **but don't panic** ! In ecology we are lucky
-to have a great tool, R, which allows us to resolve this type of system.
+to have a great tool, R, which allows us to resolve this type of system. You can see how to do it on R at the end of Lotka Volterra 3 species.
 
 ## 2) Lotka-Volterra : A three-species model
 
