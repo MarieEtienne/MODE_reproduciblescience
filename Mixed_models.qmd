@@ -78,6 +78,7 @@ $$
 where:
 
 $Y$ is the response vector of the observations, $X\theta$ is the expectation of the response vector $Y$ and $\Sigma$ is the variance matrix. 
+
 We can note that if the response vector $Y$ is of dimension $n$, the matrix $\Sigma$ is of dimensions $n \times n$. Since $\Sigma$ is symmetric, it comprises $n(n + 1)/2$ parameters. This is because, in a symmetric matrix, the elements above (or below) the main diagonal are the same as those below (or above), reducing the total number of parameters needed to describe the matrix.
 
 However, the limitation of the available data prevents considering models where all these $n(n + 1)/2$ parameters are free. This restriction arises from the need to have a significant amount of data to reliably estimate each parameter, which quickly becomes unrealistic with a limited dataset.
