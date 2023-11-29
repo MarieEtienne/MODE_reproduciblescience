@@ -1195,4 +1195,15 @@ $$
 
 # Conclusion & motivation words!
 
-> > > > > > > master
+What can we conclude from all this?
+
+An Ordinary Differential Equation (ODE):
+- has many applications: in mechanics, physics, geometry and biology
+- is an equation relating a variable to its derivative(s)
+- describes the rate at which a variable varies over time
+- has an infinite number of solutions, so it's important to define the initial conditions
+
+It is possible to solve ODE systems with one, two, three ... equations that may contain ODEs of order 1, 2 or 3... But this is complex to solve!
+
+
+
