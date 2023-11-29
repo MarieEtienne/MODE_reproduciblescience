@@ -299,7 +299,6 @@ summary(data.spatialCor.glsExp)
 
 In spatially correlated data, variance increases with increasing distance up to a point *the sill*. The span of distances over which points are correlated is called *the range*.
 
-<<<<<<< HEAD
 While we might expect the value of variance at a distance of zero to be zero, in reality we rarely have sampling units that approach such a small distance from one another. The value of variance when distance is equal to zero is *the nugget*. Typically this is the result of unexpected variability in your data that spatial patterns alone cannot account for.
 
 Here, in our example, the value of the sill, the range and the nugget are respectively 47.68, 1.69 and 0.12.
