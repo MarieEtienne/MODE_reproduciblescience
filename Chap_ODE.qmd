@@ -317,23 +317,23 @@ To make it more telling, let's say that our prey population is a zebra populatio
 ```{r, echo=TRUE}
 rm(list=ls()) #to clear all the environment
 
-X_init<- 10     #starting value for x
-Y_init<- 4     #starting value for y
+X_init<- 5     #starting value for x
+Y_init<- 3     #starting value for y
 ```
 
-The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 50 months.  
+The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 160 months.  
   
-For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
+For our example, we will talk about numbers of individuals (Xinit=5 individuals, Yinit=3 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
 
 ```{r, echo=TRUE}
-tend<-50    #how long the simulation is going to run for
+tend<-160    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
 # Model coefficients
-a<-1.1 #prey
+a<-0.8 #prey
 b<-0.4 #prey
-c<-0.1 #predator
-h<-0.4 #predator
+c<-0.6 #predator
+h<-0.2 #predator
 ```
 
 
@@ -411,7 +411,7 @@ $$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Pr
 
 ### Exercices to understand :
 
-1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 1.1. 
+1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 0.8. 
 
 Answer:
 
@@ -420,9 +420,9 @@ Answer:
 rm(list=ls())
 
 ####DEFINING THE COEFFICIENTS AND VARIABLES####
-X_init<-10
-Y_init<-4
-tend<-50
+X_init<-5
+Y_init<-3
+tend<-160
 delta_t<-0.01
 
 
@@ -437,13 +437,13 @@ t<-c(0)   #this vector will be filled up with all the time steps
 a_seasonal_variation <- function(t) {
   amplitude <- 0.6  #amplitude of the seaonal variation
   period <- 12      #seasonal period
-  mean <- 1.1     #mean value of the growth rate
+  mean <- 0.8     #mean value of the growth rate
   return(mean + amplitude * sin(2 * pi * t / period))
 }
 
 b<-0.4
-c<-0.1
-h<-0.4
+c<-0.6
+h<-0.2
 
 ####SIMULATION####
 
