@@ -1,15 +1,20 @@
 ---
-editor: 
-  markdown: 
-    wrap: 72
+title: "Chapter : Bootstrapping and Resampling"
+
+bibliography: references.bib
+execute: 
+  freeze: auto
+output: 
+  html_document:
+   toc: true
+   toc_float: true
 ---
 
 ------------------------------------------------------------------------
 
 title: "Chapter : Bootstrapping and Resampling"
 
-bibliography: references.bib \# Fichier bibliographie execute: freeze:
-auto output: html_document: toc: true toc_float: true ---
+bibliography: references.bib \# Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true ---
 
 # General introduction
 
@@ -33,8 +38,7 @@ qqline(data$Sepal.Width)
 #Or iris dataset ? 
 ```
 
-L'échantillon est normalement distribué, on peut donc calculer
-l'intervalle de confiance de la moyenne de la manière suivante:
+L'échantillon est normalement distribué, on peut donc calculer l'intervalle de confiance de la moyenne de la manière suivante:
 
 ```{r}
 low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
@@ -42,29 +46,21 @@ high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.
 print(c(low,high))
 ```
 
-rq: source INSEE taille moyenne F = 1 m 62, et
-https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=\~FRA
-taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après)
-Not in intervall, pop grow, + ech non représentatif de la pop
-française
+rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=\~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après) Not in intervall, pop grow, + ech non représentatif de la pop française
 
 ## Confidence interval on multiple sub-samples means
 
-Si on veut désormais estimer $\mu$, la taille moyenne des étudiants
-sur les trois promotions du jeu de données.
+Si on veut désormais estimer $\mu$, la taille moyenne des étudiants sur les trois promotions du jeu de données.
 
 ```{r}
 (mu <- mean(data$Sepal.Width))
 ```
 
-mu correspond à la taille moyenne qu'on veut estimer mais dont on ne
-connait pas la véritable valeur.
+mu correspond à la taille moyenne qu'on veut estimer mais dont on ne connait pas la véritable valeur.
 
 # The Jackknife resampling method
 
-Imaginons mantenant que nous ayons seulement accès à un échantillon
-et qu'on veuille estimer la taille moyenne des étudiants de ces trois
-promotions.
+Imaginons mantenant que nous ayons seulement accès à un échantillon et qu'on veuille estimer la taille moyenne des étudiants de ces trois promotions.
 
 ```{r}
 set.seed(121)
@@ -76,9 +72,7 @@ qqnorm(data_sample$Sepal.Width)
 qqline(data_sample$Sepal.Width)
 ```
 
-On a seulement accès à cet échantillon non normalement distribué. La
-dessus, nous ne pouvons pas calculer les intervalles de confiance comme
-vu précedemment. C'est là que je Jackknife devient intéressant.
+On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant.
 
 ...
 
@@ -113,55 +107,19 @@ shapiro.test(group)
 
 ## Introduction
 
-Les tests de permutations sont une méthode statistique puissante pour
-comparer des groupes et évaluer l'effet d'une variable sur une autre.
-Contrairement aux tests paramétriques, les tests de permutations ne
-reposent pas sur des hypothèses spécifiques concernant la distribution
-des données, les rendant ainsi plus robustes dans certaines situations.
-Autrement dit, même si les données de notre échantillon ne suive pas
-une loi classique (e.g. gaussienne), l'inférence statistique reste
-possible. Ce sont des tests dont le fonctionnement est intuitifs, facile
-à mettre en place et leur robustenne les rend particulièrement
-pratique dans un grand nombre de situations.
+Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l'effet d'une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations. Autrement dit, même si les données de notre échantillon ne suive pas une loi classique (e.g. gaussienne), l'inférence statistique reste possible. Ce sont des tests dont le fonctionnement est intuitifs, facile à mettre en place et leur robustenne les rend particulièrement pratique dans un grand nombre de situations.
 
 ## Fondements des Tests de Permutations
 
 ### Principe Fondamental
 
-A l'instar des autres tests statistiques classiques (e.g. T de Student,
-test du $\chi 2$...), les tests de permutations sont basés sur une
-distribution d'une statistique de test sous l'hypothèse nulle. La
-distribution sous l'hypothèse nulle correspond à la distribution
-théorique de la statistique du test en supposant que l'effet que nous
-testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas
-d'effet sur la variable dépendante). Dans les tests statistiques
-classiques, cette distribution correspond à différentes lois connues,
-la plus connue étant la loi Gaussienne, mais ça peut-être la
-distribution de Student, la distribution $\chi 2$ etc. La particularité
-des tests de permutations est que l'on va générer cette distribution
-théorique de façon empirique directement à partir des données. Les
-tests de permutation sont des tests non-paramétriques (ils ne font pas
-d'approximation de distribution) et exacts (basés sur les données
-uniquement).
+A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$...), les tests de permutations sont basés sur une distribution d'une statistique de test sous l'hypothèse nulle. La distribution sous l'hypothèse nulle correspond à la distribution théorique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dépendante). Dans les tests statistiques classiques, cette distribution correspond à différentes lois connues, la plus connue étant la loi Gaussienne, mais ça peut-être la distribution de Student, la distribution $\chi 2$ etc. La particularité des tests de permutations est que l'on va générer cette distribution théorique de façon empirique directement à partir des données. Les tests de permutation sont des tests non-paramétriques (ils ne font pas d'approximation de distribution) et exacts (basés sur les données uniquement).
 
-Selon les règles du théorème centrale limite, répéter un grand
-nombre de fois une observation d'une variable aléatoire (ici la
-statistique de test) ménera à une distribution Gaussienne dans
-laquelle on pourra placer la statistique de test observée (i.e.
-calculée sur notre échantillon) et ainsi définir la significativité
-de l'effet de nos variables explicatives. En d'autres termes, on
-génère toutes les permutations possibles des observations, calculons
-la statistique de test pour chaque permutation, puis comparons la
-statistique observée à cette distribution nulle.
+Selon les règles du théorème centrale limite, répéter un grand nombre de fois une observation d'une variable aléatoire (ici la statistique de test) ménera à une distribution Gaussienne dans laquelle on pourra placer la statistique de test observée (i.e. calculée sur notre échantillon) et ainsi définir la significativité de l'effet de nos variables explicatives. En d'autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.
 
 ### Statistique de Test
 
-La statistique d'un test est une mesure numérique utilisée pour
-évaluer si les différences observées entre les groupes dans une
-étude sont statistiquement significatives. Elle permet de quantifier
-l'écart entre les observations observées et celles qui pourraient
-être attribuées au hasard. Voici quelques exemples de statistiques de
-tests connues : \$\$ \begin{align*}
+La statistique d'un test est une mesure numérique utilisée pour évaluer si les différences observées entre les groupes dans une étude sont statistiquement significatives. Elle permet de quantifier l'écart entre les observations observées et celles qui pourraient être attribuées au hasard. Voici quelques exemples de statistiques de tests connues : \$\$ \begin{align*}
 F [\text{ANOVA}] &: \quad F = \frac{MS_{\text{intergroupes}}}{MS_{\text{intragroupes}}} \quad \sim \mathcal{F(ddl_{\text{intergroupes}}, ddl_{\text{intragroupes}})} &&\\
 \\
 t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \quad \sim t(ddl) &&\\
@@ -169,80 +127,49 @@ t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_
 \chi^2 [\text{Test du } \chi^2] &: \quad \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} \quad \sim \chi^2(ddl) &&\\
 \end{align*}
 
-\$\$ Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté,
-$\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$,
-$n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$
-observée, $E_i$ la distance $\chi^2$ attendue.
+\$\$ Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté, $\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$, $n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$ observée, $E_i$ la distance $\chi^2$ attendue.
 
-Ces statistiques suivent des loi de distribution connues, on va donc
-comparer la statistique observée (calculé sur l'échantillon de
-données) à la distribution nulle de cette statistique et obtenir ainsi
-une p-valeur.
+Ces statistiques suivent des loi de distribution connues, on va donc comparer la statistique observée (calculé sur l'échantillon de données) à la distribution nulle de cette statistique et obtenir ainsi une p-valeur.
 
-Ces staomme La statistique de test pour les tests de permutations
-dépend du type d'étude et de la relation entre les données
-(indépendance ou non-indépendance). Pour un test de différence de
-moyennes entre deux groupes, par exemple, la statistique de test
-pourrait être définie comme suit :
+Ces staomme La statistique de test pour les tests de permutations dépend du type d'étude et de la relation entre les données (indépendance ou non-indépendance). Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :
 
-\[ T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}}
-\sqrt{\frac{n_1 n_2}{n_1 + n_2}}, \]
+\[ T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}} \sqrt{\frac{n_1 n_2}{n_1 + n_2}}, \]
 
-où (\bar{X}\_1) et (\bar{X}*2) sont les moyennes des deux groupes,
-(s*{\text{pooled}}) est l'écart-type combiné des groupes, et (n_1) et
-(n_2) sont les tailles des échantillons.
+où (\bar{X}\_1) et (\bar{X}*2) sont les moyennes des deux groupes, (s*{\text{pooled}}) est l'écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons.
 
 ## Mise en œuvre des Tests de Permutations
 
 ### Étapes du Test
 
-Les étapes typiques pour mettre en œuvre un test de permutations
-comprennent :
+Les étapes typiques pour mettre en œuvre un test de permutations comprennent :
 
 1.  Formuler les hypothèses nulle et alternative.
 2.  Calculer la statistique de test à partir des données observées.
 3.  Générer toutes les permutations possibles des données.
 4.  Calculer la statistique de test pour chaque permutation.
-5.  Comparer la statistique observée à la distribution nulle des
-    statistiques de test.
+5.  Comparer la statistique observée à la distribution nulle des statistiques de test.
 6.  Conclure sur l'acceptation ou le rejet de l'hypothèse nulle.
 
 ## Exemples Pratiques
 
 ### Test de Permutations pour la Différence de Moyennes
 
-Considérons un exemple où nous voulons tester si la différence de
-moyennes entre deux groupes est statistiquement significative. La
-statistique de test est définie comme dans l'équation ci-dessus.
+Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l'équation ci-dessus.
 
 ### Test de Permutations pour la Corrélation
 
-Dans le cas d'une corrélation, la statistique de test pourrait être
-basée sur la mesure de corrélation de Spearman. Les étapes décrites
-précedemment devront être suivi également.
+Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
 
 # R�gressions et tests de Mantel
 
 ## R�gressions
 
-La r�gression est une m�thode de mod�lisation empirique d'une variable
-r�ponse\
-(appel�e ici $Y$) en fonction d'une ou de plusieurs variables
-explicatives (\$ X_1, X_2, ..., X_n �\$ avec \$ n \$ le nombre de
-variables explicatives). Ce sont les r�gressions lin�aires qui sont
-majoritairement utilis�es dans le domaine des statistiques,
-principalement pour leur simplicit� d'application. Pla�ons nous donc
-dans ce monde lin�aire. Le mod�le lin�aire est mod�lis� par :
-$$ Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} + \epsilon_i, \ \ \ \epsilon_i \sim \mathcal{N}(0,\,\sigma) $$
-Avec $Y_i$ la $i^{�me}$ valeur de la variable $Y$ et $X_{ij}$ la
-$i^{�me}$ valeur de la $j^{�me}$ variable $X$.
+La r�gression est une m�thode de mod�lisation empirique d'une variable r�ponse\
+(appel�e ici $Y$) en fonction d'une ou de plusieurs variables explicatives (\$ X_1, X_2, ..., X_n �\$ avec \$ n \$ le nombre de variables explicatives). Ce sont les r�gressions lin�aires qui sont majoritairement utilis�es dans le domaine des statistiques, principalement pour leur simplicit� d'application. Pla�ons nous donc dans ce monde lin�aire. Le mod�le lin�aire est mod�lis� par : $$ Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} + \epsilon_i, \ \ \ \epsilon_i \sim \mathcal{N}(0,\,\sigma) $$ Avec $Y_i$ la $i^{�me}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{�me}$ valeur de la $j^{�me}$ variable $X$.
 
 ### Test statistique sur les coefficients.
 
-Il faut maintenant s'assurer que les param�tres $b$ et $\alpha$ sont
-diff�rents de 0. Le test par permutation permet de d�finir l'hypoth�se
-nulle (H0 : \$ \alpha = 0\$ et $b = 0$). L'id�e est de permuter les
-valeurs de $Y_i$ et les $X_i$.
+Il faut maintenant s'assurer que les param�tres $b$ et $\alpha$ sont diff�rents de 0. Le test par permutation permet de d�finir l'hypoth�se nulle (H0 : \$ \alpha = 0\$ et $b = 0$). L'id�e est de permuter les valeurs de $Y_i$ et les $X_i$.
 
 ```{r exemple permutation sepal.width & sepal.length}
 library(kableExtra) # Mettre en 1er chunk si n�cessaire
@@ -303,4 +230,3 @@ hist(hyp_nulle[,2],
      xlab = "b")
 
 ```
-
