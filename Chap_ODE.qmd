@@ -303,7 +303,7 @@ Let's dive into R, to simulate and plot the evolution of the two populations, us
 To simulate this population dynamic, we will use given coefficients, initial levels of populations and also a given simulation time and given time step size. Indeed, We will use the so-called Euler method, as we will be moving through time, and incrementing new values of population levels at each time steps, to keep track of the evolution of the two populations.  
 
 What you will have to keep in mind:
-In this Euler method, we will think of $$dt$$ as $$\Delta t$$
+In this Euler method, we will think of *dt* as $$\Delta t$$
 
 Thus, we can make this approximation:
 $$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d_y}{d_t} = -cy + hxy \\ => dy = (-cy + hxy) * \Delta t $$
@@ -314,7 +314,7 @@ $$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d
 Disclaimer: terms' values are not intended to be ecologically relevant, but to serve as an example.  
 
 To make it more telling, let's say that our prey population is a zebra population, whereas the predator population are a group of lions. Obviously, we would think that the zebra population starts at a higher population size than a simple group of lions. That's what we tell to our model:
-```{r}
+```{r, echo=TRUE}
 rm(list=ls()) #to clear all the environment
 
 X_init<- 10     #starting value for x
@@ -325,7 +325,7 @@ The initial values for the populations' sizes have been defined. Now, since LV i
   
 For our example, we will talk about numbers of individuals (Xinit=10 individuals, Yinit=4 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
 
-```{r}
+```{r, echo=TRUE}
 tend<-50    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
@@ -341,7 +341,7 @@ h<-0.4 #predator
 
 We create some vectors to keep track of the variables, as we are moving through time. Then those vectors will prove useful when we will want to plot the dynamics:
 
-```{r}
+```{r, echo=TRUE}
 X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
 Y<-c(Y_init)    #idem with Y
 
@@ -350,7 +350,7 @@ t<-c(0)   #this vector will be filled up with all the time steps
 
 #### Simulation
 
-```{r}
+```{r, echo=TRUE}
 while (t[length(t)]<tend) 
 {
   current_X<-X[length(X)]   #we define current_X as the most recent value of X
@@ -374,7 +374,7 @@ while (t[length(t)]<tend)
 ```
 #### Plotting
 
-```{r}
+```{r, echo=TRUE}
 library(ggplot2)
 
 LV <- data.frame(time = t, prey = X, predator = Y)
@@ -390,7 +390,7 @@ You can see the cyclic nature of this dynamic as explained earlier: the prey thr
 
 This dynamic can be seen in a phase space plot i.e. the level of predator as a function of the prey level :
 
-```{r}
+```{r, echo=TRUE}
 ggplot(LV, aes(x = prey, y = predator)) +
   geom_point() +
   labs(x = "Prey (nb of individuals)", y = "Predator (nb of individuals)") +
@@ -416,7 +416,7 @@ $$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Pr
 Answer:
 
 
-```{r}
+```{r,echo=TRUE}
 rm(list=ls())
 
 ####DEFINING THE COEFFICIENTS AND VARIABLES####
