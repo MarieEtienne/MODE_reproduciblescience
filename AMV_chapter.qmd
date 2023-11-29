@@ -9,6 +9,8 @@ editor_options:
 
 # Introduction to Multivariates Analysis
 
+@van2001comparison
+
 Biologists' data, whether on individuals, populations or communities,
 are usually presented in the form of rectangular tables, with
 observations (n) in the rows and variables (p) in the columns.
@@ -37,12 +39,18 @@ and generate hypotheses that can then be tested.
 # PART 1: PCA
 
 ## Introduction
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> ef4b68f34a715a34e1ba68b220d2f0d7b3c0ea3c
 
 You can import R package using the code
+>>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
 
 PCA can be used to process a measurement table with :
 
--   In rows: the **n observations**.
+-   In row: the **n observations**.
 
 -   In column: the **p quantitative variables**.
 
@@ -64,16 +72,22 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
+<<<<<<< HEAD
 <!-- -->
 
+=======
+<<<<<<< HEAD
+=======
+<!-- -->
+
+>>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
+>>>>>>> ef4b68f34a715a34e1ba68b220d2f0d7b3c0ea3c
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
         forming an acute angle.
 
     -   Two independent variables are represented by orthogonal vectors.
-
-## 
 
 ## Mathematics
 
@@ -179,8 +193,25 @@ summary(data)
 
 In this data set, we have 14 individuals (athletes) on whom 10
 quantitative variables (performances in different sports disciplines)
-have been recorded: - X100m - Long.jump - Shot.put - X400m -
-X110m.hurdle - Discus - Pole.vault - Javelin - X1500m
+have been recorded:
+
+-   X100m
+
+-   Long.jump
+
+-   Shot.put
+
+-   X400m
+
+-   X110m.hurdle
+
+-   Discus
+
+-   Pole.vault
+
+-   Javelin
+
+-   X1500m
 
 If NAs are present in the data. In order to carry out the PCA without
 any problems with NAs, they can be omitted from the analysis with the
@@ -212,18 +243,18 @@ Here's another way of visualizing correlations between variables:
 abs(cor(data))>0.9
 ```
 
-If TRUE (outside the diagonal), then both variables are correct. If two
-variables are correct, one must be removed. The choice of deleting one
-of the two correct variables is arbitrary and depends on the question
-being asked.
+If TRUE (outside the diagonal), then both variables are correlated If
+two variables are correlated, one must be removed. The choice of
+deleting one of the two correct variables is arbitrary and depends on
+the question being asked.
 
 To remove a variable from the data set, use the following function:
 **data=data\[,-(column_of_the_variable_to_remove)}\]**
 
 ### c) Performing PCA :
 
-To run the PCA, you need to load the following two packages: -
-**factoextra** - **FactoMineR**
+To run the PCA, you need to load the following two packages:
+**factoextra** and **FactoMineR**
 
 Then, to perform the PCA on R, you can use the function : **PCA()**.
 Remember to store the result of this PCA in a new variable, so that you
@@ -241,68 +272,73 @@ PCA=PCA(data)
 #### 1) Inertia and choice of axes :
 
 ```{r}
-# Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
+# Recover the eigenvalues of each axis and the inertia carried by the principal components
 PCA$eig
 
-# Visualisation graphique de l'inertie de chaque axe : 
+# Graphical display of the inertia of each axis : 
 fviz_eig(PCA, addlabels = TRUE)
 ```
 
 To determine the number of axes used in the PCA analysis, we need to
 identify the jump in variance explained by the different axes. Here we
 can see that the first axis represents 43.2% of the variance, the second
-axis 22%, the third axis 14.1%, ... We can therefore see that the jump
-in variance explained by the different axes is between the first and
-second axes. The difference between the variance explained by the axes
-other than the first is negligible compared to the difference between
-the first axis and the others.
+axis 22%, the third axis 14.1%, ...
+
+We can therefore see that the jump in variance explained by the
+different axes is between the first and second axes. The difference
+between the variance explained by the axes other than the first is
+negligible compared to the difference between the first axis and the
+others.
 
 For the PCA interpretation, we therefore retain the first two axes,
 which together explain 65.19% of the variance.
 
 #### 2) Interpretation of the biological meaning of the axes :
 
-In PCA, the axes are interpreted according to the columns (\<=\>
+In PCA, the axes are interpreted according to the columns (i.e.
 variables) via the correlation circle and the absolute contributions of
 the variables.
 
 To obtain this information in R, use the following commands:
 
 ```{r}
-# Obtention des contributions absolues des variables :
+# Obtain the absolute contributions of variables :
 PCA$var$contrib
 
-# Obtention du cercle des correlations :
+# Obtain the circle of correlations :
 fviz_pca_var(PCA)
 
-# Representation graphique des valeurs de contributions absolues des variables pour un axe : 
-# Cas axe 1 : 
+# Graphical representation of absolute variable contribution values for an axis: 
+# Axis 1 case : 
 fviz_contrib(PCA, choice = "var", axes = 1)
 
-# Cas axe 2: 
+# Axis 2 case: 
 fviz_contrib(PCA, choice = "var", axes = 2)
 ```
 
 The absolute contribution shows how the initial variable contributes to
 the formation of the axis. To find out from these results which
 variables contribute to the formation of the synthetic axis, we use the
-threshold of \*1/number_of_variables)\*100\*\* (in general). For a
-variable to contribute, its contribution value must be greater than this
+threshold of $\frac{1}{nb\_variables}\times100$ (in general). For a variable
+to contribute, its contribution value must be greater than this
 threshold. This threshold value corresponds to the red dotted line on
 the graphs showing the absolute contributions of the variables along the
 axes.
 
 From these results, we can see that axis 1 is mainly represented by the
-following variables: - Points - Discus - Shotput - Long.jump - X100m -
-High.jump
+following variables:
 
-Axis 2 is represented by the variables: - X1500m - Pole.vault -
-X110m.hurdle - X100m
+-   Points, Discus, Shotput, Long.jump, X100m, High.jump
+
+Axis 2 is represented by the variables:
+
+-   X1500m, Pole.vault, X110m.hurdle, X100m
 
 The correlation circle also shows that some variables are related and
 others independent. Two related variables are represented by vectors
 forming an acute angle. Two independent variables are represented by
-orthogonal vectors.
+orthogonal vectors. Two negatively related variables are represented by
+two opposite vectors.
 
 #### 3) Projection of individuals to create a typology based on the axes:
 
@@ -316,19 +352,21 @@ To obtain the relative contributions of individuals on R, use the
 following commands:
 
 ```{r}
-# Obtention des contributions relatives des individus :
+# Relative contributions of individuals :
 PCA$ind$cos2
 
-# Obtention de la projection des individus : 
+# Obtaining the projection of individuals : 
 fviz_pca_ind(PCA)
 
 ```
 
-The individuals who most explain Axis 1 are : - Sebrle - Clay - Karpov -
-Schwarzl - Drews - Schoenbeck
+The individuals who most explain Axis 1 are :
 
-Those who most explain axis 2 are : - Macey - Warners - Zsivoczky -
-Barras
+-   Sebrle, Clay, Karpov, Schwarzl, Drews, Schoenbeck
+
+Those who most explain axis 2 are :
+
+-   Macey, Warners, Zsivoczky, Barras
 
 ### e) Biological conclusion :
 
@@ -340,7 +378,9 @@ represent the projection of the individuals and variables as follows:
 fviz_pca_biplot(PCA)
 ```
 
-Knowing the biological interpretation of the axes : *IMAGE*
+Knowing the biological interpretation of the axes :
+
+![**PCA interpretation**](PCA_interpretation.png)
 
 We can therefore see that the individuals with the highest scores at
 this tournament are those who had the best results in the discus, shot
@@ -356,9 +396,10 @@ between certain variables and individuals can be observed.
 ## Introduction
 
 CA deals with **tables that cross two categorical variables with several
-modalities**, such as contingency tables, frequency tables, ... In these
-tables, rows and columns are **interchangeable** and the **variables are
-all in the same units**.
+modalities**, such as contingency tables, frequency tables, ...
+
+In these tables, rows and columns are **interchangeable** and the
+**variables are all in the same units**.
 
 The aim of CA is to **reveal structures and associations between these
 qualitative variables** by representing them in a multidimensional
@@ -371,9 +412,9 @@ identify associations between categories.
 Unlike PCA, for a CA, we're not interested in the distances between
 points, but in the distances between profiles of different modalities. A
 CA is therefore simply a PCA on the profiles, by equipping the space
-with a suitable distance: **the ??? distance**. With this distance, the
-weight of rows (or columns) is relativized, but not cancelled out, and
-the symmetry between rows and columns is preserved.
+with a suitable distance: **the** $\chi^2$ **distance**. With this
+distance, the weight of rows (or columns) is relativized, but not
+cancelled out, and the symmetry between rows and columns is preserved.
 
 ## Mathematics
 
@@ -678,7 +719,7 @@ variable.
 ### a) Performing CA :
 
 To run the CA, such as the PCA, you need to load the following two
-packages: - **factoextra** - **FactoMineR**
+packages: **factoextra** and **FactoMineR**.
 
 Then, to perform the CA on R, you can use the function : **CA()**.
 Remember to store the result of this PCA in a new variable, so that you
@@ -691,28 +732,30 @@ library(factoextra)
 CA=CA(data)
 ```
 
-In a CFA, rows are called **rows** and columns called **col**.
+In a CA, rows are called **rows** and columns called **col**.
 
 ### b) Interpretation of outputs :
 
 #### 1) Inertia and choice of axes :
 
 ```{r}
-# Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
+# Recover the eigenvalues of each axis and the inertia carried by the principal components
 CA$eig
 
-# Visualisation graphique de l'inertie de chaque axe : 
+# Graphical display of the inertia of each axis : 
 fviz_eig(CA, addlabels = TRUE)
 ```
 
 To determine the number of axes used in the CA analysis, we need to
 identify the jump in variance explained by the different axes. It's the
 same as for PCA. Here we can see that the first axis represents 55.4% of
-the variance, the second axis 28.7%, the third axis 9.8%, ... We can
-therefore see that the jump in variance explained by the different axes
-is between the first and second axes. The difference between the
-variance explained by the axes other than the first is negligible
-compared to the difference between the first axis and the others.
+the variance, the second axis 28.7%, the third axis 9.8%, ...
+
+We can therefore see that the jump in variance explained by the
+different axes is between the first and second axes. The difference
+between the variance explained by the axes other than the first is
+negligible compared to the difference between the first axis and the
+others.
 
 For the CA interpretation, we therefore retain the first two axes, which
 together explain 65.19% of the variance.
@@ -738,10 +781,13 @@ Row_contrib>(1/8)*100
 
 ```
 
-D'apres ces resultats, les lignes expliquant le premier axe sont : -
-Black - Blues - Pink
+According to these results, the lines explaining the first axis are :
 
-Les lignes expliquant le second axe sont : - Chestnut - White
+-   Black, Blues, Pink
+
+The lines explaining the second axis are :
+
+-   Chestnut, White
 
 #### 3) Interpretation of relatives contributions :
 
@@ -758,11 +804,11 @@ CA$col$cos2
 
 ```
 
-Blue and yellow eye colors are well represented by axis 1. Gray eye
+Blue and yellow eye colors are well represented by axis 1. Grey eye
 color is represented by axis 2.
 
 ```{r}
-# Obtention des valeurs des contributions relatives des lignes : 
+# Relative line contribution values : 
 CA$row$cos2
 
 ```
@@ -774,15 +820,20 @@ the case).
 ### c) Biological conclusion :
 
 For the question of links between modalities in rows or columns, you
-need to know that : - If we have a positive sclaire product, i.e. less
-than 90? difference between the arrows of two different modalities. Then
-we have a conjunction representing an affinity between these two
-modalities. - If we have a negative scalar product, i.e. more than 90?
-difference between the arrows of two different modalities. Then we have
-an opposition of these two modalities. They reject each other. - If we
-have a zero scalar product, i.e. the arrows between two different
-modalities are perpendicular. Then there is no link between these two
-modalities.
+need to know that :
+
+-   If we have a positive sclaire product, i.e. less than 90 degree
+    difference between the arrows of two different modalities. Then we
+    have a conjunction representing an affinity between these two
+    modalities.
+
+-   If we have a negative scalar product, i.e. more than 90? difference
+    between the arrows of two different modalities. Then we have an
+    opposition of these two modalities. They reject each other.
+
+-   If we have a zero scalar product, i.e. the arrows between two
+    different modalities are perpendicular. Then there is no link
+    between these two modalities.
 
 ```{r}
 fviz_ca_biplot(CA)
@@ -791,10 +842,14 @@ fviz_ca_biplot(CA)
 On this graph, the rows are shown in blue and the columns in red. In
 other words, hair color in blue and eye color in red.
 
-From this analysis, we can see : - A conjunction between black, pink,
-brown or blond hair and blue or brown eyes. - A conjunction between
-yellow eyes and blue hair - An opposition between these two groups on
-axis 1.
+From this analysis, we can see :
+
+-   A conjunction between black, pink, brown or blond hair and blue or
+    brown eyes.
+
+-   A conjunction between yellow eyes and blue hair
+
+-   An opposition between these two groups on axis 1.
 
 In an analysis where the data are not created randomly, but come from
 different individuals from different populations. This could reveal a
@@ -805,7 +860,7 @@ particular typology of one population in relation to another.
 ## Introduction
 
 MCA is a statistical method adapted to table of type "individuals x
-quatitative variable". Eingen Values correspond to means of squered
+quatitative variable". Eingen Values correspond to means of squared
 correlation ratios. It could be used a pre-processing before a
 classification or a coinertia analysis on tables with quantitative.
 
@@ -835,10 +890,10 @@ or 0) is divided by the probability $p_{k}$ of having this modality
 (i.e. $p_k=\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we
 subtract 1 to center the result.
 
-$V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
+$$V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$$
 
 We define the ***distance D*** between 2 individuals $i$ and $i’$ as :
-$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
+$$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$$
 
 So 2 individuals taking the all same modalities are at a distance D = 0,
 the more similar the responses are over a large number of modalities,
@@ -850,7 +905,7 @@ The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is
 the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$
 is the ***correlation ratio*** between the modality $k$ and l'axe $F_s$.
 The axis $F_1$ is the one which maximize its correlation ratio with all
-the modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
+the modalities $k$ : $$F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$$
 
 ## Interpretation
 
@@ -882,15 +937,17 @@ Let's have a look to Eigen Values :
 
 ```{r}
 res.mca$eig
+fviz_eig(res.mca, addlabels = TRUE)
 ```
 
 The total variance of the data set is divided between four dimensions.
 The first dimension concentrate 32.6% of the total variance. The first
-plan gather 58% of the variance.
+plan gather 58% of the variance. You can better visualize the
+repartition of variance with the plot.
 
 Here, you can see the results for the individuals, their coordinates
-($coord$), contribution ($contrib$) and the quality of their projection
-($cos2$ )
+($coord$), absolute contributions ($contrib$), and the quality of their
+projection ($cos2$).
 
 ```{r}
 head(res.mca$ind$coord)
@@ -904,19 +961,12 @@ on the first plan. Contribution is how the point contribute to the
 creation of different axis.
 
 You can access the same information for the variable (instead of the
-individuals): \>\>\>\>\>\>\> Lucile
+individuals):
 
 ```{r}
 res.mca$var$coord
 res.mca$var$contrib
 res.mca$var$cos2
-```
-
-As a supplementary quantitative variable was added, MCA gives its
-coordinates with the following code :
-
-```{r}
-res.mca$quanti.sup$coord
 ```
 
 Let's have a look to the plot of this MCA analysis :
@@ -945,6 +995,11 @@ axis. As we can gather individuals sharing close properties, females
 seams to drink regularly and male more rarely. It is a bit less clear
 but male are drinking preferably in pound 1.
 
+Note that supplementary quantitaive data could be added to the analysis
+to help interpretation. As they are quantitatives, they would not
+participate to the creation of axis but they may be ploted on the final
+graph.
+
 # PART 4: CCA
 
 ## Introduction
@@ -955,7 +1010,11 @@ Y, the response variable and the second one is called X, the explanatory
 variable. For example :
 
 | Table Y                                           | Table X                                                                                              |
-|--------------------------|----------------------------------------------|
+<<<<<<< HEAD
+|---------------------------|---------------------------------------------|
+=======
+|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
+>>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
 | a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
@@ -978,9 +1037,8 @@ require(vegan)
 require(tidyverse)
 ```
 
-Let's import the data, they are from Thilenius, 1963. However, the data
-of abundance have been changed to facilitated the interpretation. For
-access to real data and metadata, please see the JDBakker Git page:
+Let's import the data, they are from @thilenius1963synecology. However, the data of abundance have been changed to facilitated the interpretation. 
+For access to real data and metadata, please see the JDBakker Git page:
 [appliedmultivariatestatistics/Oak_data_47x216.csv at main ·
 jon-bakker/appliedmultivariatestatistics
 (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
@@ -1023,13 +1081,13 @@ caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
 ```
 
 Then, we can perform the PCA on the CA that corresponds to the CCA with
-the *ADE4* package:
+the **ADE4** package:
 
 ```{r}
 ccaoak <- pcaiv(caoak,Topo,scannf=F,nf=2)
 ```
 
-You can also realize the CCA with one code row only with the *vegan*
+You can also realize the CCA with one code row only with the **vegan**
 package:
 
 ```{r}
@@ -1042,11 +1100,11 @@ different information during the analyse of the result
 An we already have completed our analyse, it was no difficult! But now,
 we need analyse the result and test the significant.
 
-To test the significant, we use a bootstrapping test thank you the ADE4
-package.It is important to test if the result of the RLQ is not only due
-to random combination of values but that we have a real correlation
-between are different tables. To produce this, we perform a permutation
-test with the function *randtest*.
+To test the significant, we use a bootstrapping test thank you the
+**ADE4** package.It is important to test if the result of the RLQ is not
+only due to random combination of values but that we have a real
+correlation between are different tables. To produce this, we perform a
+permutation test with the function *randtest*.
 
 ```{r}
 randtest(ccaoak)#with ADE4
@@ -1084,7 +1142,7 @@ ccaoak
 print(paste("The pourcentage of variance explained by topographic variables is: ",sum(ccaoak$eig)/sum(caoak$eig),"%"))
 ```
 
-The first output (by *ADE4*) allows us to see each part of the analyse
+The first output (by **ADE4**) allows us to see each part of the analyse
 that could be use to describe the result. We will use especially the
 last part afterward. You also have, at the beginning, the number of rank
 that corresponds to the number of eigenvalue with their score below. We
@@ -1095,7 +1153,7 @@ variables.
 ccavegan
 ```
 
-Here, it is the output with the *vegan* package. We can see the total
+Here, it is the output with the **vegan** package. We can see the total
 inertia in the CCA analyse (5.55) and the inertia explained by the
 topographic variables (0.71) and by the residuals (4.85). We can
 therefore conclude that our topographic variables explain only 13% of
@@ -1110,7 +1168,7 @@ We can now, observe the complet plot of the CCA result:
 plot(ccaoak)
 ```
 
-Here, we can have a complete plot with the *ADE4* package.
+Here, we can have a complete plot with the **ADE4** package.
 
 -   The "Loadings" part represents the canonical coefficients. For each
     axis, the arrows explain the relative weight of the topographic
@@ -1218,7 +1276,7 @@ The RLQ analysis is a generalized co-inertia with 3 tables :
 environmental variables for each sites (R), species abundances for each
 sites (L) and trait variables for each species (Q). We will have to
 perform a CA on the table L and weighted analysis (MCA or PCA) on
-tablesR and Q. Then a function named rlq() perform 3 co-inertia analysis
+tablesR and Q. Then a function named *rlq()* perform 3 co-inertia analysis
 between R and L and L and Q and then between the results of each
 co-inertia.
 
@@ -1262,8 +1320,8 @@ library(RVAideMemoire)
 library(PerformanceAnalytics)
 ```
 
-Here, we work with a dataset of "*ade4*" package. The data comes from
-Legendre et al., 1997, Dray and Legendre, 2008
+Here, we work with a dataset of **ADE4** package. The data comes from
+@dray2008testing, @legendre1997relating
 
 ```{r}
 #import the dataset
@@ -1337,8 +1395,7 @@ their values. All the different compounds of the output will be used
 after in representations or analysis.
 
 Nevertheless, we can calculate the contribution of each axis of the RLQ
-by performing the formule below: METTRE LA FORMULE AU PROPRE
-rlq$eig/(sum(rlq$eig))\*100
+by performing the formule below: $$\frac{rlq$eig}{\sum{rlq$eig}}.100$$
 
 After that, and before to plot and analyse the result, it is important
 to test if the result of the RLQ is not only due to random combination
@@ -1461,9 +1518,8 @@ others variables (trait and environment) For species and sites, we do
 not have contribution because these variables do not contribute of the
 axis creation.
 
-CONCLUSION To conclude on this analyse, the two first axes were required
-to explain 86.2% of the total variation with 66.7%, and 19.5% of the
-total inertia respectively.
+To conclude on this analysis, the two first axes explain 86.2% of the
+total variation with respectively 66.7%, and 19.5% of the total inertia.
 
 The correlations between the environmental variables and the RLQ axes
 showed that the first axis is explained by Veg.cover.R100 (contribution
@@ -1474,9 +1530,9 @@ are breeding.ground (28.19%), feed.strat.foliage (19.8%), breeding.scrub
 (13.3%) and negatively with breeding.building (17.18%) and
 feed.strat.aerial (7.09%). In other words, breeding.ground,
 feed.strat.foliage, breeding.scrub, feed.strat.aerial and
-breeding.building were the most powerful explanatory attributes for this
-RLQ axis (explained by both the length and the angle between the axes
-and the vectors).
+breeding.building were the higher explanatory attributes for this RLQ
+axis (explained by the length and the angle between the axes and the
+vectors).
 
 # To go further with Multivariate Analysis
 
