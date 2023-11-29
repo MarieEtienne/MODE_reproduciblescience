@@ -8,42 +8,42 @@ output:
    toc: true
    toc_float: true
 ---
-MERCI DE CHARGER ICI LES PACKAGES QUE VOUS UTILISEE
-```{r Importation des packages}
+
+```{r Importation des packages,fig.align='center'}
 library(nlme)
+library(ggplot2)
+library(gridExtra)
+library(predictmeans)
+library(sp)
 ```
 
+Mise en forme ::: {style="text-align: justify"} Teste :::
 
+## Introduction
 
-## Introduction:
-
-**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as \(Y\), and one or more independent variables (\(X_1, X_2, ..., X_n\)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the non-collinearity of residuals.
+**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ((X_1, X_2, ..., X_n)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. **Generalized Linear Models (GLMs)** can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the **non-collinearity of residuals**.
 
 In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated. This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites. In such cases, it becomes necessary to employ **mixed models**. These models, extensions of both general and generalized linear models, consider the correlation of measurements by introducing individuals, regions, families, or other factors as **random effects** in the models. This incorporation allows for a more accurate representation of the complex dependencies present in the data.
 
-#### What is a random effect, and how do I determine if my effect is random or fixed?
+*What is a random effect, and how do I determine if my effect is random or fixed ?*
 
 To clarify the distinction between fixed and random effects, let's examine two examples:
 
-- **Example 1: Comparing Individual Cars**
-  
-  Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars. They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns. The dataset consists of one factor with four levels (representing the four cars) and five replicates each. Performing a one-way ANOVA allows them to determine which car is the most economical. In this scenario, the factor "car" is **fixed**, and the analysis provides conclusions specific to the four studied cars.
+-   **Example 1: Comparing individual cars**
 
-- **Example 2: Assessing Homogeneity within a Car Model**
+    Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars. They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns. The dataset consists of one factor with four levels (representing the four cars) and five replicates each. Performing a one-way ANOVA allows them to determine which car is the most economical. In this scenario, the factor "car" is **fixed**, and the analysis provides conclusions specific to the four studied cars.
 
-  A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption. Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a dataset with one factor and four levels, each with five replicates. Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars. Here, a mixed model with the factor 'car' as a **random factor** should be used.
+-   **Example 2: Assessing homogeneity within a car model**
 
+    A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption. Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a dataset with one factor and four levels, each with five replicates. Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars. Here, a mixed model with the factor 'car' as a **random factor** should be used.
 
-  In summary, a factor is designated as fixed when the experimenter intentionally chooses a limited number of levels for investigation, aiming to assess the impact of each level on the response variable. On the other hand, a factor is considered random when the selected levels represent only a sample from all possible levels. In this case, the objective is to understand the variability in the response variable attributed to this factor.
+In summary, a factor is designated as fixed when the experimenter intentionally chooses a limited number of levels for investigation, aiming to assess the impact of each level on the response variable. On the other hand, a factor is considered random when the selected levels represent only a sample from all possible levels. In this case, the objective is to understand the variability in the response variable attributed to this factor.
 
 For example, let's consider a researcher investigating the influence of the number of training sessions per week on the concentration of red blood cells in recreational athletes. The researcher collects data from 50 athletes in a local club who train between 1 and 5 times a week. Initially planning a simple ANOVA with the number of training sessions as the main factor, the researcher discovers that most athletes in the dataset belong to only 10 families, leading to non-independent measurements. To address this issue, the researcher opts for a mixed model, treating the number of training sessions as a fixed factor and the family as a random factor. This approach allows the exploration of variability between families without the intention of directly comparing them.
-  
-  
- Now that we have a general understanding of what mixed models are, we can delve into the mathematical formalism of these models. In this chapter, you will discover how **matrices** can be employed to create mixed models, explore the various **dependency structures** that exist, and ultimately, find an **implementation** of mixed models in R.
 
+Now that we have a general understanding of what mixed models are, we can delve into the mathematical formalism of these models. In this chapter, you will discover how **matrices** can be employed to create mixed models, explore the various **dependency structures** that exist, and ultimately, find an **implementation** of mixed models in R.
 
-
-## Model: création du model : Abdou
+## 1 The model
 
 The linear mixed model can be formulated as follows:
 
@@ -53,31 +53,28 @@ $$
 
 where:
 
-* $Y_i = n_i \times 1$ measurements for subject $i$
-* $X_i = n_i \times p$ matrix of vectors for fixed effects
-* $beta_i= p \times 1$ parameters for fixed effects
-* $Z_i = n_i \times p$ matrix of vectors for random effects
-* $gamma_i = r \times 1$ parameters for random effects
-* $varepsilon_i = n_i \times 1$ residuals for individual $i$
+-   $Y_i = n_i \times 1$ measurements for subject $i$
+-   $X_i = n_i \times p$ matrix of vectors for fixed effects
+-   $\beta_i= p \times 1$ parameters for fixed effects
+-   $Z_i = n_i \times p$ matrix of vectors for random effects
+-   $\gamma_i = r \times 1$ parameters for random effects
+-   $\varepsilon_i = n_i \times 1$ residuals for individual $i$
 
-
-A mixed effects model incorporates random effects ($\gamma_i$), or a combination of both random and fixed effects ($\beta$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
+A mixed effects model incorporates **random effects** ($\gamma_i$), or a combination of both **random and fixed effects** ($\beta$), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.
 
 When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.
 
 In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.
 
-**RANDOM VARIABLE** = « something that could not be known before sampling/measurement/observation".
-
+**RANDOM VARIABLE** = « *something that could not be known before sampling/measurement/observation*".
 
 In matrix form, the mixed model is written as:
 
 $$
 Y \sim \mathcal{N{n}}(X\theta, \Sigma)
-$$ 
-where:
+$$ where:
 
-$Y$ is the response vector of the observations, $X\theta$ is the expectation of the response vector $Y$ and $\Sigma$ is the variance matrix. 
+$Y$ is the response vector of the observations, $X\theta$ is the expectation of the response vector $Y$ and $\Sigma$ is the variance matrix.
 
 We can note that if the response vector $Y$ is of dimension $n$, the matrix $\Sigma$ is of dimensions $n \times n$. Since $\Sigma$ is symmetric, it comprises $n(n + 1)/2$ parameters. This is because, in a symmetric matrix, the elements above (or below) the main diagonal are the same as those below (or above), reducing the total number of parameters needed to describe the matrix.
 
@@ -85,27 +82,16 @@ However, the limitation of the available data prevents considering models where 
 
 To address this issue, the linear mixed-effects model proposes an approach where a structure is imposed on the variance matrix $\Sigma$. This structure, governed by a limited number of parameters called "variance parameters," denoted $\psi$, reduces the number of parameters needed to describe the covariance matrix. Consequently, the model can be realistically adapted even with a limited amount of data, while accounting for the correlation between observations within the framework of linear mixed-effects models. The model parameters include $\theta$ for the expectation and $\psi$ for the variance.
 
-
-
-
-
-
-
-
-
-## Calcule matriciel : Antoine
+## 2 Matrix computation
 
 $$
   M_{2\times2} = \left( {\begin{array}{cc}
     A & B \\
     C & D \\
   \end{array} } \right)
-$$
-Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
+$$ Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.
 
-
-Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives peut s'écrire sous la forme $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, où $y_i$ représente une observation de la variable réponse $Y$ pour l'individu $i$, $\beta_0$ l'ordonnée à l'origine, $\beta_1,...,\beta_p$ les coefficients associés à chaque variables explicatives $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ p observations (pour les p variables explicatives) pour l'individu $i$, et $e_i$ un terme d'erreur associé à cet individu $i$. On peut voir $e_i$ comme une réalisation d'une variable aléatoire $E_i$ distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$.
-En notant $$y=\begin{pmatrix}
+Pour rappel, un modèle linéaire, de type regression linéaire, avec $p$ variables explicatives peut s'écrire sous la forme $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, où $y_i$ représente une observation de la variable réponse $Y$ pour l'individu $i$, $\beta_0$ l'ordonnée à l'origine, $\beta_1,...,\beta_p$ les coefficients associés à chaque variables explicatives $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ p observations (pour les p variables explicatives) pour l'individu $i$, et $e_i$ un terme d'erreur associé à cet individu $i$. On peut voir $e_i$ comme une réalisation d'une variable aléatoire $E_i$ distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$. En notant $$y=\begin{pmatrix}
 y_1\\
 \vdots\\
 y_n\\
@@ -121,17 +107,13 @@ y_n\\
 \varepsilon_0\\
 \vdots\\
 \varepsilon_n\\
-\end{pmatrix}$$, on peut réécrire le modèle précédent sous la forme $$y=X\theta+e$$.
-Ici, $e$ est un vecteur de n réalisations indépendantes d'une variable aléatoire $E_i$ suivant une loi noramle $\mathcal{N}(0,\sigma^2)$. Ainsi, $e$ est lui même une réalisation d'une variable aléatoire $E$ de distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ est une observation de la variable aléatoire $E_i$  distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$). De la même manière, $y$ est une observation de $Y=X\theta+E$ où $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ est l'observation de $Y_i$ distribuée selon une loi normale $\mathcal{N}((X\theta)_i,\sigma^2)$).
-Ainsi, en introduisant $Y$ et $E$, le modèle précédent peut s'écrire $Y=X\theta+E$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
+\end{pmatrix}$$, on peut réécrire le modèle précédent sous la forme $$y=X\theta+e$$. Ici, $e$ est un vecteur de n réalisations indépendantes d'une variable aléatoire $E_i$ suivant une loi noramle $\mathcal{N}(0,\sigma^2)$. Ainsi, $e$ est lui même une réalisation d'une variable aléatoire $E$ de distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ est une observation de la variable aléatoire $E_i$ distribuée selon une loi normale $\mathcal{N}(0,\sigma^2)$). De la même manière, $y$ est une observation de $Y=X\theta+E$ où $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ est l'observation de $Y_i$ distribuée selon une loi normale $\mathcal{N}((X\theta)_i,\sigma^2)$). Ainsi, en introduisant $Y$ et $E$, le modèle précédent peut s'écrire $Y=X\theta+E$ où $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
 
-Par définition, la réponse moyenne est de $X\theta$, plus ou moins un terme d'erreur qui en moyenne vaut 0 mais qui varie de $\sigma^2I_n$. Ainsi, on peut écrire $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$.
-On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques)  car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance (mesures répétées dans le temps, individus groupés par une ascendance commune,...).
+Par définition, la réponse moyenne est de $X\theta$, plus ou moins un terme d'erreur qui en moyenne vaut 0 mais qui varie de $\sigma^2I_n$. Ainsi, on peut écrire $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$. On remarque qu'en écrivant $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, toutes les erreurs ont la même variance ($\sigma^2$) et deux individus (statistiques) car tous les échantillons sont indépendants. On verra par la suite que si cette condition d'indépendance n'est pas respectée, toutes les erreurs n'ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance (mesures répétées dans le temps, individus groupés par une ascendance commune,...).
 
+## 3 Dependency structure
 
-## Structure de dependance : Odin
-
-### Cas des Mesures répétées
+### 3.1 Case of repeated measurements
 
 On considère cette fois une expérience visant à évaluer l'effet d'un régime sur la prise de poids d'un animal au cours du temps. Plusieurs animaux (indicés par $j$) reçoivent chaque régime (noté $i$) et un animal ne reçoit qu'un régime au cours de l'expérience. On mesure le poids, noté $Y_{ij}$, de chaque animal au bout de t semaines ($t = 1, . . . , T$). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données *longitudinales*. Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait utiliser le modèle :
 
@@ -148,35 +130,25 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
 
 Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
 
+**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances respectives.
 
-**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare. Une telle dépendance n'admet pas de représentation simple sous la forme d'un eet aléatoire. On suppose donc que les poids sont gaussiens d'espérances
-respectives.
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ **Structure de dépendance** On suppose de plus que toutes les mesures ont la même variance
 
-$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ 
-**Structure de dépendance** On suppose de plus que toutes les mesures ont la même
-variance
-
-$$ V(Y_{ijt} =  σ^2) $$
-et que la covariance entre elles vaut
+$$ V(Y_{ijt} =  σ^2) $$ et que la covariance entre elles vaut
 
 $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
   \begin{array}{ll}
   σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
-  \right.$$
-Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que |ρ| < 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
-Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ
-2, soit
+  \right.$$ Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que \|ρ\| \< 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1). Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ 2, soit
 
 $$
   ψ = \left( {\begin{array}{cc}
     ρ \\
     σ^2 \\
   \end{array} } \right)
-$$
-*Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des
-animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs  mais le bloc R diffère :
+$$ *Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs mais le bloc R diffère :
 
 $$
   R = \left( {\begin{array}{cc}
@@ -187,6 +159,7 @@ $$
     σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
   \end{array} } \right)
 $$
+
 ```{r}
 #Read the data
 d=read.delim(
@@ -198,8 +171,6 @@ d$Timef = factor(d$Time)
 
 ```
 
-
-
 ```{r}
 o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 | Subj))
  
@@ -208,16 +179,14 @@ o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 
 ```{r}
 summary(o.ar1)
 ```
-### Cas de l'autocorrelation spatiale
 
-*Structure de dépendance*  Là encore, on veut prendre en compte la dépendance due
-à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
-Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+### 3.2 Case of spatial autocorrelation
+
+*Structure de dépendance* Là encore, on veut prendre en compte la dépendance due à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures. Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
 
 $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
 *Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
-
 
 $$
   Σ = \left( {\begin{array}{cc}
@@ -228,7 +197,6 @@ $$
   \end{array} } \right)
 $$
 
-
 ```{r}
 set.seed(3)  
 n <- 100
@@ -236,7 +204,7 @@ n <- 100
 loc <- data.frame(LAT = runif(n, 144, 150), LONG = runif(n,
     -26, -20))
 
-library(sp)
+
 grid <- expand.grid(LAT = seq(144, 150, l = 100), LONG = seq(-26,
     -20, l = 100))
 coordinates(grid) <- ~LAT + LONG
@@ -261,45 +229,29 @@ y <- 50 + 1 * x + 60 * V  #+ rnorm(n,0,1)
 data.spatialCor <- data.frame(y, x, loc)
 ```
 
-
 ```{r}
 data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
     correlation = corExp(form = ~LAT + LONG, nugget = TRUE),
     method = "REML")
 ```
 
-
-
 ```{r}
 summary(data.spatialCor.glsExp)
 ```
 
-## Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?
-
-
-
+**Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?**
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
 
-
-
-
-
-
-### Application : Ael
+## 4 Application
 
 Pour cet exemple d'application de modèle mixte, nous allons utiliser un modèle mixte linéaire général. C'est un cas particulier de modèle linéaire général, dans lequel la réponse est quantitative et les variables prédictives sont à la fois quantitatives et qualitatives, et le modèle inclut des facteurs aléatoires pour tenir compte de la dépendance des données. Les modèles mixtes doivent respecter la normalité des résidus et l'homogénéité des variances.
 
-----> Explications du jeu de données pinguins, présenter les variables
-(Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)
+----\> Explications du jeu de données pinguins, présenter les variables (Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)
 
-----> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
-----> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
-----> Expliquer le graphe (pour les interactions entre les $X_s$)
-----> Cites Yannick Outreman pour la structure et les lignes de code
+----\> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ??? ----\> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ??? ----\> Expliquer le graphe (pour les interactions entre les $X_s$) ----\> Cites Yannick Outreman pour la structure et les lignes de code
 
-
-## IMPORTATION DES DONNEES
+### 4.1 Data import
 
 ```{r}
 # Importation des données
@@ -312,6 +264,7 @@ df$sex=as.factor(df$sex)
 # On vérifie qu'il n'y a pas de valeurs manquantes
 colSums(is.na(df))
 ```
+
 On voit qu'il y a des valeurs manquantes, dont 2 pour la variable réponse $Y$ "body_mass_g' et 11 pour la variable explicative $X$ 'sex'. On va supprimer les lignes qui présentes les valeurs manquantes.
 
 ```{r}
@@ -326,21 +279,17 @@ colSums(is.na(df))
 #Il n'y a plus de valeurs manquante.
 ```
 
-
-## EXPLORATION DES DONNÉES
+### 4.2 Data exploration
 
 Avant toute analyse statistique, il est INDISPENSABLE d'explorer les données afin d'éviter toute erreur. Voici la liste des explorations à effectuer avant la modélisation :
 
 1.  Vérifier la présence de valeurs aberrantes dans $Y$ et la distribution des valeurs de $Y$.
-2.  Si $X$ est une variable quantitative indépendante, vérifier la présence de valeurs aberrantes dans X et la distribution des valeurs de X. 2b.
-    2b. Si $X$ est une variable indépendante qualitative, analyser le nombre de niveaux et le nombre d'individus par niveau.
+2.  Si $X$ est une variable quantitative indépendante, vérifier la présence de valeurs aberrantes dans X et la distribution des valeurs de X. 2b. 2b. Si $X$ est une variable indépendante qualitative, analyser le nombre de niveaux et le nombre d'individus par niveau.
 3.  Analyser les relations potentielles entre $Y$ et les $X_{s}$.
 4.  Vérifier la présence d'interactions entre $X_{s}$.
 5.  Vérifier la présence de colinéarité entre $X_{s}$.
 
-
-
-### 1.Valeurs aberrantes dans $Y$ et distribution de $Y$
+#### 4.2.1 Outliers in $Y$ and $Y$ distribution
 
 ```{r datahist, include=TRUE, fig.height=5, fig.width=6}
 par(mfrow=c(2,2))
@@ -354,18 +303,16 @@ hist(df$body_mass_g,col='blue',xlab="Masse corporel",main="")
 qqnorm(df$body_mass_g,pch=16,col='blue',xlab='')
 qqline(df$body_mass_g,col='red')
 ```
-Ici, le Boxplot et le Cleveland Plot nous permettent de voir qu'il n'y a pas d'individus présentant des valeurs aberrantes. Le Cleveland Plot nous montre qu'il semble y avoir un groupe d'individus qui présentent une masse corporel entre 5000 et 6000g, alors que le reste du groupe se situe entre 3000 et 4000g.
-L'Histogramme et le QQ Plot nous montre que $Y$ suit difficilement un loi Normale... Ce n'est pas très grave, car la validité de modèle se base entre autre sur la normalité des résidus, que l'on démontrera par la suite.
 
+Ici, le Boxplot et le Cleveland Plot nous permettent de voir qu'il n'y a pas d'individus présentant des valeurs aberrantes. Le Cleveland Plot nous montre qu'il semble y avoir un groupe d'individus qui présentent une masse corporel entre 5000 et 6000g, alors que le reste du groupe se situe entre 3000 et 4000g. L'Histogramme et le QQ Plot nous montre que $Y$ suit difficilement un loi Normale... Ce n'est pas très grave, car la validité de modèle se base entre autre sur la normalité des résidus, que l'on démontrera par la suite.
 
+#### 4.2.2 Outliers in $Xs$
 
-### 2.a Pour les $Xs$ qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution
+-   Pour les $Xs$ qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution
 
 Pas de prédicteur quantitatif ici.
 
-
-
-### 2.b Pour les $Xs$ qui sont catégoriques : nombre de niveaux et nombre d'individus par niveau
+-   Pour les $Xs$ qui sont catégoriques : nombre de niveaux et nombre d'individus par niveau
 
 ```{r datafact, include=TRUE}
 # Factor Species
@@ -375,16 +322,12 @@ summary(df$island)
 # Factor Sex
 summary(df$sex)
 ```
-La variable 'species' présente 3 niveaux : Adelie, Chinstrap et Gentoo. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'espèce Chinstrap.
-La variable 'island' présente 3 niveaux : Biscoe, Dream et Torgersen. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'île Torgersen.
-La variable 'sex' présente 2 niveaux : female et male. Le nombre d'individus par niveau s'approche de l'équilibre.
 
+La variable 'species' présente 3 niveaux : Adelie, Chinstrap et Gentoo. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'espèce Chinstrap. La variable 'island' présente 3 niveaux : Biscoe, Dream et Torgersen. Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'île Torgersen. La variable 'sex' présente 2 niveaux : female et male. Le nombre d'individus par niveau s'approche de l'équilibre.
 
+#### 4.2.3 Analysis of potential relationships Y vs Xs
 
-### Analyse des relations potentielles Y vs Xs
-
-Nous pouvons analyser graphiquement les relations possibles entre Y et X. 
-Attention, cette analyse graphique des relations entre Y et X **ne prédit en aucun cas l'importance de la relation**. La modélisation statistique reste le seul moyen d'identifier les relations.
+Nous pouvons analyser graphiquement les relations possibles entre Y et X. Attention, cette analyse graphique des relations entre Y et X **ne prédit en aucun cas l'importance de la relation**. La modélisation statistique reste le seul moyen d'identifier les relations.
 
 ```{r datagraph, include=TRUE, fig.height=4, fig.width=6}
 
@@ -398,13 +341,10 @@ plot(df$body_mass_g~df$island,pch=16,col='blue',xlab='Îles',ylab='Masse corpore
 # Sexe
 plot(df$body_mass_g~df$sex,pch=16,col='blue',xlab='Sexe',ylab='Masse corporel en g')
 ```
-COncernant l'espèce, on peut voir que Gentoo présente une masse corporel plus élevée (entre 5000 et 6000g) que les deux autres espèces (entre 3000 et 4000g).
-Concernant les îles, on peut voir que les individus présents sur Biscoe présentent une masse corporel plus élevée (entre 5000 et 6000g) que les individus présents sur les deux autres îles (entre 3000 et 4000g).
-Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un peu plus importante que les femelles.
 
+COncernant l'espèce, on peut voir que Gentoo présente une masse corporel plus élevée (entre 5000 et 6000g) que les deux autres espèces (entre 3000 et 4000g). Concernant les îles, on peut voir que les individus présents sur Biscoe présentent une masse corporel plus élevée (entre 5000 et 6000g) que les individus présents sur les deux autres îles (entre 3000 et 4000g). Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un peu plus importante que les femelles.
 
-
-### Analyse des interactions possibles entre les deux variables indépendantes
+#### 4.2.4 Analysis of possible interactions between the two independent variables
 
 Ici, nous allons considérer l'interaction entre les trois facteurs étudiés. Pour estimer la présence d'effets interactifs, nous développons une approche graphique. Rappelons que l'interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c'est-à-dire que tous les niveaux d'un traitement sont représentés dans tous les niveaux de l'autre traitement et réciproquement = un plan factoriel). Ce point doit être testé avant.
 
@@ -416,19 +356,16 @@ Ici, nous allons considérer l'interaction entre les trois facteurs étudiés. P
 par(mfrow=c(1,1))
 boxplot(df$body_mass_g~df$species*df$island*df$sex, varwidth = TRUE, xlab = "Espèces.Îles.sexe", ylab = "Masse corporelle", col='blue2', main = "")
 ```
+
 Explications
 
-
-
-### Vérifier la colinéarité entre les X
+#### 4.2.5 Check collinearity between X
 
 La colinéarité fait référence à la situation dans laquelle deux ou plusieurs variables prédictives de colinéarité sont étroitement liées les unes aux autres. La présence de colinéarité peut poser des problèmes dans le contexte de la régression, car il peut être difficile de séparer les effets individuels des variables colinéaires sur la réponse.
 
-Ici, nous allons tester la colinéarité entre nos 3 variables prédictives : 
+Ici, nous allons tester la colinéarité entre nos 3 variables prédictives :
 
 ```{r col, include=TRUE, fig.height=4, fig.width=7}
-library(ggplot2)
-library(gridExtra)
 # ploting Species by Island
 ggplot(df, aes(x=species, y=island)) +
   geom_point() +
@@ -447,29 +384,20 @@ ggplot(df, aes(x=island, y=sex)) +
 # Ploting side-by-side
 marrangeGrob(list(p1,p2,p3), nrow=1, ncol=3, top=NULL)
 ```
-On peut voir dans notre exemple que pour l'intéraction entre Species et Sex, il y a bien les deux modalités du sexe par espèces, et pour l'intéraction entre Island et Sex, qu'il y a bien les deux modalités du sexe par îles. 
-Seulement, on peut remarquer que pour l'intéraction entre Species et Island, toutes les îles ne comportent pas toutes les espèces! 
-On ne pourra donc pas tester l'influence des îles et des espèces aux vues de ce résultat.
-On décide donc par la suite de supprimer la variable Island de notre analyse.
-On testera l'influence de l'espèce et du sexe sur la masse corporelle des pinguins, avec toujours les années en effet aléatoire.
 
+On peut voir dans notre exemple que pour l'intéraction entre Species et Sex, il y a bien les deux modalités du sexe par espèces, et pour l'intéraction entre Island et Sex, qu'il y a bien les deux modalités du sexe par îles. Seulement, on peut remarquer que pour l'intéraction entre Species et Island, toutes les îles ne comportent pas toutes les espèces! On ne pourra donc pas tester l'influence des îles et des espèces aux vues de ce résultat. On décide donc par la suite de supprimer la variable Island de notre analyse. On testera l'influence de l'espèce et du sexe sur la masse corporelle des pinguins, avec toujours les années en effet aléatoire.
 
+### 4.3 Statistical analysis
 
-## ANALYSE STATISTIQUE
-
-### Construction du modèle
+#### 4.3.1 Model construction
 
 Pour la modélisation statistique, nous analysons d'abord le modèle complet (modèle contenant toutes les variables indépendantes à tester).
 
-Pour obtenir le modèle candidat (modèle ne contenant que les termes significatifs) à partir du modèle complet, nous utiliserons le **MODÈLE DE 'BACKWARD SELECTION'**, c'est-à-dire la sélection du modèle basée sur la significativité des termes. Selon cette approche, on commence par créer le modèle complet avec toutes les variables d'intérêt, puis on abandonne la variable la moins significative, tant qu'elle n'est pas significative. Nous continuons en réajustant successivement des modèles réduits et en appliquant la même règle jusqu'à ce que toutes les variables restantes soient significatives. La suppression des termes non significatifs doit suivre les deux étapes suivantes:
-- Premièrement, on supprime successivement les interactions non significatives.
-- Deuxièmement, on supprime successivement les effets principaux non significatifs. 
-Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est pas contenu dans une interaction significative.
+Pour obtenir le modèle candidat (modèle ne contenant que les termes significatifs) à partir du modèle complet, nous utiliserons le **MODÈLE DE 'BACKWARD SELECTION'**, c'est-à-dire la sélection du modèle basée sur la significativité des termes. Selon cette approche, on commence par créer le modèle complet avec toutes les variables d'intérêt, puis on abandonne la variable la moins significative, tant qu'elle n'est pas significative. Nous continuons en réajustant successivement des modèles réduits et en appliquant la même règle jusqu'à ce que toutes les variables restantes soient significatives. La suppression des termes non significatifs doit suivre les deux étapes suivantes: - Premièrement, on supprime successivement les interactions non significatives. - Deuxièmement, on supprime successivement les effets principaux non significatifs. Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est pas contenu dans une interaction significative.
 
 Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007). La présence de l'effet aléatoire de l'année s'intégrera non pas avec la fonction lm, mais lme (du package nlme).
 
 ```{r anova, include=TRUE}
-library(nlme)
 # Modèle complet
 mod1=lme(body_mass_g~species
               + sex
@@ -488,10 +416,9 @@ mod1=lme(body_mass_g~species
 #species:sex     2   325     8.76   2e-04
 ```
 
-On peut voir dans l'output de l'anova de notre modèle complet que chaque interactions et chaque variable est significativce (<0.05). Le modèle complet est donc le modèle candidat.
+On peut voir dans l'output de l'anova de notre modèle complet que chaque interactions et chaque variable est significativce (\<0.05). Le modèle complet est donc le modèle candidat.
 
-
-### Model's coefficients analysis
+#### 4.3.2 Model's coefficients analysis
 
 ```{r coeffm, ,include=TRUE}
 # Coefficients of the model
@@ -509,45 +436,33 @@ summary(mod1)
 
 
 ```
+
 A partir de cette table, on peut déterminer les coefficients du modèle tels que :
 
 **Species factor**\
-- $species_{Adelie}$ = 0 (the baseline of the factor Habitat)
-- $Species_{Chinstrap}$ = $158.370$
-- $Species_{Gentoo}$ = $1310.906$
+- $species_{Adelie}$ = 0 (the baseline of the factor Habitat) - $Species_{Chinstrap}$ = $158.370$ - $Species_{Gentoo}$ = $1310.906$
 
 **Sex factor**\
-- $Sex_{female}$ = 0 (the baseline of the factor Habitat)
-- $Sex_{male}$ = $674.658$
+- $Sex_{female}$ = 0 (the baseline of the factor Habitat) - $Sex_{male}$ = $674.658$
 
 \*\*Interaction\*\
-- $Species_{Chinstrap}$:$Sex_{male}$ = $-262.893$
-- $Species_{Gentoo}$:$Sex_{male}$ = $130.437^{NS}$
+- $Species_{Chinstrap}$:$Sex_{male}$ = $-262.893$ - $Species_{Gentoo}$:$Sex_{male}$ = $130.437^{NS}$
 
 So, the candidate model is: $$  Species = 3369 + (Adelie = 0, Chinstrap = 158, Gentoo = 1311)  + (Female = 0,\: Male = 675)$$ $$       + (Adelie_{Male} = 0, \:Chinstrap_{Male} = -263,\: Gentoo_{Male} = 130^{NS}) $$
 
-
 For sake of simplicity, we can write the model depending on the sexe :
 
-The model for the *Female* pinguin is : $$ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)$$ 
+The model for the *Female* pinguin is : $$ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)$$
 
 The model for the *Male* pinguin is : $$Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)$$
 
-Ainsi, le sexe, l'espèce et l'interaction de ces deux variables (sauf entre Male et Gentoo) ont bien un impact significatif sur la masse corporelle des pingouins.
-Par exemple, chez les pingouins Adélie, la femelle va avoir une masse corporelle de 3369g, alors qu'un mâle aura une masse corporelle de 4043g et chez les Chinstrap, la femelle va avoir une masse corporelle de 3527g, alors qu'un mâle aura une masse corporelle de 3938g.
+Ainsi, le sexe, l'espèce et l'interaction de ces deux variables (sauf entre Male et Gentoo) ont bien un impact significatif sur la masse corporelle des pingouins. Par exemple, chez les pingouins Adélie, la femelle va avoir une masse corporelle de 3369g, alors qu'un mâle aura une masse corporelle de 4043g et chez les Chinstrap, la femelle va avoir une masse corporelle de 3527g, alors qu'un mâle aura une masse corporelle de 3938g.
 
+### 4.4 Model validation
 
+Pour valider le modèle, il faut : - Valider la normalité des résidus - Histogramme et QQplot des résidus - Valider l'homogénéité des variances - En addition, vérifier la présence d'observations qui auraient trop de contribution dans le modèle
 
-
-## MODEL VALIDATION: CHECK TO ASSUMPTIONS
-
-Pour valider le modèle, il faut :
-- Valider la normalité des résidus - Histogramme et QQplot des résidus
-- Valider l'homogénéité des variances
-- En addition, vérifier la présence d'observations qui auraient trop de contribution dans le modèle
-
-
-### Normality of the residuals
+#### 4.4.1 Normality of the residuals
 
 ```{r ResidNorm, include=TRUE, fig.height=3, fig.width=6}
 par(mfrow=c(1,2))
@@ -557,10 +472,10 @@ hist(mod1$residuals,col='blue',xlab="residuals",main="Check Normality")
 qqnorm(mod1$residuals,pch=16,col='blue',xlab='')
 qqline(mod1$residuals,col='red')
 ```
+
 On voit bien que l'histogramme suit une loi normale, et les points du quantile plot suivent bien la ligne rouge : la normalité des résidus est validée.
 
-
-### Homogeneity of the variance
+#### 4.4.2 Homogeneity of the variance
 
 ```{r Residhomo, include=TRUE, fig.height=3, fig.width=9}
 par(mfrow=c(1,3))
@@ -588,15 +503,16 @@ boxplot(residuals(mod1)~ df$sex,
 abline(h = 0)
 
 ```
+
 On voit ici que pour chaque graphe, la variance des résidus est distribuée de façon homogène autour de la droite horizontale. L'homogénéité de la variance est validée.
 
-
-### Look at influential observations
+#### 4.4.3 Look at influential observations
 
 ```{r Contri, include=TRUE, fig.height=4, fig.width=4}
 par(mfrow = c(1, 1))
-library(predictmeans)
+
 
 CookD(mod1,newwd=TRUE)
 ```
-On voit que l'individu 314, 315 et 325 ont une contribution un peu plus forte dans le modèle, mais ce n'est pas un résultat aberrant. 
+
+On voit que l'individu 314, 315 et 325 ont une contribution un peu plus forte dans le modèle, mais ce n'est pas un résultat aberrant.
