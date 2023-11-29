@@ -286,15 +286,23 @@ $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
 
 ### Application : Ael
 
-Pour cet exemple d'application de modèle mixte, nous allons utiliser un modèle mixte linéaire général. C'est un cas particulier de modèle linéaire général, dans lequel la réponse est quantitative et les variables prédictives sont à la fois quantitatives et qualitatives, et le modèle inclut des facteurs aléatoires pour tenir compte de la dépendance des données. Les modèles mixtes doivent respecter la normalité des résidus et l'homogénéité des variances.
+For this example of a mixed model application, we will use a general linear mixed model. This is a special case of a general linear model, in which the response is quantitative and the predictor variables are both quantitative and qualitative, and the model includes random factors to take account of data dependency. Mixed models must respect the normality of residuals and the homogeneity of variances.
+(The structure and lines of code are inspired by Yannick Outreman's courses on linear mixed model.)
 
-----> Explications du jeu de données pinguins, présenter les variables
-(Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)
+## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
+
+For this worked exercise, we will use data from a study performed on penguins. The aim of this study is to test whether species, sex and island influence the body mass of penguins. In the experimental design, the data are collected from one year to the next (from 2007 to 2009), which suggests that the penguin body mass data are dependent on each other from one year to the next. This dependency will be included in the model. The data contains:\
+- **species**: three species of penguins (Chinstrap, Adelie, or Gentoo), categorical variable\
+- **island**: island name (Dream, Torgersen, or Biscoe) in the Palmer Archipelago (Antarctica), categorical variable\
+- **sex**: penguin sex (female, or male), categorical variable\
+- **year**: years of data collection (2007, 2008, or 2009), continuous variable\
+- **body_mass_g**: body mass of the penguins (in grams), continuous variable\
+
+The response variable is the 'body_mass_g', while 'species' and 'island' and 'sex' are assumed predictors. To include data dependency, 'year' will be included as random factor in model. The underlying question for this research is: do the species, island and sex drive the body mass of penguins?
 
 ----> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
 ----> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
 ----> Expliquer le graphe (pour les interactions entre les $X_s$)
-----> Cites Yannick Outreman pour la structure et les lignes de code
 
 
 ## IMPORTATION DES DONNEES
