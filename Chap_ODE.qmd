@@ -646,9 +646,7 @@ continues in a cycle of growth and decline.
 Typically, here's what these equations can look like :
 
 $$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
-\*\*\*\* voir avec Laura pour mettre autre chose que "d" en coefficient
-pour pas confondre avec les dérivées + voir aussi comment on s'accorde
-pour les signes
+\*\*\*\*
 
 It's important to really understand how equations are constructed and
 what they do before getting started.\
@@ -717,12 +715,12 @@ X_init<- 5     #starting value for x
 Y_init<- 3     #starting value for y
 ```
 
-The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 160 months.  
+The initial values for the populations' sizes have been defined. Now, since LV is a dynamic model, evolving over time, and since we do not want our simulation to run endlessly, it'd be a good idea to set a time limit, wouldn't it be? Let's say we want to follow the population dynamics throughout 100 months.  
   
 For our example, we will talk about numbers of individuals (Xinit=5 individuals, Yinit=3 individuals), and we will consider the time unit to be months. But we could have chosen days or years, and then chose consistent coefficient values:
 
 ```{r, echo=TRUE}
-tend<-160    #how long the simulation is going to run for
+tend<-100    #how long the simulation is going to run for
 delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
 
 # Model coefficients
@@ -754,10 +752,10 @@ while (t[length(t)]<tend)
   current_Y<-Y[length(Y)]    #idem for Y
   current_t<-t[length(t)]
   
-  delta_X<-(a*current_X-current_X*current_Y)*delta_t
+  delta_X<-(a*current_X-b*current_X*current_Y)*delta_t
   next_X<-current_X+delta_X
   
-  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  delta_Y<-(-c*current_Y + h*current_X*current_Y)*delta_t
   next_Y<-current_Y+delta_Y
   
   next_t<-current_t+delta_t
@@ -818,12 +816,13 @@ unaddressed point: reaching an equilibrium for both prey and predator
 populations, instead of endlessly going in circles.
 
 The equations become:
-$$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{N}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{x}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+
 
 ### Exercices to understand :
 
-1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 0.8. 
->>>>>>> 2388a728633c618d3b69419b4a32c5aea1db4020
+1. Supposing that you want to depict the possible seasonal variation of the coefficient "a", rewrite the code to simulate a model that includes the variability of "a" among time. We can consider a variation of "a" over a time period of one year, with an amplitude of 0.6. Moreover, we consider a mean value of "a" of 0.8.
+
 
 Answer:
 
@@ -833,7 +832,7 @@ rm(list=ls())
 ####DEFINING THE COEFFICIENTS AND VARIABLES####
 X_init<-5
 Y_init<-3
-tend<-160
+tend<-100
 delta_t<-0.01
 
 
@@ -864,10 +863,10 @@ while (t[length(t)]<tend)
   current_Y<-Y[length(Y)]    #idem for Y
   current_t<-t[length(t)]
   
-  delta_X<-(a_seasonal_variation(current_t)*current_X-current_X*current_Y)*delta_t
+  delta_X<-(a_seasonal_variation(current_t)*current_X-b*current_X*current_Y)*delta_t
   next_X<-current_X+delta_X
   
-  delta_Y<-(c*current_X*current_Y-h*current_Y)*delta_t
+  delta_Y<-(-c*current_Y + h*current_X*current_Y)*delta_t
   next_Y<-current_Y+delta_Y
   
   next_t<-current_t+delta_t
