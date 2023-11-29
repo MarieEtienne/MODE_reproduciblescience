@@ -1201,9 +1201,12 @@ and with a high abundance of species as Abgr.t.
 
 # PART 4: RLQ
 
-# PART 5: RLQ
-
 ## Mathématiques
+
+The RLQ analysis is a generalized co-inertia with 3 tables :
+environmental variables for each sites (R), species abundances for each sites (L) and trait variables for each species (Q). We will have to perform a CA on the table L and weighted analysis (MCA or PCA) on tablesR and Q.
+Then a function named rlq() perform 3 co-inertia analysis between R and L and L and Q and then between the results of each co-inertia.
+
 
 ## Interprétation
 
