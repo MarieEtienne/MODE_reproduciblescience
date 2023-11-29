@@ -36,13 +36,11 @@ and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
-## Introduction 
-
-You can import R package using the code
+## Introduction
 
 PCA can be used to process a measurement table with :
 
--   In rows: the **n observations**.
+-   In row: the **n observations**.
 
 -   In column: the **p quantitative variables**.
 
@@ -64,17 +62,12 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
-```{=html}
-<!-- -->
-```
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
         forming an acute angle.
 
     -   Two independent variables are represented by orthogonal vectors.
-
-## 
 
 ## Mathematics
 
@@ -175,8 +168,25 @@ summary(data)
 
 In this data set, we have 14 individuals (athletes) on whom 10
 quantitative variables (performances in different sports disciplines)
-have been recorded: - X100m - Long.jump - Shot.put - X400m -
-X110m.hurdle - Discus - Pole.vault - Javelin - X1500m
+have been recorded:
+
+-   X100m
+
+-   Long.jump
+
+-   Shot.put
+
+-   X400m
+
+-   X110m.hurdle
+
+-   Discus
+
+-   Pole.vault
+
+-   Javelin
+
+-   X1500m
 
 If NAs are present in the data. In order to carry out the PCA without
 any problems with NAs, they can be omitted from the analysis with the
@@ -208,18 +218,18 @@ Here's another way of visualizing correlations between variables:
 abs(cor(data))>0.9
 ```
 
-If TRUE (outside the diagonal), then both variables are correct. If two
-variables are correct, one must be removed. The choice of deleting one
-of the two correct variables is arbitrary and depends on the question
-being asked.
+If TRUE (outside the diagonal), then both variables are correlated If
+two variables are correlated, one must be removed. The choice of
+deleting one of the two correct variables is arbitrary and depends on
+the question being asked.
 
 To remove a variable from the data set, use the following function:
 **data=data\[,-(column_of_the_variable_to_remove)}\]**
 
 ### c) Performing PCA :
 
-To run the PCA, you need to load the following two packages: -
-**factoextra** - **FactoMineR**
+To run the PCA, you need to load the following two packages:
+**factoextra** and **FactoMineR**
 
 Then, to perform the PCA on R, you can use the function : **PCA()**.
 Remember to store the result of this PCA in a new variable, so that you
@@ -237,68 +247,73 @@ PCA=PCA(data)
 #### 1) Inertia and choice of axes :
 
 ```{r}
-# Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
+# Recover the eigenvalues of each axis and the inertia carried by the principal components
 PCA$eig
 
-# Visualisation graphique de l'inertie de chaque axe : 
+# Graphical display of the inertia of each axis : 
 fviz_eig(PCA, addlabels = TRUE)
 ```
 
 To determine the number of axes used in the PCA analysis, we need to
 identify the jump in variance explained by the different axes. Here we
 can see that the first axis represents 43.2% of the variance, the second
-axis 22%, the third axis 14.1%, ... We can therefore see that the jump
-in variance explained by the different axes is between the first and
-second axes. The difference between the variance explained by the axes
-other than the first is negligible compared to the difference between
-the first axis and the others.
+axis 22%, the third axis 14.1%, ...
+
+We can therefore see that the jump in variance explained by the
+different axes is between the first and second axes. The difference
+between the variance explained by the axes other than the first is
+negligible compared to the difference between the first axis and the
+others.
 
 For the PCA interpretation, we therefore retain the first two axes,
 which together explain 65.19% of the variance.
 
 #### 2) Interpretation of the biological meaning of the axes :
 
-In PCA, the axes are interpreted according to the columns (\<=\>
+In PCA, the axes are interpreted according to the columns (i.e.
 variables) via the correlation circle and the absolute contributions of
 the variables.
 
 To obtain this information in R, use the following commands:
 
 ```{r}
-# Obtention des contributions absolues des variables :
+# Obtain the absolute contributions of variables :
 PCA$var$contrib
 
-# Obtention du cercle des correlations :
+# Obtain the circle of correlations :
 fviz_pca_var(PCA)
 
-# Representation graphique des valeurs de contributions absolues des variables pour un axe : 
-# Cas axe 1 : 
+# Graphical representation of absolute variable contribution values for an axis: 
+# Axis 1 case : 
 fviz_contrib(PCA, choice = "var", axes = 1)
 
-# Cas axe 2: 
+# Axis 2 case: 
 fviz_contrib(PCA, choice = "var", axes = 2)
 ```
 
 The absolute contribution shows how the initial variable contributes to
 the formation of the axis. To find out from these results which
 variables contribute to the formation of the synthetic axis, we use the
-threshold of \*1/number_of_variables)\*100\*\* (in general). For a
-variable to contribute, its contribution value must be greater than this
+threshold of $\frac{1}{nb\_variables}\times100$ (in general). For a variable
+to contribute, its contribution value must be greater than this
 threshold. This threshold value corresponds to the red dotted line on
 the graphs showing the absolute contributions of the variables along the
 axes.
 
 From these results, we can see that axis 1 is mainly represented by the
-following variables: - Points - Discus - Shotput - Long.jump - X100m -
-High.jump
+following variables:
 
-Axis 2 is represented by the variables: - X1500m - Pole.vault -
-X110m.hurdle - X100m
+-   Points, Discus, Shotput, Long.jump, X100m, High.jump
+
+Axis 2 is represented by the variables:
+
+-   X1500m, Pole.vault, X110m.hurdle, X100m
 
 The correlation circle also shows that some variables are related and
 others independent. Two related variables are represented by vectors
 forming an acute angle. Two independent variables are represented by
-orthogonal vectors.
+orthogonal vectors. Two negatively related variables are represented by
+two opposite vectors.
 
 #### 3) Projection of individuals to create a typology based on the axes:
 
@@ -312,19 +327,21 @@ To obtain the relative contributions of individuals on R, use the
 following commands:
 
 ```{r}
-# Obtention des contributions relatives des individus :
+# Relative contributions of individuals :
 PCA$ind$cos2
 
-# Obtention de la projection des individus : 
+# Obtaining the projection of individuals : 
 fviz_pca_ind(PCA)
 
 ```
 
-The individuals who most explain Axis 1 are : - Sebrle - Clay - Karpov -
-Schwarzl - Drews - Schoenbeck
+The individuals who most explain Axis 1 are :
 
-Those who most explain axis 2 are : - Macey - Warners - Zsivoczky -
-Barras
+-   Sebrle, Clay, Karpov, Schwarzl, Drews, Schoenbeck
+
+Those who most explain axis 2 are :
+
+-   Macey, Warners, Zsivoczky, Barras
 
 ### e) Biological conclusion :
 
@@ -349,12 +366,13 @@ between certain variables and individuals can be observed.
 
 # PART 2: CA
 
-## Introduction 
+## Introduction
 
 CA deals with **tables that cross two categorical variables with several
-modalities**, such as contingency tables, frequency tables, ... In these
-tables, rows and columns are **interchangeable** and the **variables are
-all in the same units**.
+modalities**, such as contingency tables, frequency tables, ...
+
+In these tables, rows and columns are **interchangeable** and the
+**variables are all in the same units**.
 
 The aim of CA is to **reveal structures and associations between these
 qualitative variables** by representing them in a multidimensional
@@ -367,9 +385,9 @@ identify associations between categories.
 Unlike PCA, for a CA, we're not interested in the distances between
 points, but in the distances between profiles of different modalities. A
 CA is therefore simply a PCA on the profiles, by equipping the space
-with a suitable distance: **the ??? distance**. With this distance, the
-weight of rows (or columns) is relativized, but not cancelled out, and
-the symmetry between rows and columns is preserved.
+with a suitable distance: **the** $\chi^2$ **distance**. With this
+distance, the weight of rows (or columns) is relativized, but not
+cancelled out, and the symmetry between rows and columns is preserved.
 
 ## Mathematics
 
@@ -662,7 +680,7 @@ variable.
 ### a) Performing CA :
 
 To run the CA, such as the PCA, you need to load the following two
-packages: - **factoextra** - **FactoMineR**
+packages: **factoextra** and **FactoMineR**.
 
 Then, to perform the CA on R, you can use the function : **CA()**.
 Remember to store the result of this PCA in a new variable, so that you
@@ -675,28 +693,30 @@ library(factoextra)
 CA=CA(data)
 ```
 
-In a CFA, rows are called **rows** and columns called **col**.
+In a CA, rows are called **rows** and columns called **col**.
 
 ### b) Interpretation of outputs :
 
 #### 1) Inertia and choice of axes :
 
 ```{r}
-# Recuperer les valeurs propres de chaque axes et l'inerties portees par les composantes principales
+# Recover the eigenvalues of each axis and the inertia carried by the principal components
 CA$eig
 
-# Visualisation graphique de l'inertie de chaque axe : 
+# Graphical display of the inertia of each axis : 
 fviz_eig(CA, addlabels = TRUE)
 ```
 
 To determine the number of axes used in the CA analysis, we need to
 identify the jump in variance explained by the different axes. It's the
 same as for PCA. Here we can see that the first axis represents 55.4% of
-the variance, the second axis 28.7%, the third axis 9.8%, ... We can
-therefore see that the jump in variance explained by the different axes
-is between the first and second axes. The difference between the
-variance explained by the axes other than the first is negligible
-compared to the difference between the first axis and the others.
+the variance, the second axis 28.7%, the third axis 9.8%, ...
+
+We can therefore see that the jump in variance explained by the
+different axes is between the first and second axes. The difference
+between the variance explained by the axes other than the first is
+negligible compared to the difference between the first axis and the
+others.
 
 For the CA interpretation, we therefore retain the first two axes, which
 together explain 65.19% of the variance.
@@ -722,10 +742,13 @@ Row_contrib>(1/8)*100
 
 ```
 
-D'apres ces resultats, les lignes expliquant le premier axe sont : -
-Black - Blues - Pink
+According to these results, the lines explaining the first axis are :
 
-Les lignes expliquant le second axe sont : - Chestnut - White
+-   Black, Blues, Pink
+
+The lines explaining the second axis are :
+
+-   Chestnut, White
 
 #### 3) Interpretation of relatives contributions :
 
@@ -742,11 +765,11 @@ CA$col$cos2
 
 ```
 
-Blue and yellow eye colors are well represented by axis 1. Gray eye
+Blue and yellow eye colors are well represented by axis 1. Grey eye
 color is represented by axis 2.
 
 ```{r}
-# Obtention des valeurs des contributions relatives des lignes : 
+# Relative line contribution values : 
 CA$row$cos2
 
 ```
@@ -758,15 +781,20 @@ the case).
 ### c) Biological conclusion :
 
 For the question of links between modalities in rows or columns, you
-need to know that : - If we have a positive sclaire product, i.e. less
-than 90? difference between the arrows of two different modalities. Then
-we have a conjunction representing an affinity between these two
-modalities. - If we have a negative scalar product, i.e. more than 90?
-difference between the arrows of two different modalities. Then we have
-an opposition of these two modalities. They reject each other. - If we
-have a zero scalar product, i.e. the arrows between two different
-modalities are perpendicular. Then there is no link between these two
-modalities.
+need to know that :
+
+-   If we have a positive sclaire product, i.e. less than 90 degree
+    difference between the arrows of two different modalities. Then we
+    have a conjunction representing an affinity between these two
+    modalities.
+
+-   If we have a negative scalar product, i.e. more than 90? difference
+    between the arrows of two different modalities. Then we have an
+    opposition of these two modalities. They reject each other.
+
+-   If we have a zero scalar product, i.e. the arrows between two
+    different modalities are perpendicular. Then there is no link
+    between these two modalities.
 
 ```{r}
 fviz_ca_biplot(CA)
@@ -775,10 +803,14 @@ fviz_ca_biplot(CA)
 On this graph, the rows are shown in blue and the columns in red. In
 other words, hair color in blue and eye color in red.
 
-From this analysis, we can see : - A conjunction between black, pink,
-brown or blond hair and blue or brown eyes. - A conjunction between
-yellow eyes and blue hair - An opposition between these two groups on
-axis 1.
+From this analysis, we can see :
+
+-   A conjunction between black, pink, brown or blond hair and blue or
+    brown eyes.
+
+-   A conjunction between yellow eyes and blue hair
+
+-   An opposition between these two groups on axis 1.
 
 In an analysis where the data are not created randomly, but come from
 different individuals from different populations. This could reveal a
@@ -939,7 +971,7 @@ Y, the response variable and the second one is called X, the explanatory
 variable. For example :
 
 | Table Y                                           | Table X                                                                                              |
-|--------------------------|----------------------------------------------|
+|---------------------------|---------------------------------------------|
 | a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
