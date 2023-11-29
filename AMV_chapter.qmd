@@ -965,10 +965,11 @@ require(vegan)
 require(tidyverse)
 ```
 
-Let's import the data, they are from @thilenius1963synecology. However, the data of abundance have been changed to facilitated the interpretation. 
-For access to real data and metadata, please see the JDBakker Git page:
-[appliedmultivariatestatistics/Oak_data_47x216.csv at main ·
-jon-bakker/appliedmultivariatestatistics
+Let's import the data, they are from @thilenius1963synecology. However,
+the data of abundance have been changed to facilitated the
+interpretation. For access to real data and metadata, please see the
+JDBakker Git page: [appliedmultivariatestatistics/Oak_data_47x216.csv at
+main · jon-bakker/appliedmultivariatestatistics
 (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
 
 ```{r}
@@ -1204,9 +1205,9 @@ The RLQ analysis is a generalized co-inertia with 3 tables :
 environmental variables for each sites (R), species abundances for each
 sites (L) and trait variables for each species (Q). We will have to
 perform a CA on the table L and weighted analysis (MCA or PCA) on
-tablesR and Q. Then a function named *rlq()* perform 3 co-inertia analysis
-between R and L and L and Q and then between the results of each
-co-inertia.
+tablesR and Q. Then a function named *rlq()* perform 3 co-inertia
+analysis between R and L and L and Q and then between the results of
+each co-inertia.
 
 ## Interpretation
 
