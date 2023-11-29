@@ -39,14 +39,6 @@ and generate hypotheses that can then be tested.
 # PART 1: PCA
 
 ## Introduction
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> ef4b68f34a715a34e1ba68b220d2f0d7b3c0ea3c
-
-You can import R package using the code
->>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
 
 PCA can be used to process a measurement table with :
 
@@ -72,16 +64,6 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
-<<<<<<< HEAD
-<!-- -->
-
-=======
-<<<<<<< HEAD
-=======
-<!-- -->
-
->>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
->>>>>>> ef4b68f34a715a34e1ba68b220d2f0d7b3c0ea3c
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
@@ -149,10 +131,10 @@ eigenvalues. The graphical representation of the distances of
 observations to these eigenvectors illustrates how each principal
 component captures the variation in the data.
 
-![](Capture d’écran 2023-11-15 à 16.45.12.png){fig-align="center"
+![](Capture%20d’écran%202023-11-15%20à%2016.45.12.png){fig-align="center"
 width="190"}
 
-![](Capture d’écran 2023-11-15 à 16.45.20.png){fig-align="center"
+![](Capture%20d’écran%202023-11-15%20à%2016.45.20.png){fig-align="center"
 width="191"}
 
 The orthogonal aspect of the principal components becomes evident when
@@ -319,8 +301,8 @@ fviz_contrib(PCA, choice = "var", axes = 2)
 The absolute contribution shows how the initial variable contributes to
 the formation of the axis. To find out from these results which
 variables contribute to the formation of the synthetic axis, we use the
-threshold of $\frac{1}{nb\_variables}\times100$ (in general). For a variable
-to contribute, its contribution value must be greater than this
+threshold of $\frac{1}{nb\_variables}\times100$ (in general). For a
+variable to contribute, its contribution value must be greater than this
 threshold. This threshold value corresponds to the red dotted line on
 the graphs showing the absolute contributions of the variables along the
 axes.
@@ -1009,15 +991,10 @@ with expecting the second to explain the first. The first one is called
 Y, the response variable and the second one is called X, the explanatory
 variable. For example :
 
-| Table Y                                           | Table X                                                                                              |
-<<<<<<< HEAD
-|---------------------------|---------------------------------------------|
-=======
-|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
->>>>>>> 828e0771d9e6b2ebc4afa407c523990d42938065
-| a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
-| a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
-| a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
+| Table Y \| Table X
+| a data set with temperature data \| a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... \|
+| a data set with the quantity of chemicals in soil \| a data set with % of pesticide applied \|
+| a data set with functional traits of an animal \| a data set with the quantities of different food given to the animal \|
 
 RDA is used when expecting a linear response from $X$ to $Y$. Only the
 variables of $X$ explaining $Y$ would be kept. The canonical axis are a
@@ -1037,10 +1014,11 @@ require(vegan)
 require(tidyverse)
 ```
 
-Let's import the data, they are from @thilenius1963synecology. However, the data of abundance have been changed to facilitated the interpretation. 
-For access to real data and metadata, please see the JDBakker Git page:
-[appliedmultivariatestatistics/Oak_data_47x216.csv at main ·
-jon-bakker/appliedmultivariatestatistics
+Let's import the data, they are from @thilenius1963synecology. However,
+the data of abundance have been changed to facilitated the
+interpretation. For access to real data and metadata, please see the
+JDBakker Git page: [appliedmultivariatestatistics/Oak_data_47x216.csv at
+main · jon-bakker/appliedmultivariatestatistics
 (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
 
 ```{r}
@@ -1276,9 +1254,9 @@ The RLQ analysis is a generalized co-inertia with 3 tables :
 environmental variables for each sites (R), species abundances for each
 sites (L) and trait variables for each species (Q). We will have to
 perform a CA on the table L and weighted analysis (MCA or PCA) on
-tablesR and Q. Then a function named *rlq()* perform 3 co-inertia analysis
-between R and L and L and Q and then between the results of each
-co-inertia.
+tablesR and Q. Then a function named *rlq()* perform 3 co-inertia
+analysis between R and L and L and Q and then between the results of
+each co-inertia.
 
 ## Interpretation
 
