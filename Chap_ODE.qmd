@@ -385,6 +385,30 @@ The stability of a linear system is often determined by the real parts of the ei
 
 This sounds complicated, **but don't panic** ! In ecology we are lucky to have a great tool, R, which allows us to resolve this type of system. We will see how can R help us with an harder example.
 
+#### Résolution sous R d'un système à deux équations
+
+```{r}
+rm(list = ls())
+library(ggplot2)
+library(deSolve)
+library(phaseR)
+library(tidyverse)
+library(rgl)
+```
+
+```{r}
+
+SIR<-function(t,y,parametres){
+  
+  
+  
+  
+  
+}
+
+
+```
+
 ## 2) Lotka-Volterra : A three-species model
 
 Biotic interactions are complex, requiring the interaction of numerous parameters. If we take the **Lotka-Volterra** example, it only considers the **interactions between two species**, prey and predator. It assumes a constant mortality rate among predators, regardless of prey. However, **predators are themselves the prey of other super-predators**. Their mortality rate should therefore depend on the super-predators they encounter. Thus, the **prey-predator-superpredator** extension of the Lotka-Volterra model would be a good representation of natural trophic interactions.
@@ -415,7 +439,7 @@ $$\frac{d_x}{d_t}=\frac{d_y}{d_t}=\frac{d_z}{d_t}=0$$
 
 We take our previous systems that we factored:
 
-$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(dxy-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
+$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(dx-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
 
 The obvious solution is (0,0,0) but is not the only one. Indeed, for the derivatives to be equal to 0, then we must find the following solution:
 
@@ -431,13 +455,19 @@ The steps are the same as for the SIR model but here the matrix is 3x3. We invit
 
 Finding equilibrum point and their behaviour is a little bit harder than before so it's time to use R.
 
+#### Résolution sous R
+
 presentation librair
 
 The most famous library to solve and study ODE is DeSolve you can also compute yourself if you want but it will be a harsh task. A great point of desolve it's this simplicity tu use and we hope you would agree with us a the end of this chapter. We will also use ggplot to made beautifull. ggplot can be present as more a more intuative way to create and manipulate plot than using basic ploting system in r
 
 ```{r}
+rm(list = ls())
 library(ggplot2)
 library(deSolve)
+library(phaseR)
+library(tidyverse)
+library(rgl)
 ```
 
 Definition de la fonction
@@ -445,18 +475,27 @@ Definition de la fonction
 Ordre important pour t y mais nous verrons après pourquoi
 
 ```{r}
-PPS <- function(t , y , parameters){
-  b <- parameters[1]
-  d <- parameters[2]
-  e <- parameters[3]
-  c <- parameters[4]
-  g <- parameters[5]
+PPS <- function(t , dy , parameters){
+
+  x <- dy[1]
+  y <- dy[2]
+  z <- dy[3]
   
-  dx <- x(a - by)
-  dy <- y(dxy -ez -c)
-  dz <- z(gy - z)
+  a <- parameters[1]
+  b <- parameters[2]
+  c <- parameters[3]
+  d <- parameters[4]
+  e <- parameters[5]
+  f <- parameters[6]
+  g <- parameters[7]
   
-  return(list(dx , dy , dz))
+  sol <- numeric(3)
+  
+  sol[1] <- a * x - b * y * x
+  sol[2] <- d * x * y  - e * y * z - c * y
+  sol[3] <- z * g * y - z * f
+ 
+  list(sol)
 }
 
 ```
@@ -465,8 +504,47 @@ Présenation du comportement de l'équation
 
 et fonctionnement ODE
 
+étape de con faire attention à son modele
+
 ```{r}
-ode()
+param <- c(a = 0.5 , b = 0.04, c = 0.01 , d = 0.02 , e = 0.04 ,f = 0.1, g = 0.009 )
+temps = seq(from = 0 , to = 200, by = 0.01)
+depart = c(20 , 10 , 5)
+resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
+
+resolnum <- as.data.frame(resolnum)
+colnames(resolnum) <- c("Times" , "Prey" ,"Predators" ,"SuperPredators")
+
+
+
+ggplot(resolnum)+
+  geom_line(aes(x = Times, y = Prey),color ="chartreuse" ,size =1.5)+
+  geom_line(aes(x = Times,y = Predators),color = "red" ,size =1.5)+
+  geom_line(aes(x = Times,y = SuperPredators),color = "darkviolet",size =1.5)+
+  theme_classic()
+
+
+
+
+```
+
+```{r}
+resolnum10 <- resolnum %>%
+  filter(Times <= 2)
+
+ggplot(resolnum10)+
+  geom_line(aes(x = Prey, y = Predators),color = "black",size =1.5)+
+    theme_classic()
+
+ggplot(resolnum10)+
+  geom_line(aes(x = Predators, y = SuperPredators),color = "black",size =1.5)+
+    theme_classic()
+
+ggplot(resolnum10)+
+  geom_line(aes(x = Prey, y = SuperPredators),color = "black",size =1.5)+
+    theme_classic()
+
+plot3d(resolnum[,2],resolnum[,3],resolnum[,4])
 ```
 
 Maintenant analyse point d'équilibre
@@ -474,50 +552,6 @@ Maintenant analyse point d'équilibre
 Plusieurs fonctions importantes
 
 one présente pas tout argument
-
-trajectory()
-
-```{r}
-
-numericalSolution()
-flowfield()
-
-
-```
-
-```{r}
-flowfield()
-```
-
-```{r}
-nullclines()
-```
-
-Présentation graphique avec 1 trajectoires
-
-```{r}
-trajectory()
-```
-
-Maintenant que se passe t'il dans cas à 10 trajectoires
-
-```{r}
-trajectory()
-```
-
-De manière générale il est important de tracer plusieurs trajectoires pour comprendre comportemement modèles
-
-```{r}
-drawManifolds()
-```
-
-Problemes d'affichage
-
--   Présentation en dim
-
-Présentation en 3 dim
-
-ZOOM + DEZOMM
 
 ## 3) Generalizations of the three-species model and other examples
 
