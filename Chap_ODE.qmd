@@ -19,6 +19,7 @@ editor:
 #Add packages
   df_print: paged
 
+```
 
 ```{=html}
 <style>
