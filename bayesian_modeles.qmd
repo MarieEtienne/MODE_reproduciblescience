@@ -9,7 +9,7 @@ output:
    toc: true
    toc_float: true
 ---
-#bonjour ça marche ?
+#bonjour ça fonctionne ?
 ```{r setup}
 #| include: false
 
