@@ -789,7 +789,7 @@ particular typology of one population in relation to another.
 ## Introduction
 
 MCA is a statistical method adapted to table of type "individuals x
-quatitative variable". Eingen Values correspond to means of squered
+quatitative variable". Eingen Values correspond to means of squared
 correlation ratios. It could be used a pre-processing before a
 classification or a coinertia analysis on tables with quantitative.
 
@@ -866,15 +866,16 @@ Let's have a look to Eigen Values :
 
 ```{r}
 res.mca$eig
+fviz_eig(res.mca, addlabels = TRUE)
 ```
 
 The total variance of the data set is divided between four dimensions.
 The first dimension concentrate 32.6% of the total variance. The first
-plan gather 58% of the variance.
+plan gather 58% of the variance. You can better visualize the repartition of variance with the plot.
 
 Here, you can see the results for the individuals, their coordinates
-($coord$), contribution ($contrib$) and the quality of their projection
-($cos2$ )
+($coord$), absolute contributions ($contrib$), and the quality of their projection
+($cos2$). 
 
 ```{r}
 head(res.mca$ind$coord)
@@ -888,7 +889,7 @@ on the first plan. Contribution is how the point contribute to the
 creation of different axis.
 
 You can access the same information for the variable (instead of the
-individuals): \>\>\>\>\>\>\> Lucile
+individuals):
 
 ```{r}
 res.mca$var$coord
@@ -902,6 +903,8 @@ coordinates with the following code :
 ```{r}
 res.mca$quanti.sup$coord
 ```
+
+
 
 Let's have a look to the plot of this MCA analysis :
 
