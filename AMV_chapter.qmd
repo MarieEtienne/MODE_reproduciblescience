@@ -57,7 +57,7 @@ $$Where :
 
 -   $Z_p$ is the principal component $p$
 
--    $Ø_j$ is the weight vector comprising the $j$ weights for principal
+-   $Ø_j$ is the weight vector comprising the $j$ weights for principal
     component $p$, i.e., the coefficients of the linear combination of
     the original variables from which the principal components are
     constructed.
@@ -96,10 +96,10 @@ eigenvalues. The graphical representation of the distances of
 observations to these eigenvectors illustrates how each principal
 component captures the variation in the data.
 
-![](images/Capture d’écran 2023-11-15 à 16.45.12.png){fig-align="center"
+![](images/Capture%20d’écran%202023-11-15%20à%2016.45.12.png){fig-align="center"
 width="175"}
 
-![](images/Capture d’écran 2023-11-15 à 16.45.20-01.png){fig-align="center"
+![](images/Capture%20d’écran%202023-11-15%20à%2016.45.20-01.png){fig-align="center"
 width="174"}
 
 The orthogonal aspect of the principal components becomes evident when
