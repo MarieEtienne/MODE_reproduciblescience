@@ -34,7 +34,7 @@ examine the structure of the data by answering the following questions:
 Multivariate analysis methods are therefore used to describe the data
 and generate hypotheses that can then be tested.
 
-# PART 1: PCA
+
 
 ## Mathematics
 
@@ -123,11 +123,10 @@ space. This process aligns the data along the principal components,
 providing a simplified yet informative view of the underlying structure
 of the initial data.
 
-\
+
 
 ## Interprétation
 
-385b1ad696329aa5b7f18746a630c2c7f2ff85b9
 
 ## Introduction :
 
@@ -154,7 +153,7 @@ visualization of the point cloud in reduced space.
 
 However, this reduction must :
 
--   Preserve distances between individuals:
+
 
     -   Two individuals who resemble each other must be close in the
         representation space.
@@ -163,6 +162,7 @@ However, this reduction must :
 
     -   Two variables that are correlated must be represented by vectors
         forming an acute angle.
+
     -   Two independent variables are represented by orthogonal vectors.
 
 ## Mathematics
@@ -360,6 +360,7 @@ between certain variables and individuals can be observed.
 # PART 2: CA
 
 ## Mathematics
+
 
 Correspondence Analysis (CA) represents a statistical method aimed at
 exploring the relationship between two sets of categories. In contrast
@@ -605,9 +606,6 @@ connection with the statistic of the $\chi^2$ test.
 By definition,
 $trace(S*)=\sum_{j=1}^p\sum_{i=1}^n\frac{(f_{ij}-f_if_j)^2}{f_if_j}$
 
-## Interprétation
-
-385b1ad696329aa5b7f18746a630c2c7f2ff85b9
 
 ## Introduction :
 
@@ -631,13 +629,15 @@ with a suitable distance: **the ??? distance**. With this distance, the
 weight of rows (or columns) is relativized, but not cancelled out, and
 the symmetry between rows and columns is preserved.
 
+
 ## Mathematiques
 
 ## Interpretation
 
 Here's an example of how CA can be applied.
 
-### a) Importing the dataset :
+You can import R package using the code
+
 
 ```{r}
 # Creating the dataset :
@@ -896,8 +896,9 @@ $cos2$ represents the quality of the representation of the individuals
 on the first plan. Contribution is how the point contribute to the
 creation of different axis.
 
-You can access the same information for the variable (instead of the
-individuals) :
+
+You can access the same information for the variable (instead of the individuals): \>\>\>\>\>\>\> Lucile
+
 
 ```{r}
 res.mca$var$coord
@@ -945,48 +946,195 @@ quatitative variable". Eingen Values correspond to means of squered
 correlation ratios. It could be used a pre-processing before a
 classification or a coinertia analysis on tables with quantitative.
 
-# PART 4: RDA
+# PART 3: CCA
 
-# PART 3: RDA
 
-385b1ad696329aa5b7f18746a630c2c7f2ff85b9
+## Method principle
 
-## Mathématiques
+Two table analysis is used when the scientist possesses two data set with expecting the second to explain the first. The first one is called Y, the response variable and the second one is called X, the explanatory variable. For example :
+
+| Table Y                                           | Table X                                                                                              |
+|--------------------------|----------------------------------------------|
+| a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
+| a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
+| a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
+
+RDA is used when expecting a linear response from $X$ to $Y$. Only the variables of $X$ explaining $Y$ would be kept. The canonical axis are a linear combinaison of the explicative variable ($Y$). The $Y$ table will be ordered with a PCA. Then, a multiple regression of $Y$ on $X$ is done and stored in a new table, $Y'$. The residual matrix correspond to $Y-Y'$, what was not explained by $X$.
+
 
 ## Interprétation
 
-This chapter is a simple example using R
+Here are the library you will need to perfor the RDA, make sure your import them at the begining of your working document.
 
-You can import R package using the code
-
-```{r}
-library(tidyverse)
+```{r, include=FALSE}
+require(ade4)
+require(vegan)
+require(tidyverse)
 ```
 
-and then describe the purpose of your chapter as well as executing R
-command.
-
-For example a basic summary of a dataset is given by
+Let's import the data, they are from Thilenius, 1963. However, the data of abundance have been changed to facilitated the interpretation. For access to real data and metadata, please see the JDBakker Git page: [appliedmultivariatestatistics/Oak_data_47x216.csv at main · jon-bakker/appliedmultivariatestatistics (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
 
 ```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+Oak <- read.csv("https://raw.githubusercontent.com/AnsaldiL/MODE_reproduciblescience/master/Oak_data.csv", sep=';', header = TRUE) 
+
+Topo <- Oak %>%
+select(LatAppx, LongAppx, Elev.m, Slope.deg) %>%
+decostand("range")
+
+Oak_sp=Oak[,28:83]
 ```
 
-and produce a graph
+
+We can explore the tables
 
 ```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
+head(Oak_sp)
+head(Topo)
 ```
 
-A citation @bauer2023writing
+
+So here, the first table ("Oak_sp") represents a table of plant abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
+
+
+As explained above, the CCA objective is to link the abundance of plant by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the plants.
+
+We have seen in introduction of the part 3 that CCA was used when the respond have a non-linear distribution but rather a gaussian relationship.
+
+So we begin by performing a CA on the species table:
+
+```{r}
+caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
+```
+
+Then, we can perform the PCA on the CA that corresponds to the CCA with the *ADE4* package:
+
+```{r}
+ccaoak <- pcaiv(caoak,Topo,scannf=F,nf=2)
+```
+
+You can also realize the CCA with one code row only with the *vegan* package:
+
+```{r}
+ccavegan=cca(Oak_sp,Topo,scan=F)
+```
+
+It is important to use the two methods because each allows us to have different information during the analyse of the result
+
+An we already have completed our analyse, it was no difficult! But now, we need analyse the result and test the significant.
+
+To test the significant, we use a bootstrapping test thank you the ADE4 package.It is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+
+```{r}
+randtest(ccaoak)#with ADE4
+plot(randtest(ccaoak))
+```
+
+The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+
+The results of this test shows that our result is significatively different to the permutation result with a threshold of 5% (p-value = 0.02)
+
+Finally, the results of the CCA are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the plant distribution.
+
+We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF).
+
+```{r}
+test=vif.cca(ccavegan) 
+test
+```
+
+If all the variables have a number lower than 10, you can conclude that you do not not have collinearity. If you have, you need to select some variables to remove with, for example, an *ordistep* function.
+
+Now that we have tested all the conditions, we can look at the results.
+
+```{r}
+ccaoak
+print(paste("The pourcentage of variance explained by topographic variables is: ",sum(ccaoak$eig)/sum(caoak$eig),"%"))
+```
+
+The first output (by *ADE4*) allows us to see each part of the analyse that could be use to describe the result. We will use especially the last part afterward. You also have, at the beginning, the number of rank that corresponds to the number of eigenvalue with their score below. We can calculate the percentage of variance explained by topographic variables.
+
+```{r}
+ccavegan
+```
+
+Here, it is the output with the *vegan* package. We can see the total inertia in the CCA analyse (5.55) and the inertia explained by the topographic variables (0.71) and by the residuals (4.85). We can therefore conclude that our topographic variables explain only 13% of the plant variances (same result that before). Below that, we have the eigenvalues for the constrained axes (variance part explained by topographic variables) and for the unconstrained axes (variance part explained by the residuals)
+
+We can now, observe the complet plot of the CCA result:
+
+```{r}
+plot(ccaoak)
+```
+
+Here, we can have a complete plot with the *ADE4* package.
+
+-   The "Loadings" part represents the canonical coefficients. For each axis, the arrows explain the relative weight of the topographic variables in the multiple regression calculation.
+
+-   The "Correlation" part shows the correlation between topographic variables themselves and with CCA axes
+
+-   The "Scores and Predictions" part allows us to understand, for each site, the real plant abundance (base of arrows) and the abundance predicted by multiple regressions with the topographic variables.
+
+-   The "Species" part corresponds to the coordinates of each plant species in the CCA analyse
+
+But this can also be decomposed in different plots and output.We can detail each part and observe the biological results.
+
+We can begin by the absolute contribution of species:
+
+```{r}
+contrib=inertia.dudi(ccaoak, col = TRUE, row = FALSE)
+contrib$col.abs
+```
+
+The output, here, is the absolute contribution of each species for the axis 1 and the axis 2. This allows us to observe what species contributes the most of the axes.
+
+```{r}
+ccaoak$fa
+s.corcircle(ccaoak$fa)
+```
+This line gives you the canonical coefficients on each axis. The circle is explain in the "Loadings" part of the main plot of the RDA. On axis 1, the variable with the main contribution of the predictive power is $LatAppx$. On axis 2, $Slope.deg$ and $Elev.m$ contributes the most of the predictive power.
+
+```{r}
+ccaoak$co
+s.label(ccaoak$co,boxes=F)
+```
+$co$ gives you access to the coordinates of each species on the first plan. The table explicits the coordinates and the plot help you to find close species. On the first axis, two species have high negative value : Adbi (-1.97) & Abgr.t (-1.50). They are opposed at species as Coco.t (0.86) & Cato (0.96). You can realize the same for the second axis.
+
+Here, we can highlight that there is a group formed by Agse (coord = 0.31 ; 1.90 respectively for the axis 1 and 2), Agha (coord = -0.38 ; 1.25) Avfa (coord = 0.33 ; 0.88) and ALL (coord = 0.20 ; 1.14). An other on with two outliers, Abgr.t and Adbi. These groups will be correlated with the environment data further in the analysis.
+
+```{r}
+ccaoak$cor 
+s.corcircle(ccaoak$cor)
+```
+
+Here, we have the correlation between axes and the topographic variables. We can conclude that the elevation (corr = -0.15\[axis1\] ; -0.45\[axis2\]) and the slope (corr = 0.12\[axis1\] ; 0.65\[axis2\]) are strongly negatively correlated. The Longitude seems to be positively correlated with the slope and negatively correlated with the elevation.
+
+```{r}
+s.match(ccaoak$ls, ccaoak$li)
+plot(ccavegan,scaling=1) 
+plot(ccavegan,scaling=2) 
+```
+
+
+The first plot with the arrows represents the real abundances for each site (base of the arrow) and the predictions of abundance calculated by a multiple regression thanks to the topographic variables. 
+We see here that there are some large differences between reality and prediction. 
+Most of the sites are in a center group but some sites differ. It is the case with the sites n°7,40,41,42. We have another group with the sites n°43,44,45,46.
+
+The second plot, with *scaling = 1* preserves euclidian distances between stations.\
+The third plot, with *scaling = 2* preserves correlations between species.
+
+
+
+To conclude on the CCA analyse, we have seen that the topographic variables explain 13% of the plant variances. The first axis represents 34% of the constrained inertia and is explained by the Latitude (corr = 0.99). We can see that two species have a high coordinate in this axis (Adbi & Abgr.t). \
+The second axis (18% of the constrained inertia) is explained by the Elevation (corr = -0.45), the Slope (corr = 0.65) and the Longitude (corr = 0.33). 
+
+
+Finally, the sites n°43,44,45,46 are sites with a small latitude value and with a high abundance of species as Abgr.t.
+
+
 
 # PART 4: RLQ
 
 # PART 5: RLQ
 
-385b1ad696329aa5b7f18746a630c2c7f2ff85b9
 
 ## Mathématiques
 
