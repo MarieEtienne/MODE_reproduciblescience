@@ -174,32 +174,34 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
    \end{array}
   \right.$$
 
-Dans ce modèle, la covariance entre deux mesures faites aux temps t et t' sur un même modèle est constante, quel que soit l'intervalle de temps qui sépare les deux mesures.
+In this model, the covariance between two measurements made at times t and t' on the same model is constant, whatever the time interval between the two measurements.
 
-**Modèle** On propose ici un modèle qui prend en compte l'aspect cinétique de l'expérience et prévoit que la dépendance entre deux mesures dépend de l'intervalle de temps qui les sépare.
-Une telle dépendance n'admet pas de représentation simple sous la forme d'un effet aléatoire.
-On suppose donc que les poids sont gaussiens d'espérances respectives.
+**Model** A model is proposed here which takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.
+Such a dependency cannot be represented simply as a random effect.
+We therefore assume that the weights are Gaussian with respective expectations.
 
-$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ **Structure de dépendance** On suppose de plus que toutes les mesures ont la même variance
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$ **Dependency structure** It is also assumed that all measurements have the same variance
 
-$$ V(Y_{ijt} =  σ^2) $$ et que la covariance entre elles vaut
+$$ V(Y_{ijt} =  σ^2) $$ and the covariance between them is
 
 $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
   \begin{array}{ll}
   σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
-  \right.$$ Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes.
-On suppose de plus que \|ρ\| \< 1, ce qui implique que celles faites sur un même animal sont d'autant moins corrélées que l'intervalle de temps est grand.
-Cette forme de covariance correspond à un processus auto-régressif d'ordre 1, généralement noté AR(1).
-Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ 2, soit
+  \right.$$ This structure assumes that measurements made on different animals are independent.
+It is also assumed that \|ρ\| \< 1, which implies that the longer the time interval, the less correlated the tests on the same animal.
+This form of covariance corresponds to an autoregressive process of order 1, generally denoted AR(1).
+This model has two variance parameters (also called variance components): the temporal correlation ρ and the variance of each observation $σ^2$.
 
 $$
   ψ = \left( {\begin{array}{cc}
     ρ \\
     σ^2 \\
   \end{array} } \right)
-$$ *Ecriture matricielle* Du fait de l'indépendance entre les mesures obtenues sur des animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs mais le bloc R diffère :
+$$ 
+
+Because of the independence between the measurements obtained on different animals, the variance matrix Σ also has the same diagonal block shape, but the R block differs. :
 
 $$
   R = \left( {\begin{array}{cc}
@@ -233,15 +235,15 @@ summary(o.ar1)
 
 ### Cas de l'autocorrelation spatiale
 
-<<<<<<< HEAD
-*Structure de dépendance* Là encore, on veut prendre en compte la dépendance due à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
+*Dependency structure* We want to take into account the dependency due to the possible spatial proximity between the sites at which the measurements were taken.
 
-Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+
+To do this, d(i, i') is the distance separating sites i and i', and the following equation is used
 
 $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
-*Ecriture matricielle* Comme dans le cas des mesures répétées, il n'existe pas d'écriture simple en termes d'effets aléatoires.
-De plus, comme toutes les mesures sont dépendantes, la matrice Σ n'est plus diagonale par bloc et s'écrit :
+As in the case of repeated measurements, there is no simple way of writing this in terms of random effects.
+Moreover, since all the measurements are dependent, the matrix Σ is no longer diagonal per block and is written as :
 
 $$
   Σ = \left( {\begin{array}{cc}
@@ -255,7 +257,6 @@ $$
 
 
 ```{r, include=FALSE, echo=FALSE}
->>>>>>> 4a005b60a7bfc23afd1421e0a74fb24cb006139d
 set.seed(3)  
 n <- 100
 
