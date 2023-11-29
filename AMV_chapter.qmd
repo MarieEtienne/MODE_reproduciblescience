@@ -897,15 +897,6 @@ res.mca$var$contrib
 res.mca$var$cos2
 ```
 
-As a supplementary quantitative variable was added, MCA gives its
-coordinates with the following code :
-
-```{r}
-res.mca$quanti.sup$coord
-```
-
-
-
 Let's have a look to the plot of this MCA analysis :
 
 ```{r}
@@ -931,6 +922,8 @@ drinking at G3. Male and female seamed to be separated by the first
 axis. As we can gather individuals sharing close properties, females
 seams to drink regularly and male more rarely. It is a bit less clear
 but male are drinking preferably in pound 1.
+
+Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitatives, they would not participate to the creation of axis but they may be ploted on the final graph. 
 
 # PART 4: CCA
 
