@@ -113,7 +113,7 @@ Les tests de permutations sont une mÃ©thode statistique puissante pour comparer 
 
 ### Principe Fondamental
 
-A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$...), les tests de permutations sont basÃ©s sur une distribution d'une statistique de test sous l'hypothÃ¨se nulle. La distribution sous l'hypothÃ¨se nulle correspond Ã  la distribution thÃ©orique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dÃ©pendante). Dans les tests statistiques classiques, cette distribution correspond Ã  diffÃ©rentes lois connues, la plus connue Ã©tant la loi Gaussienne, mais Ã§a peut-Ãªtre la distribution de Student, la distribution $\chi 2$ etc. La particularitÃ© des tests de permutations est que l'on va gÃ©nÃ©rer cette distribution thÃ©orique de faÃ§on empirique directement Ã  partir des donnÃ©es. Les tests de permutation sont des tests non-paramÃ©triques (ils ne font pas d'approximation de distribution) et exacts (basÃ©s sur les donnÃ©es uniquement).
+A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$ ...), les tests de permutations sont basÃ©s sur une distribution d'une statistique de test sous l'hypothÃ¨se nulle. La distribution sous l'hypothÃ¨se nulle correspond Ã  la distribution thÃ©orique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dÃ©pendante). Dans les tests statistiques classiques, cette distribution correspond Ã  diffÃ©rentes lois connues, la plus connue Ã©tant la loi Gaussienne, mais Ã§a peut-Ãªtre la distribution de Student, la distribution $\chi 2$ etc. La particularitÃ© des tests de permutations est que l'on va gÃ©nÃ©rer cette distribution thÃ©orique de faÃ§on empirique directement Ã  partir des donnÃ©es. Les tests de permutation sont des tests non-paramÃ©triques (ils ne font pas d'approximation de distribution) et exacts (basÃ©s sur les donnÃ©es uniquement).
 
 Selon les rÃ¨gles du thÃ©orÃ¨me centrale limite, rÃ©pÃ©ter un grand nombre de fois une observation d'une variable alÃ©atoire (ici la statistique de test) mÃ©nera Ã  une distribution Gaussienne dans laquelle on pourra placer la statistique de test observÃ©e (i.e. calculÃ©e sur notre Ã©chantillon) et ainsi dÃ©finir la significativitÃ© de l'effet de nos variables explicatives. En d'autres termes, on gÃ©nÃ¨re toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observÃ©e Ã  cette distribution nulle.
 
@@ -165,11 +165,19 @@ Dans le cas d'une corrÃ©lation, la statistique de test pourrait Ãªtre basÃ©e sur
 ## Régressions
 
 La régression est une méthode de modélisation empirique d'une variable réponse\
-(appelée ici $Y$) en fonction d'une ou de plusieurs variables explicatives (\$ X_1, X_2, ..., X_n  \$ avec \$ n \$ le nombre de variables explicatives). Ce sont les régressions linéaires qui sont majoritairement utilisées dans le domaine des statistiques, principalement pour leur simplicité d'application. Plaçons nous donc dans ce monde linéaire. Le modèle linéaire est modélisé par : $$ Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} + \epsilon_i, \ \ \ \epsilon_i \sim \mathcal{N}(0,\,\sigma) $$ Avec $Y_i$ la $i^{ème}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{ème}$ valeur de la $j^{ème}$ variable $X$.
+(appelée ici $Y$) en fonction d'une ou de plusieurs variables explicatives ( $X_1,X_2,.,X_n$ avec $n$ le nombre de variables explicatives). Ce sont les régressions linéaires qui sont majoritairement utilisées dans le domaine des statistiques, principalement pour leur simplicité d'application. Plaçons nous donc dans ce monde linéaire. Le modèle linéaire est modélisé par :
+
+$$ 
+Y_i = \alpha + \sum_{j=1}^{n}b_j \times X{ij} +\epsilon\_i\sim\mathcal{N}(0,,\sigma)
+$$ {#eq-1}
+
+Avec $Y_i$ la $i^{ème}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{ème}$ valeur de la $j^{ème}$ variable $X$.
 
 ### Test statistique sur les coefficients.
 
-Il faut maintenant s'assurer que les paramètres $b$ et $\alpha$ sont différents de 0. Le test par permutation permet de définir l'hypothèse nulle (H0 : \$ \alpha = 0\$ et $b = 0$). L'idée est de permuter les valeurs de $Y_i$ et les $X_i$.
+Il faut maintenant s'assurer que les paramètres \$b\$ et $\alpha$ sont différents de 0. Le test par permutation permet de définir l'hypothèse nulle (H0 : $\alpha=0$ et $b = 0$). L'idée est de permuter les valeurs de
+
+$Y_i$ par rapport aux $X_ij$ ou inversement.
 
 ```{r exemple permutation sepal.width & sepal.length}
 library(kableExtra) # Mettre en 1er chunk si nécessaire
@@ -194,11 +202,20 @@ cbind(data[,1:2], permu) %>%
   
 ```
 
-Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramètres estimés à partir des échantillons permutés forment H0.
+Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramètres estimés à partir des échantillons permutés forment H0. Le paramètre b est éstimé par la méthode des moindres carrés tels que :
+
+$$
+b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
+$$
+
+Le paramètre $\alpha$ est estimé par :
+$$
+\alpha=\bar{y}-b_i\bar{x}
+$$
 
 ```{r}
 
-n_permu <- 5000 # choix du nombre de permutations
+n_permu <- 100 # choix du nombre de permutations
 
 hyp_nulle <- matrix(NA, nrow = n_permu, ncol = 2)
 colnames(hyp_nulle) <- c("alpha", "b")
@@ -222,11 +239,66 @@ hyp_nulle[i,2] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[2]]
 # Distribution de l'hypothèse nulle
 
 par(mfrow = c(1,2))
-hist(hyp_nulle[,1], 
+hist_1 <- hist(hyp_nulle[,1], 
      main = expression("Distribution empirique de "*alpha*" sous H0"),
      xlab = expression(""*alpha*"")) 
-hist(hyp_nulle[,2], 
+hist_2 <- hist(hyp_nulle[,2], 
      main = expression("Distribution empirique de b sous H0"),
      xlab = "b")
 
+
+
 ```
+
+### coefficients de la regression observée
+
+```{r}
+
+# Calcul des coefficients de la regression à partir des données brutes
+obs <- lm(data$Sepal.Length~data$Sepal.Width)$coefficients 
+
+# Distribution de H0 et coefficients observés
+
+par(mfrow = c(1,2))
+plot(hist_1,
+     main = expression("Distribution empirique de "*alpha*" sous H0"),
+     xlab = expression(""*alpha*"")) 
+abline(v = obs[1])
+
+plot(hist_2,
+     main = expression("Distribution empirique de b sous H0"),
+     xlab = expression("b")) 
+abline(v = obs[2])
+
+
+
+```
+
+# Calcul des statistiques associées au test
+
+```{r}
+
+p_a <- length(hyp_nulle[hyp_nulle[,1]<=obs[1]])
+
+p_value_a <- p_a/n_permu
+
+p_b <- length(hyp_nulle[hyp_nulle[,2]>=obs[2]])
+
+p_value_b <- p_b/n_permu
+
+#Affichage des résultats
+
+df_results <- data.frame(alpha = round(c(obs[1], p_value_a),4),
+                         b = round(c(obs[2], p_value_b),4))
+row.names(df_results) <- c("coefficient \n observée", "P valeur")
+
+df_results%>%
+  kable("html", booktabs =TRUE, align = rep("c", 3))%>%
+  kable_paper("hover", full_width = F)
+  
+```
+
+## Test de mantel
+
+### Usages
+
