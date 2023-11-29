@@ -26,7 +26,7 @@ text-align: justify}
 rm(list=ls()) # Properly clear workspace
 
 # Install packages
-pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools")
+pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools","deSolve")
 inst.pkg <- row.names(installed.packages())
 pkg2inst <- pmatch(pkg, inst.pkg)
 if (any(is.na(pkg2inst[1:4]))) install.packages(pkg[which(is.na(pkg2inst[1:4]))],
@@ -38,6 +38,7 @@ library(ggplot2) # graph package
 library(tidyverse)
 library(draw) # To draw some shapes
 library(devtools)
+library(deSolve)
 devtools::install_github("hadley/emo")
 ```
 
@@ -113,7 +114,7 @@ paper, to avoid getting lost (*Figure 1*)!\
 
 Let's make it more concrete:
 
-```{r, include=TRUE, fig.height=2.8, fig.width=5}
+```{r, include=TRUE, echo=FALSE, fig.height=2.8, fig.width=5}
 # Create a new drawing page and set the drawing settings
 drawPage(width = 5, height = 5, units = "inches")
 
@@ -245,7 +246,7 @@ $$\lim_{\Delta t \to 0} \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = \frac{d👽
 
 Graphically, this gives (*Figure 2*):
 
-```{r, include=TRUE, fig.height=5, fig.width=6}
+```{r, include=TRUE, echo=FALSE, fig.height=5, fig.width=6}
 # Create a new drawing page and set the drawing settings
 drawPage(width = 5, height = 4, units = "inches")
 
@@ -368,7 +369,7 @@ individuals at the next time.
 
 It could be illustrated as follows (*Figure 3*):
 
-```{r, include=TRUE, fig.height=2.8, fig.width=5}
+```{r, include=TRUE, echo=FALSE, fig.height=2.8, fig.width=5}
 # Create a new drawing page and set the drawing settings
 drawPage(width = 5, height = 5, units = "inches")
 
@@ -463,9 +464,9 @@ use a package you've seen or will no doubt be seeing very soon: the
 
 Install and load it:
 
-```{r, include=TRUE, echo=FALSE}
-install.packages("deSolve")
-library(deSolve)
+```{r, include=TRUE, echo=TRUE}
+#install.packages("deSolve")
+#library(deSolve)
 ```
 
 There are two important points to bear in mind when using this package:
@@ -909,7 +910,7 @@ Answer:
 You can use a online generator to flip the text back up, or just take a
 picture and turn it !
 
-# IV. 3-equation system
+# IV. 3-equation ODE system
 
 We will now make the system more complex by adding an additional
 equation. To solve these systems, two methods are possible. If we are in
@@ -964,14 +965,13 @@ It's the **disease-free equilibrium** (DFE).
 **If *S = b/a***, we integrate S into our "susceptible" equation to
 obtain the solution for I:
 
-$$
-\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0
-\\ S = \frac{\beta}{\alpha} \end{cases}
-\\ & \Leftrightarrow \begin{cases} -\beta I + \gamma - \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases}
-\\ & \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}
-\\ & \text{We thus obtain our first solution:}
-\\ & \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\ S=\frac{\beta}{\alpha} \end{cases} \end{align} 
-$$
+$$\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0\\
+S = \frac{\beta}{\alpha} \end{cases}\\
+& \Leftrightarrow \begin{cases} -\beta I + \gamma - \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
+& \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}\\ 
+& \text{We thus obtain our first solution:}\\
+& \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\
+S=\frac{\beta}{\alpha} \end{cases} \end{align} $$
 
 It's the **endemic equilibrium** (EE).
 
@@ -1040,25 +1040,23 @@ depends on the signs and nature of the eigenvalues.
 
 Now, we solve the characteristic polynomial to obtain the eigenvalues:
 
-$$ det(J- \lambda Id) = 0
-\\ \text{with Id : identity matrix}
-\\
-\\ \Leftrightarrow \begin{bmatrix} \frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda 
-& - \beta - \gamma
-\\  \frac{\gamma (\alpha - \beta)}{\beta + \gamma} & - \lambda \end{bmatrix} = 0
-\\ \Leftrightarrow - \lambda (
-\frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda) 
-- (- \beta - \gamma )(
-\frac{\gamma (\alpha - \beta)}{\beta + \gamma}
-) = 0 
-\\ \Leftrightarrow \lambda^2 + \lambda (\gamma +  \frac{\gamma (\alpha- \beta)}{\beta + \gamma})+ \gamma (\alpha - \beta) = 0 $$
+$$ \begin{align} & det(J- \lambda Id) = 0\\
+& \text{with Id : identity matrix}\\
+
+&\Leftrightarrow \begin{bmatrix} \frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda 
+& - \beta - \gamma\\
+\frac{\gamma (\alpha - \beta)}{\beta + \gamma} & - \lambda \end{bmatrix} = 0\\
+&\Leftrightarrow - \lambda (\frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda) 
+- (- \beta - \gamma )(\frac{\gamma (\alpha - \beta)}{\beta + \gamma}
+) = 0 \\
+&\Leftrightarrow \lambda^2 + \lambda (\gamma +  \frac{\gamma (\alpha- \beta)}{\beta + \gamma})+ \gamma (\alpha - \beta) = 0 \end{align}$$
 
 The number of solutions is indicated by the value of the discriminant :
-$$ \Delta = (\gamma +  \frac{\gamma (\alpha - \beta)}{\beta + \gamma})^2 - 4 (\gamma (\alpha - \beta))
-\\ \text{With} \ \alpha > \beta
+$$ \begin{align} & \Delta = (\gamma +  \frac{\gamma (\alpha - \beta)}{\beta + \gamma})^2 - 4 (\gamma (\alpha - \beta))
+\\ &\text{With} \ \alpha > \beta
 \\
 \\
-\begin {align} \text{If} \ & \Delta < 0:\ \text{you will have two complex conjugate roots.} \\ &\Delta = 0:\ \text{you will have one real repeated root.} \\ &\Delta>0: \ \text{you will have two distinct real roots.} \end{align} $$
+\text{If} \ & \Delta < 0:\ \text{you will have two complex conjugate roots.} \\ &\Delta = 0:\ \text{you will have one real repeated root.} \\ &\Delta>0: \ \text{you will have two distinct real roots.} \end{align} $$
 
 From now,we will assign **numerical values**:
 $$ \alpha = 4, \ \beta = 2 \ and \ \gamma = 1 
@@ -1066,13 +1064,14 @@ $$ \alpha = 4, \ \beta = 2 \ and \ \gamma = 1
 \Delta = (1 + \frac{1(4-2)}{1+2})^2 - 4(1(4-2))= -5.22 
 \\ So \ \Delta < 0 $$
 
-$$ \text{Solutions are given by the following formula:}
-\\ \lambda= \frac{-(\gamma + \frac{
+$$ \begin{align} &\text{Solutions are given by the following formula:}
+\\ & \lambda= \frac{-(\gamma + \frac{
 \gamma (\alpha - \beta)}{\beta + \gamma}) \pm \sqrt \Delta}{2}i
-\\ \frac{\sqrt \Delta}{2}i: \ \text{imaginary part.}
-\\ \frac{-(\gamma + \frac{\gamma (\alpha - \beta)}{\beta +\gamma})}{2}: \ \text{real part.} 
+\\ & \frac{\sqrt \Delta}{2}i: \ \text{imaginary part.}
+\\ & \frac{-(\gamma + \frac{\gamma (\alpha - \beta)}{\beta +\gamma})}{2}: \ \text{real part.} 
 \\
-\\ \text{Real part}= -\frac{5}{3}$$
+\\ & \text{Real part}= -\frac{5}{3}
+\end{align} $$
 
 The stability of a linear system is often determined by the real parts
 of the eigenvalues. In this case, the real part is negative which
