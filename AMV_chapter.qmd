@@ -36,7 +36,7 @@ and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
-## Introduction 
+## Introduction
 
 You can import R package using the code
 
@@ -64,9 +64,8 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
-```{=html}
 <!-- -->
-```
+
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
@@ -336,7 +335,9 @@ represent the projection of the individuals and variables as follows:
 fviz_pca_biplot(PCA)
 ```
 
-Knowing the biological interpretation of the axes : *IMAGE*
+Knowing the biological interpretation of the axes :
+
+![**PCA interpretation**](PCA_interpretation.png)
 
 We can therefore see that the individuals with the highest scores at
 this tournament are those who had the best results in the discus, shot
@@ -349,7 +350,7 @@ between certain variables and individuals can be observed.
 
 # PART 2: CA
 
-## Introduction 
+## Introduction
 
 CA deals with **tables that cross two categorical variables with several
 modalities**, such as contingency tables, frequency tables, ... In these
@@ -871,11 +872,12 @@ fviz_eig(res.mca, addlabels = TRUE)
 
 The total variance of the data set is divided between four dimensions.
 The first dimension concentrate 32.6% of the total variance. The first
-plan gather 58% of the variance. You can better visualize the repartition of variance with the plot.
+plan gather 58% of the variance. You can better visualize the
+repartition of variance with the plot.
 
 Here, you can see the results for the individuals, their coordinates
-($coord$), absolute contributions ($contrib$), and the quality of their projection
-($cos2$). 
+($coord$), absolute contributions ($contrib$), and the quality of their
+projection ($cos2$).
 
 ```{r}
 head(res.mca$ind$coord)
@@ -923,7 +925,10 @@ axis. As we can gather individuals sharing close properties, females
 seams to drink regularly and male more rarely. It is a bit less clear
 but male are drinking preferably in pound 1.
 
-Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitatives, they would not participate to the creation of axis but they may be ploted on the final graph. 
+Note that supplementary quantitaive data could be added to the analysis
+to help interpretation. As they are quantitatives, they would not
+participate to the creation of axis but they may be ploted on the final
+graph.
 
 # PART 4: CCA
 
@@ -935,7 +940,7 @@ Y, the response variable and the second one is called X, the explanatory
 variable. For example :
 
 | Table Y                                           | Table X                                                                                              |
-|--------------------------|----------------------------------------------|
+|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | a data set with temperature data                  | a data set with cities caracteristics such as heigth of buildings, concreted area, number of cars... |
 | a data set with the quantity of chemicals in soil | a data set with % of pesticide applied                                                               |
 | a data set with functional traits of an animal    | a data set with the quantities of different food given to the animal                                 |
