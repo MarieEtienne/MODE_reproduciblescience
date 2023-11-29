@@ -36,7 +36,7 @@ and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
-## Introduction 
+## Introduction
 
 You can import R package using the code
 
@@ -64,9 +64,8 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
-```{=html}
 <!-- -->
-```
+
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
@@ -92,7 +91,7 @@ observations.
 The space of principal components can be expressed as :
 
 $$
-Z_p=\Sigma^p_{j=1}ø_j*X_j
+Z_p=\Sigma^p_{j=1}ø_j\times X_j
 $$Where :
 
 -   $Z_p$ is the principal component $p$
@@ -136,7 +135,11 @@ eigenvalues. The graphical representation of the distances of
 observations to these eigenvectors illustrates how each principal
 component captures the variation in the data.
 
-image
+![](Capture d’écran 2023-11-15 à 16.45.12.png){fig-align="center"
+width="190"}
+
+![](Capture d’écran 2023-11-15 à 16.45.20.png){fig-align="center"
+width="191"}
 
 The orthogonal aspect of the principal components becomes evident when
 observing the second principal component, which, in turn, maximizes the
@@ -144,11 +147,12 @@ variance in the data. These principal components, each aligned along an
 orthogonal axis, form a new coordinate system in which the information
 is more clearly structured.
 
-In addition to representing the magnitude of the principal components,
+In addition to representing the variance of the principal components,
 the eigenvectors also provide a relative understanding of their
 influence. This influence is calculated by dividing the eigenvalues by
 the total sum of these values, thus providing context on the
-contribution of each principal component to the overall information.
+contribution of each principal component $v_k$ to the overall
+information.
 
 $$
 Explained\ variance\ of\ v_k = \frac{\lambda_{v_k}}{\Sigma_{i=1}^p\lambda_v}
@@ -349,7 +353,7 @@ between certain variables and individuals can be observed.
 
 # PART 2: CA
 
-## Introduction 
+## Introduction
 
 CA deals with **tables that cross two categorical variables with several
 modalities**, such as contingency tables, frequency tables, ... In these
@@ -396,12 +400,12 @@ f_{ij} = \frac{X_{ij}}{n}
 $$With $f_{ij}$ representing the probability that events $i$ and $j$
 occur jointly, $X_{ij}$ the number of times this co-occurrence has been
 observed, and $n$ the total number of observations.The marginal
-probabilities of the columns $(f_j)$ and rows $(f_i)$ are calculated as
-follows:
+probabilities of the columns $(f_{.j})$ and rows $(f_{i.})$ are
+calculated as follows:
 
 $$
-f_j = \sum_{i=1}^{I}f_{ij}\\\\\\  
-f_i=\sum_{j=1}^{J}f_{ij}
+f_{.j} = \sum_{i=1}^{I}f_{ij}\\\\\\  
+f_{i.}=\sum_{j=1}^{J}f_{ij}
 $$
 
 ### - Profiles
@@ -409,38 +413,38 @@ $$
 -   Row profiles
 
     The row profile is
-    $L_i = (\frac{f_{i1}}{f_i},...,\frac{f_{ij}}{f_i})$. In matrix
-    terms, we will set up $D_n=diag(f_i)$ such that $L = D_n^{-1}F$. We
-    can then define the average row profile, obtained by summing the
+    $L_i = (\frac{f_{i1}}{f_{i.}},...,\frac{f_{ij}}{f_{i.}})$. In matrix
+    terms, we will set up $D_n=diag(f_{i.})$ such that $L = D_n^{-1}F$.
+    We can then define the average row profile, obtained by summing the
     columns of our frequency table :
 
     $$
-    (\sum_{i=1}^nf_i\frac{f_{i1}}{f_i},...,\sum_{i=1}^nf_i\frac{f_{ij}}{f_i})=(f_1,...,f_j)
+    (\sum_{i=1}^nf_{i.}\frac{f_{i1}}{f_{i.}},...,\sum_{i=1}^nf_{i.}\frac{f_{ij}}{f_{i.}})=(f_{.1},...,f_{.j})
     $$
 
 -   **Column profiles**
 
     The column profile is
-    $C_j=(\frac{f_{1j}}{f_j},...,\frac{f_{ij}}{f_j})$. As with row
+    $C_j=(\frac{f_{1j}}{f_{.j}},...,\frac{f_{ij}}{f_{.j}})$. As with row
     profiles, it can be expressed and calculated in matrix terms by
-    setting: $D_p=diag(f_j)$, such that $C=D_p^{-1}F^T$. We can then
+    setting: $D_p=diag(f_{.j})$, such that $C=D_p^{-1}F^T$. We can then
     define the average column profile by summing the rows of our
     frequency table:
 
     $$
-    (\sum_{j=1}^pf_j\frac{f_{1j}}{f_j},...,\sum_{j=1}^pf_j\frac{f_{ij}}{f_i})=(f_1,...f_i)
+    (\sum_{j=1}^pf_{.j}\frac{f_{1j}}{f_{.j}},...,\sum_{j=1}^pf_{.j}\frac{f_{ij}}{f_{i.}})=(f_{1.},...f_{i.})
     $$
 
 ### - Distances between profiles
 
 One can measure the distance between two row profiles
-by$$d^2(i,i')=\sum_{j=1}^p(\frac{f_{i j}}{f_i}-\frac{f_{i'j}}{f_{i'}})^2$$
+by$$d^2(i,i')=\sum_{j=1}^p(\frac{f_{i j}}{f_{i.}}-\frac{f_{i'j}}{f_{i'.}})^2$$
 
 But this distance does not take into account the importance of each
 column. A more sensible choice is to use the $\chi^2$ distance, which
 does take the importance of each column into consideration.
 
-$d^2(i,i')=\sum_{j=1}^p\frac{1}{f_j}(\frac{f_{i j}}{f_i}-\frac{f_{i'j}}{f_{i'}})^2$
+$d^2(i,i')=\sum_{j=1}^p\frac{1}{f_{.j}}(\frac{f_{i j}}{f_{i.}}-\frac{f_{i'j}}{f_{i'}})^2$
 
 Let's use the notation $x$ to refer to the vector of distances between
 two rows $L_{11}-L_{21}$ or between two columns $C_{11}-C_{12}$.
@@ -448,7 +452,7 @@ Adopting matrix notation, the square distance of the $\chi^2$ is of the
 form:
 
 $$
-x^TD_p^{-1}x = \sum_{j=1}^p\frac{x^2_j}{f_j}
+x^TD_p^{-1}x = \sum_{j=1}^p\frac{x^2_j}{f_{.j}}
 $$for a row point $x\ \epsilon\ \mathbb{R}^n$ .
 
 ### - Independence
@@ -464,19 +468,19 @@ model.This independence model is calculated based on the following
 equation:
 
 $$
-P(A\ et\ B) = P(A) * P(B)
+P(A\ \cap\ B) = P(A) \times P(B)
 $$Therefore, the joint probability is the product of the marginal
 probabilities:
 
 $$
-f_{ij} = f_i * f_j
+f_{ij} = f_{i.} \times f_{.j}
 $$One can then calculate the discrepancy between the observed data
 $(f_{ij})$ and the independence model:
 
 -   The significance of the association is measured with a $\chi^2$ test
 
     $$
-    \chi_{obs}^2 = \sum_{i=1}^I\sum_{j=1}^J\frac{(obs.headcount - th.headcount)^2}{th.headcount}=\sum_{i=1}^I\sum_{j=1}^J\frac{(n*f_{ij} - n*f_i*f_j)^2}{n*f_i*f_j}
+    \chi_{obs}^2 = \sum_{i=1}^I\sum_{j=1}^J\frac{(obs.headcount - th.headcount)^2}{th.headcount}=\sum_{i=1}^I\sum_{j=1}^J\frac{(n\times f_{ij} - n\times f_{i.}\times f_{.j})^2}{n\times f_{i.}\times f_{.j}}
     $$
 
 -   The strength of the association $Ø^2$ is measured by the discrepancy
@@ -511,12 +515,16 @@ such as :
 
 $$
 (u^TD_p^{-1}F^TD_n^{-1})D_n(D_n^{-1}FD_p^{-1}u)
-$$is maximal, given that $u^TD_p^{-1}u=1$.
+$$
+
+*With* $F$ *: the observed frequency matrix*
+
+is maximal, given that $u^TD_p^{-1}u=1$.
 
 The solution is given by the principal eigenvector of
 
 $$
-D_p(D_p^{-1}F^TD_n^{-1}FD_p^{-1}=F^TD_n^{-1}FD_p^{-1}\equiv S
+D_pD_p^{-1}F^TD_n^{-1}FD_p^{-1}=F^TD_n^{-1}FD_p^{-1}\equiv S
 $$
 
 #### - Dual Analysis (Columns)
@@ -525,8 +533,7 @@ Dual analysis is performed on the column profiles. The rows of
 $C = D_p^{-1}F^T$ are elements of $\mathbb{R}^n$. We aim to represent
 them in this space using the distance function $x^TD-n^{-1}x$.
 
-In dual analysis, we seek the vector \\(u\\) $v\ \epsilon\ \mathbb{R}^n$
-such as
+In dual analysis, we seek the vector $v\ \epsilon\ \mathbb{R}^n$ such as
 
 $$
 (v^TD_n^{-1}FD_p^{-1})D_p(D_p^{-1}F^TD-n^{-1}v)
@@ -562,10 +569,19 @@ $$
 
 $$
 D_p^{-1}F^T\Psi_j=\sqrt{\lambda_j}\varphi_j\equiv \hat{\varphi}_j
-$$establish an almost barycentric link between the two types of
-analysis, meaning that the coordinates of points in one space are
-proportional to the components of the factor from the other space
-corresponding to the same eigenvalue.
+$$
+
+*With* $\varphi_j$ : *the* eigenvector *associated with the eigenvalue*
+$\lambda_j$ *of the matrix F;* $\Psi_j$ : *the* modality *coordinates of
+the row variable in the row space defined by the eigenvalues;*
+$\hat{\Psi}_j$ *the* contrinution *of the component* $j$ *to the row
+variable in the row space and* $\hat{\varphi}_j$ *the* contrinution *of
+the component* $j$ *to the column variable in the column space*
+
+establish an almost barycentric link between the two types of analysis,
+meaning that the coordinates of points in one space are proportional to
+the components of the factor from the other space corresponding to the
+same eigenvalue.
 
 Verification: The first relationship is confirmed as follows.
 
