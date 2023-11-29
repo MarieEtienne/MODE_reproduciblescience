@@ -253,7 +253,7 @@ We will now make the system more complex by adding an additional equation. To so
 
 The most used **models in epidemiology** are mathematical models of infectious diseases such as the SIR model. These models are based on compartmentalization that divide the population into various possible disease states. The **SIR model** is composed of 3 compartments: initially healthy or **susceptible individuals** (S), **infected individuals** (I) and cured individuals or **resistent** (R).
 
-$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
+$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI+\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
 \\
 \\ \begin{align} With : & - \alpha \text{: disease transmission rate}
 \\ & - \beta \text{: cure rate}
@@ -387,6 +387,8 @@ This sounds complicated, **but don't panic** ! In ecology we are lucky to have a
 
 #### Résolution sous R d'un système à deux équations
 
+inspiration visuelle interessante : https://rstudio-pubs-static.s3.amazonaws.com/32888_197d1a1896534397b67fb04e0d4899ae.html
+
 ```{r}
 rm(list = ls())
 library(ggplot2)
@@ -394,20 +396,72 @@ library(deSolve)
 library(phaseR)
 library(tidyverse)
 library(rgl)
+
+
+```
+
+```{r}
+SIR <- function(t , dy , parameters){
+
+  S <- dy[1]
+  I <- dy[2]
+
+  
+  alpha <- parameters[1]
+  beta <- parameters[2]
+  gamma <- parameters[3]
+
+  
+  sol <- numeric(2)
+
+  
+  sol[1] <- - alpha * S * I + gamma * (1 - S - I)
+  sol[2] <- alpha * S * I  - beta * (1 - S - I)
+  
+  list(sol)
+}
+
 ```
 
 ```{r}
 
-SIR<-function(t,y,parametres){
-  
-  
-  
-  
-  
-}
+param <- c(alpha = 0.2, beta = 0.01, gamma = 0.2)
+temps = seq(from = 0 , to = 60, by = 0.01)
+depart = c(0.999 , 0.001 )
+resolnum <- ode(y = depart, times = temps, func = SIR, parms = param)
+
+resolnum <- as.data.frame(resolnum)
+colnames(resolnum) <- c("Times" , "Susceptible" ,"Infectious" )
+
+
+
+ggplot(resolnum)+
+  geom_line(aes(x = Times, y = Susceptible),color ="chartreuse" ,size =1.5)+
+  geom_line(aes(x = Times,y = Infectious),color = "red" ,size =1.5)+
+  theme_classic()
 
 
 ```
+
+```{r}
+  flowField(SIR,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,add = F)
+nullclines(SIR,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,points = 100, add = T,add.legend = F)
+
+
+
+
+for(i in 1:100){
+  X0 <- sample(x = seq(0,1,0.01),size =1)
+Y0 <- sample(x = seq(0,1-X0,0.01),size =1)
+
+cond_init = c(X0, Y0)
+  trajectory(SIR,cond_init,tlim= c(0,50),parameters = param,col = i)
+}
+```
+
+Il existe la fonction findequilibrum qui est ... intéressante...
+
+-   faireplot3D pour comportement modèle dans l'espace
 
 ## 2) Lotka-Volterra : A three-species model
 
