@@ -1,5 +1,5 @@
 ---
-title: "AMV_chapter"
+title: "Multivariate analysis"
 format: html
 editor: visual
 editor_options: 
