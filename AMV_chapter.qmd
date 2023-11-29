@@ -9,6 +9,8 @@ editor_options:
 
 # Introduction to Multivariates Analysis
 
+@van2001comparison
+
 Biologists' data, whether on individuals, populations or communities,
 are usually presented in the form of rectangular tables, with
 observations (n) in the rows and variables (p) in the columns.
@@ -36,7 +38,7 @@ and generate hypotheses that can then be tested.
 
 # PART 1: PCA
 
-## Introduction 
+## Introduction
 
 You can import R package using the code
 
@@ -64,9 +66,8 @@ However, this reduction must :
 -   Two individuals who resemble each other must be close in the
     representation space.
 
-```{=html}
 <!-- -->
-```
+
 -   Preserve correlations between variables:
 
     -   Two variables that are correlated must be represented by vectors
@@ -349,7 +350,7 @@ between certain variables and individuals can be observed.
 
 # PART 2: CA
 
-## Introduction 
+## Introduction
 
 CA deals with **tables that cross two categorical variables with several
 modalities**, such as contingency tables, frequency tables, ... In these
@@ -819,10 +820,10 @@ or 0) is divided by the probability $p_{k}$ of having this modality
 (i.e. $p_k=\frac{\sum_{i=0}^I V_{i,k}}{I}$, result from which we
 subtract 1 to center the result.
 
-$V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$
+$$V'_{i,k}=\frac{\sum_{i=1}^I V_{i,k}}{I}-1$$
 
 We define the ***distance D*** between 2 individuals $i$ and $i’$ as :
-$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$
+$$D=\frac{1}{J}\sum_{k=1}^K \frac{1}{p_{k}}(V'_{i,k}-V'_{i',k})^2$$
 
 So 2 individuals taking the all same modalities are at a distance D = 0,
 the more similar the responses are over a large number of modalities,
@@ -834,7 +835,7 @@ The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is
 the correlation ratio between 2 variables $x$ and $y$ and $η^2(F_s,k)$
 is the ***correlation ratio*** between the modality $k$ and l'axe $F_s$.
 The axis $F_1$ is the one which maximize its correlation ratio with all
-the modalities $k$ : $F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$.
+the modalities $k$ : $$F_1=\max(\sum_{k=1}^K η^2(F_s,V_{.,k}))$$
 
 ## Interpretation
 
@@ -888,7 +889,7 @@ on the first plan. Contribution is how the point contribute to the
 creation of different axis.
 
 You can access the same information for the variable (instead of the
-individuals): \>\>\>\>\>\>\> Lucile
+individuals):
 
 ```{r}
 res.mca$var$coord
@@ -962,9 +963,8 @@ require(vegan)
 require(tidyverse)
 ```
 
-Let's import the data, they are from Thilenius, 1963. However, the data
-of abundance have been changed to facilitated the interpretation. For
-access to real data and metadata, please see the JDBakker Git page:
+Let's import the data, they are from @thilenius1963synecology. However, the data of abundance have been changed to facilitated the interpretation. 
+For access to real data and metadata, please see the JDBakker Git page:
 [appliedmultivariatestatistics/Oak_data_47x216.csv at main ·
 jon-bakker/appliedmultivariatestatistics
 (github.com)](https://github.com/jon-bakker/appliedmultivariatestatistics/blob/main/Oak_data_47x216.csv)
@@ -1007,13 +1007,13 @@ caoak <- dudi.coa(Oak_sp,scannf=F,nf=2)
 ```
 
 Then, we can perform the PCA on the CA that corresponds to the CCA with
-the *ADE4* package:
+the **ADE4** package:
 
 ```{r}
 ccaoak <- pcaiv(caoak,Topo,scannf=F,nf=2)
 ```
 
-You can also realize the CCA with one code row only with the *vegan*
+You can also realize the CCA with one code row only with the **vegan**
 package:
 
 ```{r}
@@ -1026,11 +1026,11 @@ different information during the analyse of the result
 An we already have completed our analyse, it was no difficult! But now,
 we need analyse the result and test the significant.
 
-To test the significant, we use a bootstrapping test thank you the ADE4
-package.It is important to test if the result of the RLQ is not only due
-to random combination of values but that we have a real correlation
-between are different tables. To produce this, we perform a permutation
-test with the function *randtest*.
+To test the significant, we use a bootstrapping test thank you the
+**ADE4** package.It is important to test if the result of the RLQ is not
+only due to random combination of values but that we have a real
+correlation between are different tables. To produce this, we perform a
+permutation test with the function *randtest*.
 
 ```{r}
 randtest(ccaoak)#with ADE4
@@ -1068,7 +1068,7 @@ ccaoak
 print(paste("The pourcentage of variance explained by topographic variables is: ",sum(ccaoak$eig)/sum(caoak$eig),"%"))
 ```
 
-The first output (by *ADE4*) allows us to see each part of the analyse
+The first output (by **ADE4**) allows us to see each part of the analyse
 that could be use to describe the result. We will use especially the
 last part afterward. You also have, at the beginning, the number of rank
 that corresponds to the number of eigenvalue with their score below. We
@@ -1079,7 +1079,7 @@ variables.
 ccavegan
 ```
 
-Here, it is the output with the *vegan* package. We can see the total
+Here, it is the output with the **vegan** package. We can see the total
 inertia in the CCA analyse (5.55) and the inertia explained by the
 topographic variables (0.71) and by the residuals (4.85). We can
 therefore conclude that our topographic variables explain only 13% of
@@ -1094,7 +1094,7 @@ We can now, observe the complet plot of the CCA result:
 plot(ccaoak)
 ```
 
-Here, we can have a complete plot with the *ADE4* package.
+Here, we can have a complete plot with the **ADE4** package.
 
 -   The "Loadings" part represents the canonical coefficients. For each
     axis, the arrows explain the relative weight of the topographic
@@ -1202,7 +1202,7 @@ The RLQ analysis is a generalized co-inertia with 3 tables :
 environmental variables for each sites (R), species abundances for each
 sites (L) and trait variables for each species (Q). We will have to
 perform a CA on the table L and weighted analysis (MCA or PCA) on
-tablesR and Q. Then a function named rlq() perform 3 co-inertia analysis
+tablesR and Q. Then a function named *rlq()* perform 3 co-inertia analysis
 between R and L and L and Q and then between the results of each
 co-inertia.
 
@@ -1246,8 +1246,8 @@ library(RVAideMemoire)
 library(PerformanceAnalytics)
 ```
 
-Here, we work with a dataset of "*ade4*" package. The data comes from
-Legendre et al., 1997, Dray and Legendre, 2008
+Here, we work with a dataset of **ADE4** package. The data comes from
+@dray2008testing, @legendre1997relating
 
 ```{r}
 #import the dataset
@@ -1321,8 +1321,7 @@ their values. All the different compounds of the output will be used
 after in representations or analysis.
 
 Nevertheless, we can calculate the contribution of each axis of the RLQ
-by performing the formule below: METTRE LA FORMULE AU PROPRE
-rlq$eig/(sum(rlq$eig))\*100
+by performing the formule below: $$\frac{rlq$eig}{\sum{rlq$eig}}.100$$
 
 After that, and before to plot and analyse the result, it is important
 to test if the result of the RLQ is not only due to random combination
@@ -1445,9 +1444,8 @@ others variables (trait and environment) For species and sites, we do
 not have contribution because these variables do not contribute of the
 axis creation.
 
-CONCLUSION To conclude on this analyse, the two first axes were required
-to explain 86.2% of the total variation with 66.7%, and 19.5% of the
-total inertia respectively.
+To conclude on this analysis, the two first axes explain 86.2% of the
+total variation with respectively 66.7%, and 19.5% of the total inertia.
 
 The correlations between the environmental variables and the RLQ axes
 showed that the first axis is explained by Veg.cover.R100 (contribution
@@ -1458,9 +1456,9 @@ are breeding.ground (28.19%), feed.strat.foliage (19.8%), breeding.scrub
 (13.3%) and negatively with breeding.building (17.18%) and
 feed.strat.aerial (7.09%). In other words, breeding.ground,
 feed.strat.foliage, breeding.scrub, feed.strat.aerial and
-breeding.building were the most powerful explanatory attributes for this
-RLQ axis (explained by both the length and the angle between the axes
-and the vectors).
+breeding.building were the higher explanatory attributes for this RLQ
+axis (explained by the length and the angle between the axes and the
+vectors).
 
 # To go further with Multivariate Analysis
 
