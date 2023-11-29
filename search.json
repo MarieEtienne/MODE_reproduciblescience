@@ -179,6 +179,6 @@
     "href": "python_chapter.html",
     "title": "Chapter : statistical tests with dependent data",
     "section": "",
-    "text": "This chapter is a simple example using python\nYou can import python librairies using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
+    "text": "This chapter is a simple example using python\nYou can import python libraries using the code\n\nimport pandas as pd\nimport numpy as np\n\nand then describe the purpose of your chapter as well as executing python command.\nFor example a basic summary of a dataset is given by\n\ndf = pd.read_csv(\"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv\")\n\nand produce a graph\n\ndf.boxplot(by = 'species', column = 'body_mass_g')  \n\n&lt;Axes: title={'center': 'body_mass_g'}, xlabel='species'&gt;"
   }
 ]
