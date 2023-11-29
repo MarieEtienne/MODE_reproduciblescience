@@ -11,6 +11,7 @@ output:
 MERCI DE CHARGER ICI LES PACKAGES QUE VOUS UTILISEE
 ```{r Importation des packages}
 library(nlme)
+library(sp)
 ```
 
 
@@ -140,7 +141,7 @@ avec
 
 $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
   \begin{array}{ll}
-  σ^2ρ \ \ si \ \ (i, j) = (i_0, j_0) \\
+  σ^2ρ \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
   \right.$$
@@ -186,6 +187,7 @@ $$
     σ^2ρ^{T-1} & ... & σ^2ρ^2 & σ^2ρ & σ^2\\
   \end{array} } \right)
 $$
+
 ```{r}
 #Read the data
 d=read.delim(
@@ -209,7 +211,7 @@ summary(o.ar1)
 ```
 ### Cas de l'autocorrelation spatiale
 
-*Structure de dépendance*  Là encore, on veut prendre en compte la dépendance due
+*Structure de dépendance* On veut prendre en compte la dépendance due
 à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
 Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
 
@@ -220,22 +222,22 @@ $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
 $$
   Σ = \left( {\begin{array}{cc}
-     σ^2 + γ^2 & ...& ...& ...\\
-     ...& σ^2 + γ^2 & e^{−δ.d(i,i')} &...\\
-     ...& e^{−δ.d(i,i')}  & σ^2 + γ^2 &...\\
- ...& ...& ... & σ^2 + γ^2\\
+     σ^2 + γ^2 & e^{−δ.d(i,i')}& ...& e^{−δ.d(i,i')}\\
+     e^{−δ.d(i,i')}& σ^2 + γ^2 & e^{−δ.d(i,i')} & \vdots\\
+     \vdots & e^{−δ.d(i,i')}  & σ^2 + γ^2 & e^{−δ.d(i,i')}\\
+ e^{−δ.d(i,i')}& \ldots & e^{−δ.d(i,i')} & σ^2 + γ^2\\
   \end{array} } \right)
 $$
 
 
-```{r}
+```{r, include=FALSE, echo=FALSE}
 set.seed(3)  
 n <- 100
 
 loc <- data.frame(LAT = runif(n, 144, 150), LONG = runif(n,
     -26, -20))
 
-library(sp)
+
 grid <- expand.grid(LAT = seq(144, 150, l = 100), LONG = seq(-26,
     -20, l = 100))
 coordinates(grid) <- ~LAT + LONG
@@ -272,9 +274,6 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
 ```{r}
 summary(data.spatialCor.glsExp)
 ```
-
-## Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?
-
 
 
 
