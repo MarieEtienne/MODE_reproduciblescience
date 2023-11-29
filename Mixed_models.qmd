@@ -11,6 +11,7 @@ output:
 
 ```{r Importation des packages,fig.align='center'}
 library(nlme)
+
 library(ggplot2)
 library(gridExtra)
 library(predictmeans)
@@ -123,7 +124,7 @@ avec
 
 $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
   \begin{array}{ll}
-  σ^2ρ \ \ si \ \ (i, j) = (i_0, j_0) \\
+  σ^2ρ \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
   \right.$$
@@ -180,9 +181,13 @@ o.ar1 = gls(Strength ~ Program * Timef, data = d,correlation = corAR1(form = ~1 
 summary(o.ar1)
 ```
 
+
 ### 3.2 Case of spatial autocorrelation
 
-*Structure de dépendance* Là encore, on veut prendre en compte la dépendance due à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures. Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+*Structure de dépendance* On veut prendre en compte la dépendance due
+à l'éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures.
+Pour cela, on note d(i, i') la distance qui sépare les sites i et i' et on pose
+
 
 $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
@@ -190,14 +195,17 @@ $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
 $$
   Σ = \left( {\begin{array}{cc}
-     σ^2 + γ^2 & ...& ...& ...\\
-     ...& σ^2 + γ^2 & e^{−δ.d(i,i')} &...\\
-     ...& e^{−δ.d(i,i')}  & σ^2 + γ^2 &...\\
- ...& ...& ... & σ^2 + γ^2\\
+     σ^2 + γ^2 & e^{−δ.d(i,i')}& ...& e^{−δ.d(i,i')}\\
+     e^{−δ.d(i,i')}& σ^2 + γ^2 & e^{−δ.d(i,i')} & \vdots\\
+     \vdots & e^{−δ.d(i,i')}  & σ^2 + γ^2 & e^{−δ.d(i,i')}\\
+ e^{−δ.d(i,i')}& \ldots & e^{−δ.d(i,i')} & σ^2 + γ^2\\
   \end{array} } \right)
 $$
 
-```{r}
+
+
+```{r, include=FALSE, echo=FALSE}
+
 set.seed(3)  
 n <- 100
 
@@ -239,7 +247,7 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
 summary(data.spatialCor.glsExp)
 ```
 
-**Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?**
+
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} $$
 
