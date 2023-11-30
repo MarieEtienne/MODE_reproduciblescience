@@ -93,28 +93,132 @@ shapiro.test(group)
 
 # The Bootstrap re-sampling method
 
-## Introduction and principle
+## Introduction and Principle
 
 Now that we've extensively covered the Jackknife resampling in the previous section, let's delve into another resampling technique: the Bootstrap method.
 
-Similar to Jackknife, Bootstrap aims to estimate descriptive parameters of a sample and evaluate the accuracy of these estimates to make inferences about the actual population. It is yet another method of statistical inference through multiple replications of data based on the initial dataset. In simpler terms, akin to the previous section, our goal here is to derive parameters of interest from our sample (such as mean, median, or even the $R^2$ of a regression, among others) and construct confidence intervals around these estimates.
+Similar to Jackknife, Bootstrap aims to estimate descriptive parameters of a sample and evaluate the accuracy of these estimates to make inferences about the actual population. It is yet another method of statistical inference through multiple replications of data based on the initial dataset. Basically, the idea is to use resampling to create a probability distribution of any chosen parameter. This distribution probability, know as the empirical distribution function, will be an estimation of what really is the distribution probability of our parameter in the real population. In practice, akin to the previous section, our goal here is to derive parameters of interest from our sample (such as mean, median, or even the $R^2$ of a regression, among others) and construct confidence intervals around these estimates.
 
 The key distinction between Jackknife and Bootstrap lies in how, in each of its $i$ iterations, Bootstrap resamples $n$ elements with replacement from an initial sample of $n$ data. Put differently, during each iteration, elements are drawn from the initial sample and then put back in after each random selection. This implies two important differences from the resampling we achieved using Jackknife: i) the new samples maintain the same size $n$ as the original dataset, ii) a specific element may appear multiple times in a new sample or may not appear at all.
 
-Once these $i$ Bootstrap samples are created, the desired statistical parameters are calculated for each of these samples. Consequently, we obtain a distribution consisting of $i$ data points from these samples. Finally, it is by analyzing this distribution that we can estimate precision, particularly the confidence interval for our statistical parameters.
+Once these $i$ Bootstrap samples are created, the desired statistical parameters are calculated for each of these samples. Consequently, we obtain a distribution consisting of $i$ data points from these samples, this is our empirical distribution function. Finally, it is by analyzing this distribution that we can estimate precision, particularly the confidence interval for our statistical parameters.
 
-## Applications
+## Practice and Applications
 
-Tentons maintenant d'illustrer ces propos et de leur donner du sens au travers de quelques exemples. Nous allons illustrer comme précédemment différentes applications de la méthode de Bootstrap en fonction des potentiels jeux de données qui peuvent se présenter à vous.
+A bit confused about this previous introduction? No worries, we'll take an example to illustrate this.
 
-### La base : Calcule de l'intervalle de confiance autour de la moyenne
-
-Comme précédemment réalisé pour illustrer la méthode de Jacknife, nous utiliserons les données de largeur de sépales issues du jeu de données Iris de R base.
+For this part, we will work again on the Iris RBase dataset. Let's say that we are interested in the average width of the sepals in a wild population of Iris flowers. As we couldn't measure the sepals of every single flower, we sampled and measured a given number of individuals on field. To illustrate this, we'll consider our Iris dataset to be our complete wild population (which of course, you'll never have access to in real condition), and take only a few individuals to represent our field sampling.
 
 ```{r}
-## Importation des données Iris
-dataPetal <- iris$Petal.Width
+# Our real population
+irisPopulation <- iris$Sepal.Width
+# Our field sampling
+set.seed(42)
+irisSampling <- irisPopulation[sample(1:150,15)]
 ```
+
+From this field sampling, we are easily able to compute a mean, which we'll be doing:
+
+```{r}
+# Field sampling mean
+mean(irisSampling)
+```
+
+So, we got a mean value of $3.15$, great. However, this mean can hardly be extrapolated to the actual population, as we don't have any information of the variability induced by the individuals we decided to sample. Especially, you can see in our previous code, that we only sampled $n=15$ individuals on field. This is clearly not enough sampling to assume that our estimated mean is representative of our actual population. So, we might want to have some information about the variability of the mean we just estimated, and this is where Bootstrap method joins the game.
+
+We are now going to apply step by step our algorithm to resample our initial field sampling dataset, and use to build the probability distribution of our mean.
+
+1.  **Make our Bootstrap resampling iterations**
+
+```{r}
+# Fix our number of bootstrap iterations
+B = 1000
+
+# Create an empty list to stock our resamplings
+bootstrapSamples <- vector("list",B)
+
+# Bootstrap resampling algorithm
+for (i in 1:B) {
+  # Randomly sample n elements with replacement
+  bootstrapSamples[[i]] <- sample(irisSampling, replace = TRUE)
+}
+```
+
+For pedagogical purpose, let's give a look at a few resamples while comparing them to our initial field sampling dataset.
+
+```{r}
+# Our original field sampling
+sort(irisSampling)
+```
+
+```{r}
+# A few resampling
+sort(bootstrapSamples[[5]])
+sort(bootstrapSamples[[777]])
+```
+
+See how some values are repeated more times than in our initial dataset? And that some others aren't sampled? For instance, $2.5$ appeared only one time in our initial set and was therefore rarely or never resampled. Meanwhile, $2.8$ was more common, and end up being really often sampled.
+
+2.  **Compute mean for every resampled datasets**
+
+Now we are going to compute our parameter of interest of every of our resampled datasets. This will give us our set of $i=1000$ mean values, from which we will create our empirical distribution in the next step.
+
+```{r}
+# Compute mean for each boostrap samples
+iterationMeans <- sapply(bootstrapSamples, mean)
+```
+
+3.  **Plot the probability distribution**
+
+The distribution of our parameter of interest is now done, we can therefore plot it to have an idea of the variability of our estimated mean value.
+
+```{r}
+# Probability distribution plot
+ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_density(alpha = 0.5, fill = "orange") +
+  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed") +
+  labs(title = "Empirical probability distribution of mean values",
+       x = "Mean",
+       y = "Density") +
+  theme_minimal()
+```
+
+This probability distribution therefore give us information about the variability around the mean value estimated with our field sampling. As expected and as represented with the red dashed line, this distribution is centered around this estimated mean value.
+
+4.  **Compute confidence interval around our mean estimate**
+
+Remember the original purpose of the Bootstrap method? Evaluate the accuracy around the estimation of our parameter to make inferences to our natural population. And to make so, we are going to use the Bootstrap percentiles. Let's say we want to compute the 95% Confidence Interval. To do so, we will split the 5% of error between each side of our distribution and therefore took the values corresponding to 2.5 and 97.5% in our empirical distribution.
+
+```{r}
+# Get percentile 2.5%
+quantile(iterationMeans, probs = 0.025)
+```
+
+```{r}
+# Get percentile 97.5%
+quantile(iterationMeans, probs = 0.975)
+```
+
+And this is how we finally got our confidence interval for our mean estimation : $2.97 \leq \overline{x} \leq 3.33$.
+
+Once again for pedagogical purpose, we can plot those percentiles.
+
+```{r}
+# Probability distribution plot
+ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_density(alpha = 0.5, fill = "orange") +
+  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed") +
+  geom_vline(xintercept = quantile(iterationMeans, probs = 0.025), color = "green", linetype = "dashed") +
+  geom_vline(xintercept = quantile(iterationMeans, probs = 0.975), color = "green", linetype = "dashed") +
+  labs(title = "Empirical probability distribution of mean values",
+       x = "Mean",
+       y = "Density") +
+  theme_minimal()
+```
+
+5.  \*\*Compare with what
 
 **Calcule de l'intervalle de confiance autour de la moyenne sous hypothèse de normalité :** Nous allons pour le moment considérer le jeu de données entier et calculer l'intervalle de confiance autour de sa moyenne.
 
