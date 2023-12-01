@@ -218,98 +218,35 @@ ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
   theme_minimal()
 ```
 
-5.  \*\*Compare with what
+5.  **Compare with true population value**
 
-**Calcule de l'intervalle de confiance autour de la moyenne sous hypothèse de normalité :** Nous allons pour le moment considérer le jeu de données entier et calculer l'intervalle de confiance autour de sa moyenne.
-
-```{r}
-## Calcule de la moyenne de l'échantillon
-m_petalW = mean(dataPetal)
-cat("Moyenne de l'échantillon :", m_petalW)
-```
-
-On obtient donc une moyenne $\overline{x} \approx 1.20$ pour la largeur des pétales. En faisant l'hypothèse, comme vu précédemment pour la méthode de Jacknife, que nos données suivent la loi normale, nous allons pouvoir calculer l'intervalle de confiance autour de la moyenne d'un échantillon tel que :
-
-$$
-IC = \overline{x} \pm t \cdot (\frac{s}{\sqrt{n}})
-$$
-
-Avec comme valeurs :
-
--   $\overline{x}$ : la moyenne de l'échantillon
-
--   $t$ : le score de t de Student correspondant à l'intervale de confiance choisi et à un degré de liberté $(n-1)$.
-
--   $s$ : l'écart-type de la l'échantillon.
-
--   $n$ : la taille de l'échantillon.
+The Bootstrap resampling method enabled us to build a confidence interval around or mean with a risk error of 5%. Let's compare this interval with the actual value of our Iris population.
 
 ```{r}
-## Calcule de l'intervalle de confiance 
-# Calcul de l'écart type de l'échantillon
-et_petalW <- sd(dataPetal)
-
-# Calcul du coefficient de Student pour un niveau de confiance à 95%
-coef_t <- qt(0.995, df = length(dataPetal) - 1)
-
-# Calcul de l'intervalle de confiance
-IC <- coef_t * (et_petalW / sqrt(length(dataPetal)))
-borne_inferieure <- m_petalW - IC
-borne_superieure <- m_petalW + IC
-
-# Affichage de l'intervalle de confiance
-cat("Valeur de l'intervale de confiance à 95%: ",IC,"\n")
-cat("Intervalle de confiance à 95% autour de la moyenne :", borne_inferieure, "-", borne_superieure, "\n")
+mean(irisPopulation)
 ```
 
-On obtient donc avec cette méthode une moyenne avec intervalle de confiance à 95% de $120 \pm 0.16$.
+The true sepal width mean of our population is comprised between the two limits of our confidence interval, which is really positive!
 
-**Calcule de l'intervalle de confiance avec méthode par Bootstrap :** Comme réalisé précédemment pour la méthode par Jacknife, nous allons utiliser la méthode de rééchantillonnage pour estimer l'intervalle de confiance autour de la moyenne à partir d'une petite portion du jeu de données seulement. Ceci nous servira de cas d'école pour comparer les estimations de la méthode avec le jeu de données original que l'on considérera comme une réalité connue.
+### Strengths and Weaknesses
 
-```{r}
-## Récupération d'une partie seulement du jeu de données
-set.seed(42)
-data_sample <- dataPetal[sample(1:150,15)]
-```
+As we've seen, Bootstrap is a powerful resampling technique used in statistics for estimating the precision of parameters. One of its primary advantages lies in its versatility across a wide spectrum of statistical estimations. Indeed, this resampling technique is applicable to various parameters, such as mean, variance, regression coefficients, and more. Furthermore, this method is particularly robust in handling complex data structure without strict distributional assumptions, meaning that it can easily works with non-normally distributed datasets with little observations, which is really relevant in real-word scenarios. In those cases, Bootstrap ends up being more accurate than the standard intervals obtained under normality asumption.
 
-On va donc commencer par réaliser les $i$ itérations du rééchantillonnage. On fixera ici une valeur de $i=1000$ itérations, où pour chacune d'entre elles on tirera aléatoirement avec remise l'ensemble des données et on calculera la moyenne.
+However, one significant concern is its computational intensity, especially noticeable with larger datasets or complex models. Generating numerous bootstrap samples can demand, in certain cases, substantial computing resources. Additionally, Bootstrap might display biased estimation of the accuracy of estimates, depending on whether or not the sampling dataset is representative of the actual population.
 
-```{r}
-## Création d'un vecteur qui contiendra les itérations
-boots = numeric(1000)
+Overall, Bottstrap's major advantages lie in its broader applicability across various statistical estimations, but which comes with higher computational demands. In contrast, Jackknife might be less versatile, but tends to offer a better computationa efficiency and less biased parameters, making it a favorable choice under certain conditions.
 
-## Boucle des iérations avec calcule de la moyenne
-for (i in 1:1000) {
-  boots[i] = mean(sample(data_sample, replace=T))
-}
-```
+### To go further
 
-Maintenant que l'on a $i=1000$ moyennes calculées à partir de nos rééchantillonnages par Bootstrap, on va pouvoir représenter leur distribution.
+This part on the Bootstrap method only covers the most basic application for parameters estimation with explicit script on R for pedagogical reasons. If you end up needing to use Bootstrap, we can highly recommend you to give a look at the `boot` R package. Moreover, this Bootstrap method comes with many derivatives and applications for many usages, so here is a few examples that you might love to delve in if needed:
 
-```{r}
-# Création du graphique avec ggplot2
-ggplot(data = data.frame(boots), aes(x = boots)) +
-  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y = ..density..)) +
-  geom_density(alpha = 0.5, fill = "orange") +
-  labs(title = "Distribution des valeurs",
-       x = "Valeurs",
-       y = "Densité") +
-  theme_minimal()
-```
+-   **Parametric Bootstrap:** Assumes a specific parametric distribution, generating bootstrap samples from this fitted distribution and allowing inference within a particular statistical model.
 
-De cette distribution de densité, on va pouvoir récupérer les percentiles correspondants à notre intervalle de confiance. Dans notre exemple on souhaitera obtenir un intervalle de confiance à 95%, on répartira donc les 5% d'erreur de part et d'autre de la distribution, ce qui nous donne les percentiles à 2.5% et 97.5%.
+-   **Smooth Bootstrap:** Incorporates smoothing techniques to reduce variability in resampling, ideal for noisy or irregular data.
 
-```{r}
-## Obtention des percentiles à 2.5 et 97.5%
-limBoot1=quantile(boots,c(.025,.975))
-limBoot1
-```
+-   **Bayesian Bootstrap:** Generates bootstrap samples from posterior distributions, useful for uncertainty estimation in Bayesian analysis (see more in Bayesian chapter of this book).
 
-L'intervalle de confiance n'est pas parfaitement équivalent, ce qui est normal car le jeu de données sur lequel nous avons travaillé n'est qu'une très petite portion du jeu de données initial. Cependant, on constate qu'à partir de cette méthode, on obtient un intervalle de confiance qui inclue la moyenne du jeu de données de base.
-
-## Strenghts and weaknesses
-
-Un des avantages majeurs de la méthode Bootstrap est que contrairement à la méthode Jacknife elle marche beaucoup mieux pour des échantillons de petite taille.
+Finally, Bootstrap resampling method can also be used to assess statistical tests, which is what we are going to develop in our next section.
 
 # Tests de permutation
 
