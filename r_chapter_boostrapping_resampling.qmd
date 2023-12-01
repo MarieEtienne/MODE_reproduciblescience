@@ -95,19 +95,19 @@ shapiro.test(group)
 
 ## Introduction and Principle
 
-Now that we've extensively covered the Jackknife resampling in the previous section, let's delve into another resampling technique: the Bootstrap method.
+Now that we've thoroughly explored Jackknife resampling in the previous section, let's delve into another resampling technique: the Bootstrap method.
 
-Similar to Jackknife, Bootstrap aims to estimate descriptive parameters of a sample and evaluate the accuracy of these estimates to make inferences about the actual population. It is yet another method of statistical inference through multiple replications of data based on the initial dataset. Basically, the idea is to use resampling to create a probability distribution of any chosen parameter. This distribution probability, know as the empirical distribution function, will be an estimation of what really is the distribution probability of our parameter in the real population. In practice, akin to the previous section, our goal here is to derive parameters of interest from our sample (such as mean, median, or even the $R^2$ of a regression, among others) and construct confidence intervals around these estimates.
+Similar to Jackknife, Bootstrap aims to estimate descriptive parameters of a sample and assess the accuracy of these estimates for making inferences about the actual population. It is yet another statistical inference method that involves generating multiple datasets through resampling from the original dataset. Essentially, the concept revolves around using resampling techniques to create a probability distribution for a chosen parameter. This distribution, known as the empirical distribution function, serves as an estimation of the true probability distribution of our parameter in the population. In practice, similar to the earlier section, our objective here is to compute parameters of interest from our sample (such as mean, median, or even the $R^2$ of a regression, among others) and establish confidence intervals around these estimates.
 
-The key distinction between Jackknife and Bootstrap lies in how, in each of its $i$ iterations, Bootstrap resamples $n$ elements with replacement from an initial sample of $n$ data. Put differently, during each iteration, elements are drawn from the initial sample and then put back in after each random selection. This implies two important differences from the resampling we achieved using Jackknife: i) the new samples maintain the same size $n$ as the original dataset, ii) a specific element may appear multiple times in a new sample or may not appear at all.
+The fundamental difference between Jackknife and Bootstrap lies in their resampling methodologies. In each of its $i$ iterations, Bootstrap resamples $n$ elements from an initial sample of $n$ data points with replacement. In simpler terms, during every iteration, elements are randomly drawn from the original sample and then returned to it after each selection. This leads to two crucial distinctions from the resampling method employed in Jackknife: i) The new samples generated through Bootstrap maintain the same size $n$ as the original dataset. ii) Given the sampling with replacement approach, a particular element can occur multiple times in a new sample or might not appear at all during the resampling process.
 
-Once these $i$ Bootstrap samples are created, the desired statistical parameters are calculated for each of these samples. Consequently, we obtain a distribution consisting of $i$ data points from these samples, this is our empirical distribution function. Finally, it is by analyzing this distribution that we can estimate precision, particularly the confidence interval for our statistical parameters.
+After generating these $i$ Bootstrap samples, the intended statistical parameters are computed for each of these samples. As a result, we obtain a distribution comprising $i$ data points derived from these samples, forming what is known as our empirical distribution function. Subsequently, the analysis of this distribution allows us to estimate precision, particularly in establishing the confidence interval for our statistical parameters.
 
-## Practice and Applications
+## Practice and Application
 
-A bit confused about this previous introduction? No worries, we'll take an example to illustrate this.
+If the previous introduction seemed a bit perplexing, don't worry---we'll use an example to illustrate this concept.
 
-For this part, we will work again on the Iris RBase dataset. Let's say that we are interested in the average width of the sepals in a wild population of Iris flowers. As we couldn't measure the sepals of every single flower, we sampled and measured a given number of individuals on field. To illustrate this, we'll consider our Iris dataset to be our complete wild population (which of course, you'll never have access to in real condition), and take only a few individuals to represent our field sampling.
+For this demonstration, we'll once again employ the Iris RBase dataset. Suppose we're interested in determining the average width of the sepals in a wild population of Iris flowers. However, it's practically impossible to measure the sepals of every single flower in the population. Instead, we've sampled and measured a specific number of individuals in the field. To simplify, let's consider our Iris dataset as a representation of the complete wild population (which, in reality, is inaccessible) and select only a small number of individuals to mimic our field sampling.
 
 ```{r}
 # Our real population
@@ -117,18 +117,18 @@ set.seed(42)
 irisSampling <- irisPopulation[sample(1:150,15)]
 ```
 
-From this field sampling, we are easily able to compute a mean, which we'll be doing:
+From this field sampling, let's proceed with the calculation of the mean.
 
 ```{r}
 # Field sampling mean
 mean(irisSampling)
 ```
 
-So, we got a mean value of $3.15$, great. However, this mean can hardly be extrapolated to the actual population, as we don't have any information of the variability induced by the individuals we decided to sample. Especially, you can see in our previous code, that we only sampled $n=15$ individuals on field. This is clearly not enough sampling to assume that our estimated mean is representative of our actual population. So, we might want to have some information about the variability of the mean we just estimated, and this is where Bootstrap method joins the game.
+So, we've obtained a mean value of 3.15, which is great. However, this mean value can't be reliably generalized to the entire population because we lack information about the variability induced by the specific individuals we chose to sample. As highlighted in our previous code, we only sampled $n=15$ individuals in the field. Clearly, this limited sampling isn't sufficient to confidently assert that our estimated mean is truly representative of the entire population. Hence, it becomes essential to gain insights into the variability of the mean we've just calculated. This is precisely where the Bootstrap method comes into play.
 
-We are now going to apply step by step our algorithm to resample our initial field sampling dataset, and use to build the probability distribution of our mean.
+We'll now systematically apply our algorithm to resample the initial dataset obtained from our field sampling. This resampling process will be utilized to construct the probability distribution of our mean.
 
-1.  **Make our Bootstrap resampling iterations**
+1.  **Bootstrap resampling iterations**
 
 ```{r}
 # Fix our number of bootstrap iterations
@@ -144,7 +144,7 @@ for (i in 1:B) {
 }
 ```
 
-For pedagogical purpose, let's give a look at a few resamples while comparing them to our initial field sampling dataset.
+For pedagogical purposes, let's examine a few resamples while comparing them to our initial field sampling dataset.
 
 ```{r}
 # Our original field sampling
@@ -157,11 +157,11 @@ sort(bootstrapSamples[[5]])
 sort(bootstrapSamples[[777]])
 ```
 
-See how some values are repeated more times than in our initial dataset? And that some others aren't sampled? For instance, $2.5$ appeared only one time in our initial set and was therefore rarely or never resampled. Meanwhile, $2.8$ was more common, and end up being really often sampled.
+Observe how certain values are repeated more frequently than in our initial dataset. Additionally, note that some values aren't sampled at all. For instance, the value 2.5 appeared only once in our initial set and consequently was seldom or perhaps never resampled. Conversely, the value 2.8 was more prevalent in our initial dataset and consequently was sampled more frequently
 
 2.  **Compute mean for every resampled datasets**
 
-Now we are going to compute our parameter of interest of every of our resampled datasets. This will give us our set of $i=1000$ mean values, from which we will create our empirical distribution in the next step.
+Now, we'll compute the parameter of interest for each of our resampled datasets. This process will yield our set of $i=1000$ mean values, which we'll utilize to construct our empirical distribution in the subsequent step.
 
 ```{r}
 # Compute mean for each boostrap samples
@@ -170,7 +170,7 @@ iterationMeans <- sapply(bootstrapSamples, mean)
 
 3.  **Plot the probability distribution**
 
-The distribution of our parameter of interest is now done, we can therefore plot it to have an idea of the variability of our estimated mean value.
+The computation of the distribution for our parameter of interest is complete. We can now proceed to plot it, providing us with an understanding of the variability surrounding our estimated mean value.
 
 ```{r}
 # Probability distribution plot
@@ -184,11 +184,11 @@ ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
   theme_minimal()
 ```
 
-This probability distribution therefore give us information about the variability around the mean value estimated with our field sampling. As expected and as represented with the red dashed line, this distribution is centered around this estimated mean value.
+Hence, this probability distribution provides us with insights into the variability around the mean value estimated from our field sampling. As anticipated, and as indicated by the red dashed line, this distribution is centered around the estimated mean value.
 
-4.  **Compute confidence interval around our mean estimate**
+4.  **Compute Confidence Interval around our mean estimate**
 
-Remember the original purpose of the Bootstrap method? Evaluate the accuracy around the estimation of our parameter to make inferences to our natural population. And to make so, we are going to use the Bootstrap percentiles. Let's say we want to compute the 95% Confidence Interval. To do so, we will split the 5% of error between each side of our distribution and therefore took the values corresponding to 2.5 and 97.5% in our empirical distribution.
+Recall the primary objective of the Bootstrap method: to assess the precision of our parameter estimation for making inferences about the broader population. To accomplish this, we'll utilize the Bootstrap percentiles. For instance, suppose we aim to calculate the 95% Confidence Interval. In this case, we'll allocate 5% of the error evenly on both sides of our distribution, corresponding to the values at the 2.5th and 97.5th percentiles in our empirical distribution.
 
 ```{r}
 # Get percentile 2.5%
@@ -200,9 +200,9 @@ quantile(iterationMeans, probs = 0.025)
 quantile(iterationMeans, probs = 0.975)
 ```
 
-And this is how we finally got our confidence interval for our mean estimation : $2.97 \leq \overline{x} \leq 3.33$.
+And thus, we've successfully obtained our confidence interval for the mean estimation: $2.97 \leq \overline{x} \leq 3.33$.
 
-Once again for pedagogical purpose, we can plot those percentiles.
+For educational purposes, let's proceed to plot these percentiles.
 
 ```{r}
 # Probability distribution plot
@@ -218,35 +218,38 @@ ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
   theme_minimal()
 ```
 
-5.  **Compare with true population value**
+5.  **Compare with population mean value**
 
-The Bootstrap resampling method enabled us to build a confidence interval around or mean with a risk error of 5%. Let's compare this interval with the actual value of our Iris population.
+The Bootstrap resampling method has facilitated the construction of a confidence interval around our mean estimate with a 5% margin of error. Now, let's compare this interval with the actual value of our Iris population.
 
 ```{r}
 mean(irisPopulation)
 ```
 
-The true sepal width mean of our population is comprised between the two limits of our confidence interval, which is really positive!
+The actual sepal width mean of our population falls within the bounds of our confidence interval, which is highly encouraging! Consequently, we've effectively inferred information about the population mean in a scenario where we had limited data, made no normality assumptions, and where the standard computation of confidence intervals might not have been sufficiently robust and accurate.
 
 ### Strengths and Weaknesses
 
-As we've seen, Bootstrap is a powerful resampling technique used in statistics for estimating the precision of parameters. One of its primary advantages lies in its versatility across a wide spectrum of statistical estimations. Indeed, this resampling technique is applicable to various parameters, such as mean, variance, regression coefficients, and more. Furthermore, this method is particularly robust in handling complex data structure without strict distributional assumptions, meaning that it can easily works with non-normally distributed datasets with little observations, which is really relevant in real-word scenarios. In those cases, Bootstrap ends up being more accurate than the standard intervals obtained under normality asumption.
+As we've seen, Bootstrap is a powerful resampling technique used in statistics for estimating the precision of parameters. One of its primary advantages lies in its versatility across a wide spectrum of statistical estimations. Indeed, this resampling technique is applicable to various parameters, such as mean, variance, regression coefficients, and more. Furthermore, this method is particularly robust in handling complex data structure without strict distributional assumptions, meaning that it can easily works with non-normally distributed datasets with little observations, which is really relevant in real-word scenarios. In those cases, Bootstrap ends up being more accurate than the standard intervals obtained under normality assumption.
 
 However, one significant concern is its computational intensity, especially noticeable with larger datasets or complex models. Generating numerous bootstrap samples can demand, in certain cases, substantial computing resources. Additionally, Bootstrap might display biased estimation of the accuracy of estimates, depending on whether or not the sampling dataset is representative of the actual population.
 
-Overall, Bottstrap's major advantages lie in its broader applicability across various statistical estimations, but which comes with higher computational demands. In contrast, Jackknife might be less versatile, but tends to offer a better computationa efficiency and less biased parameters, making it a favorable choice under certain conditions.
+Overall, Bootstrap's major advantages lie in its broader applicability across various statistical estimations, but which comes with higher computational demands. In contrast, Jackknife might be less versatile, but tends to offer a better computational efficiency and less biased parameters, making it a favorable choice under certain conditions.
 
 ### To go further
 
-This part on the Bootstrap method only covers the most basic application for parameters estimation with explicit script on R for pedagogical reasons. If you end up needing to use Bootstrap, we can highly recommend you to give a look at the `boot` R package. Moreover, this Bootstrap method comes with many derivatives and applications for many usages, so here is a few examples that you might love to delve in if needed:
+This section on the Bootstrap method offers a fundamental understanding, providing explicit R scripts for pedagogical purposes. If you find yourself needing to utilize Bootstrap, we highly recommend exploring the capabilities of the `boot` R package, which streamlines Bootstrap implementation. Moreover, the Bootstrap method extends beyond basic parameter estimation, offering various derivatives and applications catering to diverse needs:
 
--   **Parametric Bootstrap:** Assumes a specific parametric distribution, generating bootstrap samples from this fitted distribution and allowing inference within a particular statistical model.
+-   **metric Bootstrap:** Assumes a specific parametric distribution, generating bootstrap samples from this fitted distribution and allowing inference within a particular statistical model.
 
+```{=html}
+<!-- -->
+```
 -   **Smooth Bootstrap:** Incorporates smoothing techniques to reduce variability in resampling, ideal for noisy or irregular data.
 
 -   **Bayesian Bootstrap:** Generates bootstrap samples from posterior distributions, useful for uncertainty estimation in Bayesian analysis (see more in Bayesian chapter of this book).
 
-Finally, Bootstrap resampling method can also be used to assess statistical tests, which is what we are going to develop in our next section.
+Lastly, Bootstrap resampling isn't limited to parameter estimation. It can also be employed to assess statistical tests, a topic we'll delve into in our upcoming section.
 
 # Tests de permutation
 
