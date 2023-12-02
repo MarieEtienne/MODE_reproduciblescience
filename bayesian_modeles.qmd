@@ -273,14 +273,174 @@ Incorporating existing information to a data set can be based on previous studie
 
 # V) Case Studies in Bayesian Ecology
 
+## Using JAGS
+### two parameter example
 ```{r}
-library(rjags)
-
-plot(pois_distr,type ="h",
-     lwd = 2, col = 'blue',
-     xlab = "Mushroom Count", 
-     ylab = expression(paste( 'Density or ','[y]')) )
+Y2 = rnorm(n = 200, mean = 10, sd = 1)
+hist(Y2)
 ```
+
+```{r}
+mod1 = "
+  model{
+  ## model 
+  for(i in 1:n_obs){
+    Y2[i] ~ dnorm(m,preci)
+  }
+  
+  ## Prior distribution
+  m ~ dunif(0, 10**3)
+  sd ~ dunif(0, 10**3)
+  preci <- 1/(sd*sd)
+  }
+"
+
+data_list1 = list(
+  Y2 = Y2,
+  n_obs= length(Y2)
+  
+)
+
+init_list1 <- list(
+  m = 5,
+  sd = 2
+)
+
+mjags1 <- jags.model(file=textConnection(mod1), 
+                     data=data_list1,
+                     inits=init_list1, 
+                     n.chains = 3)
+
+postSamples1 <- coda.samples(mjags1, 
+                             variable.names = c("m","sd"),
+                             n.iter = 10000, 
+                             thin = 10)
+
+postSamples_df1 <-  postSamples1 %>% ggs()
+
+postSamples_df1%>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free")+
+  geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))          
+postSamples_df1 %>%
+  ggplot() +
+  facet_wrap(~as.factor(Chain)*Parameter, scales = "free") +
+  geom_histogram(data = postSamples_df1, aes(x= value, y =..density.., fill = as.factor(Chain)),
+                 position = "identity", alpha = 0.7)+
+  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))
+
+str(postSamples_df1$value)
+# postSamples_df1 %>%
+#   pivot_wider(id_cols = -c(Iteration, Chain), names_from = "Parameter", values_from = "value")%>%
+#   ggplot() +
+#   facet_wrap(~as.factor(Chain), scales = "free") +
+#   geom_point(data = postSamples_df1, aes(x= m, y =sd),
+#                  position = "identity", alpha = 0.7)
+
+```
+```{r}
+set.seed(1000)
+y_means = round(runif(n= 5, min = 5, max = 15))
+n_obs = 40
+Y3 = c()
+class = c()
+IDclass = c()
+ID = c("A","B","C","D","E")
+for(i in 1:length(y_means)){
+ Y3= c(Y3, rnorm(n = n_obs, mean = y_means[i], sd = 2))
+ class = c(class,rep(ID[i],n_obs))
+ IDclass = c(IDclass,rep(i,n_obs))
+}
+data = data.frame(Y3, class, IDclass)
+
+ggplot(data)+
+  geom_boxplot(aes(class,Y3))
+
+```
+```{r}
+
+mod2 = "
+  model{
+  ## model 
+  for(i in 1:n_obs){
+    Y3[i] ~ dnorm(m[IDclass[i]],preci)
+  }
+  
+  ## Prior distribution
+  for(n in 1:n_class){
+    m[n] ~ dunif(0, 10**3)
+  }
+  sd ~ dunif(0, 10**3)
+  preci <- 1/(sd*sd)
+  }
+"
+
+
+data_list2 = list(
+  Y3 = data$Y3,
+  n_obs= length(data$Y3),
+  IDclass = data$IDclass,
+  n_class = max(data$IDclass)
+)
+
+init_list2 <- list(
+  m = rep(5,5),
+  sd = 2
+)
+
+mjags2 <- jags.model(file=textConnection(mod2), 
+                     data=data_list2,
+                     inits=init_list2, 
+                     n.chains = 3)
+
+postSamples2 <- coda.samples(mjags2, 
+                             variable.names = c("m","sd"),
+                             n.iter = 10000, 
+                             thin = 10)
+
+postSamples_df2 <-  postSamples2 %>% ggs()
+params_names = unique(postSamples_df2$Parameter)
+postSamples_df2$true_values = NA
+for( i in 1:5){
+  temp = which(postSamples_df2$Parameter == params_names[i])
+  if(substr(params_names[5],1,1) == "m"){
+      postSamples_df2$true_values[temp] = y_means[i]
+  }else{
+    postSamples_df2$true_values[temp] = 2
+  }
+
+}
+
+
+postSamples_df2%>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free")+
+  geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))          
+postSamples_df2 %>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free") +
+  geom_histogram(aes(x= value, y =..density.., fill = as.factor(Chain), col = as.factor(Chain)),
+                 position = "identity", alpha = 0.3)+
+    geom_histogram(aes(x= value, y =..density.., col = as.factor(Chain)),
+                 position = "identity", alpha = 0)+
+  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  geom_vline(aes(xintercept = true_values), alpha = 0.7, linetype = "dashed")
+
+# str(postSamples_df1$value)
+# postSamples_df1 %>%
+#   pivot_wider(id_cols = -c(Iteration, Chain), names_from = "Parameter", values_from = "value")%>%
+#   ggplot() +
+#   facet_wrap(~as.factor(Chain), scales = "free") +
+#   geom_point(data = postSamples_df1, aes(x= m, y =sd),
+#                  position = "identity", alpha = 0.7)
+
+```
+
+
+
 
 
 ## V-1) Highlighting specific ecological studies that employed Bayesian methods
