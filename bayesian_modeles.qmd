@@ -162,19 +162,17 @@ When we add no data in the computation of the posterior, it is normal that we do
 
 En statistiques bayésiennes, comme dit précédemment l'objectif est d'actualiser nos croyances sur les paramètres d'un modèle en combinant une connaissance a priori avec l'information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. Le passage par des loi de distribution conjugées est une solution pour pallier au problème mais ceci n'est pas toujours possibles. C'est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.
 
-## Approximation with MCMC
-
 Il existe de multiple algorithmes de type MCMC ( Metropolis-Hastings, échantillionneur de Gibbs, Hamiltonian Monte Carlo), chacun possèdes ses avantages et ses inconvénients et le choix de l'algorithme dépend de la situation d'application. Cependant ils partent tous de la même base théorique.
 
 L'idée essentielle d'un algorithme MCMC est de créer une séquence de nombre aléatoire dépendant via une chaine de Markov. Quand la chaine arrive à l'équilibre (état stationnaire) elle forme un échantillionage au sein de la loi a posteriori ce qui permet de calculer les quantités qui nous intéressent : moyennes, variances, quantiles...
 
-### Implémentation de l'algorithm de Metropolis-Hastings
+## Implémentation de l'algorithm de Metropolis-Hastings
 
-Let's implemant the algortihm to try to understand how it works:
+Let's implemant the algortihm to try to understand how it works. Dans les lignes suivantes nous allons décrire les différentes étapes de l'algorithme de Matropolis-Hastings avec les lignes de codes R correspondantes.
 
-**Step 1 : Definition of the likelihood function and the prior law** Comme pour chaque début d'analyse statistique bayésienne, on pause le problème et on définit la loi de probabilité de la vraissemblance et les loi à priori des paramètres à estimer.
+**#Step 1 : Definition of the likelihood function and the prior law** Comme pour chaque début d'analyse statistique bayésienne, on pause le problème et on définit la loi de probabilité de la vraissemblance et les loi à priori des paramètres à estimer.
 
-Ici on reprend le problème de nos comptages de champignions
+Ici on reprend le problème de nos comptages de champignions, on choisit donc une loi de poisson pour la vraissemblance. Et cette fois ci pour l'estimation du paramètre $\lambda$ on choisi un loi uniforme allant de $0$ à $1000$ . On fait donc l'hypothèse de n'avoir aucun information sur le paramètre $\lambda$. Aucune information n'est porté par le prior.
 
 ```{r}
 # [y | lambda]
@@ -192,7 +190,9 @@ prior.dist = function(lambda){
 }
 ```
 
-**Step 2 : Definition of a candidate position and a initial position**
+**Step 2 : Definition of a candidate position**
+
+On va chercher à se déplacer il faut donc définir une fonction pour dertimer une position candidat. On tire ici aléatoirement cette position dans une loi normal de moyenne $\lambda_c$ c'est à dire la position à laquelle on part et on choisit abitrairement une valeur d'écart-type.
 
 ```{r}
 
@@ -201,13 +201,25 @@ move  <- function(lambda, sd.explore = 0.1){
   return (candidate)
 }
 
+```
+
+**Step 3 : Compute of the ratio**
+
+Une fois qu'on a cette position candidat il faut décider si si on la garde ou pas, le critère de décision à calculer est la ratio de Metropolis-Hastings $r$. On p
+
+$$
+r = \dfrac{[\lambda_{t+1} \mid Y]\space \cdot \space [\lambda_{t+1}] \space \cdot \space g(\lambda_{t+1} \mid \lambda_{t})}{[\lambda_{t} \mid Y]\space \cdot \space [\lambda_{t}] \space \cdot \space g(\lambda_{t} \mid \lambda_{t+1})}
+$$
+
+avec $g(\lambda_{t+1} \mid \lambda_{t})$ la probabilité de passer de la position candidate sachant la position courante.
+
+```{r}
+
 proba_move <- function(lambda1, lambda2, sd.explore = 0.1){
   dnorm(lambda2, mean = lambda1, sd = sd.explore)
 } 
 
 ```
-
-**Step 3 : Compute of the ratio**
 
 ```{r}
 MH.ratio <- function(lambda_c,lambda, y){
@@ -220,6 +232,14 @@ MH.ratio <- function(lambda_c,lambda, y){
 
 **Step 4 : Decide if we go to the candidate position or not**
 
+Pour décider si on passe à la position candidate $\lambda_{t+1}$ on défini $u$ :
+$$
+u \sim unif(0,100)
+$$
+
+Si il est supérieur au ratio $r$ on reste sur la position courante et inversement si $u$ est inférieur à $r$ on passe à la position candidate. 
+
+*Fonction qui permet de regrouper tout les calculs : *
 ```{r}
 mcmc.function = function(lambda_init, n_iter = 1000, burning = 100, thin = 10){
   
@@ -250,6 +270,7 @@ mcmc.function = function(lambda_init, n_iter = 1000, burning = 100, thin = 10){
 
 **Step 5 : Visualization**
 
+
 ```{r}
 mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 500000)
 
@@ -260,9 +281,9 @@ ggplot(data = mcmc_df)+
   theme_bw()
 ```
 
-### Discussion with two parameters
+## Discussion with two parameters
 
-### Some words about Rjags
+##Some words about Rjags
 
 Après une implémentation from scratch de l'algorithme de Metropolis Hastings il est temps de vous annoncer qu'il existe des outils qui permettent de réaliser tout ceci. Un de plus courrament utilisé c'est RJags...
 
