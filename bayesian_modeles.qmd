@@ -25,6 +25,8 @@ library(deSolve)
 
 Bayesian approach : "What is the probability of m y model given my data."
 
+Rappel : - différence entre loi à posterio jointes et marginales
+
 # General theory behind Bayesian approach.
 
 Explanation in the special case of conjugation between prior and posterior
@@ -85,7 +87,7 @@ $$
 \end{align}
 $$
 
-The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}$.
+The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}$.
 
 Now we want to find the prior distribution of $\hat{\lambda}$. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify ! lets try it :
 
@@ -154,73 +156,72 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 
 ```
 
-When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.
+When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. **Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.**
 
 # When approximation by computation is needed
 
-En statistiques bayésiennes, comme dit précédemment l'objectif est d'actualiser nos croyances sur les paramètres d'un modèle en combinant une connaissance a priori avec l'information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. C'est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.
-
-### Small recap on Markov Chain
+En statistiques bayésiennes, comme dit précédemment l'objectif est d'actualiser nos croyances sur les paramètres d'un modèle en combinant une connaissance a priori avec l'information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. Le passage par des loi de distribution conjugées est une solution pour pallier au problème mais ceci n'est pas toujours possibles. C'est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.
 
 ## Approximation with MCMC
 
 Il existe de multiple algorithmes de type MCMC ( Metropolis-Hastings, échantillionneur de Gibbs, Hamiltonian Monte Carlo), chacun possèdes ses avantages et ses inconvénients et le choix de l'algorithme dépend de la situation d'application. Cependant ils partent tous de la même base théorique.
 
-L'idée essentielle de la MCMC est que nous pouvons en apprendre davantage sur les paramètres non observés en effectuant de nombreux tirages aléatoires dans leurs distributions marginales a posteriori. L'accumulation de ces nombreux échantillons donne la "forme" de la distribution postérieure. Ces nombreux échantillons nous permettent de calculer les quantités qui nous intéressent : moyennes, variances et quantiles.
+L'idée essentielle d'un algorithme MCMC est de créer une séquence de nombre aléatoire dépendant via une chaine de Markov. Quand la chaine arrive à l'équilibre (état stationnaire) elle forme un échantillionage au sein de la loi a posteriori ce qui permet de calculer les quantités qui nous intéressent : moyennes, variances, quantiles...
 
-Il est maintenant légitime de se demander : Mais ça sert à quoi de tirer un échantillionnage dans une loi inconnu pour ensuite la reconstituer ? Et surtout comment on fait si on ne la connait pas ?
+### Implémentation de l'algorithm de Metropolis-Hastings
 
-Et bien la loi que l'on reconstitue n'est pas totalement la même que celle qu'on utilise pour obtenir ces tirages. En effet la loi a posteriori n'est pas totalement inconnue. Ses informations sont portées par le produit de vraissemblance et du prior :
+Let's implemant the algortihm to try to understand how it works:
 
-$$
-[{\theta} \mid Y] \propto [Y \mid {\theta}  ]\cdot[{\theta}]
-$$
+**Step 1 : Definition of the likelihood function and the prior law** Comme pour chaque début d'analyse statistique bayésienne, on pause le problème et on définit la loi de probabilité de la vraissemblance et les loi à priori des paramètres à estimer.
 
-C'est cette loi a priori estimée qui sert de première référence et le tirage aléatoire va permettre de normaliser cette expression pour qu'elle soit égal à un fonction de probabilité dont l'intégral est égal à 1. Cette propriété est normalement donnée par la division du produit par $[Y]$.
-
-L'algorithme MCMC estime donc la loi a posteriori des paramètres non observé en évitant l'étape de calcul d'intégral qui peut s'avérer complexe pour obtenir $[Y]$.
-
-**Step 1 : Initialisation**
-
-### A small example without using JAGS
-
-On reprend l'exemple avec les champignons.
+Ici on reprend le problème de nos comptages de champignions
 
 ```{r}
 # [y | lambda]
 
 likelihood = function(lambda,y){
-  if(lambda < 0){
-    return(0)
-  }else{
     return( dpois(x = sum(y),lambda = lambda*length(y)))
-  }
 }
 
+```
+
+```{r}
 # [lambda]
 prior.dist = function(lambda){
   dunif(lambda,0,1000)
 }
+```
 
-# g([lambda_c(i) | lambda(i-1)])
-dstep <- function(lambda1, lambda2, sd.explore = 0.1){
+**Step 2 : Definition of a candidate position and a initial position**
+
+```{r}
+
+move  <- function(lambda, sd.explore = 0.1){
+  candidate <- rnorm(1, mean = lambda, sd = sd.explore)
+  return (candidate)
+}
+
+proba_move <- function(lambda1, lambda2, sd.explore = 0.1){
   dnorm(lambda2, mean = lambda1, sd = sd.explore)
-}
+} 
 
-rstep <- function(lambda, sd.explore = 0.1){
-  rnorm(1, mean = lambda, sd = sd.explore)
-}
+```
 
+**Step 3 : Compute of the ratio**
+
+```{r}
 MH.ratio <- function(lambda_c,lambda, y){
-  ratio = (likelihood(lambda_c, y) * prior.dist(lambda) * dstep(lambda, lambda_c))/
-    (likelihood(lambda, y) * prior.dist(lambda) * dstep(lambda_c, lambda))
+  ratio = (likelihood(lambda_c, y) * prior.dist(lambda) * proba_move(lambda, lambda_c))/
+    (likelihood(lambda, y) * prior.dist(lambda) * proba_move(lambda_c, lambda))
   
   return(ratio)
 }
 ```
 
+**Step 4 : Decide if we go to the candidate position or not**
+
 ```{r}
-mcmc.function = function(lambda_init, n_iter = 10000, burning = 100, thin = 10){
+mcmc.function = function(lambda_init, n_iter = 1000, burning = 100, thin = 10){
   
   lambda_sample = rep(NA, n_iter)
   lambda_save = rep(NA, n_iter)
@@ -247,16 +248,25 @@ mcmc.function = function(lambda_init, n_iter = 10000, burning = 100, thin = 10){
 
 ```
 
+**Step 5 : Visualization**
+
 ```{r}
-mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 1000000)
+mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 500000)
 
 plot(step~iteration, mcmc_df, "l")
+
+ggplot(data = mcmc_df)+
+  geom_histogram(aes(x = step))+
+  theme_bw()
 ```
 
+### Discussion with two parameters
 
+### Some words about Rjags
+
+Après une implémentation from scratch de l'algorithme de Metropolis Hastings il est temps de vous annoncer qu'il existe des outils qui permettent de réaliser tout ceci. Un de plus courrament utilisé c'est RJags...
 
 # IV) Prior Selection in Ecology
-
 
 ## IV-1) The role of prior knowledge and beliefs
 
@@ -268,15 +278,8 @@ Incorporating existing information to a data set can be based on previous studie
 
 ## IV-3) Incorporating expert opinions and literature data
 
-
-
-
 # V) Case Studies in Bayesian Ecology
-
 
 ## V-1) Highlighting specific ecological studies that employed Bayesian methods
 
 ## V-2) Illustrative examples from different ecological sub-disciplines
-
-
-
