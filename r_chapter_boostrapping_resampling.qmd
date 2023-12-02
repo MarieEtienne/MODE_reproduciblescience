@@ -1,8 +1,7 @@
 ---
-
 title: "Chapter : Bootstrapping and Resampling"
 
-bibliography: references.bib  # Fichier bibliographie
+bibliography: references.bib
 execute: 
   freeze: auto
 output: 
@@ -11,7 +10,7 @@ output:
    toc_float: true
 ---
 
-# General introduction 
+# General introduction
 
 A dataframe:
 
@@ -20,9 +19,7 @@ data <- iris
 head(iris)
 ```
 
-## Confidence interval on a sample 
-
-Peut-on estimer la taille moyenne 
+## Confidence interval on a sample
 
 ```{r}
 
@@ -30,74 +27,173 @@ hist(data$Sepal.Width)
 shapiro.test(data$Sepal.Width)
 qqnorm(data$Sepal.Width)
 qqline(data$Sepal.Width)
-#Or iris dataset ? 
 ```
-L'échantillon est normalement distribué, on peut donc calculer l'intervalle de confiance de la moyenne de la manière suivante:
+
+The sample being normally distributed, we can estimate a confidence interval as below:
 
 ```{r}
 low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
 high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
 print(c(low,high))
 ```
-rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après)
-Not in intervall, pop grow, + ech non représentatif de la pop française
 
+## Confidence interval on a sub-sample
 
-## Confidence interval on multiple sub-samples means 
-
-Si on veut désormais estimer $\mu$, la taille moyenne des étudiants sur les trois promotions du jeu de données.
+Let's imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.
 
 ```{r}
-(mu <- mean(data$Sepal.Width))
+mu <- mean(data$Sepal.Width)
+print(mu)
 ```
-mu correspond à la taille moyenne qu'on veut estimer mais dont on ne connait pas la véritable valeur.
 
+Here $\mu$ is the "real" mean of the population that theoretically we do not know.\
+We only have access to the following sub-sample of 15 individuals:
 
-# The Jackknife resampling method
-
-Imaginons mantenant que nous ayons seulement accès à un échantillon et qu'on veuille estimer la taille moyenne des étudiants de ces trois promotions.
 ```{r}
-set.seed(121)
-data_sample <- data[sample(1:150,30),]
-mean(data_sample$Sepal.Width)
+set.seed(42)
+data_sample <- data[sample(1:150,15),]
+par(mfrow=c(2,1))
 hist(data_sample$Sepal.Width)
-shapiro.test(data_sample$Sepal.Width)
 qqnorm(data_sample$Sepal.Width)
 qqline(data_sample$Sepal.Width)
 ```
 
-On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant. 
-
-... 
-
-
-## a - Principe
-
-## b - exemple d'implémentation
-
-test pas du tout fini
+This sample is not normally distributed.
 
 ```{r}
-group <- c()
-sampled_data <- c()
-for (i in 1:20) { #au total, 100 individus auront été échantillonnés
-  set.seed(i)
-  sample_temp <- sample(setdiff(1:139,sampled_data),5)
-  sampled_data <- c(sampled_data,sample_temp)
-  group <- c(group,mean(data[sample_temp,"Sepal.Width"]))
-  
+mean(data_sample$Sepal.Width)
+```
+
+The mean is 3.15, the problem is that we can not estimate if the mean that we observe is far from the true mean. We don't have any method with classical statistics to estimate a confidence interval. This is where resampling methods can become interesting.
+
+# The Jackknife resampling method
+
+This method was first proposed in 1949 by Maurice Quenouille ( **Source Quenouille** ). The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics (**Source Abdi)**. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
+
+## a - The leave-one-out Jackknife (source: shinaray & cours eric petit)
+
+The principle of the jackknife is to create subsamples of the initial sample by successively removing one of the individuals. This is the leave-one-out technique.
+
+Concretely, for a sample of $n$ individuals, there will be $n$ subsamples of size $(n-1)$. The $i^{th}$ subsample will be composed of individuals from $1$ to $n$ minus the $i^{th}$ individual. A simple representation of all the subsamples is proposed below with the subsamples in lines and the individual numbers in columns.
+
+```{r,echo=FALSE, results='hold'}
+
+subsample_representation <- cbind(rep(seq(1,nrow(data_sample)),nrow(data_sample)),
+                                  sort(rep(seq(1,nrow(data_sample)),
+                                           nrow(data_sample))),
+                                  rep(1,nrow(data_sample)*nrow(data_sample)))
+
+colnames(subsample_representation) <- c("subsample", "individual", "value")
+subsample_representation <- as.data.frame(subsample_representation)
+subsample_representation[subsample_representation$subsample == subsample_representation$individual,"value"] <- 0
+
+library(ggplot2)
+
+ggplot(subsample_representation)+
+  geom_tile(aes(x = individual ,y = subsample, fill = as.factor(value)), color = "white")+
+  theme_classic()+
+  scale_fill_manual(values = c("#CCCCFF","#666699"),name = "", labels = c("Removed of \n the subsample", "Kept in \n the subsample"))+
+  ylab("Subsample number")+
+  xlab("Individual number")+
+  labs(title = "Representation of the subsamples in the leave-one-out \n jackknife method")
+```
+
+The next step is to calculate pseudo-values for each of the new subsamples. The formula for pseudo-values depend on the statistic of interest. In our case we want to estimate the mean, the formula will then be:
+
+$$
+v_{i} = n\overline{X} - (n-1)\overline{X}_{-i}
+$$
+
+with the following variables:
+
+|      Variable       | Meaning                                                                             |
+|:-------------------:|-------------------------------------------------------------------------------------|
+|       $v_{i}$       | Pseudo value of the $i^{th}$ subsample                                              |
+|         $n$         | Total number of individuals                                                         |
+|   $\overline{X}$    | Mean of the initial sample                                                          |
+| $\overline{X}_{-i}$ | Mean of the $i^{th}$ subsample, corresponding to all individuals except the $i{th}$ |
+
+Let's write a function which create the subsamples and calculate their pseudo values:
+
+```{r}
+pseudo_val <- function(data, theta){
+  #entry : data = the vector of data to which we want to apply the Jackknife
+  #entry : theta = function for the statistic of interest
+  #output : a vector of pseudo values for each subsample
+  n <- length(data)
+  mean_init <- theta(data)
+  pv <- rep(NA,n) #to keep in memory each pseudo value
+  for (i in 1:n) {
+    pv[i] <- n*mean_init - (n-1)*theta(data[-i])
+  }
+  return(pv)
 }
+
 ```
 
-Le vecteur group contient les moyennes de plusieurs sous échantillons de 5 étudiants
+To try the function:
 
 ```{r}
-hist(group)
-qqnorm(group)
-qqline(group)
-shapiro.test(group)
+(pv <- pseudo_val(data =  data_sample$Sepal.Width, 
+                  theta = mean))
 ```
 
-## c - Avantages et inconvénients de la méthode
+The jackknife estimator of the mean will then be calculated as follow:
 
+$$
+\begin{align}
+\hat{\theta} & = \frac{\sum_{i=1}^{n}v_{i}}{n} \\
+\hat{\theta} & = \overline{v}
+\end{align}
+$$
 
+It corresponds to the mean of the pseudo values $v_i$.
+
+```{r}
+(mean_pv <- mean(pv))
+```
+
+The Jackknife estimator obtained is 3.15. Note that here it is the same as the initial sample mean but it is not always the case. This technique supposes that the Jackknife estimator is normally distributed and its standard error is calculated as follow:
+
+$$
+\begin{align}
+SE_\hat{X} & = \sqrt{\frac{\sum_{i=1}^{n}(v_{i}-\overline{v})}{n(n-1)}} \\
+SE_\hat{X} & = \sqrt{\frac{\sigma_{v}^{2}}{n}}
+\end{align}
+$$
+
+With $\overline{v}$ being the mean of the pseudo values (and the jackknife estimator).
+
+```{r}
+(SE <- sqrt(var(pv)/length(pv)))
+```
+
+From these we can calculate a confidence interval:
+
+$$
+[\, \overline{v} - 1.96 \, SE_\hat{X} ; \overline{v} + 1.96 \, SE_\hat{X} \,]
+$$
+
+Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
+
+```{r}
+cat(" Lower bound : ",
+    as.character(mean_pv - 1.96*SE),
+    "\n",
+    "Higher bound : ",
+    as.character(mean_pv + 1.96*SE))
+```
+
+On r, functions already exist to automatically execute the Jackknife. For instance, in the package bootstrap, there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
+
+```{r}
+library("bootstrap")
+print(jackknife(x= data_sample$Sepal.Width,
+                theta = function(x) mean(x)))
+```
+
+The output of the function include the standard error (\$jack.se) as describe above. It also include the bias (\$jack.bias) which is the difference between the initial sample statistic and the jackknife estimated statistic. It is important to note that the output \$jack.values does not correspond to the pseudo values but to the statistic of interest calculated on every subsample. In our example, it correspond to th mean of each subsample.
+
+## b - The grouped Jackknife
+
+## c - Advantages and disadvantages of the method
