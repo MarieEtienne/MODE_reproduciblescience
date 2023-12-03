@@ -966,7 +966,7 @@ obtain the solution for I:
 
 $$\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0\\
 S = \frac{\beta}{\alpha} \end{cases}\\
-& \Leftrightarrow \begin{cases} -\beta I + \gamma - \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
+& \Leftrightarrow \begin{cases} -\beta I + \gamma \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
 & \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}\\ 
 & \text{We thus obtain our first solution:}\\
 & \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\
