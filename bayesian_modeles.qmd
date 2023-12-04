@@ -315,6 +315,134 @@ Both graphs represent the sampling of $p$ in its marginal posterior distribution
 
 ## Discussion with two parameters
 
+Et comment ça se passe dans plusieurs dimensions ? Evidemment au dessus de deux paramètres à estimer la visualisation devient impossibile. Donc pour que cela reste visuel, on va seulement réaliser un exemple avec un paramètre de plus à estimer. 
+
+We will use a simple example: estimating a population mean and standard deviation. We’ll define some population level parameters, collect some data, then use the Metropolis-Hastingsalgorithm to simulate the joint posterior of the mean and standard deviation.
+
+On commence par simuler des données.
+
+```{r}
+library(sm)
+
+# population level parameters
+mu <- 7
+sigma <- 3
+
+# collect some data (e.g. a sample of heights)
+n <- 50
+x <- rnorm(n, mu, sigma)
+
+```
+Puis comme précédemment on définit la vraissemblance et les lois a priopri des paramètres à estimer : mu et sigma : 
+
+$$
+Y \sim N(\mu,\sigma)
+$$
+```{r}
+# likelihood function
+ll <- function(x, muhat, sigmahat){
+  sum(dnorm(x, muhat, sigmahat, log = T))
+}
+```
+$$
+\mu \sim N(0,100)
+$$
+$$
+\sigma \sim unif(0,10)
+$$
+```{r}
+# prior
+pmu <- function(mu){
+  dnorm(mu, 0, 100, log = T)
+}
+
+psigma <- function(sigma){
+  dunif(sigma, 0, 10, log = T)
+}
+
+```
+
+```{r, results='hide'}
+
+geninits <- function(){
+  list(mu = runif(1, 4, 10),
+       sigma = runif(1, 2, 6))
+}
+
+# Probabilité de transition multivariée (loi normale)
+transition_prob <- function(theta_candidate, theta_current, proposal_sd = 0.1) {
+  dnorm(theta_candidate, mean = theta_current, sd = proposal_sd, log = TRUE)
+}
+
+post <- function(x, mu, sigma){
+  ll(x, mu, sigma) + pmu(mu) + psigma(sigma)
+}
+
+jump <- function(x, dist = .2){ # must be symmetric
+  x + rnorm(1, 0, dist)
+}
+iter = 10000
+chains <- 3
+posterior <- data.frame(mu = rep(NA,iter), sigma = rep(NA,iter))
+accepted <- c(rep(NA,iter-1))
+
+set.seed(1234)
+
+theta.post <- data.frame(mu = rep(NA,iter), sigma = rep(NA,iter))
+
+theta.post[1, 1] <- 9
+theta.post[1, 2] <- 5
+  t =2
+for (t in 2:iter){
+    # theta_star = proposed next values for parameters
+    theta_star <- c(jump(theta.post[t-1, 1],0.1),jump(theta.post[t-1, 2],0.1))
+    
+    #cacul ratio => à changer 
+    pstar <- post(x, mu = theta_star[1], sigma = theta_star[2])  
+    pprev <- post(x, mu = theta.post[t-1, 1], sigma = theta.post[t-1, 2])
+    r <- (pstar+transition_prob(c(theta.post[t-1,1],theta.post[t-1,2]), theta_star, 0.1) )-(pprev+transition_prob(theta_star, c(theta.post[t-1,1],theta.post[t-1,2]), 0.1))
+    ratio = exp(r[1])
+    # Exemple d'utilisation
+
+    # theta_star is accepted if posterior density is higher w/ theta_star
+    # if posterior density is not higher, it is accepted with probability r
+    # else theta does not change from time t-1 to t
+    accept <- rbinom(1, 1, prob = min(r, 1))
+
+    if(runif(1)<ratio){
+      theta.post[t, ] <- theta_star
+    } else {
+      theta.post[t, ] <- theta.post[t-1, ]
+    }
+  
+  posterior <- theta.post
+}
+
+```
+
+
+
+```{r}
+
+sequence <- unique(round(exp(seq(0, log(iter), length.out = 150))))
+
+xlims <- c(4, 10)
+ylims <- c(1, 6)
+
+  par(mfrow=c(1, 2))
+  plot(posterior[ 1:1000,1], posterior[1:1000,2],
+       type="l", xlim=xlims, ylim=ylims, col="blue",
+       xlab="mu", ylab="sigma", main="Markov chains")
+  text(x=7, y=1.2, paste("Iteration ", 1000), cex=1.5)
+  sm.density(x=cbind(c(posterior[1:1000,1]), c(posterior[1:1000,2])),
+             xlab="mu", ylab="sigma",
+             zlab="", zlim=c(0, .7),
+             xlim=xlims, ylim=ylims, col="white", 
+             verbose=0)
+  title("Posterior density")
+
+```
+
 ## Some words about Rjags
 
 After implementing the Metropolis-Hastings algorithm from scratch, it's time to let you know that there are tools available to perform all of this more conveniently. One commonly used tool is RJags. As stated in its documentation, "The rjags package provides an interface from R to the JAGS library for Bayesian data analysis. JAGS uses Markov Chain Monte Carlo (MCMC) to generate a sequence of dependent samples from the posterior distribution of the parameters."
