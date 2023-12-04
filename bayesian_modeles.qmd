@@ -253,7 +253,7 @@ If $u$ is greater than the ratio $r$, we remain at the current position; convers
 
 ```{r}
 # parameter algorithm
-n_iter = 1000
+n_iter = 10000
 thin = 10
 
 #data 
@@ -292,9 +292,7 @@ data = data.frame(iteration = 1:length(p_save),
 
 
 There is a parameter we haven't discussed in this function, and that's $thin$. It means that we will only save the samples within the chain at intervals of 
-$thin$. This is due to the fact that the samples are correlated with each other as they depend on the previous position and therefore do not accurately reflect the distribution. Consequently, if we want independent samples, we must discard the majority of samples and keep only one sample every 
-$thin$ steps, with 
-$thin$ being "sufficiently large."
+$thin$. This is due to the fact that the samples are correlated with each other as they depend on the previous position and therefore do not accurately reflect the distribution. Consequently, if we want independent samples, we must discard the majority of samples and keep only one sample every $thin$ steps, with $thin$ being "sufficiently large."
 
 **Step 5 : Visualization**
 
@@ -315,11 +313,11 @@ Both graphs represent the sampling of $p$ in its marginal posterior distribution
 
 ## Discussion with two parameters
 
-Et comment ça se passe dans plusieurs dimensions ? Evidemment au dessus de deux paramètres à estimer la visualisation devient impossibile. Donc pour que cela reste visuel, on va seulement réaliser un exemple avec un paramètre de plus à estimer. 
+And how does it work in multiple dimensions? Obviously, above two parameters to estimate, visualization becomes impossible. So, to keep it visual, we will only perform an example with one additional parameter to estimate.
 
-We will use a simple example: estimating a population mean and standard deviation. We’ll define some population level parameters, collect some data, then use the Metropolis-Hastingsalgorithm to simulate the joint posterior of the mean and standard deviation.
+We will use a simple example: estimating a population mean and standard deviation. We'll define some population-level parameters, collect some data, then use the Metropolis-Hastings algorithm to simulate the joint posterior of the mean and standard deviation.
 
-On commence par simuler des données.
+Let's start by simulating some data.
 
 ```{r}
 library(sm)
@@ -333,7 +331,7 @@ n <- 50
 x <- rnorm(n, mu, sigma)
 
 ```
-Puis comme précédemment on définit la vraissemblance et les lois a priopri des paramètres à estimer : mu et sigma : 
+Then, as previously, we define the likelihood and the prior distributions for the parameters to be estimated $\mu$ and $\sigma$:
 
 $$
 Y \sim N(\mu,\sigma)
@@ -361,12 +359,27 @@ psigma <- function(sigma){
 }
 
 ```
+In the context of the Metropolis-Hastings algorithm, the focus is typically on probability ratios rather than the probabilities themselves. Logarithms simplify calculations and improve numerical stability in this context, especially for the ratio calculation.
+
+Indeed, as mentioned earlier, we performed:
+
+$$
+r_t = \dfrac{[\theta_{t+1} \mid Y]\space \cdot \space [\theta_{t+1}] \space \cdot \space g(\theta_{t+1} \mid \theta_{t})}{[\theta_{t} \mid Y]\space \cdot \space [\theta_{t}] \space \cdot \space g(\theta_{t} \mid \theta_{t+1})}
+$$
+
+Which is equal to : 
+
+$$
+log(r_t) = [\theta_{t+1} \mid Y]\space \cdot \space [\theta_{t+1}] \space + \space g(\theta_{t+1} \mid \theta_{t}) - [\theta_{t} \mid Y]\space \cdot \space [\theta_{t}] \space + \space g(\theta_{t} \mid \theta_{t+1})
+$$
+
 
 ```{r, results='hide'}
+# for the compute of the ratio
 
-geninits <- function(){
-  list(mu = runif(1, 4, 10),
-       sigma = runif(1, 2, 6))
+# poseterior 
+post <- function(x, mu, sigma){
+  ll(x, mu, sigma) + pmu(mu) + psigma(sigma)
 }
 
 # Probabilité de transition multivariée (loi normale)
@@ -374,67 +387,59 @@ transition_prob <- function(theta_candidate, theta_current, proposal_sd = 0.1) {
   dnorm(theta_candidate, mean = theta_current, sd = proposal_sd, log = TRUE)
 }
 
-post <- function(x, mu, sigma){
-  ll(x, mu, sigma) + pmu(mu) + psigma(sigma)
-}
-
+# to compute a new candidate 
 jump <- function(x, dist = .2){ # must be symmetric
   x + rnorm(1, 0, dist)
 }
-iter = 10000
-chains <- 3
-posterior <- data.frame(mu = rep(NA,iter), sigma = rep(NA,iter))
-accepted <- c(rep(NA,iter-1))
 
-set.seed(1234)
+```
+
+*Algorithm implementation*
+```{r}
+iter = 10000
 
 theta.post <- data.frame(mu = rep(NA,iter), sigma = rep(NA,iter))
 
 theta.post[1, 1] <- 9
 theta.post[1, 2] <- 5
-  t =2
+
 for (t in 2:iter){
+  
     # theta_star = proposed next values for parameters
     theta_star <- c(jump(theta.post[t-1, 1],0.1),jump(theta.post[t-1, 2],0.1))
     
-    #cacul ratio => à changer 
+    #ratio
     pstar <- post(x, mu = theta_star[1], sigma = theta_star[2])  
     pprev <- post(x, mu = theta.post[t-1, 1], sigma = theta.post[t-1, 2])
     r <- (pstar+transition_prob(c(theta.post[t-1,1],theta.post[t-1,2]), theta_star, 0.1) )-(pprev+transition_prob(theta_star, c(theta.post[t-1,1],theta.post[t-1,2]), 0.1))
     ratio = exp(r[1])
-    # Exemple d'utilisation
-
-    # theta_star is accepted if posterior density is higher w/ theta_star
-    # if posterior density is not higher, it is accepted with probability r
-    # else theta does not change from time t-1 to t
-    accept <- rbinom(1, 1, prob = min(r, 1))
+    
+    # Acceptation or not 
 
     if(runif(1)<ratio){
       theta.post[t, ] <- theta_star
     } else {
       theta.post[t, ] <- theta.post[t-1, ]
     }
-  
-  posterior <- theta.post
+
 }
 
 ```
 
-
+**Visualization**
 
 ```{r}
 
-sequence <- unique(round(exp(seq(0, log(iter), length.out = 150))))
 
 xlims <- c(4, 10)
 ylims <- c(1, 6)
 
   par(mfrow=c(1, 2))
-  plot(posterior[ 1:1000,1], posterior[1:1000,2],
+  plot(theta.post[ 1:1000,1], theta.post[1:1000,2],
        type="l", xlim=xlims, ylim=ylims, col="blue",
        xlab="mu", ylab="sigma", main="Markov chains")
   text(x=7, y=1.2, paste("Iteration ", 1000), cex=1.5)
-  sm.density(x=cbind(c(posterior[1:1000,1]), c(posterior[1:1000,2])),
+  sm.density(x=cbind(c(theta.post[1:1000,1]), c(theta.post[1:1000,2])),
              xlab="mu", ylab="sigma",
              zlab="", zlim=c(0, .7),
              xlim=xlims, ylim=ylims, col="white", 
@@ -442,6 +447,8 @@ ylims <- c(1, 6)
   title("Posterior density")
 
 ```
+
+The figure 1 represents the joint sampling of the two parameters. At each iteration, a new pair of parameters is proposed, and the ratio calculation assigns a weight to the proximity of the candidate parameter pair to the prior. Figure 2 represents the joint distribution of the two parameters formed by the sampling. It is from this joint distribution that the marginal posterior distributions of the two parameters arise. Therefore, we can also calculate the statistics (mean, standard deviation, etc.) of interest on these marginal posterior distributions.
 
 ## Some words about Rjags
 
