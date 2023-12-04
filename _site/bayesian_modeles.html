@@ -186,11 +186,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#when-approximation-by-computation-is-needed" id="toc-when-approximation-by-computation-is-needed" class="nav-link" data-scroll-target="#when-approximation-by-computation-is-needed">When approximation by computation is needed</a>
   <ul class="collapse">
-  <li><a href="#small-recap-on-markov-chain" id="toc-small-recap-on-markov-chain" class="nav-link" data-scroll-target="#small-recap-on-markov-chain">Small recap on Markov Chain</a></li>
-  <li><a href="#approximation-with-mcmc" id="toc-approximation-with-mcmc" class="nav-link" data-scroll-target="#approximation-with-mcmc">Approximation with MCMC</a>
-  <ul class="collapse">
-  <li><a href="#a-small-example-without-using-jags" id="toc-a-small-example-without-using-jags" class="nav-link" data-scroll-target="#a-small-example-without-using-jags">A small example without using JAGS</a></li>
+  <li><a href="#implémentation-de-lalgorithm-de-metropolis-hastings" id="toc-implémentation-de-lalgorithm-de-metropolis-hastings" class="nav-link" data-scroll-target="#implémentation-de-lalgorithm-de-metropolis-hastings">Implémentation de l’algorithm de Metropolis-Hastings</a></li>
+  <li><a href="#discussion-with-two-parameters" id="toc-discussion-with-two-parameters" class="nav-link" data-scroll-target="#discussion-with-two-parameters">Discussion with two parameters</a></li>
+  <li><a href="#some-words-about-rjags" id="toc-some-words-about-rjags" class="nav-link" data-scroll-target="#some-words-about-rjags">Some words about Rjags</a></li>
   </ul></li>
+  <li><a href="#iv-prior-selection-in-ecology" id="toc-iv-prior-selection-in-ecology" class="nav-link" data-scroll-target="#iv-prior-selection-in-ecology">IV) Prior Selection in Ecology</a>
+  <ul class="collapse">
+  <li><a href="#iv-1-the-role-of-prior-knowledge-and-beliefs" id="toc-iv-1-the-role-of-prior-knowledge-and-beliefs" class="nav-link" data-scroll-target="#iv-1-the-role-of-prior-knowledge-and-beliefs">IV-1) The role of prior knowledge and beliefs</a></li>
+  <li><a href="#iv-2-informative-and-non-informative-priors" id="toc-iv-2-informative-and-non-informative-priors" class="nav-link" data-scroll-target="#iv-2-informative-and-non-informative-priors">IV-2) Informative and non-informative priors</a></li>
+  <li><a href="#iv-3-incorporating-expert-opinions-and-literature-data" id="toc-iv-3-incorporating-expert-opinions-and-literature-data" class="nav-link" data-scroll-target="#iv-3-incorporating-expert-opinions-and-literature-data">IV-3) Incorporating expert opinions and literature data</a></li>
+  </ul></li>
+  <li><a href="#v-case-studies-in-bayesian-ecology" id="toc-v-case-studies-in-bayesian-ecology" class="nav-link" data-scroll-target="#v-case-studies-in-bayesian-ecology">V) Case Studies in Bayesian Ecology</a>
+  <ul class="collapse">
+  <li><a href="#v-1-highlighting-specific-ecological-studies-that-employed-bayesian-methods" id="toc-v-1-highlighting-specific-ecological-studies-that-employed-bayesian-methods" class="nav-link" data-scroll-target="#v-1-highlighting-specific-ecological-studies-that-employed-bayesian-methods">V-1) Highlighting specific ecological studies that employed Bayesian methods</a></li>
+  <li><a href="#v-2-illustrative-examples-from-different-ecological-sub-disciplines" id="toc-v-2-illustrative-examples-from-different-ecological-sub-disciplines" class="nav-link" data-scroll-target="#v-2-illustrative-examples-from-different-ecological-sub-disciplines">V-2) Illustrative examples from different ecological sub-disciplines</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -228,6 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Philosophy behind it. Frequentist approach : “What is the probability to observe my data given my model.”</li>
 </ul>
 <p>Bayesian approach : “What is the probability of m y model given my data.”</p>
+<p>Rappel : - différence entre loi à posterio jointes et marginales</p>
 </section>
 <section id="general-theory-behind-bayesian-approach." class="level1">
 <h1>General theory behind Bayesian approach.</h1>
@@ -281,7 +291,7 @@ L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat
 &amp;= e^{-n \cdot\hat{\lambda}} \cdot\hat{\lambda}^{n \cdot \bar{y}}\\
 \end{align}
 \]</span></p>
-<p>The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, <span class="math inline">\(mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}\)</span>.</p>
+<p>The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, <span class="math inline">\(mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}\)</span>.</p>
 <p>Now we want to find the prior distribution of <span class="math inline">\(\hat{\lambda}\)</span>. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify ! lets try it :</p>
 <p><span class="math display">\[
 \begin{align}
@@ -341,99 +351,150 @@ L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat
 <p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>When we add no data in the computation of the posterior, it is normal that we don’t see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true <span class="math inline">\(\lambda\)</span>. Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.</p>
+<p>When we add no data in the computation of the posterior, it is normal that we don’t see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true <span class="math inline">\(\lambda\)</span>. <strong>Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.</strong></p>
 </section>
 </section>
 <section id="when-approximation-by-computation-is-needed" class="level1">
 <h1>When approximation by computation is needed</h1>
-<p>En statistiques bayésiennes, comme dit précédemment l’objectif est d’actualiser nos croyances sur les paramètres d’un modèle en combinant une connaissance a priori avec l’information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. C’est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.</p>
-<section id="small-recap-on-markov-chain" class="level3">
-<h3 class="anchored" data-anchor-id="small-recap-on-markov-chain">Small recap on Markov Chain</h3>
-</section>
-<section id="approximation-with-mcmc" class="level2">
-<h2 class="anchored" data-anchor-id="approximation-with-mcmc">Approximation with MCMC</h2>
+<p>En statistiques bayésiennes, comme dit précédemment l’objectif est d’actualiser nos croyances sur les paramètres d’un modèle en combinant une connaissance a priori avec l’information observée dans nos données récoltées sur le terrain. Cependant, le calcul direct de la distribution postérieure peut souvent être compliqué à calculer analytiquement, surtout dans des modèles complexes. Le passage par des loi de distribution conjugées est une solution pour pallier au problème mais ceci n’est pas toujours possibles. C’est là que les algorithmes Markov Chain Monte Carlo (MCMC) interviennent pour estimer les distributions a posteriori des paramètres.</p>
 <p>Il existe de multiple algorithmes de type MCMC ( Metropolis-Hastings, échantillionneur de Gibbs, Hamiltonian Monte Carlo), chacun possèdes ses avantages et ses inconvénients et le choix de l’algorithme dépend de la situation d’application. Cependant ils partent tous de la même base théorique.</p>
-<p>L’idée essentielle de la MCMC est que nous pouvons en apprendre davantage sur les paramètres non observés en effectuant de nombreux tirages aléatoires dans leurs distributions marginales a posteriori. L’accumulation de ces nombreux échantillons donne la “forme” de la distribution postérieure. Ces nombreux échantillons nous permettent de calculer les quantités qui nous intéressent : moyennes, variances et quantiles.</p>
-<p>Il est maintenant légitime de se demander : Mais ça sert à quoi de tirer un échantillionnage dans une loi inconnu pour ensuite la reconstituer ? Et surtout comment on fait si on ne la connait pas ?</p>
-<p>Et bien la loi que l’on reconstitue n’est pas totalement la même que celle qu’on utilise pour obtenir ces tirages. En effet la loi a posteriori n’est pas totalement inconnue. Ses informations sont portées par le produit de vraissemblance et du prior :</p>
-<p><span class="math display">\[
-[{\theta} \mid Y] \propto [Y \mid {\theta}  ]\cdot[{\theta}]
-\]</span></p>
-<p>C’est cette loi a priori estimée qui sert de première référence et le tirage aléatoire va permettre de normaliser cette expression pour qu’elle soit égal à un fonction de probabilité dont l’intégral est égal à 1. Cette propriété est normalement donnée par la division du produit par <span class="math inline">\([Y]\)</span>.</p>
-<p>L’algorithme MCMC estime donc la loi a posteriori des paramètres non observé en évitant l’étape de calcul d’intégral qui peut s’avérer complexe pour obtenir <span class="math inline">\([Y]\)</span>.</p>
-<p><strong>Step 1 : Initialisation</strong></p>
-<section id="a-small-example-without-using-jags" class="level3">
-<h3 class="anchored" data-anchor-id="a-small-example-without-using-jags">A small example without using JAGS</h3>
-<p>On reprend l’exemple avec les champignons.</p>
+<p>L’idée essentielle d’un algorithme MCMC est de créer une séquence de nombre aléatoire dépendant via une chaine de Markov. Quand la chaine arrive à l’équilibre (état stationnaire) elle forme un échantillionage au sein de la loi a posteriori ce qui permet de calculer les quantités qui nous intéressent : moyennes, variances, quantiles…</p>
+<section id="implémentation-de-lalgorithm-de-metropolis-hastings" class="level2">
+<h2 class="anchored" data-anchor-id="implémentation-de-lalgorithm-de-metropolis-hastings">Implémentation de l’algorithm de Metropolis-Hastings</h2>
+<p>Let’s implemant the algortihm to try to understand how it works. Dans les lignes suivantes nous allons décrire les différentes étapes de l’algorithme de Matropolis-Hastings avec les lignes de codes R correspondantes.</p>
+<p><strong>#Step 1 : Definition of the likelihood function and the prior law</strong> Comme pour chaque début d’analyse statistique bayésienne, on pause le problème et on définit la loi de probabilité de la vraissemblance et les loi à priori des paramètres à estimer.</p>
+<p>Ici on reprend le problème de nos comptages de champignions, on choisit donc une loi de poisson pour la vraissemblance. Et cette fois ci pour l’estimation du paramètre <span class="math inline">\(\lambda\)</span> on choisi un loi uniforme allant de <span class="math inline">\(0\)</span> à <span class="math inline">\(1000\)</span> . On fait donc l’hypothèse de n’avoir aucun information sur le paramètre <span class="math inline">\(\lambda\)</span>. Aucune information n’est porté par le prior.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># [y | lambda]</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">=</span> <span class="cf">function</span>(lambda,y){</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(lambda <span class="sc">&lt;</span> <span class="dv">0</span>){</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">0</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="fu">dpois</span>(<span class="at">x =</span> <span class="fu">sum</span>(y),<span class="at">lambda =</span> lambda<span class="sc">*</span><span class="fu">length</span>(y)))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [lambda]</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>prior.dist <span class="ot">=</span> <span class="cf">function</span>(lambda){</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dunif</span>(lambda,<span class="dv">0</span>,<span class="dv">1000</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># g([lambda_c(i) | lambda(i-1)])</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>dstep <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda1, lambda2, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(lambda2, <span class="at">mean =</span> lambda1, <span class="at">sd =</span> sd.explore)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>rstep <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> lambda, <span class="at">sd =</span> sd.explore)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>MH.ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda_c,lambda, y){</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">=</span> (<span class="fu">likelihood</span>(lambda_c, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">dstep</span>(lambda, lambda_c))<span class="sc">/</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">likelihood</span>(lambda, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">dstep</span>(lambda_c, lambda))</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ratio)</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>( <span class="fu">dpois</span>(<span class="at">x =</span> <span class="fu">sum</span>(y),<span class="at">lambda =</span> lambda<span class="sc">*</span><span class="fu">length</span>(y)))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mcmc.function <span class="ot">=</span> <span class="cf">function</span>(lambda_init, <span class="at">n_iter =</span> <span class="dv">10000</span>, <span class="at">burning =</span> <span class="dv">100</span>, <span class="at">thin =</span> <span class="dv">10</span>){</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  lambda_sample <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  lambda_sample[<span class="dv">1</span>] <span class="ot">=</span> lambda_init</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  i<span class="ot">=</span><span class="dv">2</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n_iter){</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    lambda <span class="ot">=</span> lambda_sample[(i<span class="dv">-1</span>)]</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    lambda_c <span class="ot">=</span> <span class="fu">rstep</span>(lambda)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    ratio <span class="ot">=</span> <span class="fu">MH.ratio</span>(lambda_c,lambda, Y)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>)<span class="sc">&lt;</span>ratio){</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda_c</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> lambda_sample[<span class="fu">seq</span>(burning,n_iter, <span class="at">by=</span> thin)]</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">iteration =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(lambda_save),</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">step =</span> lambda_save))</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># [lambda]</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>prior.dist <span class="ot">=</span> <span class="cf">function</span>(lambda){</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dunif</span>(lambda,<span class="dv">0</span>,<span class="dv">1000</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Step 2 : Definition of a candidate position</strong></p>
+<p>On va chercher à se déplacer il faut donc définir une fonction pour dertimer une position candidat. On tire ici aléatoirement cette position dans une loi normal de moyenne <span class="math inline">\(\lambda_c\)</span> c’est à dire la position à laquelle on part et on choisit abitrairement une valeur d’écart-type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>move  <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  candidate <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> lambda, <span class="at">sd =</span> sd.explore)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (candidate)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Step 3 : Compute of the ratio</strong></p>
+<p>Une fois qu’on a cette position candidat il faut décider si si on la garde ou pas, le critère de décision à calculer est la ratio de Metropolis-Hastings <span class="math inline">\(r\)</span>. On p</p>
+<p><span class="math display">\[
+r = \dfrac{[\lambda_{t+1} \mid Y]\space \cdot \space [\lambda_{t+1}] \space \cdot \space g(\lambda_{t+1} \mid \lambda_{t})}{[\lambda_{t} \mid Y]\space \cdot \space [\lambda_{t}] \space \cdot \space g(\lambda_{t} \mid \lambda_{t+1})}
+\]</span></p>
+<p>avec <span class="math inline">\(g(\lambda_{t+1} \mid \lambda_{t})\)</span> la probabilité de passer de la position candidate sachant la position courante.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>proba_move <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda1, lambda2, <span class="at">sd.explore =</span> <span class="fl">0.1</span>){</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(lambda2, <span class="at">mean =</span> lambda1, <span class="at">sd =</span> sd.explore)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mcmc_df <span class="ot">=</span> <span class="fu">mcmc.function</span>(<span class="at">lambda_init =</span> <span class="dv">10</span>,<span class="at">burning =</span> <span class="dv">200</span>, <span class="at">n_iter =</span> <span class="dv">1000000</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(step<span class="sc">~</span>iteration, mcmc_df, <span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>MH.ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda_c,lambda, y){</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">=</span> (<span class="fu">likelihood</span>(lambda_c, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">proba_move</span>(lambda, lambda_c))<span class="sc">/</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">likelihood</span>(lambda, y) <span class="sc">*</span> <span class="fu">prior.dist</span>(lambda) <span class="sc">*</span> <span class="fu">proba_move</span>(lambda_c, lambda))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ratio)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Step 4 : Decide if we go to the candidate position or not</strong></p>
+<p>Pour décider si on passe à la position candidate <span class="math inline">\(\lambda_{t+1}\)</span> on défini <span class="math inline">\(u\)</span> : <span class="math display">\[
+u \sim unif(0,100)
+\]</span></p>
+<p>Si il est supérieur au ratio <span class="math inline">\(r\)</span> on reste sur la position courante et inversement si <span class="math inline">\(u\)</span> est inférieur à <span class="math inline">\(r\)</span> on passe à la position candidate.</p>
+<p><em>Fonction qui permet de regrouper tout les calculs :</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mcmc.function <span class="ot">=</span> <span class="cf">function</span>(lambda_init, <span class="at">n_iter =</span> <span class="dv">1000</span>, <span class="at">burning =</span> <span class="dv">100</span>, <span class="at">thin =</span> <span class="dv">10</span>){</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  lambda_sample <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_iter)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  lambda_sample[<span class="dv">1</span>] <span class="ot">=</span> lambda_init</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  i<span class="ot">=</span><span class="dv">2</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n_iter){</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    lambda <span class="ot">=</span> lambda_sample[(i<span class="dv">-1</span>)]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    lambda_c <span class="ot">=</span> <span class="fu">move</span>(lambda)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    ratio <span class="ot">=</span> <span class="fu">MH.ratio</span>(lambda_c,lambda, Y)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>)<span class="sc">&lt;</span>ratio){</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda_c</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>      lambda_sample[i] <span class="ot">=</span> lambda</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  lambda_save <span class="ot">=</span> lambda_sample[<span class="fu">seq</span>(burning,n_iter, <span class="at">by=</span> thin)]</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">iteration =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(lambda_save),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">step =</span> lambda_save))</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Il y a un parmètre dont on n’a pas discuter dans cette fonction c’est le <span class="math inline">\(thin\)</span>, il signifie qu’on ne va sauvegarder les échantillionnage au sein de la chaine avec un interval égal à <span class="math inline">\(thin\)</span>. C’est dû au fait que les échantillion sont corrélé entre eux car dépendant dans la position précédente et donc ne reflète donc pas correctement la distribution. Par conséquent, si l’on souhaite avoir des échantillons indépendants, on doit éliminer la majorité des échantillons pour ne conserver qu’un échantillon tous les <span class="math inline">\(thin\)</span> pas, avec <span class="math inline">\(thin\)</span> « suffisamment grand ».</p>
+<p><strong>Step 5 : Visualization</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mcmc_df <span class="ot">=</span> <span class="fu">mcmc.function</span>(<span class="at">lambda_init =</span> <span class="dv">10</span>,<span class="at">burning =</span> <span class="dv">200</span>, <span class="at">n_iter =</span> <span class="dv">5000</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(step<span class="sc">~</span>iteration, mcmc_df, <span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> mcmc_df)<span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> step))<span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>alph <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>bet<span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>posterior_exact <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">p =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">10001</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">posterior =</span> <span class="fu">dgamma</span>(p, <span class="at">shape =</span>  alph <span class="sc">+</span> <span class="fu">sum</span>(Y), <span class="at">rate =</span> bet <span class="sc">+</span> <span class="dv">5000</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">data =</span> posterior_exact, <span class="fu">aes</span>(<span class="at">x=</span>p, <span class="at">y =</span>posterior), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="bayesian_modeles_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
+<p>Le premier graphique représante</p>
 </section>
+<section id="discussion-with-two-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-with-two-parameters">Discussion with two parameters</h2>
+</section>
+<section id="some-words-about-rjags" class="level2">
+<h2 class="anchored" data-anchor-id="some-words-about-rjags">Some words about Rjags</h2>
+<p>Après une implémentation from scratch de l’algorithme de Metropolis Hastings il est temps de vous annoncer qu’il existe des outils qui permettent de réaliser tout ceci. Un de plus courrament utilisé c’est RJags…</p>
+</section>
+</section>
+<section id="iv-prior-selection-in-ecology" class="level1">
+<h1>IV) Prior Selection in Ecology</h1>
+<section id="iv-1-the-role-of-prior-knowledge-and-beliefs" class="level2">
+<h2 class="anchored" data-anchor-id="iv-1-the-role-of-prior-knowledge-and-beliefs">IV-1) The role of prior knowledge and beliefs</h2>
+<p>In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.</p>
+<p>Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.</p>
+</section>
+<section id="iv-2-informative-and-non-informative-priors" class="level2">
+<h2 class="anchored" data-anchor-id="iv-2-informative-and-non-informative-priors">IV-2) Informative and non-informative priors</h2>
+</section>
+<section id="iv-3-incorporating-expert-opinions-and-literature-data" class="level2">
+<h2 class="anchored" data-anchor-id="iv-3-incorporating-expert-opinions-and-literature-data">IV-3) Incorporating expert opinions and literature data</h2>
+</section>
+</section>
+<section id="v-case-studies-in-bayesian-ecology" class="level1">
+<h1>V) Case Studies in Bayesian Ecology</h1>
+<section id="v-1-highlighting-specific-ecological-studies-that-employed-bayesian-methods" class="level2">
+<h2 class="anchored" data-anchor-id="v-1-highlighting-specific-ecological-studies-that-employed-bayesian-methods">V-1) Highlighting specific ecological studies that employed Bayesian methods</h2>
+</section>
+<section id="v-2-illustrative-examples-from-different-ecological-sub-disciplines" class="level2">
+<h2 class="anchored" data-anchor-id="v-2-illustrative-examples-from-different-ecological-sub-disciplines">V-2) Illustrative examples from different ecological sub-disciplines</h2>
+
+
 </section>
 </section>
 
