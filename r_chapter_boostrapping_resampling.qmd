@@ -160,24 +160,23 @@ Considérons un exemple où nous voulons tester si la différence de moyennes en
 
 Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
 
-# Régressions et tests de Mantel
+# Regressions and Mantel tests
 
-## Régressions
+## Regressions
 
-La régression est une méthode de modélisation empirique d'une variable réponse\
-(appelée ici $Y$) en fonction d'une ou de plusieurs variables explicatives ( $X_1,X_2,.,X_n$ avec $n$ le nombre de variables explicatives). Ce sont les régressions linéaires qui sont majoritairement utilisées dans le domaine des statistiques, principalement pour leur simplicité d'application. Plaçons nous donc dans ce monde linéaire. Le modèle linéaire est modélisé par :
+Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is modelled by :
 
 $$ 
 Y_i = \alpha + \sum_{j=1}^{n}b_j \times X{ij} +\epsilon\_i\sim\mathcal{N}(0,,\sigma)
 $$ {#eq-1}
 
-Avec $Y_i$ la $i^{ème}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{ème}$ valeur de la $j^{ème}$ variable $X$.
+With $Y_i$ the $i^{th}$ value of the variable $Y$ and $X_{ij}$ the $i^{th}$ value of the $j^{th}$ variable $X$.
 
-### Test statistique sur les coefficients.
+### Statistical test on the coefficients.
 
-Il faut maintenant s'assurer que les paramètres \$b\$ et $\alpha$ sont différents de 0. Le test par permutation permet de définir l'hypothèse nulle (H0 : $\alpha=0$ et $b = 0$). L'idée est de permuter les valeurs de
+We now need to make sure that the parameters \$b\$ and $\alpha$ are different from 0. The permutation test is used to define the null hypothesis (H0: $\alpha=0$ and $b = 0$). The idea is to permute the values of
 
-$Y_i$ par rapport aux $X_ij$ ou inversement.
+$Y_i$ with respect to $X_ij$ or vice versa.
 
 ```{r exemple permutation sepal.width & sepal.length}
 library(kableExtra) # Mettre en 1er chunk si nécessaire
@@ -202,21 +201,22 @@ cbind(data[,1:2], permu) %>%
   
 ```
 
-Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramètres estimés à partir des échantillons permutés forment H0. Le paramètre b est éstimé par la méthode des moindres carrés tels que :
+For each permutation, a linear model is constructed. The set of parameters estimated from the permuted samples form H0. The parameter b is estimated by the method of least squares such that :
 
 $$
 b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
 $$
 
-Le paramètre $\alpha$ est estimé par : 
+The parameter $\alpha$ is estimated by : 
 $$
 \alpha=\bar{y}-b_i\bar{x}
 $$
 
 
+
 ```{r}
 
-n_permu <- 1000 # choix du nombre de permutations
+n_permu <- 1000 # choice of number of permutations
 
 hyp_nulle <- matrix(NA, nrow = n_permu, ncol = 2)
 colnames(hyp_nulle) <- c("alpha", "b")
@@ -225,33 +225,33 @@ permu <- matrix(NA, ncol = n_permu, nrow = nrow(data))
 
 
 for (i in 1:n_permu){
-# Tirages aléatoire
+# random sampling
 samp_ind <- sample(1:nrow(data), nrow(data))
 
-# creation des échantillons, on permute les Y par rapport aux Xi
+# creation of samples, we permute the Ys with respect to the Xi
 permu[,i] <- data$Sepal.Length[samp_ind]
 
 
-#Estimation des coefficients
+#Coefficients estimation
 hyp_nulle[i,1] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[1]]
 hyp_nulle[i,2] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[2]]
 }
 
-# Distribution de l'hypothèse nulle
+# Distribution of the null hypothesis
 
 par(mfrow = c(1,2))
 hist_1 <- hist(hyp_nulle[,1], 
-     main = expression("Distribution empirique de "*alpha*" sous H0"),
+     main = expression("Empirical distribution of "*alpha*" under H0"),
      xlab = expression(""*alpha*"")) 
 hist_2 <- hist(hyp_nulle[,2], 
-     main = expression("Distribution empirique de b sous H0"),
+     main = expression("Empirical distribution of b under H0"),
      xlab = "b")
 
 
 
 ```
 
-### coefficients de la regression observée
+### observed regression coefficients
 
 ```{r}
 
@@ -275,7 +275,7 @@ abline(v = obs[2])
 
 ```
 
-# Calcul des statistiques associées au test
+# Calculation of test statistics
 
 ```{r}
 
@@ -287,11 +287,11 @@ p_b <- length(hyp_nulle[hyp_nulle[,2]>=obs[2]])
 
 p_value_b <- p_b/n_permu
 
-#Affichage des résultats
+#results representation
 
 df_results <- data.frame(alpha = round(c(obs[1], p_value_a),10),
                          b = round(c(obs[2], p_value_b),4))
-row.names(df_results) <- c("coefficient \n observée", "P valeur")
+row.names(df_results) <- c("coefficient \n observed", "P value")
 
 df_results%>%
   kable("html", booktabs =TRUE, align = rep("c", 3))%>%
@@ -299,21 +299,20 @@ df_results%>%
   
 ```
 
-## Test de mantel
+## Mantel test
 
-### Usages
+### Uses
 
-Le test de mantel (Mantel, 1967) permet d'évaluer la relation entre deux matrices de correspondances mesurées sur les mêmes individus. On note $X$ et $Y$ les deux matrices de correspondances (ou distances). Ici, l'hypothèse nulle décrit l'indépendance des mécanismes qui régissent les distances entre individus. La distribution de H0 s'obtient par permutation des individus entre-eux.
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence matrices (or distances) are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The H0 distribution is obtained by permuting the individuals between them.
 
-### matrices de correspondances (distances)
+### Correspondence matrices (distances)
 
-Les matrices de distances doivent porter sur les mêmes individus. On peut utiliser le package vegan pour les extraire d'un jeu de données. On utilise ici un jeu de données issu du site de l'UCLA.
+Distance matrices must relate to the same individuals. You can use the vegan package to extract them from a dataset. Here, we use a dataset from the UCLA site.
 
 ```{r}
 library(vegan)
 
-# Téléchargement d'un jeu de données et création des matrices de distances
-
+# Download a dataset and create distance matrices
 ozone <- read.table("https://stats.idre.ucla.edu/stat/r/faq/ozone.csv", sep=",", header=T)
 station.dists <- dist(cbind(ozone$Lon, ozone$Lat))
 ozone.dists <- dist(ozone$Av8top)
@@ -323,18 +322,18 @@ ozone.dists <- as.matrix(ozone.dists)[1:5, 1:5]
 ozone.dists <- cbind(c("1","2","3","4","5"),as.data.frame(ozone.dists))
 
 names(ozone.dists) <- c("","1","2","3","4","5")
-ozone.dists %>% # Visualisation d'une matrice de distances
+ozone.dists %>% # Visualizing a distance matrix
   kable("html", booktabs =TRUE, align = rep("c", 6))%>%
   kable_minimal()%>%
   column_spec(1, bold = TRUE)
 
 ```
 
-Il existe différents packages permettant de réaliser le test de Mantel. Par exemple le package ade4 
+There are a number of packages available to perform the Mantel test. For example, the ade4 package 
 
 
 ```{r}
-# En utilisant le package ade4
+# Using the ade4 package
 
 library(ade4)
 
@@ -342,9 +341,11 @@ mantel.rtest(as.dist(station.dists), as.dist(ozone.dists), nrepet = 99)
 ```
 
 
-Le package vegan permet d'utiliser différentes statistiques. Dans notre cas nous avons choisis la correlation de Pearson.
+The vegan package allows you to use different statistics. In our case we chose the Pearson correlation.
 
 ```{r}
-# En utilisant le package vegan, corrélation de pearson
+# Using the vegan package, pearson correlation
 mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
 ```
+
+With this funcions, you can get the p-value (significiance) of the nul hypothesis.
