@@ -9,11 +9,17 @@ output:
    toc: true
    toc_float: true
 ---
+
 ```{r setup}
 #| include: false
 
 library(tidyverse)
+library(ggforce)
 library(deSolve)
+library(rjags)
+library(ggmcmc)
+
+
 
 ```
 
@@ -53,7 +59,7 @@ Y = rpois(n = n_sample, lambda = lbda)
 hist(Y)
 ```
 
-**So let's pretend that we don't know the $\lambda$**. We want to find the the value of the mean number of mushrooms we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. The Bayesian method will give us a range of estimated mean $\hat{\lambda}$ and the probability of those values to be true knowing the observation $Y$. This is what we call the posterior distribution. We can simply write this as follows $[\hat{\lambda} \mid Y]$ which is the probability of $\hat{\lambda}$ knowing our observations. This probability can be found with the equation :
+**So let's pretend that we don't know the** $\lambda$. We want to find the the value of the mean number of mushrooms we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. The Bayesian method will give us a range of estimated mean $\hat{\lambda}$ and the probability of those values to be true knowing the observation $Y$. This is what we call the posterior distribution. We can simply write this as follows $[\hat{\lambda} \mid Y]$ which is the probability of $\hat{\lambda}$ knowing our observations. This probability can be found with the equation :
 
 $$
 [\hat{\lambda} \mid Y] = [Y \mid \hat{\lambda}  ]\cdot[\hat{\lambda}]
@@ -253,10 +259,7 @@ mcmc_df = mcmc.function(lambda_init = 10,burning = 200, n_iter = 1000000)
 plot(step~iteration, mcmc_df, "l")
 ```
 
-
-
 # IV) Prior Selection in Ecology
-
 
 ## IV-1) The role of prior knowledge and beliefs
 
@@ -268,21 +271,21 @@ Incorporating existing information to a data set can be based on previous studie
 
 ## IV-3) Incorporating expert opinions and literature data
 
-
-
-
 # V) Case Studies in Bayesian Ecology
 
 ## Using JAGS
+
 ### two parameter example
-For this example we are going to use data taken from a normal law. It is slightly different form the poisson distribution because normal distributions take 2 parameters. So we will need to estimate not only the mean but also the standard deviation will our bayesian approximation. We start by  creating the data.
+
+For this example we are going to use data taken from a normal law. It is slightly different form the poisson distribution because normal distributions take 2 parameters. So we will need to estimate not only the mean but also the standard deviation will our bayesian approximation. We start by creating the data.
+
 ```{r}
 Y2 = rnorm(n = 200, mean = 10, sd = 1)
 hist(Y2)
 ```
 
-For this example we will use the software *JAGS* with the library *rjgas*. *JAGS* is a software that let's us build our own model to estimate parameters that we want to find. It need 3 main componente.
-Fist, the model :
+For this example we will use the software *JAGS* with the library *rjgas*. *JAGS* is a software that let's us build our own model to estimate parameters that we want to find. It need 3 main componente. Fist, the model :
+
 ```{r}
 mod1 = "
   model{
@@ -299,9 +302,11 @@ mod1 = "
   }
 "
 ```
+
 It look like *R* syntax but it is *JAGS* syntax, which is sligthly different for some function
 
 Second, the list of data :
+
 ```{r}
 data_list1 = list(
   Y2 = Y2,
@@ -309,25 +314,28 @@ data_list1 = list(
   
 )
 ```
+
 This list contain all information needed to make the model run.
 
 Third, the list of initialization :
+
 ```{r}
 init_list1 <- list(
   m = 5,
   sd = 2
 )
 ```
+
 *JAGS* will probably run MCMC algorithm to find the best parameters, those algorithm need values to start. Try to give values that make sense. If you don't the algorithm might take more time to converge or JAGS could also give error messages.
 
 Now that every thing is setup we can run the model
+
 ```{r}
 mjags1 <- jags.model(file=textConnection(mod1), 
                      data=data_list1,
                      inits=init_list1, 
                      n.chains = 3) # Number of MCMC 
 ```
-
 
 ```{r}
 # function to extract mcmc 
@@ -340,12 +348,14 @@ postSamples_df1 <-  postSamples1 %>% ggs()
 ```
 
 Always verify if the markov chain are stationary (otherwise you will have a bad estimation of the posterior distribution)
+
 ```{r}
 postSamples_df1%>%
   ggplot() +
   facet_wrap(~Parameter, scales = "free")+
   geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
 ```
+
 All MCMC seem to be stationary, we can go on.
 
 ```{r}
@@ -366,11 +376,13 @@ str(postSamples_df1$value)
 #                  position = "identity", alpha = 0.7)
 
 ```
+
 Here we look at the posterior distribution estimated by the 3 chain for the mean and the standard error.
 
-
 For this example we are going to use data taken from a normal law. And we can for example suppose that we want to study the length of snakes in 5 different dessert (that we gonna call A,B,C,D,E for simplicity).
+
 ```{r}
+
 set.seed(1000)
 y_means = round(runif(n= 5, min = 5, max = 15))
 n_obs = 40
@@ -386,11 +398,11 @@ for(i in 1:length(y_means)){
 data = data.frame(Y3, class, IDclass)
 
 ggplot(data)+
-  geom_boxplot(aes(class,Y3))
+  geom_sina(aes(class,Y3))
 
 ```
-```{r}
 
+```{r}
 mod2 = "
   model{
   ## model 
@@ -406,20 +418,31 @@ mod2 = "
   preci <- 1/(sd*sd)
   }
 "
+```
 
+For this time we want to estimate 5 different means and we will suppose that standard deviation is the same between each class (but we could also estimate it with respect to the class). To estimate multiple parameter we initiate as much prior as there is class with the loop `for(n in 1:n_class){ m[n] ~ dunif(0, 10**3)}`
 
+```{r}
 data_list2 = list(
-  Y3 = data$Y3,
-  n_obs= length(data$Y3),
-  IDclass = data$IDclass,
-  n_class = max(data$IDclass)
+  Y3 = data$Y3, # data vector
+  n_obs= length(data$Y3), # number of observations
+  IDclass = data$IDclass, # vector to specify class of each observation
+  n_class = max(data$IDclass) # Number of class
 )
+```
+For this example we add `IDclass = data$IDclass` and ` n_class = max(data$IDclass)` for the class specification in the model.
 
+```{r}
 init_list2 <- list(
-  m = rep(5,5),
+  m = rep(5,5), 
   sd = 2
 )
+```
 
+This is where we initiate the prior, the only change is that we initialize 5 mean with `m = rep(5,5)`
+
+We run the model :
+```{r}
 mjags2 <- jags.model(file=textConnection(mod2), 
                      data=data_list2,
                      inits=init_list2, 
@@ -429,32 +452,42 @@ postSamples2 <- coda.samples(mjags2,
                              variable.names = c("m","sd"),
                              n.iter = 10000, 
                              thin = 10)
+```
 
+Some data manipulation for the visualization
+```{r}
 postSamples_df2 <-  postSamples2 %>% ggs()
 params_names = unique(postSamples_df2$Parameter)
 postSamples_df2$true_values = NA
-for( i in 1:5){
+for( i in 1:6){
   temp = which(postSamples_df2$Parameter == params_names[i])
-  if(substr(params_names[5],1,1) == "m"){
+  if(substr(params_names[i],1,1) == "m"){
       postSamples_df2$true_values[temp] = y_means[i]
   }else{
     postSamples_df2$true_values[temp] = 2
   }
 
 }
+```
 
-
+Check if the chains are stationary.
+```{r}
 postSamples_df2%>%
   ggplot() +
   facet_wrap(~Parameter, scales = "free")+
   geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
-  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))          
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5)) 
+```
+
+Finally we look at the results of posterior distribution of the estimated means and the estimated standard deviation.
+```{r}
+         
 postSamples_df2 %>%
   ggplot() +
   facet_wrap(~Parameter, scales = "free") +
-  geom_histogram(aes(x= value, y =..density.., fill = as.factor(Chain), col = as.factor(Chain)),
+  geom_histogram(aes(x= value, y =after_stat(density), fill = as.factor(Chain), col = as.factor(Chain)),
                  position = "identity", alpha = 0.3)+
-    geom_histogram(aes(x= value, y =..density.., col = as.factor(Chain)),
+  geom_histogram(aes(x= value, y =after_stat(density), col = as.factor(Chain)),
                  position = "identity", alpha = 0)+
   scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
   scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
@@ -470,13 +503,6 @@ postSamples_df2 %>%
 
 ```
 
-
-
-
-
 ## V-1) Highlighting specific ecological studies that employed Bayesian methods
 
 ## V-2) Illustrative examples from different ecological sub-disciplines
-
-
-
