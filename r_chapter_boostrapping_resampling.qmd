@@ -160,32 +160,32 @@ Considérons un exemple où nous voulons tester si la différence de moyennes en
 
 Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
 
-# R?gressions et tests de Mantel
+# Régressions et tests de Mantel
 
-## R?gressions
+## Régressions
 
-La r?gression est une m?thode de mod?lisation empirique d'une variable r?ponse\
-(appel?e ici $Y$) en fonction d'une ou de plusieurs variables explicatives ( $X_1,X_2,.,X_n$ avec $n$ le nombre de variables explicatives). Ce sont les r?gressions lin?aires qui sont majoritairement utilis?es dans le domaine des statistiques, principalement pour leur simplicit? d'application. Pla?ons nous donc dans ce monde lin?aire. Le mod?le lin?aire est mod?lis? par :
+La régression est une méthode de modélisation empirique d'une variable réponse\
+(appelée ici $Y$) en fonction d'une ou de plusieurs variables explicatives ( $X_1,X_2,.,X_n$ avec $n$ le nombre de variables explicatives). Ce sont les régressions linéaires qui sont majoritairement utilisées dans le domaine des statistiques, principalement pour leur simplicité d'application. Plaçons nous donc dans ce monde linéaire. Le modèle linéaire est modélisé par :
 
 $$ 
 Y_i = \alpha + \sum_{j=1}^{n}b_j \times X{ij} +\epsilon\_i\sim\mathcal{N}(0,,\sigma)
 $$ {#eq-1}
 
-Avec $Y_i$ la $i^{?me}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{?me}$ valeur de la $j^{?me}$ variable $X$.
+Avec $Y_i$ la $i^{ème}$ valeur de la variable $Y$ et $X_{ij}$ la $i^{ème}$ valeur de la $j^{ème}$ variable $X$.
 
 ### Test statistique sur les coefficients.
 
-Il faut maintenant s'assurer que les param?tres \$b\$ et $\alpha$ sont diff?rents de 0. Le test par permutation permet de d?finir l'hypoth?se nulle (H0 : $\alpha=0$ et $b = 0$). L'id?e est de permuter les valeurs de
+Il faut maintenant s'assurer que les paramètres \$b\$ et $\alpha$ sont différents de 0. Le test par permutation permet de définir l'hypothèse nulle (H0 : $\alpha=0$ et $b = 0$). L'idée est de permuter les valeurs de
 
 $Y_i$ par rapport aux $X_ij$ ou inversement.
 
 ```{r exemple permutation sepal.width & sepal.length}
-library(kableExtra) # Mettre en 1er chunk si n?cessaire
+library(kableExtra) # Mettre en 1er chunk si nécessaire
 library(knitr)
 library(dplyr)
 library(tidyverse)
 
-data <- iris[1:10,] # sous ?chantillon de iris
+data <- iris[1:10,] # sous échantillon de iris
 
 permu <- data.frame(echantillon.y = rep(NA, nrow(data)),
                     echantillon.x = rep(NA, nrow(data)))
@@ -202,15 +202,17 @@ cbind(data[,1:2], permu) %>%
   
 ```
 
-Pour chaque permutation, on construit un mod?le lin?aire. L'ensemble des param?tres estim?s ? partir des ?chantillons permut?s forment H0. Le param?tre b est ?stim? par la m?thode des moindres carr?s tels que :
+Pour chaque permutation, on construit un modèle linéaire. L'ensemble des paramètres estimés à partir des échantillons permutés forment H0. Le paramètre b est éstimé par la méthode des moindres carrés tels que :
 
 $$
 b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
 $$
 
-Le param?tre $\alpha$ est estim? par : $$
+Le paramètre $\alpha$ est estimé par : 
+$$
 \alpha=\bar{y}-b_i\bar{x}
 $$
+
 
 ```{r}
 
@@ -223,10 +225,10 @@ permu <- matrix(NA, ncol = n_permu, nrow = nrow(data))
 
 
 for (i in 1:n_permu){
-# Tirages al?atoire
+# Tirages aléatoire
 samp_ind <- sample(1:nrow(data), nrow(data))
 
-# creation des ?chantillons, on permute les Y par rapport aux Xi
+# creation des échantillons, on permute les Y par rapport aux Xi
 permu[,i] <- data$Sepal.Length[samp_ind]
 
 
@@ -235,7 +237,7 @@ hyp_nulle[i,1] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[1]]
 hyp_nulle[i,2] <- lm(permu[,i]~data$Sepal.Width)$coefficients[[2]]
 }
 
-# Distribution de l'hypoth?se nulle
+# Distribution de l'hypothèse nulle
 
 par(mfrow = c(1,2))
 hist_1 <- hist(hyp_nulle[,1], 
@@ -249,14 +251,14 @@ hist_2 <- hist(hyp_nulle[,2],
 
 ```
 
-### coefficients de la regression observ?e
+### coefficients de la regression observée
 
 ```{r}
 
-# Calcul des coefficients de la regression ? partir des donn?es brutes
+# Calcul des coefficients de la regression à partir des données brutes
 obs <- lm(data$Sepal.Length~data$Sepal.Width)$coefficients 
 
-# Distribution de H0 et coefficients observ?s
+# Distribution de H0 et coefficients observés
 
 par(mfrow = c(1,2))
 plot(hist_1,
@@ -273,7 +275,7 @@ abline(v = obs[2])
 
 ```
 
-# Calcul des statistiques associ?es au test
+# Calcul des statistiques associées au test
 
 ```{r}
 
@@ -285,11 +287,11 @@ p_b <- length(hyp_nulle[hyp_nulle[,2]>=obs[2]])
 
 p_value_b <- p_b/n_permu
 
-#Affichage des r?sultats
+#Affichage des résultats
 
 df_results <- data.frame(alpha = round(c(obs[1], p_value_a),10),
                          b = round(c(obs[2], p_value_b),4))
-row.names(df_results) <- c("coefficient \n observ?e", "P valeur")
+row.names(df_results) <- c("coefficient \n observée", "P valeur")
 
 df_results%>%
   kable("html", booktabs =TRUE, align = rep("c", 3))%>%
@@ -328,13 +330,8 @@ ozone.dists %>% # Visualisation d'une matrice de distances
 
 ```
 
-Il existe différentes libraries permettant de réaliser le test de Mantel.
+Il existe différents packages permettant de réaliser le test de Mantel. Par exemple le package ade4 
 
-```{r}
-
-# En utilisant le package vegan, corrélation de pearson
-mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
-```
 
 ```{r}
 # En utilisant le package ade4
@@ -342,5 +339,12 @@ mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
 library(ade4)
 
 mantel.rtest(as.dist(station.dists), as.dist(ozone.dists), nrepet = 99)
+```
 
+
+Le package vegan permet d'utiliser différentes statistiques. Dans notre cas nous avons choisis la correlation de Pearson.
+
+```{r}
+# En utilisant le package vegan, corrélation de pearson
+mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
 ```
