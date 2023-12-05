@@ -9,11 +9,18 @@ output:
    toc: true
    toc_float: true
 ---
+
 ```{r setup}
 #| include: false
 
 library(tidyverse)
+library(ggforce)
 library(deSolve)
+library(rjags)
+library(ggmcmc)
+library(sm)
+
+
 
 ```
 
@@ -32,7 +39,7 @@ Explanation in the special case of conjugation between prior and posterior
 
 ## Main objective, for context
 
-First, let's take an simple example to explain the idea behind Bayesian method. We want to estimate the mean abundance per $m^2$ of one fungus in a forests. To do that, we set up it some sampling area in which we count the number of mushroom. We can simulate the data by taking random observations in a poisson distribution. Let's suppose that our studies as 200 sampling area. **Because it is count data, number of mushroom that we will count should follow a poisson distribution :**
+First, let's take a simple example to explain the idea behind the Bayesian method. We want to estimate the mean abundance per $m^2$ of one fungus in a forest. To do that, we set up some sampling areas in which we count the number of mushrooms. We can simulate the data by taking random observations in a Poisson distribution. Let's suppose that our study has 200 sampling area. **Because it is count data, the number of mushrooms that we will count should follow a Poisson distribution :**
 
 ```{r}
 n_sample = 200 # sampling area
@@ -45,7 +52,7 @@ plot(pois_distr,type ="h",
 
 ```
 
-To simulate the sampling campaign we are taking values in this poisson distribution . In our case those will be used to estimate the mean number of mushroom in the forest.($\lambda = 5$ is already known because we simulate the data, but in reality this is an unknown).
+To simulate the sampling campaign we are taking values in this Poisson distribution. In our case, those will be used to estimate the mean number of mushrooms in the forest. ($\lambda = 5$ is already known because we simulate the data, but in reality, this is an unknown).
 
 ```{r}
 set.seed(1000)
@@ -55,19 +62,19 @@ Y = rpois(n = n_sample, lambda = lbda)
 hist(Y)
 ```
 
-**So let's pretend that we don't know the** $\lambda$. We want to find the the value of the mean number of mushroom we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. In fact the Bayesian method will give us the multiple estimated mean $\hat{\lambda}$ and the probability of those value to be true knowing the observation $Y$. We can simply write this as follow $[\hat{\lambda} \mid Y]$ which is the probability of hat lambda knowing our observations. This probability can be found with the equation :
+**So let's pretend that we don't know the** $\lambda$. We want to find the the value of the mean number of mushrooms we will call $\hat{\lambda}$ and we also want to know the probability of this $\hat{\lambda}$. The Bayesian method will give us a range of estimated mean $\hat{\lambda}$ and the probability of those values to be true knowing the observation $Y$. This is what we call the posterior distribution. We can simply write this as follows $[\hat{\lambda} \mid Y]$ which is the probability of $\hat{\lambda}$ knowing our observations. This probability can be found with the equation :
 
 $$
 [\hat{\lambda} \mid Y] = [Y \mid \hat{\lambda}  ]\cdot[\hat{\lambda}]
 $$
 
-The two component of the right hand side of the equation are $[Y \mid \hat{\lambda} ]$ the likelihood of our data and $[\hat{\lambda}]$ the prior distribution. First lets start with the likelihood. Our data follow a poisson distribution so our likelihood will follow a poisson distribution :
+The two components of the right-hand side of the equation are $[Y \mid \hat{\lambda} ]$ the likelihood of our data and $[\hat{\lambda}]$ the prior distribution. First, let's start with the likelihood. Our data follow a Poisson distribution so our likelihood will follow a Poisson distribution :
 
 $$
 L(\hat{\lambda} ; y)=[y \mid \hat{\lambda}] = \frac{e^{-\hat{\lambda}} \cdot\hat{\lambda}^{y}}{y!}
 $$
 
-This a first good step, but there is a small issue here, this formula isn't completely usable in this form. This is because it can only take one observation. In english words it is like asking what is the probability of one observation (one count of mushroom) given a model with a mean $\hat{\lambda}$. It it clear that this form isn't powerful enough because it use only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean $\hat{\lambda}$. To do so we can write the likelihood of all our data $Y$ as the product of the likelihood of each observation $y_i$. (We are allowed to do this only because observations are independent)
+This is a first good step, but there is a small issue here, this formula isn't completely usable in this form. This is because it can only take one observation. In English words, it is like asking what is the probability of one observation (one count of mushroom) given a model with a mean $\hat{\lambda}$. This form isn't powerful enough because it uses only one observation. What we want is to use all the data that we have, we want to know the probability of all the observations given a model with a mean $\hat{\lambda}$. To do so we can write the likelihood of all our data $Y$ as the product of the likelihood of each observation $y_i$. (We are allowed to do this only because observations are independent)
 
 $$
 \begin{align}
@@ -77,7 +84,7 @@ $$
 \end{align}
 $$
 
-As you can see we don't keep the $\frac{1}{y_i!}$, it is because we are only interested in the terms that are impacted by $\hat{\lambda}$. The last form which is proportional to the likelihood function have a more convenient form for the next step. Lets rearrange the function in a more convenient form
+As you can see we don't keep the $\frac{1}{y_i!}$, it is because we are only interested in the terms that are impacted by $\hat{\lambda}$. The last form which is proportional to the likelihood function has a more convenient form for the next step. Let's rearrange the function in a more convenient form
 
 $$
 \begin{align}
@@ -86,9 +93,10 @@ $$
 \end{align}
 $$
 
-The fist line just use the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}$.
+The first line just uses the power/exponential multiplication properties. The second line is just a writing simplification that is common in other resources, $mean(y)=\bar{y} = \frac{1}{n}\sum_{i=1}^n \Rightarrow n\cdot \bar{y} = \hat{\lambda}^{\sum^{n}_{i=1} y_i}$.
 
-Now we want to find the prior distribution of $\hat{\lambda}$. Fist we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it let the prior and the posterior have the same distribution family, it is called conjugate distributions. The the prior is called a conjugate prior for the likelihood function. Which mean that the prior function and the likelihood function have the same form ! And this means that we can simplify ! lets try it :
+
+Now we want to find the prior distribution of $\hat{\lambda}$. First, we have to choose the distribution family of our prior. We will use a Gamma distribution. We are using this one because it lets the prior and the posterior have the same distribution family, it is called conjugate distributions. The prior is called a conjugate prior for the likelihood function. This means that the prior function and the likelihood function have the same form! And this means that we can simplify! let's try it :
 
 $$
 \begin{align}
@@ -97,7 +105,7 @@ $$
 \end{align}
 $$
 
-Same as the likelihood, we are only interested by the term that vary with $\hat{\lambda}$ so we remove $\frac{\beta^\alpha}{\Gamma(\alpha)}$ and keep the proportional formula of the prior. We can now find real formula of our posterior distribution.
+Same as the likelihood, we are only interested in the term that varies with $\hat{\lambda}$ so we remove $\frac{\beta^\alpha}{\Gamma(\alpha)}$ and keep the proportional formula of the prior. We can now find the real formula of our posterior distribution.
 
 $$ 
 \begin{align}
@@ -108,7 +116,7 @@ $$
 \end{align} 
 $$
 
-Do the last formula remind you something familiar ? That's right it is a Gamma distribution ! This is the magic of the conjugate distributions. We can now write :
+Does the last formula remind you of something familiar? That's right it is a Gamma distribution! This is the magic of the conjugate distributions. We can now write :
 
 $$
 \begin{align}
@@ -145,7 +153,6 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
        xlab = expression(lambda), 
        ylab = expression(paste('[', lambda, '|y]')) )
   
-  
   lines(lambda_hat,l_post, type = 'l',lty = 3, lwd = 2, col = 'purple')
   abline(v = 5, lty = 2, lwd = 2)
   
@@ -155,7 +162,7 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 
 ```
 
-When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. **Increase the number of data give us a better approximation of the true mean. The density of probability is also higher with a lot fo data, because we have more confidence in the approximation.**
+When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increasing the number of data gives us a better approximation of the true mean. The density of probability is also higher with a lot of data because we have more confidence in the approximation.
 
 # When approximation by computation is needed
 
@@ -319,7 +326,6 @@ We will use a simple example: estimating a population mean and standard deviatio
 Let's start by simulating some data.
 
 ```{r}
-library(sm)
 
 # population level parameters
 mu <- 7
@@ -425,6 +431,7 @@ for (t in 2:iter){
 
 ```
 
+
 **Visualization**
 
 ```{r}
@@ -454,6 +461,7 @@ The figure 1 represents the joint sampling of the two parameters. At each iterat
 After implementing the Metropolis-Hastings algorithm from scratch, it's time to let you know that there are tools available to perform all of this more conveniently. One commonly used tool is RJags. As stated in its documentation, "The rjags package provides an interface from R to the JAGS library for Bayesian data analysis. JAGS uses Markov Chain Monte Carlo (MCMC) to generate a sequence of dependent samples from the posterior distribution of the parameters."
 
 However, the model definition (likelihood, prior, process model, etc.) has its peculiarities. It is done in a separate text file, subsequently called in R, and is written in the BUGS language, which happens to be very close to R. To avoid any confusion about syntax, we recommend referring to the documentation for more details.
+
 # IV) Prior Selection in Ecology
 
 ## IV-1) The role of prior knowledge and beliefs
@@ -467,6 +475,237 @@ Incorporating existing information to a data set can be based on previous studie
 ## IV-3) Incorporating expert opinions and literature data
 
 # V) Case Studies in Bayesian Ecology
+
+
+## Using JAGS
+
+### two parameter example
+
+For this example we are going to use data taken from a normal law. It is slightly different form the poisson distribution because normal distributions take 2 parameters. So we will need to estimate not only the mean but also the standard deviation will our bayesian approximation. We start by creating the data.
+
+```{r}
+Y2 = rnorm(n = 200, mean = 10, sd = 1)
+hist(Y2)
+```
+
+For this example we will use the software *JAGS* with the library *rjgas*. *JAGS* is a software that let's us build our own model to estimate parameters that we want to find. It need 3 main componente. Fist, the model :
+
+```{r}
+mod1 = "
+  model{
+  ## model 
+  for(i in 1:n_obs){# loop when there is multiple data. (will compute the product of the likelihood)
+    Y2[i] ~ dnorm(m,preci) # likelihood of our data given parameters
+  }
+  
+  ## Prior distribution
+  # All parameters that we want to estimat need a prior distibution
+  m ~ dunif(0, 10**3)
+  sd ~ dunif(0, 10**3)
+  preci <- 1/(sd*sd) # In JAGS dnorm take the precision as input not the standard deviation
+  }
+"
+```
+
+It look like *R* syntax but it is *JAGS* syntax, which is sligthly different for some function
+
+Second, the list of data :
+
+```{r}
+data_list1 = list(
+  Y2 = Y2,
+  n_obs= length(Y2)
+  
+)
+```
+
+This list contain all information needed to make the model run.
+
+Third, the list of initialization :
+
+```{r}
+init_list1 <- list(
+  m = 5,
+  sd = 2
+)
+```
+
+*JAGS* will probably run MCMC algorithm to find the best parameters, those algorithm need values to start. Try to give values that make sense. If you don't the algorithm might take more time to converge or JAGS could also give error messages.
+
+Now that every thing is setup we can run the model
+
+```{r}
+mjags1 <- jags.model(file=textConnection(mod1), 
+                     data=data_list1,
+                     inits=init_list1, 
+                     n.chains = 3) # Number of MCMC 
+```
+
+```{r}
+# function to extract mcmc 
+postSamples1 <- coda.samples(mjags1, 
+                             variable.names = c("m","sd"),
+                             n.iter = 10000, 
+                             thin = 10)
+
+postSamples_df1 <-  postSamples1 %>% ggs()
+```
+
+Always verify if the markov chain are stationary (otherwise you will have a bad estimation of the posterior distribution)
+
+```{r}
+postSamples_df1%>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free")+
+  geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
+```
+
+All MCMC seem to be stationary, we can go on.
+
+```{r}
+scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))          
+postSamples_df1 %>%
+  ggplot() +
+  facet_wrap(~as.factor(Chain)*Parameter, scales = "free") +
+  geom_histogram(data = postSamples_df1, aes(x= value, y =..density.., fill = as.factor(Chain)),
+                 position = "identity", alpha = 0.7)+
+  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))
+
+str(postSamples_df1$value)
+# postSamples_df1 %>%
+#   pivot_wider(id_cols = -c(Iteration, Chain), names_from = "Parameter", values_from = "value")%>%
+#   ggplot() +
+#   facet_wrap(~as.factor(Chain), scales = "free") +
+#   geom_point(data = postSamples_df1, aes(x= m, y =sd),
+#                  position = "identity", alpha = 0.7)
+
+```
+
+Here we look at the posterior distribution estimated by the 3 chain for the mean and the standard error.
+
+For this example we are going to use data taken from a normal law. And we can for example suppose that we want to study the length of snakes in 5 different dessert (that we gonna call A,B,C,D,E for simplicity).
+
+```{r}
+
+set.seed(1000)
+y_means = round(runif(n= 5, min = 5, max = 15))
+n_obs = 40
+Y3 = c()
+class = c()
+IDclass = c()
+ID = c("A","B","C","D","E")
+for(i in 1:length(y_means)){
+ Y3= c(Y3, rnorm(n = n_obs, mean = y_means[i], sd = 2))
+ class = c(class,rep(ID[i],n_obs))
+ IDclass = c(IDclass,rep(i,n_obs))
+}
+data = data.frame(Y3, class, IDclass)
+
+ggplot(data)+
+  geom_sina(aes(class,Y3))
+
+```
+
+```{r}
+mod2 = "
+  model{
+  ## model 
+  for(i in 1:n_obs){
+    Y3[i] ~ dnorm(m[IDclass[i]],preci)
+  }
+  
+  ## Prior distribution
+  for(n in 1:n_class){
+    m[n] ~ dunif(0, 10**3)
+  }
+  sd ~ dunif(0, 10**3)
+  preci <- 1/(sd*sd)
+  }
+"
+```
+
+For this time we want to estimate 5 different means and we will suppose that standard deviation is the same between each class (but we could also estimate it with respect to the class). To estimate multiple parameter we initiate as much prior as there is class with the loop `for(n in 1:n_class){ m[n] ~ dunif(0, 10**3)}`
+
+```{r}
+data_list2 = list(
+  Y3 = data$Y3, # data vector
+  n_obs= length(data$Y3), # number of observations
+  IDclass = data$IDclass, # vector to specify class of each observation
+  n_class = max(data$IDclass) # Number of class
+)
+```
+For this example we add `IDclass = data$IDclass` and ` n_class = max(data$IDclass)` for the class specification in the model.
+
+```{r}
+init_list2 <- list(
+  m = rep(5,5), 
+  sd = 2
+)
+```
+
+This is where we initiate the prior, the only change is that we initialize 5 mean with `m = rep(5,5)`
+
+We run the model :
+```{r}
+mjags2 <- jags.model(file=textConnection(mod2), 
+                     data=data_list2,
+                     inits=init_list2, 
+                     n.chains = 3)
+
+postSamples2 <- coda.samples(mjags2, 
+                             variable.names = c("m","sd"),
+                             n.iter = 10000, 
+                             thin = 10)
+```
+
+Some data manipulation for the visualization
+```{r}
+postSamples_df2 <-  postSamples2 %>% ggs()
+params_names = unique(postSamples_df2$Parameter)
+postSamples_df2$true_values = NA
+for( i in 1:6){
+  temp = which(postSamples_df2$Parameter == params_names[i])
+  if(substr(params_names[i],1,1) == "m"){
+      postSamples_df2$true_values[temp] = y_means[i]
+  }else{
+    postSamples_df2$true_values[temp] = 2
+  }
+
+}
+```
+
+Check if the chains are stationary.
+```{r}
+postSamples_df2%>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free")+
+  geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5)) 
+```
+
+Finally we look at the results of posterior distribution of the estimated means and the estimated standard deviation.
+```{r}
+         
+postSamples_df2 %>%
+  ggplot() +
+  facet_wrap(~Parameter, scales = "free") +
+  geom_histogram(aes(x= value, y =after_stat(density), fill = as.factor(Chain), col = as.factor(Chain)),
+                 position = "identity", alpha = 0.3)+
+  geom_histogram(aes(x= value, y =after_stat(density), col = as.factor(Chain)),
+                 position = "identity", alpha = 0)+
+  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  geom_vline(aes(xintercept = true_values), alpha = 0.7, linetype = "dashed")
+
+# str(postSamples_df1$value)
+# postSamples_df1 %>%
+#   pivot_wider(id_cols = -c(Iteration, Chain), names_from = "Parameter", values_from = "value")%>%
+#   ggplot() +
+#   facet_wrap(~as.factor(Chain), scales = "free") +
+#   geom_point(data = postSamples_df1, aes(x= m, y =sd),
+#                  position = "identity", alpha = 0.7)
+
+```
 
 ## V-1) Highlighting specific ecological studies that employed Bayesian methods
 
