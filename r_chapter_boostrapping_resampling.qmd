@@ -22,11 +22,18 @@ head(iris)
 ## Confidence interval on a sample
 
 ```{r}
+library(ggplot2)
 
-hist(data$Sepal.Width)
+ggplot(data)+
+  geom_histogram(aes(x = Sepal.Width),colour = "black", fill = "white", bins = 12)+
+  theme_classic()
+
 shapiro.test(data$Sepal.Width)
-qqnorm(data$Sepal.Width)
-qqline(data$Sepal.Width)
+ggplot(data)+
+  stat_qq(aes(sample=Sepal.Width))+
+  stat_qq_line(aes(sample=Sepal.Width), color="red")+
+  theme_classic()
+
 ```
 
 The sample being normally distributed, we can estimate a confidence interval as below:
@@ -52,10 +59,15 @@ We only have access to the following sub-sample of 15 individuals:
 ```{r}
 set.seed(42)
 data_sample <- data[sample(1:150,15),]
-par(mfrow=c(2,1))
-hist(data_sample$Sepal.Width)
-qqnorm(data_sample$Sepal.Width)
-qqline(data_sample$Sepal.Width)
+
+ggplot(data_sample)+
+  geom_histogram(aes(x = Sepal.Width),colour = "black", fill = "white", bins = 12)+
+  theme_classic()
+
+ggplot(data_sample)+
+  stat_qq(aes(sample=Sepal.Width))+
+  stat_qq_line(aes(sample=Sepal.Width), color="red")+
+  theme_classic()
 ```
 
 This sample is not normally distributed.
@@ -88,7 +100,6 @@ colnames(subsample_representation) <- c("subsample", "individual", "value")
 subsample_representation <- as.data.frame(subsample_representation)
 subsample_representation[subsample_representation$subsample == subsample_representation$individual,"value"] <- 0
 
-library(ggplot2)
 
 ggplot(subsample_representation)+
   geom_tile(aes(x = individual ,y = subsample, fill = as.factor(value)), color = "white")+
