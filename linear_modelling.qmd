@@ -1053,3 +1053,6 @@ There are 3 conditions to validate a linear model:
 - **Normality of the residuals** (*Only for general linear models*). You can use these models to show a significant effect on Y and also to draw predictions on its distribution (function *predict*).
 
 To go further: In general and generalized linear models, all the explanatory variables have fixed effects and are independent. However, in ecology, it is not always the case. Other models can allow to take into account a dependency between explanatory variables by considering a random effect (*see chapter on mixed models*) or considering spatial or temporal dependency with spatial and time models. In order to model more complex ecological issues that do not fit classical statistical models, or to estimate ecological parameters, you will need to use another approach: Bayesian statistics (*see Chapter "Bayesian Statistics*.)
+
+Examples from Yannick Outreman's course
+Written by Léa Morel, Sarah Derrien, Fanny Kuttler, Clément Berthelot and Lucia Oliveira-cruz
