@@ -97,4 +97,25 @@ Nous allons maintenant voir comment représenter notre matrice de population sur
 
 matrix(nrow = nombre de lignes désiré , ncol = nombre de colonnes désiré) soit dans notre cas matrix(nrow = 2, ncol = 2).
 
+Pour le moment, cette matrice est vide. Si nous voulions la remplir directement, nous pouvions aussi utiliser un vecteur comme information : 
+
+matrix(data = c(1, 1, 1, 1) , nrow = 2)
+
+Nous pouvions aussi faire une matrice reprenant directement nos abréviations si nous le souhaitions :
+
+matrix(data = c(〖"M〗_1 "  , 〖"F〗_1 " , 〖"M〗_2 " , 〖"F〗_1 " ), nrow = 2)
+
+Enfin, nous pouvons créer une matrice à partir d’une liste, ce qui peut être très pratique si notre jeu de donnée, notre population, est représentée sous cette forme. Dans ce cas-là, notre liste serait très simple, puisque nous n’avons que quatre valeurs. Mais cela permet de faciliter l’écriture de notre matrix si notre liste est beaucoup plus longue.
+
+liste <- list(1, 1, 1, 1)    ou alors liste2 <- list(〖"M〗_1 "  , 〖"F〗_1 " , 〖"M〗_2 " , 〖"F〗_1 " )
+matrix <- matrix(data = liste, nrow = 2)       ou      matrix2 <- matrix(data = liste2, nrow = 2)
+
+Ici, notre modèle représente une population stable, à l’instant t. Elle ne nous permet pas pour l’instant d’observer son évolution. Afin de pouvoir l’utiliser en dynamique des populations, nous allons devoir la complexifier
+
+
+C) Comment modifier une matrice basique ?
+
+Avant de rendre notre matrice adaptée à l’étude de la dynamique des populations, nous allons commencer par voir comment des manipulations simple de matrice peuvent nous permettre de modifier la représentation matricielle de notre population si cette dernière est modifiée. Reprenons notre famille de suricates : durant le trajet, le jeune mâle se fait emporter par un prédateur, ce qui retire un membre à la population et modifie donc la matrice. De même, par la suite, un mâle solitaire, égaré, est récupéré par la famille. Ainsi, notre matrice va être modifiée successivement de la sorte : 
+
+(mettre matrices)
 
