@@ -618,7 +618,7 @@ Let's take an example to illustrate the use of the Poisson law:
 ### POISSON LAW EXAMPLE
 ###Dataset representation and objectives of the analysis
 The study of Gotelli and Ellison in 2002 is a good example to apply the Poisson law. It is named "Biogeography at a regional scale: determinants of ants species density in New England bogs and forests". At each of 22 sites, 25 pitfall traps were set in two 8x8m arrays, one in the center of the bog and one in adjacent upland forest 50 to 500m from the corresponding bog. Traps are treated as 50 independent replicate observations. The data are in the file BogAnts.txt.
-```{r}
+```{r global data, echo=TRUE,include=TRUE}
 # Dataset importation 
 ants<-read.table("BogAnts.txt", dec = ".", header = TRUE) 
 ants$Location<-as.factor(ants$Location)
@@ -636,7 +636,7 @@ For this research we can wonder: which continuous or categorical variables drive
 ### Data exploration
 *See I/1).* 
 However, before continuing, we need to transform the variable 'Area', as in the exploration we can see a presence of outliers due to presence of very extensive bogs. We will therefore perform a log-transformation of this covariate.
-```{r}
+```{r, include=TRUE, fig.height=4, fig.width=9}
 par(mfrow=c(1,3))
 # Bog Area
 # Cleveland plot
@@ -648,7 +648,7 @@ qqnorm(ants$Area,pch=16,col='blue',xlab='')
 qqline(ants$Area,col='red')
 ```
 
-```{r}
+```{r, include=TRUE, fig.height=4, fig.width=9}
 par(mfrow=c(1,3))
 
 # Log-transformation for the 'Area' variable : 
@@ -670,17 +670,9 @@ Now we can use the 'Area' variable.
 As every model building, we will search for the candidate model by first analysing the full model with all the independent variables and their interactions. Then a backward selection will be used to select the best model based on term significance. Successively, the non-significant interactions are deleted, and then the non-significant main effects. However, a non-significant main effect is deleted only if it is non-significant AND not contained in a significant interaction.
 
 Here we perform a Poisson generalized linear model with these code lines:
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # The model is : 
-mod1<-glm(Nsp~ Location
-        + Latitude
-        + Elevation
-        + LogArea
-        + Location:Latitude
-        + Location:Elevation
-        + Location:LogArea
-        ,data=ants
-        ,family=poisson(link="log"))
+mod1<-glm(Nsp~ Location + Latitude + Elevation + LogArea + Location:Latitude + Location:Elevation+ Location:LogArea, data=ants,family=poisson(link="log"))
 # To check the significance
 drop1(mod1,test="Chi")
 ```
@@ -757,7 +749,7 @@ In generalized linear models, there is no R2, so we need to calculate a pseudo R
 $$Pseudo\:R^2=100\:.\:\frac{Null\:Deviance- Residual\:Deviance}{Null\:Deviance}$$
 
 Let's do it with R:
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Pseudo R2 calculation 
 (mod1$null.deviance-mod1$deviance)/mod1$null.deviance
 
@@ -788,7 +780,7 @@ Let's take an example to illustrate the use of the Negative binomial law:
 ### NEGATIVE BINOMIAL LAW EXAMPLE
 ### Dataset presentation and objectives of the analysis
 The study of Timi and Poulin in 2003 is a good example to apply the Negative binomial law. We will use a subset of the original data. At each of 4 stations, fish sample were collected, with a total of 522 individual of anchovy. These fish were examined for parasites in order to understand the parasite community structure across the host population of anchovy. The data are in the file FishParasite.txt The response variable is "Number", which represents the total number of parasites found in the fish. It is a count variable. There are 3 explicative variables: "Sex" (of the fish), "Length" (of the fish) and "Area". Sex and Length are continuous, and Area is a categorical variable with 4 categories (A, B, C or D). Here we only consider the interaction between Length and Area.
-```{r}
+```{r , echo=TRUE,include=TRUE}
 # Dataset import
 para <- read.table("FishParasites.txt", dec=".", header = TRUE)
 para$Area<-as.factor(para$Area)
@@ -807,14 +799,9 @@ Let's begin quickly with a **Poisson model** in order to see the problems and th
 ### Statistical analysis
 **Model building**
 We perform a backward selection as explained previously, with a Poisson model:
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Model formulation
-mod1<-glm(Number~ Sex
-        + Area
-        + Length
-        + Area:Length
-        ,data=para
-        ,family=poisson(link="log"))
+mod1<-glm(Number~ Sex + Area + Length + Area:Length ,data=para ,family=poisson(link="log"))
 # Then we check for significance
 drop1(mod1,test="Chi")
 summary(mod1)
@@ -822,7 +809,7 @@ summary(mod1)
 Here the interaction between Length and Area is significant, so we keep both variables. And Sex is also significant. So the full model is the candidate model. To see if we can apply the Poisson model, we test the overdispersion. Sometimes, the variance of the response variable may be higher than supposed by the Poisson law. If the parameter is greater than 1.5, we can say that there is overdispersion and the standard errors of the coefficient estimates are biased.
 
 Let's check the overdispersion in the model with a DHARMa non parametric dispersion test:
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Overdisperion checking of the Poisson model
 # Scale parameter calculation
 E1 <- resid(mod1, type = "pearson") # (Y - mu) / sqrt(mu)
@@ -836,13 +823,9 @@ testDispersion(mod1)
 The overdispersion index is largely over 1.5, which means that there is an overdispersion in the model. So, the Poisson model can't be apply and analyse. There are some reasons of overdispersion like for example: the presence of outliers, a dependency, a non linear relationship, the use of the wrong link function...
 
 We will change and use a Negative Binomial model and recalculate the overdispersion once we have found the model.
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Model formulation
-modNB<-glm.nb(Number~ Sex
-        + Area
-        + Length
-        + Area:Length
-        ,data=para)
+modNB<-glm.nb(Number~ Sex + Area + Length + Area:Length ,data=para)
 # Then we check for significance
 drop1(modNB,test="Chi")
 ```
