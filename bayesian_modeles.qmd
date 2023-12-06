@@ -456,12 +456,6 @@ ylims <- c(1, 6)
 
 The figure 1 represents the joint sampling of the two parameters. At each iteration, a new pair of parameters is proposed, and the ratio calculation assigns a weight to the proximity of the candidate parameter pair to the prior. Figure 2 represents the joint distribution of the two parameters formed by the sampling. It is from this joint distribution that the marginal posterior distributions of the two parameters arise. Therefore, we can also calculate the statistics (mean, standard deviation, etc.) of interest on these marginal posterior distributions.
 
-## Some words about Rjags
-
-After implementing the Metropolis-Hastings algorithm from scratch, it's time to let you know that there are tools available to perform all of this more conveniently. One commonly used tool is RJags. As stated in its documentation, "The rjags package provides an interface from R to the JAGS library for Bayesian data analysis. JAGS uses Markov Chain Monte Carlo (MCMC) to generate a sequence of dependent samples from the posterior distribution of the parameters."
-
-However, the model definition (likelihood, prior, process model, etc.) has its peculiarities. It is done in a separate text file, subsequently called in R, and is written in the BUGS language, which happens to be very close to R. To avoid any confusion about syntax, we recommend referring to the documentation for more details.
-
 # IV) Prior Selection in Ecology
 
 ## IV-1) The role of prior knowledge and beliefs
