@@ -329,7 +329,7 @@ mod1<-lm(DryWeight~ Habitat
         + Habitat:Width
         + Habitat:WaterContent  
         ,data=dataFly)
-# Then we check for significance
+
 drop1(mod1,test="F")
 ```
 
@@ -337,7 +337,6 @@ To understand how main effects and interactions influence the dry weight of the 
 
 **Model's coefficients analysis**
 ```{r}
-# Coefficients of the model
 summary(mod1)
 ```
 This output presents a table detailing the coefficients of the model with coefficients associated with each significant main effect and interaction. Remind that for a factor, one level is called 'the baseline' meaning that its coefficient is 0 (also called the reference level). From this table, coefficients are:
@@ -356,8 +355,8 @@ This output presents a table detailing the coefficients of the model with coeffi
 **Model explanation: R²**
 You can determine the part of the $Y$ variation explained by your model.
 See the output of the model summary.
-```{r R², include=FALSE}
-# R² of the model
+```{r R²}
+#to get R² of the model
 summary(mod1)
 ```
 In this output, you get that the adjusted R² = 0.6067. That means that about 61% of the variance of the dry weight of the flies is explained by its relationship with their habitat, water content and width and the interactions between these predictors.
