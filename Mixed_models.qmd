@@ -323,17 +323,16 @@ Typically this is the result of unexpected variability in your data that spatial
 
 Here, in our example, the value of the sill, the range and the nugget are respectively *47.68*, *1.69* and *0.12*.
 
-## 4 Application
+## 4. Application
 
 For this example of a mixed model application, we will use a general linear mixed model.
 This is a special case of a general linear model, in which the response is quantitative and the predictor variables are both quantitative and qualitative, and the model includes random factors to take account of data dependency.
 Mixed models must respect the normality of residuals and the homogeneity of variances.
-(The structure and lines of code are inspired by Yannick Outreman's courses on linear mixed model.)
 
 ## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
 
-For this worked exercise, we will use data from a study performed on penguins.
-The aim of this study is to test whether species, sex and island influence the body mass of penguins.
+For this work exercise, we will use data from a study performed on penguins.
+This study aims to test whether species, sex,work and island influence the body mass of penguins.
 In the experimental design, the data are collected from one year to the next (from 2007 to 2009), which suggests that the penguin body mass data are dependent on each other from one year to the next.
 This dependency will be included in the model.
 The data contains:\
@@ -343,8 +342,8 @@ The data contains:\
 - **year**: years of data collection (2007, 2008, or 2009), continuous variable\
 - **body_mass_g**: body mass of the penguins (in grams), continuous variable\
 
-The response variable is the 'body_mass_g', while 'species' and 'island' and 'sex' are assumed predictors.
-To include data dependency, 'year' will be included as random factor in model.
+The response variable is 'body_mass_g', while 'species', 'island', and 'sex' are assumed predictors.
+To include data dependency, 'year' will be included as a random factor in the model.
 The underlying question for this research is: do the species, island and sex drive the body mass of penguins?
 
 ### 4.1 Data import
@@ -382,7 +381,7 @@ Before any statistical analysis, it is ESSENTIAL to explore the data in order to
 Here is the list of explorations to be carried out before modelling:
 
 1.  Check for outliers in $Y$ and the distribution of $Y$ values.
-2.  If $X$ is an independent quantitative variable, check for the presence of outliers in X and the distribution of the values of X. 2b. 2b. If $X$ is a qualitative independent variable, analyse the number of levels and the number of individuals per level.
+2.  If $X$ is an independent quantitative variable, check for the presence of outliers in X and the distribution of the values of X. 2b. If $X$ is a qualitative independent variable, analyse the number of levels and the number of individuals per level.
 3.  Analyse the potential relationships between $Y$ and the $X_{s}$.
 4.  Check for the presence of interactions between $X_{s}$.
 5.  Check for collinearity between $X_{s}$.
@@ -404,11 +403,12 @@ qqline(df$body_mass_g,col='red')
 
 Here, the Boxplot and Cleveland Plot show no individuals with outliers.
 The Cleveland Plot shows us that there appears to be a group of individuals with a body mass between 5000 and 6000g, while the rest is between 3000 and 4000g.
-The Histogram and the QQ Plot show that $Y$ hardly follows a Normal distribution... This is not very important, as the validity of the model is based, among other things, on the normality of the residuals, which we will demonstrate later.
+The Histogram and the QQ Plot show that $Y$ hardly follows a Normal distribution.
+It is not a major issue, as the validity of the model is based on the normality of the residuals, which we will be demonstrated later.
 
 #### 4.2.2 Outliers in $Xs$
 
--   For $Xs$ which are quantitative: check for outliers and distribution
+-   For $X_s$ which are quantitative: check for outliers and distribution
 
 No quantitative predictor here.
 
@@ -423,9 +423,9 @@ summary(df$island)
 summary(df$sex)
 ```
 
-The 'species' variable has 3 levels: Adelie, Chinstrap and Gentoo.
+The 'species' variable has 3 levels: Adelie, Chinstrap, and Gentoo.
 The number of individuals between the 3 levels is not balanced, with fewer individuals for the Chinstrap species.
-The 'island' variable has 3 levels: Biscoe, Dream and Torgersen.
+The 'island' variable has 3 levels: Biscoe, Drea,m, and Torgersen.
 The number of individuals between the 3 levels is not balanced, with fewer individuals for the Torgersen island.
 The 'sex' variable has 2 levels: female and male.
 The number of individuals per level is close to equilibrium.
@@ -433,20 +433,20 @@ The number of individuals per level is close to equilibrium.
 #### 4.2.3 Analysis of potential relationships Y vs Xs
 
 We can graphically analyse the possible relationships between Y and X.
-Please note that this graphical analysis of the relationships between Y and X **in no way predicts the importance of the relationship**.
-Statistical modelling is the only way to identify relationships.
+Please note that this graphical analysis of the relationships between Y and X **does not predict the importance of the relationship**.
+Statistical modeling is the only way to identify relationships.
 
 ```{r datagraph, include=TRUE, fig.height=4, fig.width=6}
 
-par(mfrow=c(1,1))
+par(mfrow=c(2,2))
 # Species
-plot(df$body_mass_g~df$species,pch=16,col='blue',xlab='Espèces',ylab='Masse corporel en g')
+plot(df$body_mass_g~df$species,pch=16,col='darkblue',xlab='Espèces',ylab='Masse corporel en g')
 
 # Islands
-plot(df$body_mass_g~df$island,pch=16,col='blue',xlab='Îles',ylab='Masse corporel en g')
+plot(df$body_mass_g~df$island,pch=16,col='darkblue',xlab='Îles',ylab='Masse corporel en g')
 
 # Sex
-plot(df$body_mass_g~df$sex,pch=16,col='blue',xlab='Sexe',ylab='Masse corporel en g')
+plot(df$body_mass_g~df$sex,pch=16,col='darkblue',xlab='Sexe',ylab='Masse corporel en g')
 ```
 
 In terms of species, we can see that Gentoo has a higher body mass (between 5000 and 6000g) than the other two species (between 3000 and 4000g).
@@ -466,7 +466,10 @@ This point must be tested first.
 
 # Interaction Species:Island:Sex
 par(mfrow=c(1,1))
-boxplot(df$body_mass_g~df$species*df$island*df$sex, varwidth = TRUE, xlab = "Espèces.Îles.sexe", ylab = "Masse corporelle", col='blue2', main = "")
+boxplot(df$body_mass_g~df$species*df$island*df$sex, 
+        varwidth = TRUE, 
+        xlab = "Espèces.Îles.sexe", ylab = "Body mass (g)", 
+        col='blue2', main = "")
 ```
 
 Explications
@@ -479,22 +482,22 @@ Here, we will test for collinearity between our 3 predictor variables:
 
 ```{r col, include=TRUE, fig.height=4, fig.width=7}
 # ploting Species by Island
-ggplot(df, aes(x=species, y=island)) +
+plot1 <- ggplot(df, aes(x=species, y=island)) +
   geom_point() +
-  theme_bw() -> p1
+  theme_bw()
 
 # ploting Species by Sex
-ggplot(df, aes(x=species, y=sex)) +
+plot2 <- ggplot(df, aes(x=species, y=sex)) +
   geom_point() +
-  theme_bw() -> p2
+  theme_bw() 
 
 # ploting Island by Sex
-ggplot(df, aes(x=island, y=sex)) +
+plot3 <- ggplot(df, aes(x=island, y=sex)) +
   geom_point() +
-  theme_bw() -> p3
+  theme_bw()
 
 # Ploting side-by-side
-marrangeGrob(list(p1,p2,p3), nrow=1, ncol=3, top=NULL)
+marrangeGrob(list(plot1,plot2,plot3), nrow=1, ncol=3, top=NULL)
 ```
 
 In our example, we can see that for the interaction between Species and Sex, there are two sex modalities per species, and for the interaction between Island and Sex, there are two sex modalities per island.
@@ -521,7 +524,7 @@ The presence of the random effect of the year will be integrated not with the lm
 
 ```{r anova, include=TRUE}
 # Full model
-mod1=lme(body_mass_g~species
+mod1 = lme(body_mass_g~species
               + sex
               + species:sex
               ,random=~1|year
@@ -573,18 +576,18 @@ From this table, we can determine the coefficients of the model such that:
 
 So, the candidate model is: $$  Species = 3369 + (Adelie = 0, Chinstrap = 158, Gentoo = 1311)  + (Female = 0,\: Male = 675)$$ $$       + (Adelie_{Male} = 0, \:Chinstrap_{Male} = -263,\: Gentoo_{Male} = 130^{NS}) $$
 
-For sake of simplicity, we can write the model depending on the sexe :
+For sake of simplicity, we can write the model depending on the sex:
 
-The model for the *Female* pinguin is : $$ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)$$
+The model for the *Female* pinguin is: $$ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)$$
 
-The model for the *Male* pinguin is : $$Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)$$
+The model for the *Male* pinguin is: $$Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)$$
 
 Thus, sex, species, and the interaction of these two variables (except between Male and Gentoo) do have a significant impact on penguin body mass.
 For example, in Adelie penguins, the female will have a body mass of 3369g, whereas a male will have a body mass of 4043g and in Chinstrap penguins, the female will have a body mass of 3527g, whereas a male will have a body mass of 3938g.
 
 ### 4.4 Model validation
 
-To validate the model, we need to : - Validate the normality of the residuals - Histogram and QQplot of the residuals - Validate the homogeneity of the variances - In addition, check for the presence of observations which would have contributed too much to the model.
+To validate the model, we need to : - Validate the normality of the residuals =\> Histogram and QQplot of the residuals - Validate the homogeneity of the variances - In addition, check for the presence of observations which would have contributed too much to the model.
 
 #### 4.4.1 Normality of the residuals
 
@@ -635,11 +638,12 @@ The homogeneity of the variance is validated.
 
 ```{r Contri, include=TRUE, fig.height=4, fig.width=4}
 par(mfrow = c(1, 1))
-
-
 CookD(mod1,newwd=TRUE)
 ```
 
 We can see that individuals 314, 315 and 325 contribute slightly more to the model, but this is not an aberrant result.
 
+## References
+
 The chapter was partly inspired from "Modèle mixte, modélisation de la variance" (L. Bel et al. 2016), taking some of the examples to illustrate the various aspects of mixed models.
+Section 4 "Application" was adaptated from Yannick Outreman's courses on linear mixed model.
