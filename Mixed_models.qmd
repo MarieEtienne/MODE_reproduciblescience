@@ -98,20 +98,6 @@ In addition, random effects are included in a model when there is a correlation 
 
 **RANDOM VARIABLE** = « *something that could not be known before sampling/measurement/observation*".
 
--   $beta_i= p \times 1$ parameters for fixed effects
--   $Z_i = n_i \times p$ matrix of vectors for random effects
--   $gamma_i = r \times 1$ parameters for random effects
--   $varepsilon_i = n_i \times 1$ residuals for individual $i$
-
-A mixed effects model incorporates random effects ($\gamma_i$), or a combination of both random and fixed effects ($\beta$), whereas a standard linear model includes only fixed effects.
-The distinction between these two lies in the nature of the effects related to the treatment under study.
-
-When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects.
-Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.
-
-In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.
-
-**RANDOM VARIABLE** = « something that could not be known before sampling/measurement/observation".
 
 In matrix form, the mixed model is written as:
 
