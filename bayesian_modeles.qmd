@@ -164,7 +164,7 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 
 When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increasing the number of data gives us a better approximation of the true mean. The density of probability is also higher with a lot of data because we have more confidence in the approximation.
 
-# When approximation by computation is needed
+# When approximation by com5/5putation is needed
 
 In Bayesian statistics, as mentioned earlier, the goal is to update our beliefs about the parameters of a model by combining prior knowledge with the observed information in our collected field data. However, the direct calculation of the posterior distribution can often be challenging to compute analytically, especially in complex models. Resorting to conjugate distribution laws is one solution to overcome the problem, but this is not always feasible. This is where Markov Chain Monte Carlo (MCMC) algorithms come into play to estimate the posterior distributions of parameters.
 
@@ -481,14 +481,17 @@ Incorporating existing information to a data set can be based on previous studie
 
 ### two parameter example
 
-For this example we are going to use data taken from a normal law. It is slightly different form the poisson distribution because normal distributions take 2 parameters. So we will need to estimate not only the mean but also the standard deviation will our bayesian approximation. We start by creating the data.
+For this example we are going to use data taken from a normal law.So we will the mean but and the standard deviation like we did just before; For this example we will use the software *JAGS* with the library *rjgas*. *JAGS* is a software that let's us build our own model to estimate parameters that we want to find. 
+We start by creating the data :
 
 ```{r}
+set.seed(1000)
 Y2 = rnorm(n = 200, mean = 10, sd = 1)
+
 hist(Y2)
 ```
 
-For this example we will use the software *JAGS* with the library *rjgas*. *JAGS* is a software that let's us build our own model to estimate parameters that we want to find. It need 3 main componente. Fist, the model :
+*rjags* need 3 main component. Fist, the model :
 
 ```{r}
 mod1 = "
@@ -507,7 +510,7 @@ mod1 = "
 "
 ```
 
-It look like *R* syntax but it is *JAGS* syntax, which is sligthly different for some function
+It look like *R* syntax but it is *JAGS* syntax, which is slightly different for some function. In the model we setup the prior for each  parameter that we want to estimate with `m ~ dunif(0, 10**3)` and `sd ~ dunif(0, 10**3)`.The uniform probability law is used because we suppose that we don't have any prior knowledge on the mean and the standard deviation. We give to the model a range of possible value between 0 and 1000 for the mean and the standard deviation. In general for uniform prior we select large upper and lower bound to be sure that the value is included in it. The likelihood is then compute with  `Y2[i] ~ dnorm(m,preci))`. *JAGS* is not like R  because it take the precision as parameter for the`dnorm` function not the standard deviation. Then we loop over all observation, *RJAG* will automatically make the product of the likelihood of all the data. Our model is complete, we have priors and likelihood formulat to compute the posterior distribution.
 
 Second, the list of data :
 
@@ -519,7 +522,7 @@ data_list1 = list(
 )
 ```
 
-This list contain all information needed to make the model run.
+This list contain all information needed to make the model run, nothing really interesting to say here.
 
 Third, the list of initialization :
 
@@ -540,6 +543,7 @@ mjags1 <- jags.model(file=textConnection(mod1),
                      inits=init_list1, 
                      n.chains = 3) # Number of MCMC 
 ```
+We choise to compute 3 Markov chains.
 
 ```{r}
 # function to extract mcmc 
@@ -552,26 +556,52 @@ postSamples_df1 <-  postSamples1 %>% ggs()
 ```
 
 Always verify if the markov chain are stationary (otherwise you will have a bad estimation of the posterior distribution)
+```{r}
+main_theme = theme_bw()+
+  theme(line = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        panel.border = element_blank(),
+        axis.ticks =  element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", size=14,
+                                   angle = 45, hjust = 1),
+        axis.text.y = element_text(colour = "black", size=14),
+        legend.title = element_text(colour = "black", size=14),
+        legend.title.align=0.5,
+        legend.text = element_text(colour = "black", size=14),
+        axis.title=element_text(size=22),
+        strip.background = element_rect(fill="white"))
+```
 
 ```{r}
 postSamples_df1%>%
   ggplot() +
-  facet_wrap(~Parameter, scales = "free")+
+  facet_wrap(~Parameter, scales = "free", nrow = 2)+
   geom_line(aes(Iteration, value , col = as.factor(Chain)), alpha = 0.3)+
+  scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  main_theme+
+  labs(col = "Chains", x= "Iterations")
 ```
 
 All MCMC seem to be stationary, we can go on.
 
 ```{r}
-scale_color_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))          
+
+ref   <- data.frame(val=c(mean(Y2),sd(Y2)), Parameter = c("m", "sd"))
+esti   <- data.frame(val=c(mean(postSamples_df1$value[postSamples_df1$Parameter =="m"]),mean(postSamples_df1$value[postSamples_df1$Parameter =="sd"])), Parameter = c("m", "sd"))
+postSamples_df1     
 postSamples_df1 %>%
   ggplot() +
-  facet_wrap(~as.factor(Chain)*Parameter, scales = "free") +
-  geom_histogram(data = postSamples_df1, aes(x= value, y =..density.., fill = as.factor(Chain)),
+  facet_wrap(~Parameter, scales = "free") +
+  geom_histogram(data = postSamples_df1, aes(x= value, y =..density..),
                  position = "identity", alpha = 0.7)+
-  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))
+  scale_fill_manual(values = wesanderson::wes_palette("FantasticFox1", n = 5))+
+  geom_vline( aes(xintercept=val), esti, col = 'purple',
+              linewidth=1.2)+
+  geom_vline( aes(xintercept=val), ref,
+              linetype = 2, linewidth=1.2)
 
-str(postSamples_df1$value)
+
+
 # postSamples_df1 %>%
 #   pivot_wider(id_cols = -c(Iteration, Chain), names_from = "Parameter", values_from = "value")%>%
 #   ggplot() +
@@ -588,6 +618,7 @@ For this example we are going to use data taken from a normal law. And we can fo
 ```{r}
 
 set.seed(1000)
+
 y_means = round(runif(n= 5, min = 5, max = 15))
 n_obs = 40
 Y3 = c()
