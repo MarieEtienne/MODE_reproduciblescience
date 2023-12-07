@@ -175,27 +175,11 @@ La dépendance entre les mesures détermine la structure de dépendance (mesures
 
 ### Repeted measurements in time
 
-We want to evaluate the effect of different diet on weight gain in rats.
-Several animals ($j$) follow each diet ($i$), and they kept the same diet accross all the experiment.
-Each week animal weight ($Y_{ij}$) is measured, during T weeks.
-In this case, measures are repeated accross time, such measurements are called *longitudinal data*.
-To analyse this data, the temporal dependency must be taken into account, for this, the following model can be used:
+We want to evaluate the effect of different diet on weight gain in rats. Several animals ($j$) follow each diet ($i$), and they kept the same diet accross all the experiment. Each week animal weight ($Y_{ij}$) is measured, during T weeks. In this case, measures are repeated accross time, such measurements are called *longitudinal data*. To analyse this data, the temporal dependency must be taken into account, for this, the following model can be used:
 
-$$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
+**Model** The model proposed here takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them. We assume that the weights are Gaussian with the following exepected values :
 
-with
-
-$$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{ 
-  \begin{array}{ll}
-  σ^2ρ \ \ si \ \ (i, j) = (i', j') \\
-     0 \ sinon \
-   \end{array}
-  \right.$$
-
-In this model, the covariance between two measurements made at times t and t' on the same model is constant, whatever the time interval between the two measurements.
-
-**Model** A model is proposed here which takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.
-Such a dependency cannot be represented simply as a random effect.
+$$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}.$$
 
 **Dependency structure** We assume that all measurements have the same variance
 
@@ -210,10 +194,7 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
    \end{array}
   \right.$$
 
-This structure assumes that measurements made on different animals are independent.
-It is also assumed that \|ρ\| \< 1, which implies that the longer the time interval, the less correlated the tests on the same animal.
-This form of covariance corresponds to an autoregressive process of order 1, generally denoted AR(1).
-This model has two variance parameters: the temporal correlation ρ and the variance of each observation $σ^2$.
+This structure assumes that measurements made on different animals are independent. It is also assumed that \|ρ\| \< 1, which implies that the longer the time interval, the less correlated the tests on the same animal. This form of covariance corresponds to an autoregressive process of order 1, generally denoted AR(1). This model has two variance parameters: the temporal correlation ρ and the variance of each observation $σ^2$.
 
 $$
   ψ = \left( {\begin{array}{cc}
@@ -234,23 +215,21 @@ R = \left( {\begin{array}{cc}
   \end{array} } \right)
 $$
 
-We are going to use the BodyWeight dataset from the nlme package.
-In this dataset, weight is measured on 16 rats every 7 days during 64 days (which gives 11 measurements for each rats).
-Three diets are tested with 88 rats following diet 1 and 44 following diet 2 and 3.
+We are going to use the BodyWeight dataset from the nlme package. In this dataset, weight is measured on 16 rats every 7 days during 64 days (which gives 11 measurements for each rats). Three diets are tested with 88 rats following diet 1 and 44 following diet 2 and 3.
 
-The reasearch question is: Is weight gain different depending on the diet?
-The model will be a mixed model with diet and time as fixed factor and individuals as random factor: weight \~ Diet \* Time \| Rat.
+The reasearch question is: Is weight gain different depending on the diet? The model will be a mixed model with diet and time as fixed factor and individuals as random factor: weight \~ Diet \* Time \| Rat.
 
 ```{r}
 head(BodyWeight, 10)
+
 ```
 
 ```{r}
-time_model = gls(weight ~ Diet * Time, data = BodyWeight,correlation = corAR1(form = ~1 | Rat))
+time_model = gls(weight ~ Diet * Time, data = BodyWeight, correlation = corAR1(form = ~ 1 | Rat))
 summary(time_model)
 ```
 
-interpretation des results
+In this example, the time correlation ρ has a value of 0.989. The sequence of weight values was highly correlated. The model allowed this temporal dependency to be taken into account.
 
 ### 3.2 Case of spatial autocorrelation
 
@@ -314,12 +293,7 @@ data.spatialCor.glsExp <- gls(y ~ x, data = data.spatialCor,
 summary(data.spatialCor.glsExp)
 ```
 
-In spatially correlated data, variance increases with increasing distance up to a point **the sill**.
-The span of distances over which points are correlated is called **the range**.
-
-While we might expect the value of variance at a distance of zero to be zero, in reality we rarely have sampling units that approach such a small distance from one another.
-The value of variance when distance is equal to zero is **the nugget**.
-Typically this is the result of unexpected variability in your data that spatial patterns alone cannot account for.
+In spatially correlated data, three coefficients are needed to describe the correlation structure. The variance increases with increasing distance up to a point **the sill**. The span of distances over which points are correlated is called **the range**. While we might expect the value of variance at a distance of zero to be zero, in reality we rarely have sampling units that approach such a small distance from one another.The value of variance when distance is equal to zero is **the nugget**.
 
 Here, in our example, the value of the sill, the range and the nugget are respectively *47.68*, *1.69* and *0.12*.
 
