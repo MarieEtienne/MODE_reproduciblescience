@@ -119,3 +119,29 @@ Avant de rendre notre matrice adaptée à l’étude de la dynamique des populat
 
 (mettre matrices)
 
+Ainsi, notre matrice finale représente notre population finale, c’est-à-dire deux individus mâles adultes, une jeune femelle et une femelle adulte, avec zéro jeune mâle. La matrice ne représente pas chaque individu personnellement mais l’effectif de chaque groupe (mâle adulte, femelle adulte, jeune mâle, jeune femelle). Il est important de se rappeler que nous ne pouvons additionner ou soustraire que des matrices ayant la même dimension.
+
+Par la suite, notre nouvelle famille rejoint finalement une colonie résidant dans les environs. Cette colonie compte 30 individus, dont la composition est révélée dans la matrice suivante :
+
+(mettre matrice)
+
+Si nous compilons nos deux populations, nous obtenons notre population finale qui est de 34 individus :
+
+(mettre matrice)
+
+C’est de cette population que nous allons partir pour la suite de notre chapitre, qui va expliquer comment nous pouvons étudier l’évolution de ce groupe au fil des temps, selon différents paramètres. 
+
+Si nous voulons effectuer ces calculs sur R, les commandes sont assez simples. Nous avons vu dans la partie précédente comment créer des matrices sur le logiciel. Si nous voulons les compiler, il suffit d’utiliser l’opération « + » ou « - » comme des pour des nombres. Bien sûr, il est ici aussi nécessaire d’avoir des matrices de même dimension.
+
+P1 <- matrix(data = c(1, 1, 1, 1) , nrow = 2)
+M <- matrix(data = c(1, 1, 0, 1) , nrow = 2)
+P2 = P1 – M
+
+N <- matrix(data = c(1, 0, 0, 0) , nrow = 2)
+P3 <- P2 + N
+
+P’ <- matrix(data = c(11, 14, 3, 2) , nrow = 2)
+P = P3 + P’
+
+Par la suite, nous allons avoir besoin de multiplier notre matrice population avec d’autres matrices afin de la faire évoluer dans le temps. Nous allons donc profiter de ce chapitre pour vous montrer maintenant comment faire cela. Encore une fois, nous allons commencer par revoir les règles de calculs des matrices, puis leurs applications dans R. Tout d’abord, pour multiplier deux matrices, il n’est pas nécessaire que ces dernières aient la même dimension, au contraire des opérations d’addition et de soustraction. En revanche, il faut que le nombre de colonne de la première matrice soit égal au nombre de lignes dans la deuxième. En effet, la multiplication des deux matrices va être un croisement des colonnes de l’une avec les lignes de l’autre, il est donc important d’avoir un nombre équivalent entre les deux. Reprenons l’exemple de P’, avec une matrice B lambda pour le moment. Nous verrons dans le chapitre suivant quelle matrice est utile à multiplier dans la réalité avec notre matrice population.
+
