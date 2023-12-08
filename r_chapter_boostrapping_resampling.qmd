@@ -133,9 +133,19 @@ With $MS$ as the mean square error, $df$ as the degrees of freedom, $\bar{X}_i$ 
 
 These statistics usually follow known distributional laws, allowing us to compare the observed statistic (calculated on the data sample) to the null distribution of that statistic and obtain a p-value by comparing the expected values of the statistic under the null hypothesis with the observed statistic obtained with our data. To illustrate, let's say we want to compare the sepal length between the species *I. virginica* and *I. versicolor* using a Student test. First, we plot the data :
 
-```{r, echo = F, out.width="50%", fig.show='hold'}
-boxplot(iris$Sepal.Length[iris$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Sepal Length", xlab = "", main = "Virginica", ylim = c(4, 8))
-boxplot(iris$Sepal.Length[iris$Species == "versicolor"], col = rgb(1, 0, 0, alpha = .5), ylab = "Sepal Length", xlab = "", main = "Versicolor", ylim = c(4, 8))
+```{r, echo = F, fig.height=4, fig.width=4}
+
+boxplot(
+  iris$Sepal.Length[iris$Species == "versicolor"],
+  iris$Sepal.Length[iris$Species == "virginica"],
+  col = c(rgb(1, 0, 0, alpha = .5), rgb(0, 0, 1, alpha = .5)),
+  ylab = "Sepal Length",
+  xlab = "",
+  main = "",
+  names = c("I. versicolor", "I. virginica"),
+  ylim = c(4, 8)
+)
+
 ```
 
 *I. virginica* seems to have slightly bigger sepal length than *I. versicolor*. Assuming all conditions are met, we perform a Student test to determine the significance of the difference observed :
@@ -162,7 +172,7 @@ curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t")
 
 This density distribution represents the probability associated for each value of the $t$ statistic for a degree of freedom of $98$. Now, we have to place in this distribution the $t_{obs}$ calculated from our data, here $t_{obs} = 5.6$. Knowing we have performed a two-sided test (i.e. no *a priori* of the direction of the effect, i.e. the sepal length could have been bigger either for one species or the other), we'll place visually the values of $t$ for which less than $2.5\%$ and more than $97.5\%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5\%$ or above $97.5\%$ threshold, the difference observed is considered statistically significant.
 
-```{r, fig.height=4, fig.width=4}
+```{r, fig.height=3.8, fig.width=4}
 # Density distribution of the t statistic
 curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t", lwd = 1.5)
 
@@ -176,14 +186,15 @@ x <- seq(-6, 6, length.out = 100000)
 y <- dt(x, df = 98)
 polygon(c(x[x<=threshold[1]], threshold[1]), c(y[x<=threshold[1]], y[x == max(x)]), col = "red")
 polygon(c(x[x>=threshold[2]], threshold[2]), c(y[x>=threshold[2]], y[x == max(x)]), col = "red")
-
+text(x = 3.7, y = 0.3, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = 0.6)
+text(x = -3.5, y = 0.3, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = 0.6)
 
 # Placing the t_obs value
 abline(v = 5.6, lwd = 1.5, col = "blue")
 text(x = 4.5, y = 0.2, labels = TeX("$t_{obs}$"), col = "blue")
 ```
 
-Hence $t_{obs}$ is in the significance area (in red) meaning the difference is significant.
+With $\alpha$ the type-I error (here 5%). Hence $t_{obs}$ is in the significance area (in red) meaning the difference is significant.
 
 ### Permutation test : test Statistic, null distribution and p-value
 
@@ -233,9 +244,10 @@ sub_data <- filter_data[sample(1:nrow(filter_data), size = 20),]
 
 Let's plot the sub-dataset.
 
-```{r, echo = F, out.width="50%", fig.show='hold'}
-hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
+```{r, echo = F, out.width="50%", fig.show='hold', , fig.height=4, fig.width=4}
 hist(sub_data$Sepal.Length[sub_data$Species == "versicolor"], col = rgb(1, 0, 0, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Versicolor")
+hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
+
 ```
 
 Here we can clearly see that the data does not follow a Gaussian distribution like we could have expect with such a few data. Furthermore, neither of the test for comparison of means show a significant differences between sepal length of the two species neither with a Student test or the Mann-Whitney non-parametric test (note that we used a Student test here even if the normal condition is not met. This serves as illustration and comparison with previous test with the full dataset).
@@ -277,7 +289,7 @@ for (i in 1:iteration)
   tapply(X = sub_data$Sepal.Length, INDEX = permuted_species, FUN = mean)["versicolor"]
   
   # --- Add to null distribution
-  null_distribution <- c(null_distribution, p_h0)
+  null_distribution[i] <- p_h0
 }
 
 # CALCULATION OF THE OBSERVED STATISTIC
@@ -290,6 +302,9 @@ paste0("P_obs = ", p_obs)
 So here we have a $P_{obs}$ value of 0.652. We can now plot the null distribution we generated with the permuted data and compare our observed statistic $P_{obs}$ with the null distribution. Let's plot it to have a visual support on how permutation test works.
 
 ```{r}
+# CALCULATE SIGNIFICANCE THRESHOLD
+bornes <- quantile(null_distribution,c(.025,.975))
+
 # VISUALISATION
 hist(null_distribution,
      xlim = c(min(null_distribution) - 0.15, 1),
@@ -300,8 +315,14 @@ hist(null_distribution,
      col = rgb(.5, .5, .5, alpha = .2)
      )
 
-abline(v = p_obs, lwd = 1.5, col = "blue", lty = 2)
-text(x = .55, y = 1000, labels = TeX("$P_{obs}$"), col = "blue")
+    # POSITION THRESHOLD 
+    abline(v = bornes, col = "red", lwd = 2)
+    text(x = 0.3, y = 1400, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = 0.8)
+    text(x = -0.65, y = 1400, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = 0.8)
+
+    # POSITION P_OBS
+    abline(v = p_obs, lwd = 2, col = "blue", lty = 2)
+    text(x = .75, y = 1400, labels = TeX("$P_{obs}$"), col = "blue")
 ```
 
 As expected by the central limit theorem, the distribution of the statistic we use and repeated 10000 times follow a normal distribution. We can clearly see that our statistic calculated on the data $P_{obs}$ stands out of the null distribution. Considering we didn't suppose any direction of the difference, we can determine the p-value as the absolute value of the number of permuted observations $P_{H0}$ greater than the absolute value of $P_{obs}$ divided by the number of iteration :
@@ -318,49 +339,78 @@ Here, the p-value of the test is 0.0041. We conclude the difference between both
 
 #### Paired data (e.g. comparison of correlation)
 
-Here we will consider the data set `Orange` from the package `datasets`. In this experimental design, the age and the circumference of an orange trees have been measured through time and several time on each tree (e.g. tree 1 have been measured 7 times through time). As a consequence, the data are paired by individuals. As each unit of permutation has to be independent, otherwise the test is not valid, here we have to constraint how our values will be permuted by individuals. In contrast to previous permuted procedure where all data were merely shuffled together regardless of their belonging to one species, here we have to permute the data **within** individual to account for the non-independence of the measures within each individual.
+In this part, we will illustrate how to perform permutation test on paire data. We'll use de `iris` dataset again a imagine a scenario where a fertilizer has been applied to each individual plant. The question will still concern the sepal length and we will explore if the fertilizer induces sepal length growing in a before / after experimental paradigm. As a consequence, the data are paired by individuals. As each unit of permutation has to be independent, otherwise the test is not valid, here we have to constraint how our values will be permuted by individuals. In contrast to previous permuted procedure where all data were merely shuffled together regardless of their belonging to one species, here we have to permute the data **within** individual to account for the non-independence of the measures within each individual.
 
-Let's have a look of the dataset :
-
-```{r}
-head(Orange)
-```
-
-Here we'll test using permutation test the correlation between the age and the circumference of the tree. Let's plot this relation :
+To simply the procedure, we will only consider the species *I. versicolor*. Let's create the sub data and generate the new variable.
 
 ```{r}
-# RECODING FACTORS LEVELS
-Orange$Tree <- as.factor(as.numeric(Orange$Tree))
+# FILTERING DATASET FOR VERSICOLOR
+data_versicolor <-
+  data %>%
+  filter(Species == "versicolor") %>%
+  droplevels()
 
-# VISUALIZE AGE ~ CIRCUMFERENCE
-ggplot(data = Orange, mapping = aes(x = age, y = circumference, col = Tree)) +
-  geom_point() +
-  geom_line() +
-  theme_classic()
+# GENERATION OF THE NEW VARIABLE 
+# --- Generation of the new variable Sepal.Length.T2 drawn drom normal distribution
+Sepal.Length.T2 <- round(
+  runif(nrow(data_versicolor), min = .8, max = 1.2) * data_versicolor$Sepal.Length,
+  digits = 1
+)
+  
+# --- Adding the new variable to the dataset
+data_versicolor <- 
+  data_versicolor %>% 
+  mutate(Sepal.Length.T1 = Sepal.Length,
+         Sepal.Length.T2 = Sepal.Length.T2)
+
 ```
 
-According to the visualization, we clearly expect a strong correlation between both variables. Let's follow the previous step to perform the permutation test.
+The new created variable `Sepal.Length.T2` follow a Gaussian distribution of mean equal to the mean of the sepal length at T1 + 0.1 and of standard deviation 3 :
+
+$$
+Sepal.Length.T2 \sim \mathcal{N}(\bar{x} = Sepal.Length.T1) + 0.1, \sigma = 3)
+$$
+
+Here we'll test using permutation test using the precedent statistic for difference in mean. Let's plot this relation :
+
+```{r}
+boxplot(
+  data_versicolor$Sepal.Length.T1,
+  data_versicolor$Sepal.Length.T2,
+  col = c(rgb(1, 0, 0, alpha = .5), rgb(0, 0, 1, alpha = .5)),
+  ylab = "Sepal Length",
+  xlab = "",
+  main = "",
+  names = c("T1", "T2"),
+  ylim = c(3, 9)
+)
+
+```
+
+According to the visualization, the effect of the fertilizer does not seem to have a great effect on the sepal length.
+
+Let's follow step by step the permutation procedure :
 
 1.  **Formulate null and alternative hypotheses**
 
-    **H1** : the age and the circumference of the tree are correlated. **H0** : the age and the circumference are not correlated
+    **H1** : the fertilizer has a positive effect on the sepal length, sepal measure at T2 is expected to be greater than T1 **H0** : the fertilizer has no effect, no differences between T1 and T2
 
 2.  **Determine and calculate the test statistic from the observed data**
 
-    We'll use the coefficient of correlation of Spearman as the test statistic for $P_{obs}$ :
+    We'll use the coefficient used precedently : P = \bar{X}*{T1} -* \bar{X}{T2}. We calculate the test statistic for $P_{obs}$ :
 
     ```{r}
-    p_obs <- cor(Orange$age, Orange$circumference, method = 'spearman')
+    p_obs <- mean(data_versicolor$Sepal.Length.T1) - mean(data_versicolor$Sepal.Length.T2) 
     p_obs
     ```
 
 3.  **Generate a large amount of permutations on independent unit of the data and calculate the test statistic for each permutation**
 
-    Considering the paired status of the data, we will shuffle randomly the values of the variable `age` **within** each individual to construct the null hypothesis.
+    Considering the paired status of the data, we will shuffle randomly the values of the variable `Sepal Length` **within** each individual to construct the null hypothesis. So rather than permuting data in the whole column like before, we will permute by row to constrain the permutation by individual.
 
     ```{r}
     # INITIAL PARAMETERS
-    iteration <- 1000  # number of iteration
+    iteration <- 10000  # number of iteration
     null_distribution <- c()  # storage of the statistic for permuted data
 
 
@@ -368,13 +418,16 @@ According to the visualization, we clearly expect a strong correlation between b
     for (i in 1:iteration)
     {
       # --- Randomly assign age data witihin individual modality
-      permuted_data <- 
-        Orange %>%
-        group_by(Tree) %>%
-        mutate(age = age[sample(n())])  # randomly shuffle age values within individual levels
+      permuted_data <-
+        t(apply(
+          X = data_versicolor[c("Sepal.Length.T1", "Sepal.Length.T2")],
+          MARGIN = 1,
+          FUN = sample,  # randomly shuffle the two values of each rows
+          simplify = T   # to have a matrix output (and not a list)
+        ))
 
       # --- Difference of means of both species under h0
-      p_h0 <- cor(permuted_data$age, permuted_data$circumference, method = "spearman")
+      p_h0 <- mean(permuted_data[,1]) - mean(permuted_data[,2])
       
       # --- Add to null distribution
       null_distribution <- c(null_distribution, p_h0)
@@ -384,18 +437,25 @@ According to the visualization, we clearly expect a strong correlation between b
 4.  **Compare the observed statistic to the null distribution of test statistics**
 
     ```{r}
+    # CALCULATE SIGNIFICANCE THRESHOLD
+    bornes <- quantile(null_distribution,c(.95))
+
     # VISUALISATION
     hist(null_distribution,
-         xlim = c(min(null_distribution) - 0.15, 1),
-         breaks = 20,
+         breaks = 30,
          main = "",
          xlab = TeX("$P_{H0}$"),
          ylab = "Frequency",
-         col = rgb(.5, .5, .5, alpha = .2)
+         col = rgb(1/3, 1/3, 1/3, alpha = .1)
          )
 
-    abline(v = p_obs, lwd = 1.5, col = "blue", lty = 2)
-    text(x = .7, y = 80, labels = TeX("$P_{obs}$"), col = "blue")
+    # POSITION THRESHOLD 
+    abline(v = bornes, col = "red", lwd = 2)
+    text(x = .24, y = 800, labels = TeX("$quantile(1 - \\alpha)$"), col = "red")
+
+    # POSITION P_OBS
+    abline(v = p_obs, lwd = 2, col = "blue", lty = 2)
+    text(x = -.08, y = 860, labels = TeX("$P_{obs}$"), col = "blue")
     ```
 
     We calculate the p-value :
@@ -406,6 +466,16 @@ According to the visualization, we clearly expect a strong correlation between b
 
 5.  **Conclude on accepting or rejecting the null hypothesis**
 
-    As $p < 0.05$, we reject the null hypothesis stating the age is not correlated with the circumference of the orange tree.
+    As $p > 0.05$, we don't reject the null hypothesis stating the a difference of means would be observed before and after fertilizer usage. Note here that we only used null statistic which were greater than the observed statistic for the calculation of the p-value because the hypothesis was one-sided (we made an asumption of direction by expecting a positive difference).
+
+### Permutation test on bootstrapped data
+
+Exploring the precision of our calculated statistic becomes particularly insightful. Taking the case of the study on the difference in sepal length between *I. virginica* and *I. versicolor* as an example, we are interested in determining the level of accuracy associated with the observed mean difference. To achieve a robust assessment, we opt for a combined approach, integrating both bootstrap and permutation methodologies. In this process, we initiate a permutation test on each pseudo-data set generated through bootstrapping. The objective is to collect the statistic for each iteration, resulting in a distribution that effectively communicates the variance of estimation linked to the difference in means. This combined technique not only provides a confidence interval around our statistic but also enhances the overall reliability of our findings by accounting for the complexities and uncertainties inherent in the data. Note that combining both re-sampling techniques can be very costly in terms of calculation time.
 
 ## Conclusion on permutation tests
+
+In conclusion, permutation tests offer a powerful and flexible approach to statistical inference, particularly when traditional parametric assumptions cannot be met. By iteratively permuting the observed data, these tests generate a null distribution under the assumption of no effect, allowing for the assessment of the observed statistic's significance. This makes permutation tests applicable in various scenarios, including comparisons of means, medians, correlations, or any other measure of interest.
+
+Although permutation tests can be costly in terms of computation (especially when paired to bootstrap procedure), the key advantage of permutation tests lies in their ability to provide reliable results with small sample sizes and non-normally distributed data. Unlike parametric tests, permutation tests do not rely on assumptions about the underlying distribution of the data, making them robust and applicable in a wide range of situations.
+
+In the next chapter, we delve into the Mantel test, a statistical method used to assess the correlation between two distance matrices. This test is particularly valuable in fields such as ecology and genetics, where understanding the spatial or temporal relationships between entities is crucial.
