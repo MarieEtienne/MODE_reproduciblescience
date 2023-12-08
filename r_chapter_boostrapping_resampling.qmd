@@ -164,10 +164,10 @@ Dans le cas d'une corrélation, la statistique de test pourrait être basée sur
 
 ## Regressions
 
-Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is modelled by :
+Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is mainly modeled by :
 
 $$ 
-Y_i = \alpha + \sum_{j=1}^{n}b_j \times X{ij} +\epsilon\_i\sim\mathcal{N}(0,,\sigma)
+Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} +\epsilon_i\sim\mathcal{N}(0,,\sigma)
 $$ {#eq-1}
 
 With $Y_i$ the $i^{th}$ value of the variable $Y$ and $X_{ij}$ the $i^{th}$ value of the $j^{th}$ variable $X$.
@@ -177,6 +177,8 @@ With $Y_i$ the $i^{th}$ value of the variable $Y$ and $X_{ij}$ the $i^{th}$ valu
 We now need to make sure that the parameters \$b\$ and $\alpha$ are different from 0. The permutation test is used to define the null hypothesis (H0: $\alpha=0$ and $b = 0$). The idea is to permute the values of
 
 $Y_i$ with respect to $X_ij$ or vice versa.
+
+Here an example of one permutation of the $Y_i$ from the $X_i$.
 
 ```{r exemple permutation sepal.width & sepal.length}
 library(kableExtra) # Mettre en 1er chunk si nécessaire
@@ -201,18 +203,18 @@ cbind(data[,1:2], permu) %>%
   
 ```
 
-For each permutation, a linear model is constructed. The set of parameters estimated from the permuted samples form H0. The parameter b is estimated by the method of least squares such that :
+For each permutation, a linear model is constructed. The set of parameters is estimated from the permuted samples of H0. The parameter b is estimated by the method of least squares such that :
 
 $$
 b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
 $$
 
 The parameter $\alpha$ is estimated by : 
+
+
 $$
 \alpha=\bar{y}-b_i\bar{x}
 $$
-
-
 
 ```{r}
 
@@ -298,16 +300,20 @@ df_results%>%
   kable_paper("hover", full_width = F)
   
 ```
+So, you can obtain the significances of your coefficients with the exacts p values.
+
+Note that you can make permutations tests on all regressions coefficients when $Y_i$ are interchangeable.
 
 ## Mantel test
 
 ### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence matrices (or distances) are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The H0 distribution is obtained by permuting the individuals between them.
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices  are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test genetics or geographicals distances.
+The H0 distribution is obtained by permuting the individuals between them.
 
-### Correspondence matrices (distances)
+### Correspondence (distances) matrices.
 
-Distance matrices must relate to the same individuals. You can use the vegan package to extract them from a dataset. Here, we use a dataset from the UCLA site.
+Distance matrices must relate to the same individuals. You can use the vegan package to extract them from a data set. Here, we use a data set from the UCLA site.
 
 ```{r}
 library(vegan)
@@ -328,9 +334,9 @@ ozone.dists %>% # Visualizing a distance matrix
   column_spec(1, bold = TRUE)
 
 ```
+We first extract distances matrix from the data using the function dist then we can apply the Mantel's test.
 
-There are a number of packages available to perform the Mantel test. For example, the ade4 package 
-
+There are a number of packages available to perform the Mantel test. For example, the ade4 package :
 
 ```{r}
 # Using the ade4 package
@@ -340,7 +346,6 @@ library(ade4)
 mantel.rtest(as.dist(station.dists), as.dist(ozone.dists), nrepet = 99)
 ```
 
-
 The vegan package allows you to use different statistics. In our case we chose the Pearson correlation.
 
 ```{r}
@@ -348,4 +353,4 @@ The vegan package allows you to use different statistics. In our case we chose t
 mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
 ```
 
-With this funcions, you can get the p-value (significiance) of the nul hypothesis.
+With this functions, you can get the p-value (significance) of the null hypothesis.
