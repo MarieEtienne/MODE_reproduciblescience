@@ -505,7 +505,7 @@ farm
 For the example, the binary variable that will be explained is the badger activity and any other variables are taken as explanatory variables. The objective is to find a model that predict the occurrence of signs of badger activity on farms in order to find a way to reduce the rates of badgers' visits to farms. This objective is motivated by the numerous transmissions of bovine tuberculosis from badgers to cattle.
 
 Let's import the dataset and perform a binomial generalized linear model.
-```{r global data, include=TRUE,echo=TRUE}
+```{r global data, include=FALSE}
 # Dataset import
 dataBadger <- read.table("Badger.txt", dec=".", header = TRUE)
 
@@ -562,7 +562,7 @@ drop1(mod1,test="Chi")
 ```
 
 Some of the coefficient are not significant because their p values are under 0.05 so we will suppress them and test the new model.
-```{r candidatemodelGLM,include=TRUE}
+```{r candidatemodelGLM,include=TRUE, echo = FALSE}
 # Let's write the new model
 mod2<-glm(Activity~N_setts
               + N_cattle
@@ -583,13 +583,12 @@ The candidate model is:
 $$  logit(Presence\:of\:badger\:activity) = - 3.64 0.27*Number\:of\:Setts\: +\: 0.004* Number\:of\:Cattles $$
 
 **Model explanation**
-However there is no R² in Generalized Linear Models, we can still calculate a *pseudo R²* to estimate how far the candidate model is from the null model by determining the distance between deviance of the null model and the residual deviance of the candidate model.
+However there is no $R^2$ in Generalized Linear Models, we can still calculate a $pseudo\:R^2* to estimate how far the candidate model is from the null model by determining the distance between deviance of the null model and the residual deviance of the candidate model.
 ```{r deviance, include=TRUE}
 # Estimate of deviance explained
 (mod2$null.deviance-mod2$deviance)/mod2$null.deviance
 
-# Some others estimates of deviance explained - package 'rcompanion'
-nagelkerke(mod2)
+# Some others estimates of deviance explained - package 'rcompanion' => code lines : nagelkerke(mod2)
 ```
 From these code lines, we deduce that the estimate of deviance explained is 22 %. We found about the same thing with the $Pseudo\:R^2$ estimate (package 'rcompanion').
 
