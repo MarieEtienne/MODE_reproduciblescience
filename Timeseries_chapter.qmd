@@ -15,35 +15,14 @@ Therefore, we have to test if the temporal relationship exists.
 
 ### Stationarity
 
-Stationary processes are characterized by a conservation of the same mean and variance throughout time. 
-*A contrario*, non-stationary processes have a mean and variance that differentiate with time.
+Stationary processes are characterized by a conservation of the same mean and variance throughout time. *A contrario*, non-stationary processes have a mean and variance that differentiate with time.
 
 The
 
 ![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
 
-
-```{r}
+```{r, echo = F}
 library(tidyverse)
 ```
-
-
-and then describe the purpose of your chapter as well as executing R command.
-
-
-For example a basic summary of a dataset is given by 
-
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
 
 A citation @bauer2023writing
