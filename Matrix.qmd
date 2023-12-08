@@ -39,9 +39,9 @@ partir de la population de suricats et on complexifie au fur et à mesure en int
 I. Modélisation matricielle en écologie
 	A quoi servent les matrices en écologie
 
-Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations durent publiés et utilisés en dynamique des populations.
+Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations furent publiés et utilisés en dynamique des populations.
 
-L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
+L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple, que l'on représentera comme discret dans ce chapitre. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
 
 En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons n(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
 n(t+1) = λn(t)
@@ -70,4 +70,123 @@ Ces représentations peuvent être très complètes, incluant le différences d�
 Il est important de savoir que les matrices de modélisation ont des limites. Elles reposent notamment sur des hypothèses qui vont permettre leur bonne analyse et la validité de leurs résultats. Ainsi, les interactions entre individus ne sont pas pris en compte, et n’influent pas sur la dynamique de leur population. Ensuite, les particularités des individus d’une même classe sont identiques, qu’importe l’individu, et constantes au cours du temps. Des particularités différentes se retrouvent uniquement dans des classes différentes.
 
 En permettant de modéliser le plus correctement possible l’évolution d’une population dans le temps, selon le maximum de paramètres qui peuvent l’impacter positivement ou négativement, nous pouvons obtenir de nombreux résultats très intéressants. Ainsi, les matrices de population peuvent nous permettre d’améliorer la conservation des espèces et leur gestion. En fonction de la dynamique de sa population, nous pouvons savoir si l’espèce est menacée dans le futur et/ou impactée par des évènements (exemple : impact du feu sur des espèces végétales). Nous pouvons avoir une vision plus globale et réelle de la manière dont les populations évoluent dans leur environnement. Cependant, il n’est pas forcément utile d’avoir recours à des modèles matriciels. Comme pour chaque étude, il est nécessaire de se poser les bonnes questions, de réfléchir à l’intérêt de ce mode d’analyse comparé à d’autres et de sa pertinence pour la question/population étudiée.
+
+B) Transformer une population en matrice
+
+Nous avons pu voir quels étaient les intérêts de fabriquer des matrices de population pour nos recherches. Désormais, nous allons voir ensemble comment créer ces matrices.
+
+La première chose à faire avant de créer notre matrice est de récolter des données. Régulièrement, les scientifiques font des suivis à long-terme et des mesures de capture-recapture pour obtenir un maximum d’informations sur la population qu’ils souhaitent étudier. Ces processus permettent aussi de connaître des compléments d’informations tels que l’âge des individus et leur sexe par exemple.
+
+Il est nécessaire de connaître les différents paramètres que nous allons appliquer à notre dynamique de population. Ainsi, comme nous l’avons vu plus tôt, les population évoluent selon quatre concepts principaux : naissances, morts, immigration et émigration. Afin de modéliser correctement la population que l’on étudie, nous devons parvenir à exprimer ces phénomènes dans la matrice. Pour cela, nous devons savoir combien d’individus meurent, naissent, immigrent ou émigrent. Ces nombres vont dépendre de l’espèce mais aussi des individus déjà présents dans la population. 
+Ainsi, pour représenter les naissances, nous devons connaître le taux de fertilité des femelles présents : en bref, combien de femelles, combien de petits en moyenne, quelles femelles sont en état de reproduire et combien de femelles seront fécondées. Ensuite, nous devons connaître la mort d’individus : pour cela, nous devons récupérer le taux de mortalité (ou de survie) des individus dans cette population. Il va dépendre de la composition de notre population telle que l’âge de ses individus, de la durée de vie moyennes de l’espèce et des taux de prédation ou de mort par maladie par exemple. Troisièmement, les taux d’immigration vont dépendre comme dit dans la première partie de la présence et distance d’autres populations autour ainsi que de la faculté/tendance de dispersion de l’espèce. Finalement, les taux d’émigration vont être basé similairement sur les mêmes choses, et aussi dépendre des individus déjà présents. Pour connaître tous ces paramètres, nous devons donc connaître déjà un minimum de choses sur l’espèce/la population étudiée. Ces informations peuvent être récupérées durant le projet de l’étude de la population ou dans la littérature, selon ce que l’on veut étudier. Bien évidemment, en fonction de la question et de la complexité de l’étude, ces paramètres pourront être plus ou moins précis (par exemple, population d’une espèce invasive ne possédant aucun prédateur, et ayant donc un taux de mortalité dépendant de moins de facteurs).
+
+Une fois tous les paramètres connus, nous pouvons formuler des équations traduisant l’évolution de la population selon ces critères. Il est utile avant de faire notre matrice de réaliser un schéma du cycle de vie de la population étudiée.
+
+Afin de vous aider à comprendre comment la modélisation matricielle des populations fonctionne, nous allons réaliser tout au long de notre chapitre un exemple de plus en plus complexe d’une matrice de population. Nous allons prendre comme exemple une population de suricates. Les suricates sont une espèce sociale vivant en groupe plus ou moins nombreux, avec toutes sortes d’individus de sexe et d’âge différents. Ce sont aussi des animaux capables de changer de groupe en quittant le leur ou en intégrant un nouveau si les conditions l’obligent. Enfin, ils sont soumis à la pression de différents prédateurs et de potentielles maladies. Ils nous permettront donc parfaitement de représenter nos matrices de populations avec un maximum de critères.
+
+Pour commencer, nous allons partir d’une situation simplifiée au maximum. Une grave épidémie a décimé la colonie d’origine d’une famille de suricate, forçant ces derniers à immigrer pour en trouver une nouvelle. La famille est saine et ne possède pas la maladie. Elle est composée d’une mâle et de sa femelle, ainsi que de leurs deux petits, un jeune mâle et une jeune femelle. 
+Si nous recherchons le mode de vie du suricate dans la littérature, nous obtenons notamment que les femelles ont 2 à 5 petits par an, deux fois par an et à partir d’un an. Nous allons considérer une moyenne de 7 petits par an.  De plus, les individus vivent en moyenne douze ans. 
+                                                                           
+Nous pouvons représenter notre petite population simplifiée sous une forme matricielle basique. Ainsi :
+
+(Mettre matrice)
+
+Dans la pratique, il est plutôt rare de considérer les deux sexes dans les matrices de population. Cela est dû à la plus grande complexité que cela demanderait de considérer aussi les interactions entre les sexes. Afin de simplifier, les modèles sont souvent basés sur les femelles uniquement (modèle female-based), notamment à cause l’importance des femelles pour le nombre de descendants et la plus grande facilité à calculer leur nombre de descendants, comparée à un mâle.
+
+Nous allons maintenant voir comment représenter notre matrice de population sur R, qui va être notre outil principal dans ce chapitre pour manipuler et comprendre la dynamique de notre population. Afin de créer une matrice similaire à celle présentée plus haut, il suffit de taper cette commande :
+
+matrix(nrow = nombre de lignes désiré , ncol = nombre de colonnes désiré) soit dans notre cas :
+
+```{r}
+matrix(nrow = 2, ncol = 2)
+```
+
+Pour le moment, cette matrice est vide. Si nous voulions la remplir directement, nous pouvions aussi utiliser un vecteur comme information : 
+
+```{r}
+matrix(data = c(1, 1, 1, 1) , nrow = 2)
+```
+
+Nous pouvions aussi faire une matrice reprenant directement nos abréviations si nous le souhaitions :
+
+```{r}
+matrix(data = c("M1 "  , "F1 " , "M2" , "F2 " ), nrow = 2)
+```
+
+Enfin, nous pouvons créer une matrice à partir d’une liste, ce qui peut être très pratique si notre jeu de donnée, notre population, est représentée sous cette forme. Dans ce cas-là, notre liste serait très simple, puisque nous n’avons que quatre valeurs. Mais cela permet de faciliter l’écriture de notre matrix si notre liste est beaucoup plus longue.
+
+```{r}
+liste <- list(1, 1, 1, 1)    
+#ou alors
+liste2 <- list("M1 "  , "F1 " , "M2 " , "F2 " )
+matrix <- matrix(data = liste, nrow = 2)
+#ou
+matrix2 <- matrix(data = liste2, nrow = 2)
+
+```
+
+Ici, notre modèle représente une population stable, à l’instant t. Elle ne nous permet pas pour l’instant d’observer son évolution. Afin de pouvoir l’utiliser en dynamique des populations, nous allons devoir la complexifier
+
+
+C) Comment modifier une matrice basique ?
+
+Avant de rendre notre matrice adaptée à l’étude de la dynamique des populations, nous allons commencer par voir comment des manipulations simple de matrice peuvent nous permettre de modifier la représentation matricielle de notre population si cette dernière est modifiée. Reprenons notre famille de suricates : durant le trajet, le jeune mâle se fait emporter par un prédateur, ce qui retire un membre à la population et modifie donc la matrice. De même, par la suite, un mâle solitaire, égaré, est récupéré par la famille. Ainsi, notre matrice va être modifiée successivement de la sorte : 
+
+(mettre matrices)
+
+Ainsi, notre matrice finale représente notre population finale, c’est-à-dire deux individus mâles adultes, une jeune femelle et une femelle adulte, avec zéro jeune mâle. La matrice ne représente pas chaque individu personnellement mais l’effectif de chaque groupe (mâle adulte, femelle adulte, jeune mâle, jeune femelle). Il est important de se rappeler que nous ne pouvons additionner ou soustraire que des matrices ayant la même dimension.
+
+Par la suite, notre nouvelle famille rejoint finalement une colonie résidant dans les environs. Cette colonie compte 30 individus, dont la composition est révélée dans la matrice suivante :
+
+(mettre matrice)
+
+Si nous compilons nos deux populations, nous obtenons notre population finale qui est de 34 individus :
+
+(mettre matrice)
+
+C’est de cette population que nous allons partir pour la suite de notre chapitre, qui va expliquer comment nous pouvons étudier l’évolution de ce groupe au fil des temps, selon différents paramètres. 
+
+Si nous voulons effectuer ces calculs sur R, les commandes sont assez simples. Nous avons vu dans la partie précédente comment créer des matrices sur le logiciel. Si nous voulons les compiler, il suffit d’utiliser l’opération « + » ou « - » comme des pour des nombres. Bien sûr, il est ici aussi nécessaire d’avoir des matrices de même dimension.
+
+```{r}
+P1 <- matrix(data = c(1, 1, 1, 1) , nrow = 2)
+M <- matrix(data = c(1, 1, 0, 1) , nrow = 2)
+P2 = P1 – M
+
+N <- matrix(data = c(1, 0, 0, 0) , nrow = 2)
+P3 <- P2 + N
+
+Pn <- matrix(data = c(11, 14, 3, 2) , nrow = 2)
+P = P3 + Pn
+
+
+
+```
+
+
+Par la suite, nous allons avoir besoin de multiplier notre matrice population avec d’autres matrices afin de la faire évoluer dans le temps. Nous allons donc profiter de ce chapitre pour vous montrer maintenant comment faire cela. Encore une fois, nous allons commencer par revoir les règles de calculs des matrices, puis leurs applications dans R. Tout d’abord, pour multiplier deux matrices, il n’est pas nécessaire que ces dernières aient la même dimension, au contraire des opérations d’addition et de soustraction. En revanche, il faut que le nombre de colonne de la première matrice soit égal au nombre de lignes dans la deuxième. En effet, la multiplication des deux matrices va être un croisement des colonnes de l’une avec les lignes de l’autre, il est donc important d’avoir un nombre équivalent entre les deux. Reprenons l’exemple de P’, avec une matrice B lambda pour le moment. Nous verrons dans le chapitre suivant quelle matrice est utile à multiplier dans la réalité avec notre matrice population.
+
+(mettre matrice)
+
+Comme précisé juste avant, les matrices ne sont pas obligatoirement de la même dimension :
+
+(mettre matrice)
+
+Il est important de préciser que la plupart du temps, les multiplications ne sont pas commutatives : nous n’obtenons pas le même résultat en faisant P’*B qu’en faisant B*P’. L’ordre de la multiplication a de l’importance, au contraire de cette la multiplication de nombres qui peut s’inverser comme on le souhaite.
+
+(mettre  matrice)
+
+Maintenant que les calculs de produits matriciels nécessaire à nos futurs modélisations sont globalement acquis, nous allons voir comment les effectuer sur R. Si nous voulons simplement multiplier notre matrice avec un nombre, le signe ‘*’ suffit :
+
+Pm = 2 * Pn
+
+Si nous voulons multiplier plusieurs matrices ensemble, nous devons rajouter le symbole ‘%’ pour chaque matrice, en plus de ‘*’. Ainsi, :
+
+```{r}
+N <- matrix(data = c(2, 4) , nrow = 2)
+Pf = Pn % * % N 
+
+```
+
+
 
