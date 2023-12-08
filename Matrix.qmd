@@ -47,7 +47,7 @@ $$ T=
 \end{array}\right)
 $$
 
-Comme nous pouvons le remarquer, cette matrice fonctionne en temps discret du fait du passage du temps t au temps t+1 et de l'absence de période de transition entre les différents compartiments. Cependant, elle pourrait également fonctionner en temps continu à espaces d'état discret.
+Comme nous pouvons le remarquer, cette matrice fonctionne en temps discret du fait du passage du temps t au temps t+1 et de l'absence de période de transition entre les différents compartiments. Cependant, elle pourrait également fonctionner en temps continu à espaces d'état discret. # Mais nous allons travailler en gardant le temps discret dans la suite.. (je sais pas si c'est la peine de dire maintenant que le temps continue marche aussi peut être garder ca pour la conclusion?
 Par exemple, dans la matrice précédente, nous pouvons lire que la probabilité de passer de la position O (la pauvre tente de camping de notre famille de suricates bien aimés) à la colonie A est de 0.9, soit 90%.
 
 Si on tient compte du fait qu'au temps 0, les suricate sont dans leur tente de fortune :
