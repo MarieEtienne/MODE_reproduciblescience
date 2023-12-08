@@ -10,11 +10,12 @@ Tout d'abord, nos pauvres suricates se trouvent en position O et ne peuvent rest
 Une fois dans la colonie A, ils ont une probabilité de 0.6 d'être acceptés puis de s'y installer définitivement dans le terrier A1 et une probabilité de 0.4 de rejoindre un autre colonie proche (colonie B). 
 Dans cette colonie B, les suricates ont une probabilité de 0.7 d'être acceptés par leurs congénères pour s'installer définitivement dans le terrier B2. Si ce n'est pas le cas, ils possèdent une probabilité de 0.1 de revenir à la colonie A retenter leur chance ou de 0.2 d'atteindre la colonie C.
 Si les suricates atterissent dans la colonie C, ceux-ci auront une probabilité de 0.8 d'être intégrés et de s'y établir définitivement au sein du terrier C3. Dans l'autre cas, une probabilité de 0.025 de revenir à la colonie B ou à la position O et une probabilité de 0.15 de rejoindre une dernière colonie D extrêmement prospère avec une probabilité de 0.9 d'être acceptés et de s'y établir définitivement au sein du terrier D4. 
-Si contre toute attente les suricates parviennent à cette dernière colonie mais ne réussissent pas à être acceptés, ceux-ci ont une probabilité de 0.1 de retenter leur chance dans la colonie C. # Je pense que le schéma doit être avant le paragraphe et qu'il y a pas besoin de décrire toute les flèche mais d'explique le principe (a quoi correspond une flèche et la probabilité qui est dessus) puis de faire seulement un exemple
+Si contre toute attente les suricates parviennent à cette dernière colonie mais ne réussissent pas à être acceptés, ceux-ci ont une probabilité de 0.1 de retenter leur chance dans la colonie C. 
+# Je pense que le schéma doit être avant le paragraphe et qu'il y a pas besoin de décrire toute les flèche mais d'explique le principe (a quoi correspond une flèche et la probabilité qui est dessus) puis de faire seulement un exemple
 
 ![Schéma des péripéties suricatiennes](C:/Users/qlamb/Documents/R/Schema_suricates.png)
 
-
+# Avant d'introduire directement la matrice de transition faire un point pour expliquer que cette situation est une chaîne de markov (donc définir ce qu'est une chaîne de markov) et dire a quoi ca sert de l'étudier (savoir si on a un etat stable et les probabilités sur le temps long d'être dans les différentes localisation)
 Ces différents éléments nous permettent de réaliser une matrice T un peu particulière, que l'on appelle matrice de transition d'une "Chaîne de Markov" dont le schéma figure ci-dessus, définissant les probabilités de transition de chaque état au temps (t) vertical vers chaque état au temps (t+1) horizontal et figurant ci-dessous : 
 
 $$
