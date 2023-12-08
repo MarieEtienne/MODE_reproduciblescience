@@ -505,6 +505,7 @@ Colinearity refers to the situation in which two or more predictors of collinear
 
 Here, we will test for collinearity between our 3 predictor variables:
 
+
 ```{r col, include=TRUE, fig.height=4, fig.width=7}
 # ploting Species by Island
 ggplot(df, aes(x=species, y=island)) +
