@@ -127,6 +127,7 @@ X_t = \left(\begin{array}{cc}
 $$
 La théorie de la chaîne de Markov nous dit qu'au bout d'un certain temps, la loi de probabilité sera indépendante de la loi initiale et nous obtiendrons une convergence vers différents points de la chaîne.
 
+#Faire un point sur le calcul de vecteur propres d'une matrice et si possible expliquer pourquoi ca permet de connaitre les probabilité d'être dans tel ou tel etat final (je serai pas le faire perso). Et la question de la convergence je crois que ca releve de l'étude de la chaîne et pas des vecteurs propres mais c'est pas très clair.. En gros expliquer le concept des états puits dans la chaîne..
 Cette convergence est facile à vérifier, en particulier en calculant le vecteur propre de la matrice T :
 $$
 q.T=q\\
