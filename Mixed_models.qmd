@@ -20,7 +20,6 @@ library(predictmeans)
 library(sp)
 ```
 
-
 ## Introduction
 
 The chapter is based on the "Modèle mixte, modélisation de la variance" section of the course "Le Modèle Linéaire et ses Extensions" (L. Bel et al. 2016), uses its examples to illustrate the various aspects of mixed models.
@@ -78,7 +77,7 @@ $$
 
 where:
 
--   $Y_i = n_i \times 1$ measurements for subject $i$, where $n$ is the numer of observations
+-   $Y_i = n_i \times 1$ measurements for subject $i$, where $n$ is the number of observations
 -   $X_i = n_i \times p$ matrix of vectors for fixed effects, where $p$ is the number of parameters for fixed effects.
 -   $\beta_i= p \times 1$ parameters for fixed effects
 -   $Z_i = n_i \times p$ matrix of vectors for random effects
@@ -94,7 +93,6 @@ Conversely, when the levels of the treatment are drawn from a larger population 
 In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.
 
 **RANDOM VARIABLE** = « *something that could not be known before sampling/measurement/observation*".
-
 
 In matrix form, the mixed model is written as:
 
@@ -118,11 +116,11 @@ The model parameters include $\theta$ for the expectation and $\psi$ for the var
 
 ## 2 Matrix computation
 
-It is possible to encounter (mixed) linear models written under their matricial form, for their concision. It is therefore natural to present this form in the context of mixed models.
+It is possible to encounter (mixed) linear models written under their matricial form, for their concision.
+It is therefore natural to present this form in the context of mixed models.
 
 As a reminder, a linear model, like linear regression, with $p$ explanatory variables can be written $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, where $y_i$ represent an observation of the response variable $Y$ for the individual $i$, $\beta_0$ the intercept, $\beta_1,...,\beta_p$ the coefficients associated to each explanatory variable $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ the $p$ observations (for the $p$ explanatory variables) for the individual $i$, and $e_i$ an error term associated to the individual $i$.
-We can see $e_i$ as a realization of a random variable $E_i$ 
-distributed according to a normal law $\mathcal{N}(0,\sigma^2)$.
+We can see $e_i$ as a realization of a random variable $E_i$ distributed according to a normal law $\mathcal{N}(0,\sigma^2)$.
 Noting $$y=\begin{pmatrix}
 y_1\\
 \vdots\\
@@ -140,36 +138,46 @@ y_n\\
 \vdots\\
 \varepsilon_n\\
 \end{pmatrix}$$, we can rewrite the previous model under the form $$y=X\theta+e$$.
-Here, $e$ is a vector of $n$ independant realizations od a random variable $E_i$ following a normal distribution $\mathcal{N}(0,\sigma^2)$.
+Here, $e$ is a vector of $n$ independent realizations or a random variable $E_i$ following a normal distribution $\mathcal{N}(0,\sigma^2)$.
 Hence, $e$ is a realization of a random variable $E$ following the distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ is an observation of the random variable $E_i$ distributed according to a normal law $\mathcal{N}(0,\sigma^2)$).
 Similarly, $y$ is an observation of $Y=X\theta+E$ where $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ is an observation of $Y_i$ distributed according to a normal law $\mathcal{N}((X\theta)_i,\sigma^2)$).
 Hence, by introducing $Y$ and $E$, the previous model can be written $Y=X\theta+E$ where $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
 
-By definition, the mean response is equal to $X\theta$, more or less an error term equals to 0 in average butt that varies of $\sigma^2I_n$.
+By definition, the mean response is equal to $X\theta$, more or less an error term equal to 0 in average but equal that varies of $\sigma^2I_n$.
 Thus, we can write $$Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$$.
-We note that when writing $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, each error has got the same variance ($\sigma^2$) because every samples are independant.
+We note that when writing $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$, each error has got the same variance ($\sigma^2$) because every samples are independent.
 We will see subsequently that if this independence condition is not respected, all the errors do not have the same variance, we speak of a dependence structure.The dependence between the measurements determines the dependence structure (measurements repeated over time, individuals grouped by common ancestry, etc.).
-We will see here that in the context of mixed models, the previous equation is written $$Y\sim\mathcal{N}_n(X\theta,\sum)$$.
-When writing this, we note that the average response does not change. Generalization concerns errors.
-Now, let's study study the components of variance $\sum$ by following an example. We decide to study the heritability of a trait (height for example). We want to see if individuals from one ascendant are more similar than those from another ascendant. We have $m$ ascendants, numbered $i=1,...,m$, from a larger population, each having $n$ descendants numbered $j=1,...,n$. We pose $Y_{ij}=$ the trait value for the j-ème descendant of the i-ème ascendant.
-Individuals with the same ascendant are therefore grouped by their belonging to the same ascendant. The fact of sampling ancestors from a larger population (random effect) introduces a correlation between the traits measured on the descendants of the same ancestor. This correlation is uniform between individuals. The descendants between the groups (for different ancestors) are independent. Thus, we write $$
+We will see here that in the context of mixed models, the previous equation is written $$Y\sim\mathcal{N}_n(X\theta,\sum)$$When writing this, we note that the average response does not change.
+Generalization concerns errors.
+Now, let's study study the components of variance $\sum$ by following an example.
+We decide to study the heritability of a trait (height for example).
+We want to see if individuals from one ascendant are more similar than those from another ascendant.
+We have $m$ ascendants, numbered $i=1,...,m$, from a larger population, each having $n$ descendants numbered $j=1,...,n$.
+We pose $Y_{ij}$ the trait value for the j-ème descendant of the i-ème ascendant.
+Individuals with the same ascendant are therefore grouped by their belonging to the same ascendant.
+The fact of sampling ancestors from a larger population (random effect) introduces a correlation between the traits measured in the descendants of the same ancestor.
+This correlation is uniform between individuals.
+The descendants between the groups (for different ancestors) are independent.
+Thus, we write $$
 \mathbb{Cov}(Y_{ij},Y_{i'j'}) = \left\{
     \begin{array}{ll}
         \gamma^2 & \mbox{si } i=i'\\
         0 & \mbox{sinon.}
     \end{array}
 \right.
-$$
-This model therefore includes a variance associated with the ascendant effect $\gamma^2$ and a residual variance $\sigma^2$. We precise that $\gamma^2$ represent the variability between the ascendants.
-Starting from the linear model $Y=X\theta+E$ where $E$ is still $\sigma^2I_n$, we just have to take into account this variance associated with the ascendant effect. To do this, we introduce the matrix $Z$, of dimension $n\times m$, where $$
+$$ This model therefore includes a variance associated with the ascendant effect $\gamma^2$ and a residual variance $\sigma^2$.
+We precise that $\gamma^2$ represent the variability between the ascendants.
+Starting from the linear model $Y=X\theta+E$ where $E$ is still $\sigma^2I_n$, we just have to take into account this variance associated with the ascendant effect.
+To do this, we introduce the matrix $Z$, of dimension $n\times m$, where $$
 Z_{a,i} = \left\{
     \begin{array}{ll}
         1 & \mbox{l'individu } a=(i,j) \mbox{ est le descendant de l'ascendant }i\\
         0 & \mbox{sinon.}
     \end{array}
 \right.
-$$ and the vector $U$ of dimension $m$ including the random effects $\gamma^2$. 
-Hence, the previous model can be rewritten $Y=X\theta+ZU+E$. We remind that $U$ and $E$ are independants, gaussiens centered, and that $\mathbb{Var}(U)=\gamma^2I_m$.
+$$ and the vector $U$ of dimension $m$ including the random effects $\gamma^2$.
+Hence, the previous model can be rewritten $Y=X\theta+ZU+E$.
+We remind that $U$ and $E$ are independents, gaussiens centered, and that $\mathbb{Var}(U)=\gamma^2I_m$.
 Consequently, $\mathbb{E}(Y)=X\theta$ and $\sum = \mathbb{V}(Y)=Z\mathbb{V}(U)Z'+\mathbb{V}(E) = \gamma^2ZZ'+\sigma^2(I_n)$.
 We get back to the matricial form $Y\sim\mathcal{N}(X\theta,\sum)$ with $$\sum=\begin{pmatrix}
 R&0 & \ldots & 0\\
@@ -181,17 +189,17 @@ R&0 & \ldots & 0\\
 \gamma^2 & \ddots & \ddots & \gamma^2 \\
 \vdots & \ddots & \ddots & \gamma^2 \\
 \gamma^2 & \ldots & \gamma^2 & \sigma^2+\gamma^2
-\end{pmatrix}$$. $R$ corresponds to the representation of the variances due to the random effect and residuals. Note that the diagonal blocks are of the same dimensions if the number of descendants is identical for each ascendant.
-
+\end{pmatrix}$$$R$ corresponds to the representation of the variances due to the random effect and residuals.
+Note that the diagonal blocks are of the same dimensions if the number of descendants is identical for each ascendant.
 
 ## 3 Dependency structure
 
 ### 3.1 Case of repeated measurements
 
-We want to evaluate the effect of different diet on weight gain in champanzee.
-Several animals $j$ follow each diet $i$ and they kept the same diet accross all the experiment.
+We want to evaluate the effect of different diet on weight gain in chimpanzee.
+Several animals $j$ follow each diet $i$ and they kept the same diet across all the experiment.
 Each week animal weight ($Y_{ij}$) is measured, during T weeks.
-In this case, measures are repeated accross time, such measurements are called *longitudinal data*.
+In this case, measures are repeated across time, such measurements are called *longitudinal data*.
 To analyse this data, the temporal dependency must be taken into account, for this, the following can be used:
 
 $$E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}$$
@@ -205,7 +213,7 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
    \end{array}
   \right.$$
 
-In this model, the covariance between two measurements made at times t and t' on the same model is constant, whatever the time interval between the two measurements.
+In this model, the covariance between two measurements made at times $t$ and $t'$ on the same model is constant, whatever the time interval between the two measurements.
 
 **Model** A model is proposed here which takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.
 Such a dependency cannot be represented simply as a random effect.
@@ -223,9 +231,9 @@ $$Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
   \right.$$
 
 This structure assumes that measurements made on different animals are independent.
-It is also assumed that \|ρ\| \< 1, which implies that the longer the time interval, the less correlated the tests on the same animal.
-This form of covariance corresponds to an autoregressive process of order 1, generally denoted AR(1).
-This model has two variance parameters (also called variance components): the temporal correlation ρ and the variance of each observation $σ^2$.
+It is also assumed that $|ρ| < 1$, which implies that the longer the time interval, the less correlated the tests on the same animal.
+This form of covariance corresponds to an autoregressive process of order 1, generally denoted $AR(1)$.
+This model has two variance parameters (also called variance components): the temporal correlation $ρ$ and the variance of each observation $σ^2$.
 
 $$
   ψ = \left( {\begin{array}{cc}
@@ -271,7 +279,7 @@ summary(o.ar1)
 
 *Dependency structure* We want to take into account the dependency due to the possible spatial proximity between the sites at which the measurements were taken.
 
-To do this, d(i, i') is the distance separating sites i and i', and the following equation is used
+To do this, $d(i, i')$ is the distance separating sites $i$ and $i'$, and the following equation is used
 
 $$Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}$$
 
@@ -340,58 +348,67 @@ Here, in our example, the value of the sill, the range and the nugget are respec
 
 ## 4 Application
 
-Pour cet exemple d'application de modèle mixte, nous allons utiliser un modèle mixte linéaire général.
-C'est un cas particulier de modèle linéaire général, dans lequel la réponse est quantitative et les variables prédictives sont à la fois quantitatives et qualitatives, et le modèle inclut des facteurs aléatoires pour tenir compte de la dépendance des données.
-Les modèles mixtes doivent respecter la normalité des résidus et l'homogénéité des variances.
+For this example of a mixed model application, we will use a general linear mixed model.
+This is a special case of a general linear model, in which the response is quantitative and the predictor variables are both quantitative and qualitative, and the model includes random factors to take account of data dependency.
+Mixed models must respect the normality of residuals and the homogeneity of variances.
+(The structure and lines of code are inspired by Yannick Outreman's courses on linear mixed model.)
 
-----\> Explications du jeu de données pinguins, présenter les variables (Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)
+## DATASET PRESENTATION AND OBJECTIVES OF THE ANALYSIS
 
-----\> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
-----\> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
-----\> Expliquer le graphe (pour les interactions entre les $X_s$) ----\> Cites Yannick Outreman pour la structure et les lignes de code
+For this worked exercise, we will use data from a study performed on penguins.
+The aim of this study is to test whether species, sex and island influence the body mass of penguins.
+In the experimental design, the data are collected from one year to the next (from 2007 to 2009), which suggests that the penguin body mass data are dependent on each other from one year to the next.
+This dependency will be included in the model.
+The data contains:\
+- **species**: three species of penguins (Chinstrap, Adelie, or Gentoo), categorical variable\
+- **island**: island name (Dream, Torgersen, or Biscoe) in the Palmer Archipelago (Antarctica), categorical variable\
+- **sex**: penguin sex (female, or male), categorical variable\
+- **year**: years of data collection (2007, 2008, or 2009), continuous variable\
+- **body_mass_g**: body mass of the penguins (in grams), continuous variable\
+
+The response variable is the 'body_mass_g', while 'species' and 'island' and 'sex' are assumed predictors.
+To include data dependency, 'year' will be included as random factor in model.
+The underlying question for this research is: do the species, island and sex drive the body mass of penguins?
 
 ### 4.1 Data import
 
-----\> Pas équilibré le nombre d'individus par niveaux pour les $X$, important ???
-----\> Est-ce que les facteurs sont croisés (pour les interactions entre les $X_s$) ???
-----\> Expliquer le graphe (pour les interactions entre les $X_s$) ----\> Cites Yannick Outreman pour la structure et les lignes de code
-
 ```{r}
-# Importation des données
+# Data import
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-# Bien s'assurer que nos variables 'species', 'island' et 'sex' sont des facteurs
+# Make sure that our variables 'species', 'island' and 'sex' are all factors in the choice.
 df$species=as.factor(df$species)
 df$island=as.factor(df$island)
 df$sex=as.factor(df$sex)
 
-# On vérifie qu'il n'y a pas de valeurs manquantes
+# Check for missing values
 colSums(is.na(df))
 ```
 
-On voit qu'il y a des valeurs manquantes, dont 2 pour la variable réponse $Y$ "body_mass_g' et 11 pour la variable explicative $X$ 'sex'. On va supprimer les lignes qui présentes les valeurs manquantes.
+We can see that there are some missing values, including 2 for the response variable $Y$ 'body_mass_g' and 11 for the explanatory variable $X$ 'sex'.
+We're going to delete the rows with the missing values.
 
 ```{r}
-# On repère les lignes qui présentes les valeurs manquantes.
+# Rows with missing values are marked.
 which(is.na(df$body_mass_g), arr.ind=TRUE)
 which(is.na(df$sex), arr.ind=TRUE)
-#On supprime les lignes 4, 9, 10, 11, 12, 48, 179, 219, 257, 269, et 272.
+# We delete the rows 4, 9, 10, 11, 12, 48, 179, 219, 257, 269, and 272.
 df=df[-c(4,9,10,11,12,48,179,219,257,269,272), ]
 
-# On vérifie qu'il n'y a pas de valeurs manquantes
+# Check for missing values
 colSums(is.na(df))
-#Il n'y a plus de valeurs manquante.
+# Ok
 ```
 
 ### 4.2 Data exploration
 
-Avant toute analyse statistique, il est INDISPENSABLE d'explorer les données afin d'éviter toute erreur.
-Voici la liste des explorations à effectuer avant la modélisation :
+Before any statistical analysis, it is ESSENTIAL to explore the data in order to avoid any errors.
+Here is the list of explorations to be carried out before modelling:
 
-1.  Vérifier la présence de valeurs aberrantes dans $Y$ et la distribution des valeurs de $Y$.
-2.  Si $X$ est une variable quantitative indépendante, vérifier la présence de valeurs aberrantes dans X et la distribution des valeurs de X. 2b. 2b. Si $X$ est une variable indépendante qualitative, analyser le nombre de niveaux et le nombre d'individus par niveau.
-3.  Analyser les relations potentielles entre $Y$ et les $X_{s}$.
-4.  Vérifier la présence d'interactions entre $X_{s}$.
-5.  Vérifier la présence de colinéarité entre $X_{s}$.
+1.  Check for outliers in $Y$ and the distribution of $Y$ values.
+2.  If $X$ is an independent quantitative variable, check for the presence of outliers in X and the distribution of the values of X. 2b. 2b. If $X$ is a qualitative independent variable, analyse the number of levels and the number of individuals per level.
+3.  Analyse the potential relationships between $Y$ and the $X_{s}$.
+4.  Check for the presence of interactions between $X_{s}$.
+5.  Check for collinearity between $X_{s}$.
 
 #### 4.2.1 Outliers in $Y$ and $Y$ distribution
 
@@ -408,17 +425,17 @@ qqnorm(df$body_mass_g,pch=16,col='blue',xlab='')
 qqline(df$body_mass_g,col='red')
 ```
 
-Ici, le Boxplot et le Cleveland Plot nous permettent de voir qu'il n'y a pas d'individus présentant des valeurs aberrantes.
-Le Cleveland Plot nous montre qu'il semble y avoir un groupe d'individus qui présentent une masse corporel entre 5000 et 6000g, alors que le reste du groupe se situe entre 3000 et 4000g.
-L'Histogramme et le QQ Plot nous montre que $Y$ suit difficilement un loi Normale... Ce n'est pas très grave, car la validité de modèle se base entre autre sur la normalité des résidus, que l'on démontrera par la suite.
+Here, the Boxplot and Cleveland Plot show no individuals with outliers.
+The Cleveland Plot shows us that there appears to be a group of individuals with a body mass between 5000 and 6000g, while the rest is between 3000 and 4000g.
+The Histogram and the QQ Plot show that $Y$ hardly follows a Normal distribution... This is not very important, as the validity of the model is based, among other things, on the normality of the residuals, which we will demonstrate later.
 
 #### 4.2.2 Outliers in $Xs$
 
--   Pour les $Xs$ qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution
+-   For $Xs$ which are quantitative: check for outliers and distribution
 
-Pas de prédicteur quantitatif ici.
+No quantitative predictor here.
 
--   Pour les $Xs$ qui sont catégoriques : nombre de niveaux et nombre d'individus par niveau
+-   For categorical $Xs$: number of levels and number of individuals per level.
 
 ```{r datafact, include=TRUE}
 # Factor Species
@@ -429,60 +446,72 @@ summary(df$island)
 summary(df$sex)
 ```
 
-La variable 'species' présente 3 niveaux : Adelie, Chinstrap et Gentoo.
-Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'espèce Chinstrap.
-La variable 'island' présente 3 niveaux : Biscoe, Dream et Torgersen.
-Le nombre d'individus entre les 3 niveaux n'est pas équilibré, avec moins d'individus pour l'île Torgersen.
-La variable 'sex' présente 2 niveaux : female et male.
-Le nombre d'individus par niveau s'approche de l'équilibre.
+The 'species' variable has 3 levels: Adelie, Chinstrap and Gentoo.
+The number of individuals between the 3 levels is not balanced, with fewer individuals for the Chinstrap species.
+
+The 'island' variable has 3 levels: Biscoe, Dream and Torgersen.
+The number of individuals between the 3 levels is not balanced, with fewer individuals for the Torgersen island.
+
+The 'sex' variable has 2 levels: female and male.
+The number of individuals per level is close to equilibrium.
 
 #### 4.2.3 Analysis of potential relationships Y vs Xs
 
-Nous pouvons analyser graphiquement les relations possibles entre Y et X.
-Attention, cette analyse graphique des relations entre Y et X **ne prédit en aucun cas l'importance de la relation**.
-La modélisation statistique reste le seul moyen d'identifier les relations.
+We can graphically analyse the possible relationships between Y and X.
+Please note that this graphical analysis of the relationships between Y and X **in no way predicts the importance of the relationship**.
+Statistical modelling is the only way to identify relationships.
 
 ```{r datagraph, include=TRUE, fig.height=4, fig.width=6}
 
 par(mfrow=c(1,1))
-# Espèces
+# Species
 plot(df$body_mass_g~df$species,pch=16,col='blue',xlab='Espèces',ylab='Masse corporel en g')
 
-# Îles
+# Islands
 plot(df$body_mass_g~df$island,pch=16,col='blue',xlab='Îles',ylab='Masse corporel en g')
 
-# Sexe
+# Sex
 plot(df$body_mass_g~df$sex,pch=16,col='blue',xlab='Sexe',ylab='Masse corporel en g')
 ```
 
-COncernant l'espèce, on peut voir que Gentoo présente une masse corporel plus élevée (entre 5000 et 6000g) que les deux autres espèces (entre 3000 et 4000g).
-Concernant les îles, on peut voir que les individus présents sur Biscoe présentent une masse corporel plus élevée (entre 5000 et 6000g) que les individus présents sur les deux autres îles (entre 3000 et 4000g).
-Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un peu plus importante que les femelles.
+In terms of species, we can see that Gentoo has a higher body mass (between 5000 and 6000g) than the other two species (between 3000 and 4000g).
+About the islands, we can see that the individuals present on Biscoe have a higher body mass (between 5000 and 6000g) than the individuals present on the other two islands (between 3000 and 4000g).
+Finally, in terms of sex, males appear to have a slightly higher body mass than females.
 
-#### 4.2.4 Analysis of possible interactions between the two independent variables
+#### 4.2.4 Analysis of possible interactions between the three independent variables
 
-Ici, nous allons considérer l'interaction entre les trois facteurs étudiés.
-Pour estimer la présence d'effets interactifs, nous développons une approche graphique.
-Rappelons que l'interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c'est-à-dire que tous les niveaux d'un traitement sont représentés dans tous les niveaux de l'autre traitement et réciproquement = un plan factoriel).
-Ce point doit être testé avant.
+Here, we will consider the interaction between the three factors studied.
+To estimate the presence of interactive effects, we develop a graphical approach.
+Remember that the interaction between factors can only be tested if the factors are crossed (i.e. all the levels of one treatment are represented in all the levels of the other treatment and vice versa = a factorial design).
+This point must be tested first.
 
-```{r dataInterFac, include=TRUE, fig.height=4, fig.width=7}
+```{r dataInter, include=TRUE, fig.height=4, fig.width=7}
 
-# Les facteurs sont croisé ? Dépend du design experimental
+# The experimental design means that the factors are cross-tabulated (all the levels of each variable are represented in all the levels of the other variables). 
 
-# Interaction Species:Island:Sex
-par(mfrow=c(1,1))
-boxplot(df$body_mass_g~df$species*df$island*df$sex, varwidth = TRUE, xlab = "Espèces.Îles.sexe", ylab = "Masse corporelle", col='blue2', main = "")
+# Interaction table
+table(df$species,df$sex,df$island)
+
+# Interaction table without island
+table(df$species,df$sex)
+
+# Interaction Species:Sex
+boxplot(df$body_mass_g~df$species*df$sex, varwidth = TRUE, xlab = "Species.Sex", ylab = "Body mass", col='blue2', main = "",cex.axis=0.7)
 ```
 
-Explications
+In the interaction table, we can see that in every island, not all the species are represented.
+This can be complicated to analyse.
+We'll see in the next section if we remove the "Island" variable.
+We can see that without the 'island' variable, there is the same number of female and male in each species, except for the Gentoo species, with 58 female and 61 male.
+
+For the interaction graph (still without the 'island' variable), we can see that males of all 3 species appear to have a greater body mass than females.
+We can also see that males and females of the Gentoo species have a higher body mass than individuals of the other species.
 
 #### 4.2.5 Check collinearity between X
 
-La colinéarité fait référence à la situation dans laquelle deux ou plusieurs variables prédictives de colinéarité sont étroitement liées les unes aux autres.
-La présence de colinéarité peut poser des problèmes dans le contexte de la régression, car il peut être difficile de séparer les effets individuels des variables colinéaires sur la réponse.
+Colinearity refers to the situation in which two or more predictors of collinearity are closely related to each other.The presence of collinearity can pose problems in the context of regression, as it can be difficult to separate the individual effects of collinear variables on the response.
 
-Ici, nous allons tester la colinéarité entre nos 3 variables prédictives :
+Here, we will test for collinearity between our 3 predictor variables:
 
 ```{r col, include=TRUE, fig.height=4, fig.width=7}
 # ploting Species by Island
@@ -504,30 +533,30 @@ ggplot(df, aes(x=island, y=sex)) +
 marrangeGrob(list(p1,p2,p3), nrow=1, ncol=3, top=NULL)
 ```
 
-On peut voir dans notre exemple que pour l'intéraction entre Species et Sex, il y a bien les deux modalités du sexe par espèces, et pour l'intéraction entre Island et Sex, qu'il y a bien les deux modalités du sexe par îles.
-Seulement, on peut remarquer que pour l'intéraction entre Species et Island, toutes les îles ne comportent pas toutes les espèces!
-On ne pourra donc pas tester l'influence des îles et des espèces aux vues de ce résultat.
-On décide donc par la suite de supprimer la variable Island de notre analyse.
-On testera l'influence de l'espèce et du sexe sur la masse corporelle des pinguins, avec toujours les années en effet aléatoire.
+In our example, we can see that for the interaction between Species and Sex, there are two sex modalities per species, and for the interaction between Island and Sex, there are two sex modalities per island.
+However, for the interaction between Species and islands based on, not all the islands contain all the species, as we saw in the previous section!
+We cannot therefore test the influence of islands and species on the basis of this result.
+We therefore decided to remove the Island variable from our analysis.
+We will test the influence of species and sex on the body mass of penguins, always with years as a random effect.
 
 ### 4.3 Statistical analysis
 
 #### 4.3.1 Model construction
 
-Pour la modélisation statistique, nous analysons d'abord le modèle complet (modèle contenant toutes les variables indépendantes à tester).
+For statistical modelling, we first analyse the full model (model containing all the independent variables to be tested).
 
-Pour obtenir le modèle candidat (modèle ne contenant que les termes significatifs) à partir du modèle complet, nous utiliserons le **MODÈLE DE 'BACKWARD SELECTION'**, c'est-à-dire la sélection du modèle basée sur la significativité des termes.
-Selon cette approche, on commence par créer le modèle complet avec toutes les variables d'intérêt, puis on abandonne la variable la moins significative, tant qu'elle n'est pas significative.
-Nous continuons en réajustant successivement des modèles réduits et en appliquant la même règle jusqu'à ce que toutes les variables restantes soient significatives.
-La suppression des termes non significatifs doit suivre les deux étapes suivantes: - Premièrement, on supprime successivement les interactions non significatives.
-- Deuxièmement, on supprime successivement les effets principaux non significatifs.
-Un effet principal n'est supprimé que s'il est non significatif ET s'il n'est pas contenu dans une interaction significative.
+To obtain the candidate model (a model containing only the significant terms) from the full model, we will use the **BACKWARD SELECTION METHOD**, i.e. model selection based on the significance of the terms.
+In this approach, we start by creating the full model with all the variables of interest, then drop the least significant variable as long as it is not significant.
+We continue by successively fitting reduced models and applying the same rule until all the remaining variables are significant.
+The deletion of non-significant terms must follow the following two steps: - First, insignificant interactions are successively removed.
+- Secondly, the non-significant main effects are successively removed.
+A main effect is only removed if it is insignificant AND if it is not contained in a significant interaction.
 
-Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007).
-La présence de l'effet aléatoire de l'année s'intégrera non pas avec la fonction lm, mais lme (du package nlme).
+In this example, we consider a measure of dependence at year level (e.g. a mass measurement made in 2009 depends on the measurement made in 2008, which in turn depends on the measurement made in 2007).
+The presence of the random effect of the year will be integrated not with the lm function, but lme (from the nlme package).
 
 ```{r anova, include=TRUE}
-# Modèle complet
+# Full model
 mod1=lme(body_mass_g~species
               + sex
               + species:sex
@@ -545,8 +574,8 @@ mod1=lme(body_mass_g~species
 #species:sex     2   325     8.76   2e-04
 ```
 
-On peut voir dans l'output de l'anova de notre modèle complet que chaque interactions et chaque variable est significativce (\<0.05).
-Le modèle complet est donc le modèle candidat.
+We can see from the anova output of our full model that each interaction and each variable is significant (\<0.05).
+The full model is therefore the candidate model.
 
 #### 4.3.2 Model's coefficients analysis
 
@@ -567,7 +596,7 @@ summary(mod1)
 
 ```
 
-A partir de cette table, on peut déterminer les coefficients du modèle tels que :
+From this table, we can determine the coefficients of the model such that:
 
 **Species factor**\
 - $species_{Adelie}$ = 0 (the baseline of the factor Habitat) - $Species_{Chinstrap}$ = $158.370$ - $Species_{Gentoo}$ = $1310.906$
@@ -586,12 +615,15 @@ The model for the *Female* pinguin is : $$ Sex_{Female} = 3369\:  + (Adelie = 0,
 
 The model for the *Male* pinguin is : $$Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)$$
 
-Ainsi, le sexe, l'espèce et l'interaction de ces deux variables (sauf entre Male et Gentoo) ont bien un impact significatif sur la masse corporelle des pingouins.
-Par exemple, chez les pingouins Adélie, la femelle va avoir une masse corporelle de 3369g, alors qu'un mâle aura une masse corporelle de 4043g et chez les Chinstrap, la femelle va avoir une masse corporelle de 3527g, alors qu'un mâle aura une masse corporelle de 3938g.
+Thus, sex, species, and the interaction of these two variables (except between Male and Gentoo) do have a significant impact on penguin body mass.
+For example, in Adelie penguins, the female will have a body mass of 3369g, whereas a male will have a body mass of 4043g and in Chinstrap penguins, the female will have a body mass of 3527g, whereas a male will have a body mass of 3938g.
+
+These results are in line with the graph obtained in the "interactions between factors" section, which showed that males had a greater body mass than females.
+This also confirms that individuals of the Gentoo species have a greater body mass than individuals (males and females) of the other two species.
 
 ### 4.4 Model validation
 
-Pour valider le modèle, il faut : - Valider la normalité des résidus - Histogramme et QQplot des résidus - Valider l'homogénéité des variances - En addition, vérifier la présence d'observations qui auraient trop de contribution dans le modèle
+To validate the model, we need to : - Validate the normality of the residuals - Histogram and QQplot of the residuals - Validate the homogeneity of the variances - In addition, check for the presence of observations which would have contributed too much to the model.
 
 #### 4.4.1 Normality of the residuals
 
@@ -604,7 +636,7 @@ qqnorm(mod1$residuals,pch=16,col='blue',xlab='')
 qqline(mod1$residuals,col='red')
 ```
 
-On voit bien que l'histogramme suit une loi normale, et les points du quantile plot suivent bien la ligne rouge : la normalité des résidus est validée.
+We can see that the histogram follows a normal distribution, and the quantile plot points follow the red line: the normality of the residuals is validated.
 
 #### 4.4.2 Homogeneity of the variance
 
@@ -635,8 +667,8 @@ abline(h = 0)
 
 ```
 
-On voit ici que pour chaque graphe, la variance des résidus est distribuée de façon homogène autour de la droite horizontale.
-L'homogénéité de la variance est validée.
+We can see here that for each plot, the variance of the residuals is evenly distributed around the horizontal line.
+The homogeneity of the variance is validated.
 
 #### 4.4.3 Look at influential observations
 
@@ -647,4 +679,4 @@ par(mfrow = c(1, 1))
 CookD(mod1,newwd=TRUE)
 ```
 
-On voit que l'individu 314, 315 et 325 ont une contribution un peu plus forte dans le modèle, mais ce n'est pas un résultat aberrant.
+We can see that individuals 314, 315 and 325 contribute slightly more to the model, but this is not an aberrant result.
