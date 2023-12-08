@@ -47,23 +47,12 @@ Par la suite, différents modèles de représentation matricielles des populatio
 L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple, que l'on représentera comme discret dans ce chapitre. 
 Cette matrice se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
 
-En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons N(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
-
-$$
-\begin{equation*}
-N(t+1) = \lambda N(t)
-\end{equation*}
-$$
+En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons n(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
+n(t+1) = λn(t)
 
 Si nous voulons écrire cette équation pour la population dans un futur lointain, nous pouvons trouver par récurrence que :
 
-$$
-\begin{equation*}
-N(t) = \lambda^t N(0)
-\end{equation*}
-$$
-
-Avec N(0) la population au début de notre étude.
+n(t) = λ^nn(0)   avec n(0) la population au début de notre étude.
 
 En fonction du signe de λ, notre population va donc augmenter ou diminuer dans le temps.
 Seulement, ce modèle est largement simplifié. Pourquoi ? Il considère que tous les individus sont identiques, que ce soit par leur capacité de reproduction ou leur capacité de survie. 
