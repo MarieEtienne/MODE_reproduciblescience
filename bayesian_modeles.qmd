@@ -88,7 +88,7 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 
 When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increasing the number of data gives us a better approximation of the true mean. The density of probability is also higher with a lot of data because we have more confidence in the approximation. \# When approximation by com5/5putation is needed In Bayesian statistics, as mentioned earlier, the goal is to update our beliefs about the parameters of a model by combining prior knowledge with the observed information in our collected field data. However, the direct calculation of the posterior distribution can often be challenging to compute analytically, especially in complex models. Resorting to conjugate distribution laws is one solution to overcome the problem, but this is not always feasible. This is where Markov Chain Monte Carlo (MCMC) algorithms come into play to estimate the posterior distributions of parameters. There are multiple MCMC algorithms (Metropolis-Hastings, Gibbs sampler, Hamiltonian Monte Carlo), each with its own advantages and disadvantages, and the choice of the algorithm depends on the application scenario. However, they all share the same theoretical foundation. The essential idea of an MCMC algorithm is to create a sequence of dependent random numbers via a Markov chain. When the chain reaches equilibrium (stationary state), it forms a sampling within the posterior distribution, allowing the calculation of quantities of interest such as means, variances, quantiles, and so on.
 
-## Metropolis-Hastings algorithm : implementation 
+## Metropolis-Hastings algorithm : implementation
 
 Let's implement the algorithm to try to understand how it works. In the following lines, we will describe the various steps of the Metropolis-Hastings algorithm along with the corresponding R code lines.
 
@@ -177,7 +177,7 @@ data = data.frame(iteration = 1:length(p_save),
                     step = p_save)
 ```
 
-There is a parameter we haven't discussed in this function, and that's $thin$. It means that we will only save the samples within the chain at intervals of $thin$. This is due to the fact that the samples are correlated with each other as they depend on the previous position and therefore do not accurately reflect the distribution. Consequently, if we want independent samples, we must discard the majority of samples and keep only one sample every $thin$ steps, with $thin$ being "sufficiently large." 
+There is a parameter we haven't discussed in this function, and that's $thin$. It means that we will only save the samples within the chain at intervals of $thin$. This is due to the fact that the samples are correlated with each other as they depend on the previous position and therefore do not accurately reflect the distribution. Consequently, if we want independent samples, we must discard the majority of samples and keep only one sample every $thin$ steps, with $thin$ being "sufficiently large."
 
 ### Step 5 : Visualization
 
@@ -193,9 +193,9 @@ bet= 1
 
 Both graphs represent the sampling of $p$ in its marginal posterior distribution. This is possible when a sufficient number of iterations is used, allowing the Markov chain to reach a stationary state.
 
-## Discussion 
+## The case of multiple parameters
 
-with two parameters And how does it work in multiple dimensions? Obviously, above two parameters to estimate, visualization becomes impossible. So, to keep it visual, we will only perform an example with one additional parameter to estimate. We will use a simple example: estimating a population mean and standard deviation. We'll define some population-level parameters, collect some data, then use the Metropolis-Hastings algorithm to simulate the joint posterior of the mean and standard deviation. Let's start by simulating some data.
+And how does it work in multiple dimensions? Obviously, above two parameters to estimate, visualization becomes impossible. So, to keep it visual, we will only perform an example with one additional parameter to estimate. We will use a simple example: estimating a population mean and standard deviation. We'll define some population-level parameters, collect some data, then use the Metropolis-Hastings algorithm to simulate the joint posterior of the mean and standard deviation. Let's start by simulating some data.
 
 ```{r}
 # population level parameters
@@ -297,14 +297,9 @@ The figure 1 represents the joint sampling of the two parameters. At each iterat
 
 ## IV-1) The role of prior knowledge and beliefs
 
-In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities. 
+In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.
 
-Bayesian analyses differ from frequentist analyses by incorporating prior information via conditional probabilities, known as Bayes’ rule (Nathan P. Lemoine, 2019):
-$$\frac{[\theta]\cdot[Y\mid\theta]}{[Y]}=[\theta\mid Y]$$
-With Pr(θ) = the probability of the parameter or hypothesis θ based on prior information
-Pr(Y|θ) = the likelihood of the data conditioned on the hypothesis
-Pr(Y) = the normalization constant
-Pr(θ|Y) = the posterior probability of the of the hypothesis conditioned on the observed data. 
+Bayesian analyses differ from frequentist analyses by incorporating prior information via conditional probabilities, known as Bayes' rule (Nathan P. Lemoine, 2019): $$\frac{[\theta]\cdot[Y\mid\theta]}{[Y]}=[\theta\mid Y]$$ With Pr(θ) = the probability of the parameter or hypothesis θ based on prior information Pr(Y\|θ) = the likelihood of the data conditioned on the hypothesis Pr(Y) = the normalization constant Pr(θ\|Y) = the posterior probability of the of the hypothesis conditioned on the observed data.
 
 Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.
 
@@ -361,8 +356,7 @@ mod1 = "
 "
 ```
 
-It looks like *R* syntax but it is *JAGS* syntax, which is slightly different for some function. In the model, we setup the prior for each parameter that we want to estimate with `m ~ dunif(0, 10**3)` and `sd ~ dunif(0, 10**3)`.The uniform probability law is used because we suppose that we don't have any prior knowledge on the mean and the standard deviation. We give to the model a range of possible value between 0 and 1000 for the mean and the standard deviation. In general for uniform prior we select large upper and lower bound to be sure that the value is included in it. The likelihood is then compute with `Y2[i] ~ dnorm(m,preci))`. *JAGS* is not like R because it takes the precision as parameter for the `dnorm`. Then we loop over all observation, *RJAG* will automatically make the product of the likelihood of all the data. Our model is complete, we have the priors and the likelihood formula setup to compute the posterior distribution.
-Second component needed for rjags, the list of data:
+It looks like *R* syntax but it is *JAGS* syntax, which is slightly different for some function. In the model, we setup the prior for each parameter that we want to estimate with `m ~ dunif(0, 10**3)` and `sd ~ dunif(0, 10**3)`.The uniform probability law is used because we suppose that we don't have any prior knowledge on the mean and the standard deviation. We give to the model a range of possible value between 0 and 1000 for the mean and the standard deviation. In general for uniform prior we select large upper and lower bound to be sure that the value is included in it. The likelihood is then compute with `Y2[i] ~ dnorm(m,preci))`. *JAGS* is not like R because it takes the precision as parameter for the `dnorm`. Then we loop over all observation, *RJAG* will automatically make the product of the likelihood of all the data. Our model is complete, we have the priors and the likelihood formula setup to compute the posterior distribution. Second component needed for rjags, the list of data:
 
 ```{r}
 data_list1 = list(
@@ -371,8 +365,7 @@ data_list1 = list(
 )
 ```
 
-This list contains all information needed to make the model run, nothing really interesting to say here.
-Third, the list of initialization:
+This list contains all information needed to make the model run, nothing really interesting to say here. Third, the list of initialization:
 
 ```{r}
 init_list1 <- list(
@@ -578,7 +571,7 @@ postSamples_df2 %>%
   main_theme
 ```
 
-Purple full lines represent the means of posterior distributions and doted line are the true values of the data. The utility to have posterior distribution and not only compute the mean or the standard error is that we can know the probability of each mean or sd values, therefore we have a good estimation of the confidence that we should have when making conclusion on values. 
+Purple full lines represent the means of posterior distributions and doted line are the true values of the data. The utility to have posterior distribution and not only compute the mean or the standard error is that we can know the probability of each mean or sd values, therefore we have a good estimation of the confidence that we should have when making conclusion on values.
 
 ## V-1) Highlighting specific ecological studies that employed Bayesian methods
 
