@@ -164,7 +164,8 @@ Dans le cas d'une corrélation, la statistique de test pourrait être basée sur
 
 ## Regressions
 
-Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is mainly modeled by :
+How to do when you have only quantitatives variables ?
+Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is classically expressed as follow :
 
 $$ 
 Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} +\epsilon_i\sim\mathcal{N}(0,,\sigma)
@@ -172,11 +173,24 @@ $$ {#eq-1}
 
 With $Y_i$ the $i^{th}$ value of the variable $Y$ and $X_{ij}$ the $i^{th}$ value of the $j^{th}$ variable $X$.
 
+When residuals approximate the normal distribution, the parameters $\alpha$ and b are mainly estimate with the least square method.
+
+The parameter b is estimate by :
+
+$$
+b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
+$$
+
+The parameter $\alpha$ is estimated by :
+
+$$
+\alpha=\bar{y}-b_i\bar{x}
+$$
+
 ### Statistical test on the coefficients.
 
-We now need to make sure that the parameters \$b\$ and $\alpha$ are different from 0. The permutation test is used to define the null hypothesis (H0: $\alpha=0$ and $b = 0$). The idea is to permute the values of
-
-$Y_i$ with respect to $X_ij$ or vice versa.
+You got the coefficients ! Now we need to make sure that the relationship between the variables are not due to random. In other terms, 
+we need to make sure that the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ with respect to $X_ij$ or vice versa. Here, permutations allow to simulate randoms relationships between variables. 
 
 Here an example of one permutation of the $Y_i$ from the $X_i$.
 
@@ -188,33 +202,25 @@ library(tidyverse)
 
 data <- iris[1:10,] # sous échantillon de iris
 
-permu <- data.frame(echantillon.y = rep(NA, nrow(data)),
-                    echantillon.x = rep(NA, nrow(data)))
+permu <- data.frame("y observed" = data$Sepal.Length,
+                    "x observed" = data$Sepal.Width
+                    )
 
 samp_ind <- sample(1:nrow(data), nrow(data))
 
-permu$echantillon.y <- data$Sepal.Length[samp_ind]
-permu$echantillon.x <- data$Sepal.Width
+permu[["y permuted"]] <- data$Sepal.Length[samp_ind]
+permu[["x permuted"]] <- data$Sepal.Width
 
-cbind(data[,1:2], permu) %>%
+permu %>%
+  rename("y observed" = y.observed,
+         "x observed" = x.observed)%>%
   kable("html", booktabs =TRUE, align = rep("c", 4)) %>%
-  add_header_above(c("Sepal" = 2, "echantillon" = 2), bold = TRUE)%>%
+  add_header_above(c("Observation" = 2, "Permutations" = 2), bold = TRUE)%>%
   kable_paper("hover", full_width = F)
   
 ```
 
-For each permutation, a linear model is constructed. The set of parameters is estimated from the permuted samples of H0. The parameter b is estimated by the method of least squares such that :
-
-$$
-b_i=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sum(x_i-\bar{x})}
-$$
-
-The parameter $\alpha$ is estimated by : 
-
-
-$$
-\alpha=\bar{y}-b_i\bar{x}
-$$
+For each permutation, a linear model is constructed. The set of parameters is estimated from the permuted samples of H0.
 
 ```{r}
 
@@ -255,6 +261,8 @@ hist_2 <- hist(hyp_nulle[,2],
 
 ### observed regression coefficients
 
+Now we  have a good idea of the random effects. We could graphically compare the distributions under H0 with the observations (here the red line) and see if our observed coefficients are under the distribution of H0.
+
 ```{r}
 
 # Calcul des coefficients de la regression à partir des données brutes
@@ -266,18 +274,19 @@ par(mfrow = c(1,2))
 plot(hist_1,
      main = expression("Distribution empirique de "*alpha*" sous H0"),
      xlab = expression(""*alpha*"")) 
-abline(v = obs[1])
+abline(v = obs[1], lwd = 2.5, col = "red")
 
 plot(hist_2,
      main = expression("Distribution empirique de b sous H0"),
      xlab = expression("b")) 
-abline(v = obs[2])
+abline(v = obs[2], lwd = 2.5, col = "red")
 
 
 
 ```
+The observations seems to be out of H0, we need to make sure using statistics !
 
-# Calculation of test statistics
+## Calculation of test statistics
 
 ```{r}
 
@@ -300,7 +309,8 @@ df_results%>%
   kable_paper("hover", full_width = F)
   
 ```
-So, you can obtain the significances of your coefficients with the exacts p values.
+
+The p value we obtained correspond to the probability that the observations knowing H. Considering a threshold (mainly 0.05) we can determine the significant of the parameters. If the p value is under the threshold, the paramter is significant and vis versa.
 
 Note that you can make permutations tests on all regressions coefficients when $Y_i$ are interchangeable.
 
@@ -308,8 +318,7 @@ Note that you can make permutations tests on all regressions coefficients when $
 
 ### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices  are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test genetics or geographicals distances.
-The H0 distribution is obtained by permuting the individuals between them.
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test genetics or geographicals distances. The H0 distribution is obtained by permuting the individuals between them.
 
 ### Correspondence (distances) matrices.
 
@@ -334,6 +343,7 @@ ozone.dists %>% # Visualizing a distance matrix
   column_spec(1, bold = TRUE)
 
 ```
+
 We first extract distances matrix from the data using the function dist then we can apply the Mantel's test.
 
 There are a number of packages available to perform the Mantel test. For example, the ade4 package :
