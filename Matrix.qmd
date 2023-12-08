@@ -5,7 +5,10 @@ date: "2023-11-15"
 output: html_document
 ---
 
-Après ce nouveau coup dur et cette épidémie, les survivants de notre famille de suricate sont de nouveau contraints de se mettre en recherche d'un habitat et de rejoindre une nouvelle colonie. Pour ce choix, plusieurs options et colonies s'offrent à eux, chacune avec une probabilité différente d'être rejointe en fonction de la penibilité du trajet et des ressources qu'elle contient :
+![Schéma des péripéties suricatiennes](C:/Users/qlamb/Documents/R/Schema_suricates.png)
+
+Après ce nouveau coup dur et cette épidémie, les survivants de notre famille de suricate sont de nouveau contraints de se mettre en recherche d'un habitat et de rejoindre une nouvelle colonie. Pour ce choix, plusieurs options et colonies s'offrent à eux, chacune avec une probabilité différente d'être rejointe en fonction de la penibilité du trajet et des ressources qu'elle contient.Autrement dit, les flèches reliant les habitats représentent les probabilités. 
+
 Tout d'abord, nos pauvres suricates se trouvent en position O et ne peuvent rester à cet endroit. Cependant, ils peuvent gagner une petite colonie proche (colonie A) avec une probabilité d'y arriver de 0.9 ou une colonie plus lointaine (colonie C) avec une probabilité d'y arriver de 0.1. 
 Une fois dans la colonie A, ils ont une probabilité de 0.6 d'être acceptés puis de s'y installer définitivement dans le terrier A1 et une probabilité de 0.4 de rejoindre un autre colonie proche (colonie B). 
 Dans cette colonie B, les suricates ont une probabilité de 0.7 d'être acceptés par leurs congénères pour s'installer définitivement dans le terrier B2. Si ce n'est pas le cas, ils possèdent une probabilité de 0.1 de revenir à la colonie A retenter leur chance ou de 0.2 d'atteindre la colonie C.
@@ -13,7 +16,6 @@ Si les suricates atterissent dans la colonie C, ceux-ci auront une probabilité 
 Si contre toute attente les suricates parviennent à cette dernière colonie mais ne réussissent pas à être acceptés, ceux-ci ont une probabilité de 0.1 de retenter leur chance dans la colonie C. 
 # Je pense que le schéma doit être avant le paragraphe et qu'il y a pas besoin de décrire toute les flèche mais d'explique le principe (a quoi correspond une flèche et la probabilité qui est dessus) puis de faire seulement un exemple
 
-![Schéma des péripéties suricatiennes](C:/Users/qlamb/Documents/R/Schema_suricates.png)
 
 # Avant d'introduire directement la matrice de transition faire un point pour expliquer que cette situation est une chaîne de markov (donc définir ce qu'est une chaîne de markov) et dire a quoi ca sert de l'étudier (savoir si on a un etat stable et les probabilités sur le temps long d'être dans les différentes localisation)
 Ces différents éléments nous permettent de réaliser une matrice T un peu particulière, que l'on appelle matrice de transition d'une "Chaîne de Markov" dont le schéma figure ci-dessus, définissant les probabilités de transition de chaque état au temps (t) vertical vers chaque état au temps (t+1) horizontal et figurant ci-dessous : 
