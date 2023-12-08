@@ -152,9 +152,9 @@ begin{table}
   \end{tabular}
 \end{table}
 
-\begin{document}
-L'expression \( P1 = M1 \cdot M2 \cdot F1 \cdot F2 \) 
-\end{document}
+\begin{equation}
+  P_1 = \begin{bmatrix} M_1 & M_2 \\ F_1 & F_2 \end{bmatrix}
+\end{equation}
 $$
 
 Dans la pratique, il est plutôt rare de considérer les deux sexes dans les matrices de population. Cela est dû à la plus grande complexité que cela demanderait de considérer aussi les interactions entre les sexes. Afin de simplifier, les modèles sont souvent basés sur les femelles uniquement (modèle female-based), notamment à cause l’importance des femelles pour le nombre de descendants et la plus grande facilité à calculer leur nombre de descendants, comparée à un mâle.
@@ -201,11 +201,11 @@ Reprenons notre famille de suricates : durant le trajet, le jeune mâle se fait 
 
 $$
 \begin{equation}
-  P_{2} = M_{1} M_{2} F_{1} F_{2} -  0 M_{2} 0  0 = M_{1} -0 M_{2}- M_{2} F_{1}-0 F_{2} -0 = M_{1} 0 F_{1} F_{2} 
+  P_2 = \begin{bmatrix} M_1 & M_2 \\ F_1 & F_2 \end{bmatrix} - \begin{bmatrix} 0 & M_2 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} M_1-0 & M_2-M_2 \\ F_1-0 & F_2-0 \end{bmatrix} = \begin{bmatrix} M_1 & 0 \\ F_1 & F_2 \end{bmatrix}
 \end{equation}
 
 \begin{equation}
-  P_{3} = M_{1} 0 F_{1} F_{2}  + M_{1} 0 0 0  = M_{1} + M_{1} 0 F_{1} + 0 F_{2} +0  = 2*M_{1} 0 F_{1} F_{2} 
+  P_3 = \begin{bmatrix} M_1 & 0 \\ F_1 & F_2 \end{bmatrix} + \begin{bmatrix} M_1 & 0 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} M_1+M_1 & 0 \\ F_1+0 & F_2+0 \end{bmatrix} = \begin{bmatrix} 2M_1 & 0 \\ F_1 & F_2 \end{bmatrix}
 \end{equation}
 $$
 
@@ -215,14 +215,18 @@ Par la suite, notre nouvelle famille rejoint finalement une colonie résidant da
 
 $$
 \begin{equation}
-  P_{n}=11*M_{1} 3*M_{2} 14*F_{1} 2*F_{2} 
+  P_n = \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix}
 \end{equation}
 $$
 
 
 Si nous compilons nos deux populations, nous obtenons notre population finale qui est de 34 individus :
 
-P = 13*M_{1} 3*M_{2} 15*F_{1} 3*F_{2} 
+$$
+\begin{equation}
+  P = \begin{bmatrix} 13M_1 & 3M_2 \\ 15F_1 & 3F_2 \end{bmatrix}
+\end{equation}
+$$
 
 C’est de cette population que nous allons partir pour la suite de notre chapitre, qui va expliquer comment nous pouvons étudier l’évolution de ce groupe au fil des temps, selon différents paramètres. 
 
@@ -246,19 +250,43 @@ P = P3 + Pn
 
 Par la suite, nous allons avoir besoin de multiplier notre matrice population avec d’autres matrices afin de la faire évoluer dans le temps. Nous allons donc profiter de ce chapitre pour vous montrer maintenant comment faire cela. Encore une fois, nous allons commencer par revoir les règles de calculs des matrices, puis leurs applications dans R. Tout d’abord, pour multiplier deux matrices, il n’est pas nécessaire que ces dernières aient la même dimension, au contraire des opérations d’addition et de soustraction. En revanche, il faut que le nombre de colonne de la première matrice soit égal au nombre de lignes dans la deuxième. En effet, la multiplication des deux matrices va être un croisement des colonnes de l’une avec les lignes de l’autre, il est donc important d’avoir un nombre équivalent entre les deux. Reprenons l’exemple de P’, avec une matrice B lambda pour le moment. Nous verrons dans le chapitre suivant quelle matrice est utile à multiplier dans la réalité avec notre matrice population.
 
-(mettre matrice)
+$$
+\begin{equation}
+  P_n \mathbf{B} = \mathbf{P'}\mathbf{B} = \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix} * \begin{bmatrix} a & c \\ b & d \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+  \mathbf{P'}\mathbf{B} = \begin{bmatrix} 11M_1 \ast a + 3M_2 \ast b & 11M_1 \ast c + 3M_2 \ast d \\ 14F_1 \ast a + 2F_2 \ast b & 14F_1 \ast c + 2F_2 \ast d \end{bmatrix}
+\end{equation}
+$$
 
 Comme précisé juste avant, les matrices ne sont pas obligatoirement de la même dimension :
 
-(mettre matrice)
+$$
+\begin{equation}
+  P_n \mathbf{N} = \mathbf{P'}\mathbf{N} = \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix} * \begin{bmatrix} a \\ b \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+  P_n \mathbf{N} = \begin{bmatrix} 11M_1 \ast a + 3M_2 \ast b \\ 14F_1 \ast a + 2F_2 \ast b \end{bmatrix}
+\end{equation}
+$$
 
 Il est important de préciser que la plupart du temps, les multiplications ne sont pas commutatives : nous n’obtenons pas le même résultat en faisant P’*B qu’en faisant B*P’. L’ordre de la multiplication a de l’importance, au contraire de cette la multiplication de nombres qui peut s’inverser comme on le souhaite.
 
-(mettre  matrice)
+$$
+\begin{equation}
+  \mathbf{B} \times P_n = \begin{bmatrix} a & c \\ b & d \end{bmatrix} \times \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix} = \begin{bmatrix} a \ast 11M_1 + c \ast 14F_1 & a \ast 3M_2 + c \ast 2F_2 \\ b \ast 11M_1 + d \ast 14F_1 & b \ast 3M_2 + d \ast 2F_2 \end{bmatrix}
+\end{equation}
+$$
 
 Maintenant que les calculs de produits matriciels nécessaire à nos futurs modélisations sont globalement acquis, nous allons voir comment les effectuer sur R. Si nous voulons simplement multiplier notre matrice avec un nombre, le signe ‘*’ suffit :
 
-Pm = 2 * Pn
+$$
+\begin{equation}
+  P_m = 2 \times P_n
+\end{equation}
+$$
 
 Si nous voulons multiplier plusieurs matrices ensemble, nous devons rajouter le symbole ‘%’ pour chaque matrice, en plus de ‘*’. Ainsi, :
 
