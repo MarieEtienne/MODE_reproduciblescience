@@ -75,7 +75,9 @@ $$
 \begin{equation}
 N(t+1) = A \cdot N(t)
 \end{equation}
+$$
 
+$$
 \begin{equation}
 N(t) = A^t \cdot N(0)
 \end{equation}
@@ -151,7 +153,9 @@ begin{table}
     \hline
   \end{tabular}
 \end{table}
+$$
 
+$$
 \begin{equation}
   P_1 = \begin{bmatrix} M_1 & M_2 \\ F_1 & F_2 \end{bmatrix}
 \end{equation}
@@ -203,7 +207,9 @@ $$
 \begin{equation}
   P_2 = \begin{bmatrix} M_1 & M_2 \\ F_1 & F_2 \end{bmatrix} - \begin{bmatrix} 0 & M_2 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} M_1-0 & M_2-M_2 \\ F_1-0 & F_2-0 \end{bmatrix} = \begin{bmatrix} M_1 & 0 \\ F_1 & F_2 \end{bmatrix}
 \end{equation}
+$$
 
+$$
 \begin{equation}
   P_3 = \begin{bmatrix} M_1 & 0 \\ F_1 & F_2 \end{bmatrix} + \begin{bmatrix} M_1 & 0 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} M_1+M_1 & 0 \\ F_1+0 & F_2+0 \end{bmatrix} = \begin{bmatrix} 2M_1 & 0 \\ F_1 & F_2 \end{bmatrix}
 \end{equation}
@@ -254,7 +260,9 @@ $$
 \begin{equation}
   P_n \mathbf{B} = \mathbf{P'}\mathbf{B} = \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix} * \begin{bmatrix} a & c \\ b & d \end{bmatrix}
 \end{equation}
+$$
 
+$$
 \begin{equation}
   \mathbf{P'}\mathbf{B} = \begin{bmatrix} 11M_1 \ast a + 3M_2 \ast b & 11M_1 \ast c + 3M_2 \ast d \\ 14F_1 \ast a + 2F_2 \ast b & 14F_1 \ast c + 2F_2 \ast d \end{bmatrix}
 \end{equation}
@@ -266,7 +274,9 @@ $$
 \begin{equation}
   P_n \mathbf{N} = \mathbf{P'}\mathbf{N} = \begin{bmatrix} 11M_1 & 3M_2 \\ 14F_1 & 2F_2 \end{bmatrix} * \begin{bmatrix} a \\ b \end{bmatrix}
 \end{equation}
+$$
 
+$$
 \begin{equation}
   P_n \mathbf{N} = \begin{bmatrix} 11M_1 \ast a + 3M_2 \ast b \\ 14F_1 \ast a + 2F_2 \ast b \end{bmatrix}
 \end{equation}
