@@ -37,39 +37,82 @@ partir de la population de suricats et on complexifie au fur et à mesure en int
 
 
 I. Modélisation matricielle en écologie
-	A quoi servent les matrices en écologie
 
-Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations furent publiés et utilisés en dynamique des populations.
+	A quoi servent les matrices en écologie ? 
 
-L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple, que l'on représentera comme discret dans ce chapitre. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
+Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. 
+Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. 
+Par la suite, différents modèles de représentation matricielles des populations furent publiés et utilisés en dynamique des populations.
 
-En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons n(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
-n(t+1) = λn(t)
+L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple, que l'on représentera comme discret dans ce chapitre. 
+Cette matrice se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
+
+En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons N(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
+
+$$
+\begin{equation*}
+N(t+1) = \lambda N(t)
+\end{equation*}
+$$
 
 Si nous voulons écrire cette équation pour la population dans un futur lointain, nous pouvons trouver par récurrence que :
 
-n(t) = λ^nn(0)   avec n(0) la population au début de notre étude.
+$$
+\begin{equation*}
+N(t) = \lambda^t N(0)
+\end{equation*}
+$$
+
+Avec N(0) la population au début de notre étude.
 
 En fonction du signe de λ, notre population va donc augmenter ou diminuer dans le temps.
-Seulement, ce modèle est largement simplifié. Pourquoi ? Il considère que tous les individus sont identiques, que ce soit par leur capacité de reproduction ou leur capacité de survie. Cela signifie que dans ce modèle, un individu âgé peut tout aussi bien se reproduire et survivre qu’un jeune individu vigoureux et ayant tout juste atteint la maturité sexuelle. Mais alors, comment régler ce problème ? Dans la nature, chaque individu est différent, mais nous pouvons prédire ses qualités selon la moyenne de son espèce et sa position dans la population : par position, nous entendons sa place dans différentes catégories exprimées selon diverses critères tels que l’âge (jeune, adulte, âgé), le sexe (mâle, femelle), ou encore beaucoup d’autres. Ces catégories sont communément appelées « classes ». Plusieurs individus d’une même classe auront les mêmes particularités du point de vue du critère utilisé pour cette classe, et donc les mêmes impacts sur la dynamique de leur population. Ils auront par exemple le même taux de fertilité ou de survie. Ainsi, nous pouvons déterminer la contribution de chaque classe à une autre classe et donc finalement à la population, et cela en fonction de l’effectif de la première classe. L’effectif d’une classe i peut ainsi s’écrire :
+Seulement, ce modèle est largement simplifié. Pourquoi ? Il considère que tous les individus sont identiques, que ce soit par leur capacité de reproduction ou leur capacité de survie. 
+Cela signifie que dans ce modèle, qu'un individu âgé peut tout aussi bien se reproduire et survivre qu’un jeune individu vigoureux et ayant tout juste atteint la maturité sexuelle.
+Mais alors, comment régler ce problème ? Dans la nature, chaque individu est différent, mais nous pouvons prédire ses qualités selon la moyenne de son espèce et sa position dans la population : par position, nous entendons sa place dans différentes catégories exprimées selon diverses critères tels que l’âge (jeune, adulte, âgé), le sexe (mâle, femelle), ou encore beaucoup d’autres. 
+Ces catégories sont communément appelées « classes ». Plusieurs individus d’une même classe auront les mêmes particularités du point de vue du critère utilisé pour cette classe, et donc les mêmes impacts sur la dynamique de leur population. Ils auront par exemple le même taux de fertilité ou de survie. Ainsi, nous pouvons déterminer la contribution de chaque classe à une autre classe et donc finalement à la population, et cela en fonction de l’effectif de la première classe. 
 
-n_i (t+1)= ∑_j▒〖a_ij n_j (t)〗  
+L’effectif d’une classe i peut ainsi s’écrire :
 
-où a est la contribution et a_ij la contribution d’une classe j à la classe i à l’instant t+1.
+$$
+\begin{equation*}
+n_i(t+1) = \sum_j (a_{ij} \cdot n_j(t))
+\end{equation*}
+$$
+
+Où a est la contribution et a_ij la contribution d’une classe j à la classe i à l’instant t+1.
 Nous pouvons alors créer un système considérant l’ensemble des classes, qui pourra être traduit en matrice :
 
-n(t+1) = An(t)
-Soit n(t) = A^tn(0)
+$$
+\begin{equation}
+N(t+1) = A \cdot N(t)
+\end{equation}
 
-Où A est ce que nous appelons matrice de projection de la population, représentant donc notre population sous forme matricielle, selon ses différentes caractéristiques (classes, paramètres des classes…). n(t) est un vecteur dépendant du nombre d’individu présents dans notre population, et n(0) est notre vecteur population initiale, duquel nous allons pouvoir partir pour faire évoluer cette population dans le temps.
+\begin{equation}
+N(t) = A^t \cdot N(0)
+\end{equation}
+$$
 
-La dynamique de population est un concept parfois difficile à étudier car dépendant de nombreux paramètres. Une population va varier en taille et en type d’individus selon quatre processus principaux : la naissance de nouveaux individus, dépendant de la fertilité de ceux déjà présent et de leur nombre ; la mortalité, pouvant dépendre du taux de prédation, de maladies ou de vieillesse ; l’immigration, dont les taux vont dépendre des autres populations, de leurs distances avec celle étudiée et de la capacité de dispersion des individus ; et enfin de l’émigration, qui va dépendre du mode de vie de l’espèce observée et de sa tendance à quitter sa population d’origine. Une matrice va permettre de représenter la variation de population selon ces quatre processus.
+Où A est ce que nous appelons matrice de projection de la population, représentant donc notre population sous forme matricielle, selon ses différentes caractéristiques (classes, paramètres des classes…). 
+N(t) est un vecteur dépendant du nombre d’individu présents dans notre population, et N(0) est notre vecteur population initiale, duquel nous allons pouvoir partir pour faire évoluer cette population dans le temps.
 
-Ces représentations peuvent être très complètes, incluant le différences d’âge, de sexe, d’origine génétique et autres des individus. En effet, tous les individus ne vont pas avoir le même impact au même sur la dynamique de leur population. Les individus trop jeunes ou trop vieux ne participent pas à la reproduction et donc à l’augmentation future de leur groupe. Les nombre de mâles ne va pas avoir le même impact sur le nombre de descendants que les femelles. Enfin, les individus de différents âges ne vont pas avoir les mêmes taux de mortalité. Les matrices sont ainsi beaucoup utilisées en épidémiologie, où elles vont permettre de modéliser la dispersion de la maladie dans une population selon la virulence et l’infectiosité de celle-ci. Elles peuvent aussi se concentrer sur la réponse de la population à la maladie, selon le taux de mortalité des individus et leur capacité de résilience.
+La dynamique de population est un concept parfois difficile à étudier car dépendant de nombreux paramètres. Une population va varier en taille et en type d’individus selon quatre processus principaux : 
+- la naissance de nouveaux individus, dépendant de la fertilité de ceux déjà présent et de leur nombre 
+- la mortalité, pouvant dépendre du taux de prédation, de maladies ou de vieillesse 
+- l’immigration, dont les taux vont dépendre des autres populations, de leurs distances avec celle étudiée et de la capacité de dispersion des individus 
+- l’émigration, qui va dépendre du mode de vie de l’espèce observée et de sa tendance à quitter sa population d’origine.
+
+ Une matrice va permettre de représenter la variation de population selon ces quatre processus.
+
+ (mettre ta figure)
+
+Ces représentations peuvent être très complètes, incluant le différences d’âge, de sexe, d’origine génétique et autres des individus. En effet, tous les individus ne vont pas avoir le même impact au même sur la dynamique de leur population. 
+Les individus trop jeunes ou trop vieux ne participent pas à la reproduction et donc à l’augmentation future de leur groupe. Les nombre de mâles ne va pas avoir le même impact sur le nombre de descendants que les femelles. 
+Enfin, les individus de différents âges ne vont pas avoir les mêmes taux de mortalité. Les matrices sont ainsi beaucoup utilisées en épidémiologie, où elles vont permettre de modéliser la dispersion de la maladie dans une population selon la virulence et l’infectiosité de celle-ci. Elles peuvent aussi se concentrer sur la réponse de la population à la maladie, selon le taux de mortalité des individus et leur capacité de résilience.
 
 Il est important de savoir que les matrices de modélisation ont des limites. Elles reposent notamment sur des hypothèses qui vont permettre leur bonne analyse et la validité de leurs résultats. Ainsi, les interactions entre individus ne sont pas pris en compte, et n’influent pas sur la dynamique de leur population. Ensuite, les particularités des individus d’une même classe sont identiques, qu’importe l’individu, et constantes au cours du temps. Des particularités différentes se retrouvent uniquement dans des classes différentes.
 
-En permettant de modéliser le plus correctement possible l’évolution d’une population dans le temps, selon le maximum de paramètres qui peuvent l’impacter positivement ou négativement, nous pouvons obtenir de nombreux résultats très intéressants. Ainsi, les matrices de population peuvent nous permettre d’améliorer la conservation des espèces et leur gestion. En fonction de la dynamique de sa population, nous pouvons savoir si l’espèce est menacée dans le futur et/ou impactée par des évènements (exemple : impact du feu sur des espèces végétales). Nous pouvons avoir une vision plus globale et réelle de la manière dont les populations évoluent dans leur environnement. Cependant, il n’est pas forcément utile d’avoir recours à des modèles matriciels. Comme pour chaque étude, il est nécessaire de se poser les bonnes questions, de réfléchir à l’intérêt de ce mode d’analyse comparé à d’autres et de sa pertinence pour la question/population étudiée.
+En permettant de modéliser le plus correctement possible l’évolution d’une population dans le temps, selon le maximum de paramètres qui peuvent l’impacter positivement ou négativement, nous pouvons obtenir de nombreux résultats très intéressants. Ainsi, les matrices de population peuvent nous permettre d’améliorer la conservation des espèces et leur gestion. En fonction de la dynamique de sa population, nous pouvons savoir si l’espèce est menacée dans le futur et/ou impactée par des évènements (exemple : impact du feu sur des espèces végétales). Nous pouvons avoir une vision plus globale et réelle de la manière dont les populations évoluent dans leur environnement. 
+Cependant, il n’est pas forcément utile d’avoir recours à des modèles matriciels. Comme pour chaque étude, il est nécessaire de se poser les bonnes questions, de réfléchir à l’intérêt de ce mode d’analyse comparé à d’autres et de sa pertinence pour la question/population étudiée.
 
 B) Transformer une population en matrice
 
@@ -77,19 +120,53 @@ Nous avons pu voir quels étaient les intérêts de fabriquer des matrices de po
 
 La première chose à faire avant de créer notre matrice est de récolter des données. Régulièrement, les scientifiques font des suivis à long-terme et des mesures de capture-recapture pour obtenir un maximum d’informations sur la population qu’ils souhaitent étudier. Ces processus permettent aussi de connaître des compléments d’informations tels que l’âge des individus et leur sexe par exemple.
 
-Il est nécessaire de connaître les différents paramètres que nous allons appliquer à notre dynamique de population. Ainsi, comme nous l’avons vu plus tôt, les population évoluent selon quatre concepts principaux : naissances, morts, immigration et émigration. Afin de modéliser correctement la population que l’on étudie, nous devons parvenir à exprimer ces phénomènes dans la matrice. Pour cela, nous devons savoir combien d’individus meurent, naissent, immigrent ou émigrent. Ces nombres vont dépendre de l’espèce mais aussi des individus déjà présents dans la population. 
-Ainsi, pour représenter les naissances, nous devons connaître le taux de fertilité des femelles présents : en bref, combien de femelles, combien de petits en moyenne, quelles femelles sont en état de reproduire et combien de femelles seront fécondées. Ensuite, nous devons connaître la mort d’individus : pour cela, nous devons récupérer le taux de mortalité (ou de survie) des individus dans cette population. Il va dépendre de la composition de notre population telle que l’âge de ses individus, de la durée de vie moyennes de l’espèce et des taux de prédation ou de mort par maladie par exemple. Troisièmement, les taux d’immigration vont dépendre comme dit dans la première partie de la présence et distance d’autres populations autour ainsi que de la faculté/tendance de dispersion de l’espèce. Finalement, les taux d’émigration vont être basé similairement sur les mêmes choses, et aussi dépendre des individus déjà présents. Pour connaître tous ces paramètres, nous devons donc connaître déjà un minimum de choses sur l’espèce/la population étudiée. Ces informations peuvent être récupérées durant le projet de l’étude de la population ou dans la littérature, selon ce que l’on veut étudier. Bien évidemment, en fonction de la question et de la complexité de l’étude, ces paramètres pourront être plus ou moins précis (par exemple, population d’une espèce invasive ne possédant aucun prédateur, et ayant donc un taux de mortalité dépendant de moins de facteurs).
+Il est nécessaire de connaître les différents paramètres que nous allons appliquer à notre dynamique de population. Ainsi, comme nous l’avons vu plus tôt, les population évoluent selon quatre concepts principaux : naissances, morts, immigration et émigration. 
+
+Afin de modéliser correctement la population que l’on étudie, nous devons parvenir à exprimer ces phénomènes dans la matrice. Pour cela, nous devons savoir combien d’individus meurent, naissent, immigrent ou émigrent. Ces nombres vont dépendre de l’espèce mais aussi des individus déjà présents dans la population. 
+Pour représenter les naissances, nous devons connaître le taux de fertilité des femelles présents : en bref, combien de femelles, combien de petits en moyenne, quelles femelles sont en état de reproduire et combien de femelles seront fécondées. 
+Ensuite, pour représenter la mort des individus nous devons récupérer le taux de mortalité (ou de survie) des individus dans cette population. Il va dépendre de la composition de notre population telle que l’âge de ses individus, de la durée de vie moyennes de l’espèce et des taux de prédation ou de mort par maladie par exemple. 
+En ce qui concerne les taux d’immigration, ils vont dépendre (comme dit précédement dans la première partie) de la présence et distance d’autres populations autour ainsi que de la faculté/tendance de dispersion de l’espèce. 
+Enfin, les taux d’émigration vont être basés similairement sur les mêmes choses, et aussi dépendre des individus déjà présents.
+ 
+Pour connaître tous ces paramètres, nous devons donc connaître déjà un minimum de choses sur l’espèce/la population étudiée. Ces informations peuvent être récupérées durant le projet de l’étude de la population ou dans la littérature, selon ce que l’on veut étudier. 
+
+Bien évidemment, en fonction de la question et de la complexité de l’étude, ces paramètres pourront être plus ou moins précis (par exemple, population d’une espèce invasive ne possédant aucun prédateur, et ayant donc un taux de mortalité dépendant de moins de facteurs).
 
 Une fois tous les paramètres connus, nous pouvons formuler des équations traduisant l’évolution de la population selon ces critères. Il est utile avant de faire notre matrice de réaliser un schéma du cycle de vie de la population étudiée.
 
-Afin de vous aider à comprendre comment la modélisation matricielle des populations fonctionne, nous allons réaliser tout au long de notre chapitre un exemple de plus en plus complexe d’une matrice de population. Nous allons prendre comme exemple une population de suricates. Les suricates sont une espèce sociale vivant en groupe plus ou moins nombreux, avec toutes sortes d’individus de sexe et d’âge différents. Ce sont aussi des animaux capables de changer de groupe en quittant le leur ou en intégrant un nouveau si les conditions l’obligent. Enfin, ils sont soumis à la pression de différents prédateurs et de potentielles maladies. Ils nous permettront donc parfaitement de représenter nos matrices de populations avec un maximum de critères.
+Afin de vous aider à comprendre comment la modélisation matricielle des populations fonctionne, nous allons utiliser tout au long de notre chapitre un exemple de plus en plus complexe d’une matrice de population.
 
-Pour commencer, nous allons partir d’une situation simplifiée au maximum. Une grave épidémie a décimé la colonie d’origine d’une famille de suricate, forçant ces derniers à immigrer pour en trouver une nouvelle. La famille est saine et ne possède pas la maladie. Elle est composée d’une mâle et de sa femelle, ainsi que de leurs deux petits, un jeune mâle et une jeune femelle. 
-Si nous recherchons le mode de vie du suricate dans la littérature, nous obtenons notamment que les femelles ont 2 à 5 petits par an, deux fois par an et à partir d’un an. Nous allons considérer une moyenne de 7 petits par an.  De plus, les individus vivent en moyenne douze ans. 
+Nous allons prendre comme exemple une population de suricates. Les suricates sont une espèce sociale vivant en groupe plus ou moins nombreux, avec toutes sortes d’individus de sexe et d’âges différents. Ce sont aussi des animaux capables de changer de groupe en quittant le leur ou en intégrant un nouveau si les conditions l’obligent. Enfin, ils sont soumis à la pression de différents prédateurs et de potentielles maladies. Ils nous permettront donc parfaitement de représenter nos matrices de populations avec un maximum de critères.
+
+Pour commencer, nous allons partir d’une situation simplifiée au maximum :
+
+Une grave épidémie a décimé la colonie d’origine d’une famille de suricate, forçant ces derniers à immigrer pour en trouver une nouvelle. La famille est saine et ne possède pas la maladie. Elle est composée d’une mâle et de sa femelle, ainsi que de leurs deux petits, un jeune mâle et une jeune femelle. 
+Si nous recherchons le mode de vie du suricate dans la littérature, nous obtenons notamment que les femelles ont 2 à 5 petits par an, deux fois par an et à partir d’un an.
+Dans notre exemple, nous allons considérer une moyenne de 7 petits par an. De plus, les individus vivent en moyenne douze ans. 
                                                                            
 Nous pouvons représenter notre petite population simplifiée sous une forme matricielle basique. Ainsi :
 
-(Mettre matrice)
+$$
+begin{table}
+  \centering
+  \caption{Tableau Sexe et Âge}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{Sexe\Age} & \\
+    \hline
+    & Adulte & Jeune \\
+    \hline
+    Mâle & M1 & M2 \\
+    \hline
+    Femelle & F1 & F2 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{document}
+L'expression \( P1 = M1 \cdot M2 \cdot F1 \cdot F2 \) 
+\end{document}
+$$
 
 Dans la pratique, il est plutôt rare de considérer les deux sexes dans les matrices de population. Cela est dû à la plus grande complexité que cela demanderait de considérer aussi les interactions entre les sexes. Afin de simplifier, les modèles sont souvent basés sur les femelles uniquement (modèle female-based), notamment à cause l’importance des femelles pour le nombre de descendants et la plus grande facilité à calculer leur nombre de descendants, comparée à un mâle.
 
@@ -130,19 +207,33 @@ Ici, notre modèle représente une population stable, à l’instant t. Elle ne 
 
 C) Comment modifier une matrice basique ?
 
-Avant de rendre notre matrice adaptée à l’étude de la dynamique des populations, nous allons commencer par voir comment des manipulations simple de matrice peuvent nous permettre de modifier la représentation matricielle de notre population si cette dernière est modifiée. Reprenons notre famille de suricates : durant le trajet, le jeune mâle se fait emporter par un prédateur, ce qui retire un membre à la population et modifie donc la matrice. De même, par la suite, un mâle solitaire, égaré, est récupéré par la famille. Ainsi, notre matrice va être modifiée successivement de la sorte : 
+Avant de rendre notre matrice adaptée à l’étude de la dynamique des populations, nous allons commencer par voir comment des manipulations simple de matrice peuvent nous permettre de modifier la représentation matricielle de notre population si cette dernière est modifiée. 
+Reprenons notre famille de suricates : durant le trajet, le jeune mâle se fait emporter par un prédateur, ce qui retire un membre à la population et modifie donc la matrice. De même, par la suite, un mâle solitaire, égaré, est récupéré par la famille. Ainsi, notre matrice va être modifiée successivement de la sorte : 
 
-(mettre matrices)
+$$
+\begin{equation}
+  P_{2} = M_{1} M_{2} F_{1} F_{2} -  0 M_{2} 0  0 = M_{1} -0 M_{2}- M_{2} F_{1}-0 F_{2} -0 = M_{1} 0 F_{1} F_{2} 
+\end{equation}
+
+\begin{equation}
+  P_{3} = M_{1} 0 F_{1} F_{2}  + M_{1} 0 0 0  = M_{1} + M_{1} 0 F_{1} + 0 F_{2} +0  = 2*M_{1} 0 F_{1} F_{2} 
+\end{equation}
+$$
 
 Ainsi, notre matrice finale représente notre population finale, c’est-à-dire deux individus mâles adultes, une jeune femelle et une femelle adulte, avec zéro jeune mâle. La matrice ne représente pas chaque individu personnellement mais l’effectif de chaque groupe (mâle adulte, femelle adulte, jeune mâle, jeune femelle). Il est important de se rappeler que nous ne pouvons additionner ou soustraire que des matrices ayant la même dimension.
 
 Par la suite, notre nouvelle famille rejoint finalement une colonie résidant dans les environs. Cette colonie compte 30 individus, dont la composition est révélée dans la matrice suivante :
 
-(mettre matrice)
+$$
+\begin{equation}
+  P_{n}=11*M_{1} 3*M_{2} 14*F_{1} 2*F_{2} 
+\end{equation}
+$$
+
 
 Si nous compilons nos deux populations, nous obtenons notre population finale qui est de 34 individus :
 
-(mettre matrice)
+P = 13*M_{1} 3*M_{2} 15*F_{1} 3*F_{2} 
 
 C’est de cette population que nous allons partir pour la suite de notre chapitre, qui va expliquer comment nous pouvons étudier l’évolution de ce groupe au fil des temps, selon différents paramètres. 
 
