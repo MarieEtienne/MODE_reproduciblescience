@@ -39,9 +39,9 @@ partir de la population de suricats et on complexifie au fur et à mesure en int
 I. Modélisation matricielle en écologie
 	A quoi servent les matrices en écologie
 
-Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations durent publiés et utilisés en dynamique des populations.
+Les matrices sont des outils mathématiques permettant de modéliser des situations. Utilisées dans de très nombreux domaines, l’écologie n’échappe pas à la règle. Les matrices permettent notamment de représenter des populations et de les faire évoluer selon différentes règles ou évènements. Les premières utilisations de ces modèles remontent à 1941 par Harro Bernardelli étudiant les oscillations de la structure d’une population. D’autres utilisent à leur tour les matrices pour représenter les populations, notamment Leslie en 1945 dont les travaux marquèrent un tournant dans l’utilisation de ces matrices en écologie. Par la suite, différents modèles de représentation matricielles des populations furent publiés et utilisés en dynamique des populations.
 
-L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
+L’objectif d’une matrice de population est, comme nous l’avons déjà dit, de représenter l’évolution d’une population dans le temps et son état à un temps t particulier par exemple, que l'on représentera comme discret dans ce chapitre. Elle se base donc sur les comportements de croissance des populations. Reprenons les bases pour mieux comprendre comment les matrices de population ont été créées :
 
 En 1798, Malthus publie son modèle de croissance des populations. Si nous considérons n(t) comme la taille de la population au temps t, et λ le taux de croissance de cette population, nous pouvons écrire que : 
 n(t+1) = λn(t)
@@ -95,20 +95,35 @@ Dans la pratique, il est plutôt rare de considérer les deux sexes dans les mat
 
 Nous allons maintenant voir comment représenter notre matrice de population sur R, qui va être notre outil principal dans ce chapitre pour manipuler et comprendre la dynamique de notre population. Afin de créer une matrice similaire à celle présentée plus haut, il suffit de taper cette commande :
 
-matrix(nrow = nombre de lignes désiré , ncol = nombre de colonnes désiré) soit dans notre cas matrix(nrow = 2, ncol = 2).
+matrix(nrow = nombre de lignes désiré , ncol = nombre de colonnes désiré) soit dans notre cas :
+
+```{r}
+matrix(nrow = 2, ncol = 2)
+```
 
 Pour le moment, cette matrice est vide. Si nous voulions la remplir directement, nous pouvions aussi utiliser un vecteur comme information : 
 
+```{r}
 matrix(data = c(1, 1, 1, 1) , nrow = 2)
+```
 
 Nous pouvions aussi faire une matrice reprenant directement nos abréviations si nous le souhaitions :
 
-matrix(data = c(〖"M〗_1 "  , 〖"F〗_1 " , 〖"M〗_2 " , 〖"F〗_1 " ), nrow = 2)
+```{r}
+matrix(data = c("M1 "  , "F1 " , "M2" , "F2 " ), nrow = 2)
+```
 
 Enfin, nous pouvons créer une matrice à partir d’une liste, ce qui peut être très pratique si notre jeu de donnée, notre population, est représentée sous cette forme. Dans ce cas-là, notre liste serait très simple, puisque nous n’avons que quatre valeurs. Mais cela permet de faciliter l’écriture de notre matrix si notre liste est beaucoup plus longue.
 
-liste <- list(1, 1, 1, 1)    ou alors liste2 <- list(〖"M〗_1 "  , 〖"F〗_1 " , 〖"M〗_2 " , 〖"F〗_1 " )
-matrix <- matrix(data = liste, nrow = 2)       ou      matrix2 <- matrix(data = liste2, nrow = 2)
+```{r}
+liste <- list(1, 1, 1, 1)    
+#ou alors
+liste2 <- list("M1 "  , "F1 " , "M2 " , "F2 " )
+matrix <- matrix(data = liste, nrow = 2)
+#ou
+matrix2 <- matrix(data = liste2, nrow = 2)
+
+```
 
 Ici, notre modèle représente une population stable, à l’instant t. Elle ne nous permet pas pour l’instant d’observer son évolution. Afin de pouvoir l’utiliser en dynamique des populations, nous allons devoir la complexifier
 
@@ -133,6 +148,7 @@ C’est de cette population que nous allons partir pour la suite de notre chapit
 
 Si nous voulons effectuer ces calculs sur R, les commandes sont assez simples. Nous avons vu dans la partie précédente comment créer des matrices sur le logiciel. Si nous voulons les compiler, il suffit d’utiliser l’opération « + » ou « - » comme des pour des nombres. Bien sûr, il est ici aussi nécessaire d’avoir des matrices de même dimension.
 
+```{r}
 P1 <- matrix(data = c(1, 1, 1, 1) , nrow = 2)
 M <- matrix(data = c(1, 1, 0, 1) , nrow = 2)
 P2 = P1 – M
@@ -140,8 +156,13 @@ P2 = P1 – M
 N <- matrix(data = c(1, 0, 0, 0) , nrow = 2)
 P3 <- P2 + N
 
-P’ <- matrix(data = c(11, 14, 3, 2) , nrow = 2)
-P = P3 + P’
+Pn <- matrix(data = c(11, 14, 3, 2) , nrow = 2)
+P = P3 + Pn
+
+
+
+```
+
 
 Par la suite, nous allons avoir besoin de multiplier notre matrice population avec d’autres matrices afin de la faire évoluer dans le temps. Nous allons donc profiter de ce chapitre pour vous montrer maintenant comment faire cela. Encore une fois, nous allons commencer par revoir les règles de calculs des matrices, puis leurs applications dans R. Tout d’abord, pour multiplier deux matrices, il n’est pas nécessaire que ces dernières aient la même dimension, au contraire des opérations d’addition et de soustraction. En revanche, il faut que le nombre de colonne de la première matrice soit égal au nombre de lignes dans la deuxième. En effet, la multiplication des deux matrices va être un croisement des colonnes de l’une avec les lignes de l’autre, il est donc important d’avoir un nombre équivalent entre les deux. Reprenons l’exemple de P’, avec une matrice B lambda pour le moment. Nous verrons dans le chapitre suivant quelle matrice est utile à multiplier dans la réalité avec notre matrice population.
 
@@ -157,11 +178,15 @@ Il est important de préciser que la plupart du temps, les multiplications ne so
 
 Maintenant que les calculs de produits matriciels nécessaire à nos futurs modélisations sont globalement acquis, nous allons voir comment les effectuer sur R. Si nous voulons simplement multiplier notre matrice avec un nombre, le signe ‘*’ suffit :
 
-P’’ = 2 * P’
+Pm = 2 * Pn
 
 Si nous voulons multiplier plusieurs matrices ensemble, nous devons rajouter le symbole ‘%’ pour chaque matrice, en plus de ‘*’. Ainsi, :
 
+```{r}
 N <- matrix(data = c(2, 4) , nrow = 2)
-P’’’ = P’ % * % N
+Pf = Pn % * % N 
+
+```
+
 
 
