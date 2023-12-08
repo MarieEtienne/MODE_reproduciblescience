@@ -293,9 +293,9 @@ ylims <- c(1, 6)
 
 The figure 1 represents the joint sampling of the two parameters. At each iteration, a new pair of parameters is proposed, and the ratio calculation assigns a weight to the proximity of the candidate parameter pair to the prior. Figure 2 represents the joint distribution of the two parameters formed by the sampling. It is from this joint distribution that the marginal posterior distributions of the two parameters arise. Therefore, we can also calculate the statistics (mean, standard deviation, etc.) of interest on these marginal posterior distributions.
 
-#IV) Prior Selection in Ecology
+# Prior Selection in Ecology
 
-## IV-1) The role of prior knowledge and beliefs
+## The role of prior knowledge
 
 In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.
 
@@ -303,7 +303,7 @@ Bayesian analyses differ from frequentist analyses by incorporating prior inform
 
 Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.
 
-## IV-2) Informative and non-informative priors
+## Informative and non-informative priors
 
 Use of informative priors: In practice, we want to base our decisions on all available information. Therefore, it is considered responsible to include informative priors in applied research whenever possible. Priors allow you to combine information from the literature, from the data, or to combine information from different datasets.
 
@@ -380,9 +380,7 @@ grid.arrange(graph1, graph2, nrow = 1)
 
 Here we illustrate the result of updating the prior with the likelihood, it gives us the posterior distribution. This shows that the impact of the chosen prior influences the posterior distribution with both its shape and the quantity of information it holds compared to the information within the dataset.
 
-## IV-3) Incorporating expert opinions and literature data
-
-# V) Case Studies in Bayesian Ecology
+# Case Studies in Bayesian Ecology
 
 ## Using JAGS
 
@@ -633,6 +631,4 @@ postSamples_df2 %>%
 
 Purple full lines represent the means of posterior distributions and doted line are the true values of the data. The utility to have posterior distribution and not only compute the mean or the standard error is that we can know the probability of each mean or sd values, therefore we have a good estimation of the confidence that we should have when making conclusion on values.
 
-## V-1) Highlighting specific ecological studies that employed Bayesian methods
-
-## V-2) Illustrative examples from different ecological sub-disciplines
+## More specific ecological studies that employed Bayesian methods
