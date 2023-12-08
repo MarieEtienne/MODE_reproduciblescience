@@ -145,3 +145,23 @@ P = P3 + P’
 
 Par la suite, nous allons avoir besoin de multiplier notre matrice population avec d’autres matrices afin de la faire évoluer dans le temps. Nous allons donc profiter de ce chapitre pour vous montrer maintenant comment faire cela. Encore une fois, nous allons commencer par revoir les règles de calculs des matrices, puis leurs applications dans R. Tout d’abord, pour multiplier deux matrices, il n’est pas nécessaire que ces dernières aient la même dimension, au contraire des opérations d’addition et de soustraction. En revanche, il faut que le nombre de colonne de la première matrice soit égal au nombre de lignes dans la deuxième. En effet, la multiplication des deux matrices va être un croisement des colonnes de l’une avec les lignes de l’autre, il est donc important d’avoir un nombre équivalent entre les deux. Reprenons l’exemple de P’, avec une matrice B lambda pour le moment. Nous verrons dans le chapitre suivant quelle matrice est utile à multiplier dans la réalité avec notre matrice population.
 
+(mettre matrice)
+
+Comme précisé juste avant, les matrices ne sont pas obligatoirement de la même dimension :
+
+(mettre matrice)
+
+Il est important de préciser que la plupart du temps, les multiplications ne sont pas commutatives : nous n’obtenons pas le même résultat en faisant P’*B qu’en faisant B*P’. L’ordre de la multiplication a de l’importance, au contraire de cette la multiplication de nombres qui peut s’inverser comme on le souhaite.
+
+(mettre  matrice)
+
+Maintenant que les calculs de produits matriciels nécessaire à nos futurs modélisations sont globalement acquis, nous allons voir comment les effectuer sur R. Si nous voulons simplement multiplier notre matrice avec un nombre, le signe ‘*’ suffit :
+
+P’’ = 2 * P’
+
+Si nous voulons multiplier plusieurs matrices ensemble, nous devons rajouter le symbole ‘%’ pour chaque matrice, en plus de ‘*’. Ainsi, :
+
+N <- matrix(data = c(2, 4) , nrow = 2)
+P’’’ = P’ % * % N
+
+
