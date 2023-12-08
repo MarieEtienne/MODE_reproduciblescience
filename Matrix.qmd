@@ -31,6 +31,7 @@ Nous allons maintenant imaginer qu'un surricate malade arrive au sein d'une nouv
 Dans ce modèle les individus sensible (S) se font infécter et passse donc dans la classe infectieux (I) puis soit quitte le système en mourrant de la maladie soit guerrisssent et deviennent donc des individus guerris ou immunisé (R). Pour finir, les individus immunisé peuvent perdre leur immunité et redevenir sensible (S).
 
 - trans.S.I/N, represente le nombre d'individus étant infecté par jour avec trans le taux de transmission
+#Je pense qu'il faudrait séparer les explications, tu commences par expliquer trans puis trans.S.I/N et pareil pour la suite
 - rec.I, représente le nombre d'individus qui guérissent par jour, avec rec le taux de guérision
 - madd.I, représente le nombre d'individus qui meurrent de la maladie par jour, avec madd le taux de mortalité
 - loss.R, représente le nombre d'individus qui perdent leur immunité par jour, avec loss le taux de perte de l'immunité.
