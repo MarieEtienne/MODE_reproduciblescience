@@ -384,31 +384,35 @@ $$ \text{Solutions are given by the following formula:}
 
 The stability of a linear system is often determined by the real parts of the eigenvalues. In this case, the real part is negative which indicates a **stable attractive node**.
 
-This sounds complicated, **but don't panic** ! In ecology we are lucky to have a great tool, R, which allows us to resolve this type of system. We will see how can R help us with an harder example.
+This sounds complicated, **but don't panic** ! In ecology we are lucky to have a great tool, R, which allows us to resolve this type of system. We will see how can R help us .
 
-#### Solving 3 equations systems
+### Solving SIR model with R
 
-Use R for study the behaviour of our model as double interest.
+Use R to study the behavior of our model as double interest.
 
--   Verify if our theorical calcul is great
+-   Verify if our theoretical calcul is okay
 
--   If you can't do your calcul help you to have an idear of the behaviour of the model
+-   If you can't do your calcul help you to have an idea of the behavior of the model
 
-To show how you can use phaseR and deSolve to solve ODE we will use the SIR we just solve. We hope our calcul is good but we will see. In our presentation we will show what's the most common function you can use not all the parameter you can add. I know you are probably sobbing crying "wHyYyYyy ?" (Who has never dream to know all the difference between the Euler and Runge Kunta order 4 ?) but i let you made you own search.
+To show how you can use phaseR and deSolve to solve ODE we will use the SIR we just solved. We hope our calcul is good. In this chapter, we will show what's the most common function you can use, but not all the parameters you can add. I know you are probably sobbing "wHyYyYyy ?" (Who has never dreamed of knowing all the difference between the Euler and Runge Kunta order 4 ?) but we let you make your search if you need more information.
 
-Lets start by erase all the data in our environnement in order to don't bother us when we work.. Then we load the 3 packages we will use.
+#### Step 1: Prepare you environnement
 
--   The most famous library to solve and study ODE is deSolve you can also compute yourself if you want but it will be an harsh task. A great point of deSolve it's this simplicity to use and we hope you would agree with us a the end of this chapter.
+Let's start by erasing all the data in our environment in order to don't bother us when we work. Then we load the 3 packages we will use.
+
+-   The most famous library to solve and study ODE is deSolve you can also compute yourself if you want but it will be a harsh task. A great point of deSolve it's its simplicity to use and we hope you will agree with us a the end of this chapter
 
 -   phaseR Performs a qualitative analysis of one- and two-dimensional autonomous ordinary differential equation systems, using phase plane methods
 
--   We will also use ggplot to made beautiful graph . It's also a litle more intuative way to create and manipulate plot than using basic ploting system in r.
+-   We will also use ggplot to make a beautiful graph. It's also a little more intuitive way to create and manipulate plot than using a basic ploting system in r
 
-- rgl is a package to creat 3D plot
+-   rgl is a package which give you tools to creat 3d plot and objects
 
-As we talk about programmation we have to talk about technical issues you can have. To prevent you to commit this we put during the presentation some technical issues to think of before coding. If you want to do the same things as us you will probably find yourself in some problem don't be afraid R is widely use in the science community you willeasily find people who have defeat the same problem. Don't be ashame to search help !
+-   tidyr is like ggplot but for data manipulation. It doesn't bring very special tools but able us to transform easily our table
 
-```{r}
+As we talk about programmation we have to talk about technical issues you can have. To prevent you from committing this we put during the presentation some technical issues to think of before coding. If you want to do the same things as us you will probably find yourself in some problems don't be afraid R is widely used you will easily find people who have defeated the same problem. Don't be ashamed to search for help!
+
+```{r message=F, warning=FALSE}
 #We erase all data use before
 rm(list = ls())
 #load library we need
@@ -416,17 +420,14 @@ library(ggplot2)
 library(deSolve)
 library(phaseR)
 library(rgl)
+library(tidyr)
 ```
 
-It's time to start modelling! The first step is to creat our fonction who give us the evolution of our population according time. This function to take a step of time, the initial population value, and value of different parameters. The output off this function needs to be a list of the new of our populations.
-To have the behaviour of our function we have to use the same hypothesis as in calculation part so we will don't code how the Recover compartiment evoluate (R). If we need the Recover evolution we will use
+#### Step 2: Define your model
+
+It's time to start modeling! The first step is to create our function which gives us the evolution of our population according to time. This function takes a step of time, the initial population value, and the value of different parameters. The output of this function needs to be a list of the new populations. To have the behavior of our function we have to use the same hypothesis as in the calculation part so we will not code how the Recover compartment evaluates (R). If we need the Recover evolution we will use: 
 $$1 = S + I + R \Leftrightarrow R = 1 - S - I $$
-
-
-Technical consideration: When you build you function you can are free to made some modification BUT the order of the input have to be time, population, parameter value because the ODE function want you to do this!
-
-
-
+Technical consideration: When you build your function you are free to make some modification BUT the order of the input has to be time, population, and parameter value because the ODE function want you to do this!
 
 ```{r}
 
@@ -453,13 +454,11 @@ mod_SIR <- function(t , dy , parameters){
 
 ```
 
-Step 2: study how the sytem evoluate among time
+#### Step 3: Study how the system evaluates among time
 
-Now we have done the heart of our model let's study it with ODE. It's from deSolve package to solve numerically our model. In order to do this we define to some quantities.
-For the time we use the seq function which creat a vector who go from 0 to 600 by 0.01 step. For parameters values we creat a vector in same order that in our function. And value we start form
+Now we have done the heart of our model let's study it with ODE. It's from the deSolve package to solve our model. To do this we define some quantities. For the time we use the seq function which creates a vector that goes from 0 to 600 by 0.01 step. For parameter values, we create a vector in the same order as in our function. And value we start to form
 
-Then we use ODE to simulate how our population evolve at each time in our vectors. 
-We take the output from ODE and manipulate it a little bit to make visualization easier
+Then we use ODE to simulate how our population evolves at each time in our vectors. We take the output from ODE and manipulate it a little bit to make visualization easier.
 
 ```{r}
 #Definition of parameters we will need for the suite
@@ -472,49 +471,73 @@ resolnum <- ode(y = depart, times = times, func = mod_SIR , parms = param)
 
 #Transfortmation of data in order to be use easely
 resolnum <- as.data.frame(resolnum)
-colnames(resolnum) <- c("Times" , "Susceptible" ,"Infectious" )
-resolnum$Recovered <- 1-  resolnum$Susceptible + resolnum$Infectious
+resolnum$R<- 1-  resolnum[,2] + resolnum[,3] 
+
+colnames(resolnum) <- as.factor(c("Times" , "Susceptible" ,"Infectious" ,"Recovered"))
+
+
 
 #Plotting time
-ggplot(resolnum)+
+ggplot(resolnum,aes(x=Times))+
   geom_line(aes(x = Times, y = Susceptible),color ="chartreuse" ,size =1.5)+
   geom_line(aes(x = Times,y = Infectious),color = "red" ,size =1.5)+
   geom_line(aes(x = Times,y = Recovered),color = "darkviolet" ,size =1.5)+
+  labs(title = "Population evolution among times", y = "Population")+
   theme_classic()
 
 
 ```
-Now we have an idear of how our population evoluate trhought time we can try to find the behaviour
 
-Step 3: Equilibrum point and behaviour
+Now we have an idea of how our population evaluates thought time we can try to find the behavior
 
-Let's study the behavior of our model and its equilibrium points. Once again, we're going to study that S as a function of I First function displays model behavior Second to draw the lines where the models cancel out
+#### Step 4: Equilibrium point and behavior
+
+Let's study the behavior of our model and its equilibrium points. We're going to study S as a function of I First function displays model behavior Second draws the lines where the models cancel out.
+
+Technical consideration: To have all nullclines you should extend the area you want to explore. For example, we only have interest in the area where S and I go to 0 at 1(we made the hypothesis the sum of all compartments should be equal to 1) but in our simulation, we go from -0.1 to 1.1.
 
 ```{r}
-  flowField(mod_SIR ,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,add = F)
+#Plot the velocity field
+  flowField(mod_SIR ,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,add = F,xlab = "S" , ylab = "I")
+  #Draw the isoclines of our model
 nullclines(mod_SIR ,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,points = 100, add = T,add.legend = F,size =2)
+
 ```
 
-We trace several trajectories to see how the model behaves
+As you can see we have two equilibrum points. The first is at the center of our phase diagram, and the arrows seem to show that we're tending towards this point. A second is present where I = 0 and S = 1 on the contrary, we seem to be moving away from it.
+If this graph allows us to observe 2 points of equilibrium, it is not easy to determine their behavior.
 
-```{r}
+To look at the behavior near these points, we can use the trajectory function, which will plot the trajectories of our system as a function of a starting point.
 
-for(i in 1:100){
+```{r message = FALSE}
+
+
+#we define our initials conditions
+X0 <- sample(x = seq(0,1,0.01),size =1)
+Y0 <- sample(x = seq(0,1-X0,0.01),size =1)
+cond_init = c(X0, Y0)
+#We simulate what's happened for one trajectory
+  trajectory(mod_SIR ,cond_init,tlim= c(0,50),parameters = param,col = "black",add = F,xlim=c(0,1),ylim = c(0,1))
+  
+#We repeat the same process for 50 other trajectory
+for(i in 1:50){
   X0 <- sample(x = seq(0,1,0.01),size =1)
 Y0 <- sample(x = seq(0,1-X0,0.01),size =1)
 
 cond_init = c(X0, Y0)
-  trajectory(mod_SIR ,cond_init,tlim= c(0,50),parameters = param,col = "black",add = T)
+  trajectory(mod_SIR ,cond_init,tlim= c(0,50),parameters = param,col = i,add = T)
 }
 ```
+What the vector field showed us seems to be confirmed by this graph. Let's check our observations with a new functions (promise they're the last)
 
-We also use find equilibrum with the this two function. findEquilibrum and stability?
+
+We'll check the behavior of the center point using the stability function. We could also have used the findEquilibrum function to find all the equilibrium points, but we'll let you have your fun.
 
 ```{r}
-findEquilibrium(SIR, y0 = c(0.99,.01),parameters = param )$classification
-stability(SIR, y0 = c(0.99,.01),parameters = param)
-
+# Checking stability of the point we see
+stability(SIR,ystar = c(0.5,0.5),parameters = param )$classification
 ```
+The two functions confirm our observations and the calculations made just before - what more could you ask for?
 
 There are still other functions in the deSolve and pahse R packages that could be of interest, but which are useful in more specific cases, so we won't look at them here.
 
@@ -564,9 +587,11 @@ The steps are the same as for the SIR model but here the matrix is 3x3. We invit
 
 Finding equilibrum point and their behaviour is a little bit harder than before so it's time to use R.
 
-#### Solving with R
+#### Solving Lotka-Volterra with R
 
-This time our problem is a little bit more complex thna before phase R isn't made to solve 3 equations system so we have th cheat. We can compute our function but unless you a nerd or MODE you don't want to do this. the solution we choose in this paragrph it's to solve system 2 by 2.
+Hey R is back! You love last part with how to solve 2 equation ODE in R ? Now let's find out how to solve a 3 equation system!
+Unfortunately, trying to solve this equation by hand leads to problems: it's not easy to find all the equilibrium points. As mentioned in the previous section, phaseR is not suitable for solving three-equation systems.
+We can compute our function but unless you a nerd or MODE you don't want to do this. the solution we choose in this paragrph it's to only study numercally system.
 
 So let's start again what we just do! We use the same library
 
@@ -579,7 +604,7 @@ library(tidyverse)
 library(rgl)
 ```
 
-We create a function with the same limitation.
+We create a function with the same limitation as in our first example     .
 
 ```{r}
 PPS <- function(t , dy , parameters){
@@ -607,19 +632,19 @@ PPS <- function(t , dy , parameters){
 
 ```
 
-In order to determine the behaviour of our system we should use the ode function to make many graph and try to understand numerically which parameter ar important. In the following example we pass this step and present you 3 cases we can have in our system
-
-
+In order to determine the behavior of our system we should use the ode function to make many graph and try to understand numerically which parameter ar important. In the following example we pass this step and present you 3 cases we can have in our system
 
 ```{r}
+#Paramters definition
 param <- c(r1 = 0.5, r2 = 0.2 , r3 = 0.1, b1 = 0.04, b2 = 0.04, c1 = 0.09, c2 = 0.01)
 temps = seq(from = 0 , to = 100, by = 0.01)
 depart = c(20 , 10 , 5)
+#Simulation
 resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
-
 resolnum <- as.data.frame(resolnum)
 colnames(resolnum) <- c("Times" , "Prey" ,"Predators" ,"SuperPredators")
 
+#Plotting some results
 
 
 ggplot(resolnum)+
@@ -630,21 +655,26 @@ ggplot(resolnum)+
 
 
 ggplot(resolnum)+
-   geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)
+   geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)+
+  theme_classic()
 
 ggplot(resolnum)+
-   geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)
+   geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)+
+  theme_classic()
 
 ggplot(resolnum)+
    geom_point(aes(x =  SuperPredators, y = Predators),color ="black" ,size =1.5)
++theme_classic()
 
+plot3d(resolnum$Prey,resolnum$Predators,resolnum$SuperPredators,xlab ="Prey",ylab ="Predators",zlab ="SuperPredators",lit =F)
 ```
+This first case is a very special one, since we observe a runaway system, with the number of prey increasing exponentially without being limited by predators. While mathematically this model makes sense, it is not very common in nature, due to the absence of infinite resources.
 
 
 
 ```{r}
 param <- c(r1 = 0.01, r2 = 0.2 , r3 = 0.1, b1 = 0.04, b2 = 0.04, c1 = 0.09, c2 = 0.01)
-temps = seq(from = 0 , to = 100, by = 0.01)
+temps = seq(from = 0 , to = 1000, by = 0.01)
 depart = c(20 , 10 , 5)
 resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
 
@@ -661,42 +691,27 @@ ggplot(resolnum)+
 
 ggplot(resolnum)+
    geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)
++theme_classic()
 
 ggplot(resolnum)+
    geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)
++theme_classic()
 
 ggplot(resolnum)+
    geom_point(aes(x =  SuperPredators, y = Predators),color ="black" ,size =1.5)
++theme_classic()
+
+plot3d(resolnum$Prey,resolnum$Predators,resolnum$SuperPredators,xlab ="Prey",ylab ="Predators",zlab ="SuperPredators")
 ```
 
+In this case, our system moves towards a balance between prey and predators. This time, however, superpredators are excluded from our system.
+
+For a more thorough analysis, we'd have to simulate the same model but draw our parameters randomly, but unfortunately this takes a lot of time, so we'd have to do it with very few simulations.
+To get a better idea of the model's behavior, more advanced simulations should be carried out, but unfortunately the fun has to stop at some point.
+
+If you eat graphics cards and want to delve deeper into the subject, the book Solving Differential Equations in R may be of some interest, even if it deals with much more complex and interesting problems than we do. 
 
 
-```{r}
-param <- c(r1 = 0.3, r2 = 0.2 , r3 = 0.1, b1 = 0.04, b2 = 0.01, c1 = 0.009, c2 = 0.01)
-temps = seq(from = 0 , to = 100, by = 0.01)
-depart = c(20 , 10 , 5)
-resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
-
-resolnum <- as.data.frame(resolnum)
-colnames(resolnum) <- c("Times" , "Prey" ,"Predators" ,"SuperPredators")
-
-
-
-ggplot(resolnum)+
-  geom_line(aes(x = Times, y = Prey),color ="chartreuse" ,size =1.5)+
-  geom_line(aes(x = Times,y = Predators),color = "red" ,size =1.5)+
-  geom_line(aes(x = Times,y = SuperPredators),color = "darkviolet",size =1.5)+
-  theme_classic()
-
-ggplot(resolnum)+
-   geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)
-
-ggplot(resolnum)+
-   geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)
-
-ggplot(resolnum)+
-   geom_point(aes(x =  SuperPredators, y = Predators),color ="black" ,size =1.5)
-```
 
 
 
