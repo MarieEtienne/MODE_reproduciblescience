@@ -309,16 +309,76 @@ Use of informative priors: In practice, we want to base our decisions on all ava
 
 Use of non-informative priors: In basic research where the results should only reflect the information in the current dataset. Results from a case study can be used in a meta-analysis which assumes independence between the different included studies.
 
+An illustration of how two different priors affect the posterior distribution in a Beta-Binomial model:
+  
 ```{r}
-x <- seq(-4, 4, length.out = 1000)
-y <- dnorm(x, mean = 0, sd = 1)
-data <- data.frame(x = x, y = y)
+# for non-informative uniform prior
+# Define the range of theta values
+theta <- seq(0, 1, by = 0.01)
+# Define the number of trials and successes
+n <- 10
+x <- 5
+# Calculate likelihood, prior, and posterior for non-informative uniform prior
+likelihood <- choose(n, x) * theta^x * (1 - theta)^(n - x)
+prior_uniform <- rep(0.05, length(theta))
+posterior_uniform <- likelihood * prior_uniform * 12
+# Create data frame for plotting
+df_uniform <- data.frame(theta, likelihood, prior_uniform, posterior_uniform)
+# Plotting the graph 
+graph1 <- ggplot(data = df_uniform, aes(x = theta)) +
+  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", size = 1) +
+  geom_line(aes(y = prior_uniform, color = "Posterior"), size = 1) +
+  geom_line(aes(y = posterior_uniform, color = "Prior"), size = 1) +
+  labs(title = "With Non-informative Uniform Prior",
+       x = "Theta (Probability of Success)",
+       y = "Density",
+       color = "Legend") +
+  theme_minimal() +
+  scale_color_manual(values = c("black", "blue", "orange"),
+                     labels = c("Likelihood", "Prior", "Posterior")) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank(),legend.position = "none")
 
-priors <- ggplot(data, aes(x = x, y = y)) + geom_line(color = "cornflowerblue", linewidth = 1) +
-  geom_hline(yintercept = 0.05, color = "purple", size = 1) + theme_classic() + labs(x = "Survival", y = "Probability density", title = "Comparaison informative and non-informative priors") + scale_color_manual(name = "Legend", label = c("With prior info"), values = c("Line 1" = "blue", "Line 2" = "red"))
-priors
+# for highly informative uniform prior
+# Define the range of theta values
+theta <- seq(0.25, 1, by = 0.01)
+# Define the number of trials and successes
+n <- 10
+x <- 9
+# Calculate likelihood, prior, and posterior for highly informative prior
+likelihood <- choose(n, x) * theta^x * (1 - theta)^(n - x)
+prior_informative <- dbeta(theta, 10, 9)
+posterior_informative <- likelihood * prior_informative
+# Rescale distributions to position them as desired
+max_likelihood <- max(likelihood)
+max_prior <- max(prior_informative)
+max_posterior <- max(posterior_informative)
+# Scale factors for prior and posterior to position them below likelihood
+scale_factor_prior <- 0.9
+scale_factor_posterior <- 0.9
+# Rescale prior and posterior
+prior_rescaled <- prior_informative * (max_likelihood / max_prior) * scale_factor_prior
+posterior_rescaled <- posterior_informative * (max_likelihood / max_posterior) * scale_factor_posterior
+# Create data frame for plotting
+df_informative <- data.frame(theta, likelihood, prior_rescaled, posterior_rescaled)
+# Plotting the graph 
+graph2 <- ggplot(data = df_informative, aes(x = theta)) +
+  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", size = 1) +
+  geom_line(aes(y = prior_rescaled, color = "Prior"), size = 1) +
+  geom_line(aes(y = posterior_rescaled, color = "Posterior"), size = 1) +
+  labs(title = "With Highly Informative Prior",
+       x = "Theta (Probability of Success)",
+       y = "Density",
+       color = "Legend") +
+  theme_minimal() +
+  scale_color_manual(values = c("black", "blue", "orange"),
+                     labels = c("Likelihood", "Posterior", "Prior")) + 
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank())
+
+grid.arrange(graph1, graph2, nrow = 1)
 
 ```
+
+Here we illustrate the result of updating the prior with the likelihood, it gives us the posterior distribution. This shows that the impact of the chosen prior influences the posterior distribution with both its shape and the quantity of information it holds compared to the information within the dataset.
 
 ## IV-3) Incorporating expert opinions and literature data
 
