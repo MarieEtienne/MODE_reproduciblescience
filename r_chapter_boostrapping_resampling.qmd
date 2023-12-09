@@ -190,7 +190,7 @@ $$
 ### Statistical test on the coefficients.
 
 You got the coefficients ! Now we need to make sure that the relationship between the variables are not due to random. In other terms, 
-we need to make sure that the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ with respect to $X_ij$ or vice versa. Here, permutations allow to simulate randoms relationships between variables. 
+The way to do that is to verify that the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ with respect to $X_ij$ or vice versa. Here, permutations allow to simulate randoms relationships between variables. 
 
 Here an example of one permutation of the $Y_i$ from the $X_i$.
 
@@ -310,7 +310,7 @@ df_results%>%
   
 ```
 
-The p value we obtained correspond to the probability that the observations knowing H. Considering a threshold (mainly 0.05) we can determine the significant of the parameters. If the p value is under the threshold, the paramter is significant and vis versa.
+The p value we obtained correspond to the probability that the observations knowing H. Considering a threshold (mainly 0.05) we can determine the significant of the parameters. If the p value is under the threshold, the parameter is significant and vis versa.
 
 Note that you can make permutations tests on all regressions coefficients when $Y_i$ are interchangeable.
 
@@ -318,11 +318,14 @@ Note that you can make permutations tests on all regressions coefficients when $
 
 ### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test genetics or geographicals distances. The H0 distribution is obtained by permuting the individuals between them.
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test correlations between genetics or geographical distances.
+The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, the Mantel's test is used to know more about correlations between ozone differences between station and geographical distances between station. In other terms : Is the ozone variability independent from the geographical variability? 
+
+
 
 ### Correspondence (distances) matrices.
 
-Distance matrices must relate to the same individuals. You can use the vegan package to extract them from a data set. Here, we use a data set from the UCLA site.
+The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix. 
 
 ```{r}
 library(vegan)
@@ -344,23 +347,27 @@ ozone.dists %>% # Visualizing a distance matrix
 
 ```
 
-We first extract distances matrix from the data using the function dist then we can apply the Mantel's test.
+The distances matrix should have the same shape than the table x. Now we can apply the Mantel test on our to matrix.
 
-There are a number of packages available to perform the Mantel test. For example, the ade4 package :
+### Mantel's test apllication
+
+There are some packages available to perform the Mantel test. For example, the ade4 package with the "mantel.rtest" function as follow.
 
 ```{r}
 # Using the ade4 package
 
 library(ade4)
-
-mantel.rtest(as.dist(station.dists), as.dist(ozone.dists), nrepet = 99)
+set.seed(seed = 1.5) # Have same results
+mantel.rtest(as.dist(station.dists), as.dist(ozone.dists[,-1]), nrepet = 1000)
 ```
+The coefficient of correlation observed is -0.2061116 and the p value is 0.6793207. If we put the threshold of significance on 0.05, the correlation is not significant here !
 
-The vegan package allows you to use different statistics. In our case we chose the Pearson correlation.
+An other example of package is the vegan package which allows to use different correlation statistics. In our case we chose the Pearson correlation. 
 
 ```{r}
-# Using the vegan package, pearson correlation
-mantel(xdis = station.dists, ydis = ozone.dists, permutations = 99)
-```
+#Using the vegan package, pearson correlation
 
-With this functions, you can get the p-value (significance) of the null hypothesis.
+mantel(xdis = station.dists, ydis = ozone.dists, permutations = 1000)
+
+```
+Using this package, the results are similar, well! The p value is indicate after the term "Significance:" and the correlation coefficient follow the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware on the length of our data set. 
