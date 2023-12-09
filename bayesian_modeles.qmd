@@ -15,63 +15,9 @@ library(sm)
 ```
 
 # Introduction
-<<<<<<< HEAD
-History and statement of the theorem:
-Biostatistics is a mathematical discipline based on statistics applied to living
-organisms (Vergnault, 2013). In ecology, the mathematical formulation of
-ecological and biological variables enables in-depth analysis of ecosystem
-functioning (e.g., population dynamics, quantitative ecology) (Zuur et al.,
-2007). Since its inception in the 17th century, many theorists have studied the
-subject, and today biostatistics is at the heart of our understanding of the
-living world (Williams, 2017).
-One of them, Thomas Bayes, is at the origin of one of the most widely used
-branches of biostatistics: Bayesian statistics. This 18th-century English
-pastor, who wore many hats (mathematics, geometry, theology, etc.), developed a
-central probability theorem known as Bayes' Theorem (Droesbeke et al., 2002).
-The need to create new statistics is linked to Thomas Bayes’ astonishing life
-experience, as he navigated between belief and science. What's more, in the
-eighteenth century, religion was still at the heart of everyday life throughout
-Europe, regardless of denomination (in this case, the Anglican Church)
-(Bellhouse, 2004). The mathematician was therefore faced with the question of
-how to formulate probable scientific hypotheses, including random parameters and
-admitting the unknown, a priori, of an experiment. Implicitly, this means that
-it is necessary to consider the results of the test even before exploiting the
-data (Cornfield, 1967).
-It is formulated in such a way that for (An) a complete system of events,
-all of non-zero probability, for any event Y, we have (Traonmilin and Richou,
-2018):
-$$ P(\theta \mid Y) = \dfrac{P(Y \mid \theta) \cdot P(\theta)}{P(Y)} $$
-It therefore states the relationship between the probability of one event (A)
-occurring and the probability of another event (B) occurring. Bayesian theory is
-applied upstream of the drafting of statistical hypotheses, hence the a priori
-terminology often used to describe this approach (Puga et al., 2015).
-The benefits of this technique for ecology:
-Bayesian statistics were shelved for almost two centuries, as they were too
-complex to perform and required a great deal of computing power. However, it was
-in the 1970s and 1980s that Bayesian statistics enjoyed a new lease of life
-(Traonmilin and Richou, 2018). This new impetus came at a time when the
-scientific world was becoming increasingly aware of ecological issues
-(Zimmermann, 2020). Recent discoveries in computing and computing power also
-made it possible to carry out more advanced analyses, and thus to integrate the
-use of Bayesian statistics. The democratization of the use of predictive models
-also contributes to the spread of these probability calculations (Manabe and
-Smagorinsky, 1967).
-In the field of ecology, one of the main difficulties in analysing processes
-operating in ecosystems is the complexity of interactions and the abundance of
-variables. These same variables are not always observable, and their influence
-can escape the observer's gaze (Zuur et al., 2007) . This form of statistics
-thus makes it possible to create a link between non-visible variables and their
-observable repercussions on the environment. The main objective of the Bayesian
-approach is therefore to assess the probability that there is an effect of these
-unperceived variables (Wikle, 2003). In this study, we attempt to take stock of
-the use of Bayesian methods in ecology and what they can offer in comparison
-with so-called "frequency" statistics, through concrete examples using modeling
-tools.
-=======
 
-History and statement of the theorem: Biostatistics is a mathematical discipline based on statistics applied to living organisms (Vergnault, 2013). In ecology, the mathematical formulation of ecological and biological variables enables in-depth analysis of ecosystem functioning (e.g., population dynamics, quantitative ecology) (Zuur et al., 2007). Since its inception in the 17th century, many theorists have studied the subject, and today biostatistics is at the heart of our understanding of the living world (Williams, 2017). One of them, Thomas Bayes, is at the origin of one of the most widely used branches of biostatistics: Bayesian statistics. This 18th-century English pastor, who wore many hats (mathematics, geometry, theology, etc.), developed a central probability theorem known as Bayes' Theorem (Droesbeke et al., 2002). The need to create new statistics is linked to Thomas Bayes' astonishing life experience, as he navigated between belief and science. What's more, in the eighteenth century, religion was still at the heart of everyday life throughout Europe, regardless of denomination (in this case, the Anglican Church) (Bellhouse, 2004). The mathematician was therefore faced with the question of how to formulate probable scientific hypotheses, including random parameters and admitting the unknown, a priori, of an experiment. Implicitly, this means that it is necessary to consider the results of the test even before exploiting the data (Cornfield, 1967). It is formulated in such a way that for "\[...\] (An) a complete system of events, all of non-zero probability, for any event B, we have» (Traonmilin and Richou, 2018): $$ P_B(A)=\frac $$ It therefore states the relationship between the probability of one event (A) occurring and the probability of another event (B) occurring. Bayesian theory is applied upstream of the drafting of statistical hypotheses, hence the a priori terminology often used to describe this approach (Puga et al., 2015). The benefits of this technique for ecology: Bayesian statistics were shelved for almost two centuries, as they were too complex to perform and required a great deal of computing power. However, it was in the 1970s and 1980s that Bayesian statistics enjoyed a new lease of life (Traonmilin and Richou, 2018). This new impetus came at a time when the scientific world was becoming increasingly aware of ecological issues (Zimmermann, 2020). Recent discoveries in computing and computing power also made it possible to carry out more advanced analyses, and thus to integrate the use of Bayesian statistics. The democratization of the use of predictive models also contributes to the spread of these probability calculations (Manabe and Smagorinsky, 1967). In the field of ecology, one of the main difficulties in analysing processes operating in ecosystems is the complexity of interactions and the abundance of variables. These same variables are not always observable, and their influence can escape the observer's gaze (Zuur et al., 2007) . This form of statistics thus makes it possible to create a link between non-visible variables and their observable repercussions on the environment. The main objective of the Bayesian approach is therefore to assess the probability that there is an effect of these unperceived variables (Wikle, 2003). In this study, we attempt to take stock of the use of Bayesian methods in ecology and what they can offer in comparison with so-called"frequency" statistics, through concrete examples using modeling tools.
+History and statement of the theorem: Biostatistics is a mathematical discipline based on statistics applied to living organisms (Vergnault, 2013). In ecology, the mathematical formulation of ecological and biological variables enables in-depth analysis of ecosystem functioning (e.g., population dynamics, quantitative ecology) (Zuur et al., 2007). Since its inception in the 17th century, many theorists have studied the subject, and today biostatistics is at the heart of our understanding of the living world (Williams, 2017). One of them, Thomas Bayes, is at the origin of one of the most widely used branches of biostatistics: Bayesian statistics. This 18th-century English pastor, who wore many hats (mathematics, geometry, theology, etc.), developed a central probability theorem known as Bayes' Theorem (Droesbeke et al., 2002). The need to create new statistics is linked to Thomas Bayes' astonishing life experience, as he navigated between belief and science. What's more, in the eighteenth century, religion was still at the heart of everyday life throughout Europe, regardless of denomination (in this case, the Anglican Church) (Bellhouse, 2004). The mathematician was therefore faced with the question of how to formulate probable scientific hypotheses, including random parameters and admitting the unknown, a priori, of an experiment. Implicitly, this means that it is necessary to consider the results of the test even before exploiting the data (Cornfield, 1967). It is formulated in such a way that for (An) a complete system of events, all of non-zero probability, for any event Y, we have (Traonmilin and Richou, 2018): $$ P(\theta \mid Y) = \dfrac{P(Y \mid \theta) \cdot P(\theta)}{P(Y)} $$ It therefore states the relationship between the probability of one event (A) occurring and the probability of another event (B) occurring. Bayesian theory is applied upstream of the drafting of statistical hypotheses, hence the a priori terminology often used to describe this approach (Puga et al., 2015). The benefits of this technique for ecology: Bayesian statistics were shelved for almost two centuries, as they were too complex to perform and required a great deal of computing power. However, it was in the 1970s and 1980s that Bayesian statistics enjoyed a new lease of life (Traonmilin and Richou, 2018). This new impetus came at a time when the scientific world was becoming increasingly aware of ecological issues (Zimmermann, 2020). Recent discoveries in computing and computing power also made it possible to carry out more advanced analyses, and thus to integrate the use of Bayesian statistics. The democratization of the use of predictive models also contributes to the spread of these probability calculations (Manabe and Smagorinsky, 1967). In the field of ecology, one of the main difficulties in analysing processes operating in ecosystems is the complexity of interactions and the abundance of variables. These same variables are not always observable, and their influence can escape the observer's gaze (Zuur et al., 2007) . This form of statistics thus makes it possible to create a link between non-visible variables and their observable repercussions on the environment. The main objective of the Bayesian approach is therefore to assess the probability that there is an effect of these unperceived variables (Wikle, 2003). In this study, we attempt to take stock of the use of Bayesian methods in ecology and what they can offer in comparison with so-called "frequency" statistics, through concrete examples using modeling tools.
 
->>>>>>> 1528edad9ac706e06bf1fac2b59d4afa0e4248f9
 # General theory behind Bayesian approach.
 
 ## Explanation in the special case of conjugation between prior and posterior
@@ -364,7 +310,7 @@ Use of informative priors: In practice, we want to base our decisions on all ava
 Use of non-informative priors: In basic research where the results should only reflect the information in the current dataset. Results from a case study can be used in a meta-analysis which assumes independence between the different included studies.
 
 An illustration of how two different priors affect the posterior distribution in a Beta-Binomial model:
-  
+
 ```{r}
 # for non-informative uniform prior
 # Define the range of theta values
