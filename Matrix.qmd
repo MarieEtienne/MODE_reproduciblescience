@@ -40,8 +40,8 @@ I. Modélisation matricielle en écologie
 
 	A quoi servent les matrices en écologie ? 
 	
-Matrices are mathematical tools for modeling situations. Used in many fields, ecology is no exception. Matrices make it possible to represent populations and make them evolve according to different rules or events. 
-The first uses of these models date back to 1941 by Harro Bernardelli which studied the oscillations of the structure of a population. Others use later matrices to represent populations, including Leslie in 1945 whose work marked a turning point in the use of matrices in ecology. 
+Matrices are mathematical tools for modeling situations. Used in many fields, ecology is no exception . Matrices make it possible to represent populations and make them evolve according to different rules or events. 
+The first uses of these models date back to 1941 by Harro Bernardelli which studied the oscillations of the structure of a population (Smith D. and Keyfitz N., 2012). Others use later matrices to represent populations, including Leslie in 1945 whose work marked a turning point in the use of matrices in ecology (Charles S., 2004). 
 Subsequently, different models of matrix representation of populations were published and used in population dynamics.
 
 The objective of a population matrix is, as we have already said, to represent the evolution of a population over time and its state at a particular time "t" for example, which will be represented as discreet in this chapter. 
@@ -59,9 +59,9 @@ N(t) = λ^tN(0)
 $$
 with N(0) the population at the beginning of our study.
 
-Depending on the sign of λ, our population will therefore increase or decrease over time.
+Depending on the sign of λ, our population will therefore increase or decrease over time (Hoppensteadt F.C., 1982).
 However, this model is largely simplified. Why? It considers that all individuals are identical, whether by their reproductive capacity or their ability to survive. 
-This means that in this model, an elderly individual can reproduce and survive just as well as a young and vigorous individual who has just reached sexual maturity.
+This means that in this model, an elderly individual can reproduce and survive just as well as a young and vigorous individual who has just reached sexual maturity ((Frisman E.Ya. et al., 2021).
 
 But then, how can we solve this problem? In the wild, each individual is different, but we can predict his qualities according to the average of his species and his position in the population: by position, we mean his place in different categories expressed according to various criteria such as age (young, adult, old), sex (male, female), or many others. 
 These categories are commonly referred to as “classes”. Several individuals of the same class will have the same characteristics from the point of view of the criterion used for this class, and therefore will have the same impacts on the dynamics of their population. For example, they will have the same fertility or the same survival rate. Thus, we can determine the contribution of each class to another class and thus ultimately to the population, and this according to the size of the first class. 
@@ -96,7 +96,7 @@ Population dynamic is a concept that is sometimes difficult to study because it 
 - immigration, the rates of which will depend on other populations, their distances from those studied and the dispersal capacity of individuals; 
 - emigration, which will depend on the lifestyle of the species studied and its tendency to leave its original population.
 
- A matrix will allow to represent the population variation according to these four processes.
+ A matrix will allow to represent the population variation according to these four processes (Schaub M. and Abadi F., 2011 ; Abadi et al., 2010).
 
  (mettre ta figure)
 
@@ -106,7 +106,7 @@ Finally, individuals of different ages will not have the same mortality rates. M
 
 It is important to know that modeling matrices have limitations. They are based in particular on hypotheses that will allow their correct analysis and the validity of their results. Thus, interactions between individuals are not taken into account, and do not affect the dynamics of their population. Then, the caracteristics of individuals of the same class are identical, regardless of the individual, and constant over time. Different caracteristics are only found in different classes.
 
-By allowing to model as correctly as possible the evolution of a population over time, according to the maximum of parameters that can positively or negatively impact it, we can obtain many very interesting results. Thus, population matrices can allow us to improve species conservation and management. Depending on the dynamics of its population, we can know if the species is threatened in the future and/or impacted by events (example: impact of fire). We can have a more global and real vision of how populations evolve in their environment. 
+By allowing to model as correctly as possible the evolution of a population over time, according to the maximum of parameters that can positively or negatively impact it, we can obtain many very interesting results. Thus, population matrices can allow us to improve species conservation and management. Depending on the dynamics of its population, we can know if the species is threatened in the future and/or impacted by events (example: impact of fire (Hoffmann W.A., 1999)). We can have a more global and real vision of how populations evolve in their environment. 
 However, matrix models may not be always necessary. As for each study, it is important to ask ourselves the right questions, to think about the interest of this mode of analysis compared to others and its relevance for the question/ population studied.
 
 B) Transformer une population en matrice
@@ -127,7 +127,7 @@ To have all these parameters, we must already know a minimum of things about the
 
 Obviously, depending on the question and the complexity of the study, these parameters may be more or less precise (for example, population of an invasive species with no predator, and therefore a mortality rate dependent on fewer factors).
 
-Once all the parameters are known, we can formulate equations reflecting the evolution of the population according to these criteria. It is useful before making our matrix to realize a life cycle diagram of the studied population.
+Once all the parameters are known, we can formulate equations reflecting the evolution of the population according to these criteria. It is useful before making our matrix to realize a life cycle diagram of the studied population (Charles S., 2004).
 
 To help you understand how matrix modeling of populations works, we will use an example more and more complex of a population matrix throughout our chapter.
 
@@ -137,7 +137,7 @@ To start, we will begin with a very simplified situation:
 
 A serious epidemic decimated the original colony of a meerkat family, forcing them to immigrate to find a new one. The family is healthy and does not have the disease. It is composed of a male and a female, as well as their two young, a young male and a young female. 
 If we look for the lifestyle of meerkats in the literature, we obtain in particular that females have 2 to 5 young per year. They can have young from one year old.
-In our example, we will consider an average of 3 cubs per year. In addition, individuals live on average 12 years. 
+In our example, we will consider an average of 3 cubs per year. In addition, individuals live on average 12 years (Réserve de Sigean, 2023). 
                                                                            
 We can represent our small, simplified population in a basic matrix form. Thus:
 
@@ -165,7 +165,7 @@ $$
 \end{equation}    
 $$      
 
-In practice, it is rather rare to consider both sexes in population matrices. This is due to the greater complexity it would require to also consider gender interactions. For simplicity, the models are often based on females only (female-based model), mainly because of the importance of females for the number of descendants and the greater ease in calculating their number of descendants, compared to a male.
+In practice, it is rather rare to consider both sexes in population matrices. This is due to the greater complexity it would require to also consider gender interactions. For simplicity, the models are often based on females only (female-based model), mainly because of the importance of females for the number of descendants and the greater ease in calculating their number of descendants, compared to a male (Girel S., 2020 ; ) .
 
 We will now see how to represent our population matrix on R, which will be our main tool in this chapter to manipulate and understand the dynamics of our population. To create a matrix similar to the one shown above, simply type this command:
 
