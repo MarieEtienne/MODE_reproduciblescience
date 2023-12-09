@@ -34,10 +34,10 @@ how to formulate probable scientific hypotheses, including random parameters and
 admitting the unknown, a priori, of an experiment. Implicitly, this means that
 it is necessary to consider the results of the test even before exploiting the
 data (Cornfield, 1967).
-It is formulated in such a way that for "[...] (An) a complete system of events,
-all of non-zero probability, for any event B, we have» (Traonmilin and Richou,
+It is formulated in such a way that for (An) a complete system of events,
+all of non-zero probability, for any event Y, we have (Traonmilin and Richou,
 2018):
-$$ P_B(A)=\frac $$
+$$ P(\theta \mid Y) = \dfrac{P(Y \mid \theta) \cdot P(\theta)}{P(Y)} $$
 It therefore states the relationship between the probability of one event (A)
 occurring and the probability of another event (B) occurring. Bayesian theory is
 applied upstream of the drafting of statistical hypotheses, hence the a priori
