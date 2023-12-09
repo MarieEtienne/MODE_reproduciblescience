@@ -164,7 +164,7 @@ Dans le cas d'une corrélation, la statistique de test pourrait être basée sur
 
 ## Regressions
 
-How to do when you have only quantitatives variables ?
+How to do when we have only quantitative variables ?
 Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1,X_2,.,X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is classically expressed as follow :
 
 $$ 
@@ -189,8 +189,7 @@ $$
 
 ### Statistical test on the coefficients.
 
-You got the coefficients ! Now we need to make sure that the relationship between the variables are not due to random. In other terms, 
-The way to do that is to verify that the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ with respect to $X_ij$ or vice versa. Here, permutations allow to simulate randoms relationships between variables. 
+We got the coefficients ! Now we need to make sure that the relationship between the variables are not due to random. In other terms, The way to do that is to verify if the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ with respect to $X_ij$ or vice versa. Here, permutations allow to simulate randoms relationships between variables. 
 
 Here an example of one permutation of the $Y_i$ from the $X_i$.
 
@@ -261,7 +260,7 @@ hist_2 <- hist(hyp_nulle[,2],
 
 ### observed regression coefficients
 
-Now we  have a good idea of the random effects. We could graphically compare the distributions under H0 with the observations (here the red line) and see if our observed coefficients are under the distribution of H0.
+Now we have a good idea of the random effects. We could graphically compare the distributions under H0 with the observations (here the red line) and see if our observed coefficients are under the distribution of H0.
 
 ```{r}
 
@@ -310,16 +309,16 @@ df_results%>%
   
 ```
 
-The p value we obtained correspond to the probability that the observations knowing H. Considering a threshold (mainly 0.05) we can determine the significant of the parameters. If the p value is under the threshold, the parameter is significant and vis versa.
+The p value we obtained correspond to the probability of the observation knowing H. Considering a threshold (mainly 0.05) we can determine the significance of the parameters. If the p value is under the threshold, the parameter is significant and vis versa.
 
-Note that you can make permutations tests on all regressions coefficients when $Y_i$ are interchangeable.
+Note that you can make permutations tests on all regressions coefficients if $Y_i$ and $X_i$ are interchangeable.
 
 ## Mantel test
 
 ### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for test correlations between genetics or geographical distances.
-The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, the Mantel's test is used to know more about correlations between ozone differences between station and geographical distances between station. In other terms : Is the ozone variability independent from the geographical variability? 
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances.
+The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, the Mantel's test is used to know more about correlations between ozone differences and geographical distances between station. In others terms : Is the ozone variability independent from the geographical variability? 
 
 
 
@@ -351,7 +350,7 @@ The distances matrix should have the same shape than the table x. Now we can app
 
 ### Mantel's test apllication
 
-There are some packages available to perform the Mantel test. For example, the ade4 package with the "mantel.rtest" function as follow.
+There are some packages available to perform the Mantel test. For example the ade4 package with the "mantel.rtest" function as follow.
 
 ```{r}
 # Using the ade4 package
@@ -360,7 +359,7 @@ library(ade4)
 set.seed(seed = 1.5) # Have same results
 mantel.rtest(as.dist(station.dists), as.dist(ozone.dists[,-1]), nrepet = 1000)
 ```
-The coefficient of correlation observed is -0.2061116 and the p value is 0.6793207. If we put the threshold of significance on 0.05, the correlation is not significant here !
+The coefficient of correlation observed is -0.2061116 and the p value is 0.6793207. If we put the threshold of significance on 0.05. The correlation is not significant here !
 
 An other example of package is the vegan package which allows to use different correlation statistics. In our case we chose the Pearson correlation. 
 
@@ -370,4 +369,4 @@ An other example of package is the vegan package which allows to use different c
 mantel(xdis = station.dists, ydis = ozone.dists, permutations = 1000)
 
 ```
-Using this package, the results are similar, well! The p value is indicate after the term "Significance:" and the correlation coefficient follow the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware on the length of our data set. 
+Using this package, the results are similar. well! The p value is indicate after the term "Significance:" and the correlation coefficient follow the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware on the length of our data set. 
