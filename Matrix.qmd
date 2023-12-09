@@ -136,8 +136,8 @@ We will take a population of meerkats as an example. Meerkats are a social speci
 To start, we will begin with a very simplified situation:
 
 A serious epidemic decimated the original colony of a meerkat family, forcing them to immigrate to find a new one. The family is healthy and does not have the disease. It is composed of a male and a female, as well as their two young, a young male and a young female. 
-If we look for the lifestyle of meerkats in the literature, we obtain in particular that females have 2 to 5 young per year, twice a year. They can have young from one year old.
-In our example, we will consider an average of 7 cubs per year. In addition, individuals live on average 12 years. 
+If we look for the lifestyle of meerkats in the literature, we obtain in particular that females have 2 to 5 young per year. They can have young from one year old.
+In our example, we will consider an average of 3 cubs per year. In addition, individuals live on average 12 years. 
                                                                            
 We can represent our small, simplified population in a basic matrix form. Thus:
 
