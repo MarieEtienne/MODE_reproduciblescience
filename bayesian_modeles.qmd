@@ -34,7 +34,7 @@ eighteenth century, religion was still at the heart of everyday life throughout
 Europe, regardless of denomination (in this case, the Anglican Church)
 (Bellhouse, 2004). The mathematician was therefore faced with the question of
 how to formulate probable scientific hypotheses, including random parameters and
-admitting the unknown, a priori, of an experiment. Implicitly, this means that
+admitting the unknown, "a priori", of an experiment. Implicitly, this means that
 it is necessary to consider the results of the test even before exploiting the
 data (Cornfield, 1967).
 It is formulated in such a way that for (An) a complete system of events,
@@ -43,7 +43,7 @@ all of non-zero probability, for any event Y, we have (Traonmilin and Richou,
 $$ P(\theta \mid Y) = \dfrac{P(Y \mid \theta) \cdot P(\theta)}{P(Y)} $$
 It therefore states the relationship between the probability of one event (A)
 occurring and the probability of another event (B) occurring. Bayesian theory is
-applied upstream of the drafting of statistical hypotheses, hence the a priori
+applied upstream of the drafting of statistical hypotheses, hence the "a priori"
 terminology often used to describe this approach (Puga et al., 2015).
 The benefits of this technique for ecology:
 Bayesian statistics were shelved for almost two centuries, as they were too
