@@ -23,6 +23,7 @@ The
 
 ```{r, echo = F}
 library(tidyverse)
+library(lubridate)
 ```
 
 A citation @bauer2023writing
