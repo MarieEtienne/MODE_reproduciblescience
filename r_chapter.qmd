@@ -15,11 +15,20 @@ Once the structure of the spatial correlation has be estimated, it can then be i
 
 Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
 
+For the analysis under R, it will be important to import the package **spatialreg** as well as **gwrr**
+
+```{r}
+library(spatialreg)
+library(gwrr)
+```
+
 ### 3.1.Stationary process
 
 For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
 
 #### 3.1.1. Spatially lagged X model
+
+This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
 
@@ -29,17 +38,19 @@ to which will be added an extra parameter, a distance-weighted function of the n
 
 ![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/autocovariate_function.png)
 
-A can be calculated as either the weighted sum : 
-![](~/cours/Master 2/S1/OCR/MODE_reproduciblescience/images projet/weighted_sum.png)
+A can be calculated as either the weighted sum :
+
+![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/weighted_sum.png)
 
 or as the weighted average:
 
-![](~/cours/Master 2/S1/OCR/MODE_reproduciblescience/images projet/weighted_average.png)
-(*y*j = the value of y at the site j i's set of *k*i neighbors
-*w*ij = the weight given to the site j's influence over site i)
+![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/weighted_average.png)
 
-This function is usually related to the distance between data points or to the environnemental distance.
+(**y**j = the value of y at the site j among site i's set of *k*i neighbors **w**ij = the weight given to the site j's influence over site i)
 
+This function is usually related to the distance between data points or to the environmental distance.
+
+In R,
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
