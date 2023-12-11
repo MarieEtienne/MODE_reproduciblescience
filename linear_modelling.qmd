@@ -92,7 +92,7 @@ Let's perform a two-factor ANOVA, something far better than running two separate
 - (1) we have more statistical power (higher degrees of freedom)
 - (2) we can test whether the main effects interact or not 
 - (3) we reduce the risk of statistical error (i.e. we can't forget that each time we perform a separate statistical analysis, we get $\alpha$ and $\beta$ risks)
-```{r global data, echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 # Dataset import
 datasessile <- read.table("sessile.txt", dec=".", header = TRUE)
 datasessile$Copper<-as.factor(datasessile$Copper)
@@ -116,7 +116,7 @@ Before any statistical analysis, we **MUST** explore the data in order to preven
 ### Statistical analysis
 **Model building**
 For the statistical modelling, we first analyse the full model (model containing all independent variables and interactions to test).
-```{r fullmodel,include=TRUE}
+```{r,include=TRUE}
 # Model formulation
 mod1<-lm(Richness~Copper+Orientation+Copper:Orientation,data=datasessile)
 # Comment : a simplest way to write this
@@ -127,7 +127,7 @@ drop1(mod1,test="F")
 We here have a significant interaction between COPPER and ORIENTATION, shown by the test statistic, F value and its associated p-value (Pr(>F)). This means that the effect of one factor (COPPER) depends upon the other (ORIENTATION). In this example, it would mean that the effect of copper enrichment is not consistent between the vertical and horizontal habitats. This complexifies the interpretation of the main effects as a consequence. As the interaction is significant, the full model is the candidate model (i.e. the model containing only significant terms). To understand how factors and their interaction influence the species richness, we must analyse the coefficients of the model.
 
 **Model's coefficients analysis**
-```{r coeff,include=TRUE}
+```{r,include=TRUE}
 # Candidate model formulation
 mod1<-lm(Richness~Copper*Orientation,data=datasessile)
 # Coefficients of the model
@@ -155,7 +155,7 @@ $$ +[Orientation_{Horizontal}=0.0; \:Orientation_{Vertical}=-11.7^{***}]  $$
 $$ +[Copper_{Low} : Orientation_{Vertical} = 15.1^{***};\:Copper_{None} : Orientation_{Vertical} = 8^{***}]$$
 
 A quick way to help understand an interaction, if we get one, is to examine the interaction plot.
-```{r grapheInter, include=TRUE, fig.height=4, fig.width=7}
+```{r, include=TRUE, fig.height=4, fig.width=7}
 # Interactions graphic
 boxplot(datasessile$Richness~datasessile$Copper*datasessile$Orientation, varwidth = TRUE, ylab = "Species Richness", col='blue', main = "",cex.axis=0.7)
 ```
@@ -174,7 +174,7 @@ Those coefficients suggest that the species richness is lowest in vertical habit
 - $Copper_{Low}$ = $0.4^{NS}$\
 - $Copper_{None}$ = $14.2^{***}$ 
 Those coefficients suggest that the species richness is highest in absence of Copper enrichment (level $None$ > $High$). But as the level $High$ is the baseline, we can't detect whether the levels $None$ and $Low$ are different or not. So, we must change the level baseline and re-analyse the coefficients of the model to detect difference or not between those two factor levels.
-```{r relevel, echo=TRUE}
+```{r, echo=TRUE}
 # Change the COPPER factor baseline: put 'Low' level as the baseline
 datasessile$Copper2<-relevel(datasessile$Copper,ref="Low")
 # New model formulation
@@ -191,7 +191,7 @@ Those coefficients suggest that the species richness is highest in absence of Co
 
 **Model explanation: R²**
 Let's determine the part of the $Y$ variation explained by the model.
-```{r R²,include=TRUE}
+```{r,include=TRUE}
 # R² of the model
 summary(mod1)
 ```
@@ -230,13 +230,13 @@ For this example, we will use data from a study performed in 1994 that concerns 
     variable
 
 The underlying question for this research is simple; do variables drive the dry weight in *Anatalanta aptera*? Predictors being continuous and categorical, we are gonna perform an **ANCOVA**.
-```{r import data, echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 # Dataset import
 dataFly <- read.table("FlyWeight.txt", dec=".", header = TRUE)
 ```
 
 We must check whether the variables are correctly imported, i.e. they are of the right type. Sex and Habitat are 'chr', so we must transform them into factors.
-```{r data mutation, echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 dataFly$Sex<-as.factor(dataFly$Sex)
 dataFly$Habitat<-as.factor(dataFly$Habitat)
 str(dataFly)
@@ -250,21 +250,10 @@ str(dataFly)
 For the statistical modelling, we first analyse the full model (model containing all independent variables to test). We will test the effects of the main effects (3 continuous and 2 categorical independent variables) and their interactions (by excluding interactions between quantitative independent variables). To get the candidate model we will perform a **backward selection**. It consist in testing the full model first, then we drop the least significant interaction, we perform this step until all the remaining interaction effect are significant. We do the qsame approach for the main effect. By following these two steps, candidate model is found. We use the function drop (F test) to test the significant at each step and choose the lest significant effect. Keep in mind that if a variable is involved in an interaction effect you must keep it as a main effect in the model.
 
 **Backward selection**
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Model formulation
 #Full model
-mod1<-lm(DryWeight~ Sex
-        + Habitat
-        + Width
-        + WaterContent
-        + FatContent
-        + Sex:Habitat
-        + Sex:Width
-        + Habitat:Width
-        + Sex:WaterContent
-        + Habitat:WaterContent  
-        + Sex:FatContent
-        + Habitat:FatContent 
+mod1<-lm(DryWeight~ Sex + Habitat + Width + WaterContent + FatContent + Sex:Habitat + Sex:Width + Habitat:Width + Sex:WaterContent + Habitat:WaterContent + Sex:FatContent + Habitat:FatContent 
         ,data=dataFly)
 # Then we check for significance
 drop1(mod1,test="F")
@@ -321,14 +310,9 @@ drop1(mod1,test="F")
 As the 'FatContent' is still non significant, we exclude this main effect and we obtain the 'Candidate Model'. This candidate model contains three main effects (we are keeping the main effect because the variables have interaction effects) and two interactions.
 
 **Candidate model**:
-```{r}
+```{r,echo=TRUE,include=TRUE}
 # Model formulation
-mod1<-lm(DryWeight~ Habitat
-        + Width
-        + WaterContent
-        + Habitat:Width
-        + Habitat:WaterContent  
-        ,data=dataFly)
+mod1<-lm(DryWeight~ Habitat+ Width + WaterContent + Habitat:Width + Habitat:WaterContent,data=dataFly)
 
 drop1(mod1,test="F")
 ```
@@ -355,7 +339,7 @@ This output presents a table detailing the coefficients of the model with coeffi
 **Model explanation: R²**
 You can determine the part of the $Y$ variation explained by your model.
 See the output of the model summary.
-```{r R²}
+```{r}
 #to get R² of the model
 summary(mod1)
 ```
@@ -406,7 +390,7 @@ continuous variable
 The response variable is mean orbital volume and the rest are assumed covariates. The Population variable is a descriptor of the samples, so not included in the modelling. Each value for orbital volume represents the mean of 3 replicate measurements from the same skull.
 
 Question: *which covariates drive the mean orbital volume?*
-```{r global data, echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 # Dataset import
 dataHVS <- read.table("HumanVisualSystem.txt", dec=".", header = TRUE)
 dataHVS$Population<-as.factor(dataHVS$Population)
@@ -431,7 +415,7 @@ dataHVS$Response<-dataHVS$MeanOrbitalVolume
 ### Statistical analysis
 **Model building**
 You need to first analyse the full model containing all the independent variables in order to test their significance (i.e. see if they are relevant in the modelling) and decide whether you keep them or not.
-```{r fullmodel, echo=TRUE, include=TRUE}
+```{r, echo=TRUE, include=TRUE}
 # Model formulation
 mod1<-lm(Response~Lat+Capacity,data=dataHVS)
 # Then we check for significance, here with an F-Test
@@ -450,7 +434,7 @@ Those coefficients suggest that the orbital volume increases with the latitude (
 
 **Model explanation: R²**
 Let's determine the part of the $Y$ variation explained by your model.
-```{r R²,include=TRUE}
+```{r,include=TRUE}
 # R² of the model
 summary(mod1)
 ```
@@ -460,7 +444,7 @@ You can read the adjusted R² = 0.345. That means that about 35% of the variance
 *See III/.*
 
 You must want to have the best visual representation of your model !
-```{r ModelGraph, include=TRUE, fig.height=5, fig.width=5}
+```{r, include=TRUE, fig.height=5, fig.width=5}
 # set your variables on each axis
 x <- dataHVS$Capacity
 y <- dataHVS$Lat
@@ -530,7 +514,7 @@ farm
 For the example, the binary variable that will be explained is the badger activity and any other variables are taken as explanatory variables. The objective is to find a model that predict the occurrence of signs of badger activity on farms in order to find a way to reduce the rates of badgers' visits to farms. This objective is motivated by the numerous transmissions of bovine tuberculosis from badgers to cattle.
 
 Let's import the dataset and perform a binomial generalized linear model.
-```{r global data, include=FALSE}
+```{r, include=FALSE}
 # Dataset import
 dataBadger <- read.table("Badger.txt", dec=".", header = TRUE)
 
@@ -564,30 +548,16 @@ colSums(is.na(dataBadger))
 ### Statistical analysis
 **Model building**
 We will use a backward selection with the most complete model, considered here, for a question of simplicity, as the model with all the explanatory variables but no interactions.
-```{r fullmodel,include=TRUE}
+```{r,echo = TRUE, include=TRUE}
 # Let's define the model with the function "glm" with the family "binomial" and the link function "logit" 
-mod1<-glm(Activity~N_setts
-              + N_buildings
-              + N_cattle
-              + season
-              + feed_store
-              + cattle_house
-              + feed
-              + grass
-              + cereal
-              + straw
-              + grains
-              + concen
-              + sugar
-              ,data=dataBadger
-              ,family=binomial(link=logit))
+mod1<-glm(Activity~N_setts + N_buildings + N_cattle + season + feed_store + cattle_house + feed + grass + cereal + straw + grains + concen + sugar,data=dataBadger, family=binomial(link=logit))
 
 # We can use then the function drop1 to check the significance
 drop1(mod1,test="Chi")
 ```
 
 Some of the coefficient are not significant because their p values are under 0.05 so we will suppress them and test the new model.
-```{r candidatemodelGLM,include=TRUE, echo = FALSE}
+```{r,include=TRUE, echo = FALSE}
 # Let's write the new model
 mod2<-glm(Activity~N_setts
               + N_cattle
@@ -598,7 +568,7 @@ drop1(mod2,test="Chi")
 ```
 
 This time, all of the variables are significant. Let's check the coefficient :
-```{r coeffm, ,include=TRUE}
+```{r,include=TRUE}
 # Coefficients of the model
 summary(mod2)
 ```
@@ -609,7 +579,7 @@ $$  logit(Presence\:of\:badger\:activity) = - 3.64 0.27*Number\:of\:Setts\: +\: 
 
 **Model explanation**
 However there is no $R^2$ in Generalized Linear Models, we can still calculate a $pseudo\:R^2* to estimate how far the candidate model is from the null model by determining the distance between deviance of the null model and the residual deviance of the candidate model.
-```{r deviance, include=TRUE}
+```{r, include=TRUE}
 # Estimate of deviance explained
 (mod2$null.deviance-mod2$deviance)/mod2$null.deviance
 
@@ -641,7 +611,7 @@ Let's take an example to illustrate the use of the Poisson law:
 ### POISSON LAW EXAMPLE
 ###Dataset representation and objectives of the analysis
 The study of Gotelli and Ellison in 2002 is a good example to apply the Poisson law. It is named "Biogeography at a regional scale: determinants of ants species density in New England bogs and forests". At each of 22 sites, 25 pitfall traps were set in two 8x8m arrays, one in the center of the bog and one in adjacent upland forest 50 to 500m from the corresponding bog. Traps are treated as 50 independent replicate observations. The data are in the file BogAnts.txt.
-```{r global data, echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 # Dataset importation 
 ants<-read.table("BogAnts.txt", dec = ".", header = TRUE) 
 ants$Location<-as.factor(ants$Location)
@@ -803,7 +773,7 @@ Let's take an example to illustrate the use of the Negative binomial law:
 ### NEGATIVE BINOMIAL LAW EXAMPLE
 ### Dataset presentation and objectives of the analysis
 The study of Timi and Poulin in 2003 is a good example to apply the Negative binomial law. We will use a subset of the original data. At each of 4 stations, fish sample were collected, with a total of 522 individual of anchovy. These fish were examined for parasites in order to understand the parasite community structure across the host population of anchovy. The data are in the file FishParasite.txt The response variable is "Number", which represents the total number of parasites found in the fish. It is a count variable. There are 3 explicative variables: "Sex" (of the fish), "Length" (of the fish) and "Area". Sex and Length are continuous, and Area is a categorical variable with 4 categories (A, B, C or D). Here we only consider the interaction between Length and Area.
-```{r , echo=TRUE,include=TRUE}
+```{r, echo=TRUE,include=TRUE}
 # Dataset import
 para <- read.table("FishParasites.txt", dec=".", header = TRUE)
 para$Area<-as.factor(para$Area)
@@ -944,7 +914,7 @@ resid<-residuals(mod3, type="pearson")
 
 ## Normality of residuals
 The assumption of normality can be checked by producing an histogram and a quantile plot of the residuals. The histogram of residuals should follow a normal distribution. If the points in the quantile plot lie mostly on the red line, the residuals are normally distributed.
-```{r normality}
+```{r}
 par(mfrow=c(1,2))
 # Histogram example 1
 hist(mod2$residuals,col='blue',xlab="residuals",main="Check Normality ex 1")
