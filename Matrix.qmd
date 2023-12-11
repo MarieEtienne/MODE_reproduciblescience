@@ -21,64 +21,65 @@ Impact prédateur
 Compétition ?
 
 III. Matrice en épidémiologie -> Jeanne
-1. Introduction to epidemiologie with SIRS model
 
-L'épidémiologie consiste à étudier la dynamique d'une maladie au sein d'une population.
-Nous allons maintenant imaginer qu'un surricate malade arrive au sein d'une nouvelle colonie saine après avoir due quitter sa présedente colonie décimé par la maladie. La dynamique de l'épidémie peut être modéliser en utilisant un utilisant un model de base en épidémiologie, le model SIRS.
+1. Introduction to epidemiology with the SIRS model
+
+
+Epidemiology is the study of disease dynamics within a population.
+Let's imagine that a sick meerkat arrives in a new, healthy colony after having had to leave its previous colony, which has been decimated by disease. The dynamics of the epidemic can be modeled using a basic epidemiological model, the SIRS model.
 
 (Schéma modele SIRS cf Image mais sans la dynamique de pop et avec loss et mortalité lié à la maladie)
 
-Dans ce modèle les individus sensible (S) se font infécter et passse donc dans la classe infectieux (I) puis soit quitte le système en mourrant de la maladie soit guerrisssent et deviennent donc des individus guerris ou immunisé (R). Pour finir, les individus immunisé peuvent perdre leur immunité et redevenir sensible (S).
+In this model, susceptible individuals (S) become infected, and thus pass into the infectious class (I), then either leave the system by dying of the disease, or heal, and thus become cured/immune individuals (R). Finally, immunized individuals can lose their immunity and become susceptible again (S).
 
-- trans.S.I/N, represente le nombre d'individus étant infecté par jour avec trans le taux de transmission
-#Je pense qu'il faudrait séparer les explications, tu commences par expliquer trans puis trans.S.I/N et pareil pour la suite
-- rec.I, représente le nombre d'individus qui guérissent par jour, avec rec le taux de guérision
-- madd.I, représente le nombre d'individus qui meurrent de la maladie par jour, avec madd le taux de mortalité
-- loss.R, représente le nombre d'individus qui perdent leur immunité par jour, avec loss le taux de perte de l'immunité.
+- trans is the transmission rate, so trans.S.I/N represents the number of individuals infected per day.
+- rec is the recovery rate, so rec.I represents the number of individuals recovering per day. 
+- madd is the mortality rate, so madd.I represents the number of individuals dying from the disease per day.
+- loss is the rate of immunity loss, so loss.R represents the number of individuals losing immunity per day.
 
-Pour pouvoir plus facilement faire le lien entre les paramêtres et la réalité il est intéressant de calculer les valeures de 1/rec et 1/loss qui sont respectivement la durée de la période infectieuse et la durée de l'immunité en jours.
+To make it easier to relate the parameters to reality, it is useful to calculate the values of 1/rec and 1/loss, which are respectively the duration of the infectious period and the duration of immunity in days.
 
 ```{r}
-#Initialisation des paramètres liés à la dynamique de l'épidémie
+#Initialization of parameters related to epidemic dynamics
 
-# Paramètres du pathogène  
-#trans = 0.1;
-trans=0;
-rec = 1/10;	# Période infectieuse dure 10 jours
-loss = 1/60; # immunité dure 60 jours
-madd = 0.02; # 2% de chance de mourrir par jour infecté
+# Pathogen parameters  
+trans = 0.2;
+rec = 1/10;	# Infectious period lasts 10 days
+loss = 1/40; # immunity lasts 40 days
+madd = 0.05; # 5% chance of dying per infected day
 
 ```
 
-Pour l'instant, le systeme d'équations différentielles suivant permet de suivre l'évolution des différents compartiment S, I et R au cours du temps en le résolvant. Mais nous allons complexifier le modèle pour le rendre plus réaliste et réaliser un suivit en temps discret en utilisant une matrice pour stocker l'évolution de la population.
+For the time being, the following system of differential equations can be solved to track the evolution of the compartments S, I and R over time. But we're going to complexify the model to make it more realistic, and carry out discrete-time tracking using a matrix to store population evolution.
 
 $$\begin{aligned}& \frac{d S}{d t}= - trans \cdot S \cdot \frac{I}{N} + loss \cdot R  \\
 & \frac{d I}{d t}= - madd \cdot I + trans \cdot S \cdot \frac{I}{N} - rec \cdot I \\
 & \frac{d R}{d t}= rec \cdot I - loss \cdot R
 \end{aligned}$$
 
-2. Prendre en compte la dynamique et structure de la population
+2. Taking population dynamics and structure into account
 
-Ce modèle ne prend pas en compte la dynamique de la population ni sa structure. Pour le rendre plus réaliste nous allons donc séparer la population en deux catégories jeune et adulte ayant chacune un taux de mortalité (m1 = et m2 =) associé. De plus, les adultes femelles (sex ratio sr =) peuvent se reproduire avec un taux de reproduction par jour f =  et donnent naissance à ? jeunes à fois (portee =). Il est important de noter que les jeunes naissent forcément sains. 
-Les jeunes grandissent et deviennent adulte avec un taux t = , soit une durée 1/t = jours correspondant au temps passé en tant que jeune.
-Pour ne pas se placer dans le cas d'une croissance de population exponentielle, on prend en compte K la capacité du millieu qui permettra de jouer sur le nombre de naissances dans le modele en le diminuant lorsque la population totale s'approchera de K.  
+
+This model takes no account of population dynamics or structure. To make it more realistic, we will therefore separate the population into two categories: juvenile (j) and adult (a), each with an associated mortality rate (m1 = and m2 =). In addition, adult females (sex ratio sr =) can reproduce with a daily reproduction rate f = and give birth to ? young at a time (portee =). It's important to note that the young are always born healthy. 
+The young grow to adulthood with a rate t = , i.e. a duration of 1/t = days corresponding to the time spent as a youngster.
+In order to avoid the case of exponential population growth, we take into account K the capacity of the environment, which will allow us to adjust the number of births in the model by decreasing it as the total population approaches K.  
 
 ```{r}
-#Initialisation des paramètres liés à la dynamique de la population
+# Initialization of population dynamics parameters
 
-# Paramètres de la population
-K = 30;		    
+# Population parameters
+K = 50;		    
 sr = 0.5;	    
-m1 = 0.007;	    
-m2 = 0.0003; #vivent environ 13 ans	    
-f = 0.002;	
+m1 = 0.0008;	    
+m2 = 0.0003; #They live about 13 years	    
+f = 0.006;	
 portee = 7; #	
-t1 = 1/365;	# femelles mature à un an    
+t1 = 1/365;	# Females mature at one year old    
 	    
 ```
 
 
-Cette dynamique de population peut être également mise sous forme d'équations différentielles. 
+These population dynamics can also be expressed in the form of differential equations. 
 
 $$\begin{aligned}& N = j + a \\
 & \frac{d j}{d t}= -m_1 \cdot j + sr \cdot portee \cdot f \cdot a - t_1 \cdot j  \\
@@ -86,12 +87,13 @@ $$\begin{aligned}& N = j + a \\
 \end{aligned}$$
 
 
-En combinant la dynamique de population et la dynamique épidémiologique,
-on se retrouve avec un modele bien plus complexe :
+By combining population dynamics and epidemiological dynamics,
+we end up with a much more complex model:
+
 
 (Schéma du modèle complet)
 
-Ce modele peut être également mis sous forme de systeme d'équation différentielles :
+This model can also be expressed as a system of differential equations:
 
 $$\begin{aligned}& \frac{d S_j}{d t}=-S_j \cdot(m_1+t_1+trans\cdot \frac{I}{N})+loss\cdot R_j + sr\cdot portee\cdot N_a\cdot f \cdot (1- \frac{N}{K}) \\
 & \frac{d I_j}{d t}=-I_j \cdot (m_1+madd+t_1+rec)+trans\cdot \frac{I}{N} \cdot S_j  \\
@@ -104,97 +106,98 @@ $$\begin{aligned}& \frac{d S_a}{d t}=S_j \cdot t_1 - S_a \cdot (m_2+trans \cdot 
 & \frac{d R_a}{d t}= R_j \cdot t_1 - R_a \cdot (m_2+loss) + rec \cdot I_a 
 \end{aligned}$$
 
-Cependant, au lieu de chercher à résoudre ce systeme en temps continu, nous allons travailler en temps discret en utilisant une matrice pour suivre les effectifs de la population de surricates.
+However, instead of trying to solve this system in continuous time, we'll work in discrete time, using a matrix to track meerkat population numbers.
 
-3. Mise en place du modele sous R
 
-La première étape est de créer la matrice qui stockera les effectifs de la population au cours du temps. Nous allons donc créer une matrice en 3 dimmensions : - La première dimmension (les lignes) correspond à la structure de la population en jeunes et adultes avec une ligne supplémentaire pour la population totale.
-- La deuxième dimmension (colonnes) correspond aux différents états des individus (S, I et R)
-- La troisième dimmension est le temps de la simmulation en jours
+3. Setting up the model in R
 
-Notre matrice nous permet donc de stocker en un seul object, l'etat de la population sous la forme d'une matrice ligne/colonne pour chaque jour de la simulation.
+The first step is to create the matrix that will store the population numbers over time. We will therefore create a matrix in 3 dimensions: - The first dimmension (rows) corresponds to the structure of the population into juveniles and adults, with an additional row for the total population.
+- The second dimension (columns) corresponds to the different states of the individuals (S, I and R).
+- The third dimension is the simulation time in days.
 
-RAPPEL MATRICE : Sous R, les objets créés avec matrix() sont en deux dimmension, pour travailler avec des matrices de plus de 2 dimmension on utilise array() qui permet de créer des tableaux à n dimensions avec R.
+Our matrix allows us to store in a single object, the state of the population in the form of a row/column matrix for each day of the simulation.
 
-Création de la matrice (MAT) sous R. 
+MATRIX REMINDER: In R, objects created with matrix() are two-dimensional. To work with matrices of more than 2 dimensions, use array(), which allows you to create n-dimensional arrays in R.
+
+Matrix creation (MAT) in R. 
 
 ```{r} 
-# Création d'une matrice de 0 aux bonnes dimensions (3 lignes, 3 colonnes, le nombre de jours que dure la simulation)
+# Creation of a matrix of 0 with the right dimensions (3 rows, 3 columns, the number of days in the simulation)
 
-temps = 4*365; #durée de la simulation = 2 ans
+temps = 4*365; #Simulation time = 4 years
 
 MAT <- array(0, dim=c(3,3,temps)); 
 
 ```
 
-Au début de l'épidémie on imagine qu'un unique adulte infectieux arrive dans une colonie entiérement sensible à la maladie, constituée de 19 adultes et 10 jeunes.
+At the very beginning of the epidemic, we imagine a single infectious adult arriving in a colony entirely susceptible to the disease, made up of 19 adults and 10 juveniles.
 
 ```{r}
-# conditions initiales 
-MAT[1,1,1] <- 10;                  # nombre de jeunes sains aux conditions initiales
-MAT[2,1,1] <- 19;                  # nombre d'adulte sains aux conditions initiales
-MAT[2,2,1] <- 1;                   # nombre d'adulte malade aux conditions initiales
+# starting conditions 
+MAT[1,1,1] <- 6;                  # number of healthy juveniles at initial conditions
+MAT[2,1,1] <- 43;                 # number of healthy adults at initial conditions
+MAT[2,2,1] <- 1;                  # number of sick adults at initial conditions
 ```
 
-A partir de ces conditions initiales on peut calculer les effectifs de la populations totale par état de santé. 
+From these initial conditions, we can calculate the total population by health status. 
 
-RAPPEL MATRICE :
+MATRIX REMINDER :
 
-* Accéder à une partie d'une matrice qui n'est pas une ligne ou une colonne complète :
+* Access a part of a matrix that is not a complete row or column:
 
-Pour accéder à plusieures lignes consécutives il suffit de mettre à la place d'un numéro de ligne une indication de la forme ligne_de_début:ligne_de_fin. 
+To access several consecutive rows, simply replace the row number with an indication of the form : starting_row:ending_row. 
 
-Voici par exemple comment on accéde seulement aux deux premières lignes de notre matrice pour l'état sain (première colonne) à t = 1 (conditions initiales.
+Here's an example of how to access only the first two rows of our matrix for the healthy state (first column) at t = 1 (initial conditions).
 
 ```{r}
 MAT[1:2,1,1]
 ```
-Celà fonctionne de la même manière pour les colonnes et la dimmension temps :
+
+It works in the same way for columns and the time dimension:
 
 ```{r}
-MAT[1,1:2,1] #Individus jeunes sains et infectés aux conditions initiales
-MAT[1,1,1:5] #Jeunes sains aux cours des 5 premiers jours (pour l'instant les effectifs sont de 0 après t=1 car la simulation n'est pas encore faite)
+MAT[1,1:2,1] #Healthy and infected juveniles at starting conditions
+MAT[1,1,1:5] #Healthy juveniles during the first 5 days (for the moment, the numbers are 0 after t=1 as the simulation has not yet been run).
 ```
 
-* Accéder à l'ensemble des lignes, des colonnes ou du temps
+* Access all rows, columns or time
 
-Pour accéder à l'ensemble des lignes de la matrice on pourrait utiliser la methode décrite précédement mais une meilleure façon de faire existe: Il suffit de ne rien mettre à la place du numéro de ligne, de colonne ou de temps. 
-Voici l'exemple avec les lignes :
+To access all the rows in the matrix, you could use the method described above, but there's a better way: simply leave the row, column or time number blank. 
+Here's an example with the rows:
 
 ```{r}
-MAT[1:3,1,1] # Methode vu précédement pour accéder aux lignes 1 à 3 pour l'état sain aux condition initiale
+MAT[1:3,1,1] # Method seen above for accessing lines 1 to 3 for healthy state at initial conditions
 
-MAT[,1,1] # Nouvelle methode
+MAT[,1,1] # New method
 ```
 
-* Exemple complexe 
+* Complexe example  
 
 ```{r}
-MAT[1:2,,1:2] # Visualisation des effectifs de jeunes et d'adultes pour tout les état de santés sur les deux premiers jours.
+MAT[1:2,,1:2] # Visualization of juvenile and adult numbers for all health conditions over the first two days.
 ```
 
-* Faire des sommes d'une matrice
+* Summing a matrix
 
-Faire des sommes des valeures contenues dans tout ou partie d'une matrice est très simple, il suffit d'utiliser la fonction sum() en mettant en argument la matrice ou la partie de la matrice dont on souhaite sommer les coefficients.
+Summing the values contained in all or part of a matrix is very straightforward. Simply use the sum() function, setting as argument the matrix or the part of the matrix whose coefficients you wish to sum.
 
-Exemple :
+Example:
+```{r}
+sum(MAT[1:2,1,1])  # Sum of the number of healthy juveniles and adults at initial conditions 
+```
+
+
+Let's now apply this reminder to fill in the line corresponding to the total meerkat population by health status.
 
 ```{r}
-sum(MAT[1:2,1,1])  # Somme du nombre de jeunes et d'adultes sains aux conditions initiales 
+# Population size by health status at initial conditions
+
+MAT[3,1,1] <- sum(MAT[1:2,1,1]); #Total number of healthy meerkats 
+MAT[3,2,1] <- sum(MAT[1:2,2,1]); #Total number of infectious meerkats
+MAT[3,3,1] <- sum(MAT[1:2,3,1]); #Total number of immunized meerkats
 ```
 
-
-Mettons maintenant en application ce rappel pour remplir la ligne correspondant à la population totale de surricate par état de santé.
-
-```{r}
-# effectifs par etat de sante aux conditions initiales
-
-MAT[3,1,1] <- sum(MAT[1:2,1,1]); #Nombre total de surricates sains 
-MAT[3,2,1] <- sum(MAT[1:2,2,1]); #Nombre total de surricates infectieux
-MAT[3,3,1] <- sum(MAT[1:2,3,1]); #Nombre total de surricates immunisés
-```
-
-Maintenant que les conditions initiales sont posées, il est temps de simuler le modèle. Pour cela, il suffit de convertir les equations différentielles obtenues en partie deux en équation en temps discret, ce qui donne :
+Now that the initial conditions have been set, it's time to simulate the model. To do this, we simply convert the differential equations obtained in part two into discrete-time equations, which give :
 
 $$\begin{aligned}& S_j[t+1]=S_j[t]-S_j[t] \cdot(m_1+t_1+trans\cdot \frac{I[t]}{N[t]})+loss\cdot R_j[t] + sr\cdot portee\cdot N_a[t]\cdot f \cdot (1- \frac{N[t]}{K}) \\
 & I_j[t+1]=I_j[t]-I_j[t] \cdot (m_1+madd+t_1+rec)+trans\cdot \frac{I[t]}{N[t]} \cdot S_j[t]  \\
@@ -207,30 +210,29 @@ $$\begin{aligned}& S_a[t+1]= S_a[t] + S_j[t] \cdot t_1 - S_a[t] \cdot (m_2+trans
 & R_a[t+1]=R_a[t]+ R_j[t] \cdot t_1 - R_a[t] \cdot (m_2+loss) + rec \cdot I_a[t] 
 \end{aligned}$$
 
-Puis de partir des conditions initiales et de simuler chaque pas de temps t lors d'une boucle durant le temps de la simulation ici 2 ans.
+Then, starting from the initial conditions, we simulate each time step in a loop. The simulation time here is 2 years.
 
 ```{r}
-Nevo <- rep(0,temps) #initialisation d'un vecteur pour garder en mémoire la population totale au cours du temps
+Nevo <- rep(0,temps) # Vector initialization to store total population over time
 Nevo[1] <- sum(MAT[3,,1])
 
 # SIMULATIONS
 for (t in 1:(temps-1)){ 
-  # Pour la classe d'age jeune (0-1 an) cf équations ci-dessus
-  # RQ : les naissances sont positives, les nouveaux nes etant dans l'etat sains
-  N <- sum(MAT[3,,t]);# taille de la population totale vivante
+  # For the juveniles 0-1 year (see equations above)
+  # Note: births are positive, as newborns are in a healthy state.
+  N <- sum(MAT[3,,t]); # size of total living population
  
-  MAT[1,1,t+1] <- round(MAT[1,1,t]*(1-m1-t1-trans*MAT[3,2,t]/N) + loss*MAT[1,3,t] + max(0, sr*portee*(sum(MAT[2,,t])*f ) * (1 - N/K)),3); # Jeunes sains le jour suivant
-  MAT[1,2,t+1] <- round(MAT[1,2,t]*(1-m1-madd-t1-rec) + trans*MAT[1,1,t]*MAT[3,3,t]/N,3); # Jeunes infectieux le jour suivant
-  MAT[1,3,t+1] <- round(MAT[1,3,t]*(1-m1-t1-loss) + rec*MAT[1,2,t],3); # Jeunes immunisés le jour suivant
+  MAT[1,1,t+1] <- MAT[1,1,t]*(1-m1-t1-trans*MAT[3,2,t]/N) + loss*MAT[1,3,t] + max(0, sr*portee*(sum(MAT[2,,t])*f ) * (1 - N/K)); # Healthy juveniles the next day
+  MAT[1,2,t+1] <- MAT[1,2,t]*(1-m1-madd-t1-rec) + trans*MAT[1,1,t]*MAT[3,2,t]/N; # Sick juveniles the next day
+  MAT[1,3,t+1] <- MAT[1,3,t]*(1-m1-t1-loss) + rec*MAT[1,2,t]; # Immunized juveniles the next day
 
-  # classe d'age adulte (1 - 13 ans)  cf équations ci-dessus
+  # For the adult category 1-13 years (see equations above)
  
+  MAT[2,1,t+1] <- MAT[2,1,t]*(1-m2-trans*MAT[3,2,t]/N) + MAT[1,1,t]*t1 + loss*MAT[2,3,t]; 
+  MAT[2,2,t+1] <- MAT[2,2,t]*(1-m2-madd-rec) + MAT[1,2,t]*t1 + trans*MAT[2,1,t]*MAT[3,2,t]/N; 
+  MAT[2,3,t+1] <- MAT[2,3,t]*(1-m2-loss) + MAT[1,3,t]*t1 + rec*MAT[2,2,t];
   
-  MAT[2,1,t+1] <- round(MAT[2,1,t]*(1-m1-t1-trans*MAT[3,2,t]/N) + loss*MAT[2,3,t],3); 
-  MAT[2,2,t+1] <- round(MAT[2,2,t]*(1-m1-madd-t1-rec) + trans*MAT[2,1,t]*MAT[3,3,t]/N,3); 
-  MAT[2,3,t+1] <- round(MAT[2,3,t]*(1-m1-t1-loss) + rec*MAT[2,2,t],3);
-  
-  # calcul des effectifs par etat de sante
+  # Calculation of population numbers by state of health
   MAT[3,1,t+1] <- sum(MAT[1:2,1,t+1]);
   MAT[3,2,t+1] <- sum(MAT[1:2,2,t+1]);
   MAT[3,3,t+1] <- sum(MAT[1:2,3,t+1]);              
@@ -241,30 +243,29 @@ for (t in 1:(temps-1)){
 }# fin boucle temps
 ```
 
-4. Visualisation des résultats
+4. Visualizing results
 
-Maintenant que la simmulation est faite, il est possible de visualiser facilement l'évolution des effectifs de surricates par état de santé au cours du temps.
+Now that the simulation is done, it's easy to visualize the evolution of meerkat numbers by health status over time.
 
-Voici un code permettant de le faire :
-
+Here's a code to do just that:
 ```{r}
-#Conversion des effectifs totaux par états de santé aux cours du temps en dataframe
+#Conversion of total numbers by health status over time into dataframes
 
-Effectifs_sains<-as.data.frame(MAT[3,1,])#Sains
-Effectifs_infectieux<-as.data.frame(MAT[3,2,])#Infectieux
-Effectifs_immunises<-as.data.frame(MAT[3,3,])#Immunises
+Effectifs_sains<-as.data.frame(MAT[3,1,])        # Healthy
+Effectifs_infectieux<-as.data.frame(MAT[3,2,])   # Infectious
+Effectifs_immunises<-as.data.frame(MAT[3,3,])    # Immunized
 
-# Mise sous la forme d'un unique dataframe
+# Putting it in the form of a single dataframe
 Effectifs<-cbind(Effectifs_sains,Effectifs_infectieux,Effectifs_immunises)
 
-# Graphique
+# Graphic
 library(ggplot2)
-Effectifsplot<-ggplot(Effectifs,aes(x=seq(1,temps,1))) +
+Effectifsplot <- ggplot(Effectifs,aes(x=seq(1,temps,1))) +
   geom_line(aes(y=Effectifs[,1]),color="blue") +    
   geom_line(aes(y=Effectifs[,2]),color="darkred") + 
   geom_line(aes(y=Effectifs[,3]),color="darkgreen" ) + 
   geom_line(aes(y=Nevo),color="black") +
-  labs(title="Dynamique de l'épidémie",x="Temps (Jours)",y="Effectifs\n S (bleu), I (rouge), R (vert), N (noir)")
+  labs(title="Epidemic dynamics",x="Time (Days)",y="Number of S (blue), I (red), R (green) and N (black)")
 
 Effectifsplot  
 ```
