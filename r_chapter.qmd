@@ -9,32 +9,48 @@ output:
    toc_float: true
 ---
 
+## 3 - Saptial modeling
 
-This chapter is a simple example using R
+Once the structure of the spatial correlation has be estimated, it can then be included in the model.
 
-You can import R package using the code
+Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
 
-```{r}
-library(tidyverse)
-```
+### 3.1.Stationary process
 
+For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. 
+Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction.
+Anisotropy may be caused for example by environmental factors like the wind or water currents. 
 
-and then describe the purpose of your chapter as well as executing R command.
+#### 3.1.1. Spatially lagged X model
 
+This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
 
-For example a basic summary of a dataset is given by 
+![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/equation_glm%20.png)
 
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
+to which will be added an extra parameter, a distance-weighted function of the neighboring response value, called the autocovariate.
 
-and produce a graph
+![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/autocovariate_function.png)
 
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
+#### 3.1.2. - Simultaneous autoregressive models (SAR)
 
+##### 3.1.2.1. Lagrange Multiplier diagnostic
 
-A citation @bauer2023writing
+##### 3.1.2.2. Error models
+
+##### 3.1.2.3. Lag models
+
+##### 3.1.2.4. Mixed models
+
+### 3.2. - Non stationary process
+
+**Graphically weighted models (GWM)**
+
+Few methods exist to deal with non stationary processes
+
+Bibliography :
+
+F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ». Ecography 30, nᵒ 5 (2007): 609‑28. https://doi.org/10.1111/j.2007.0906-7590.05171.x.
+
+Smith, P. A. (1994). Autocorrelation in Logistic Regression Modelling of Species' Distributions. Global Ecology and Biogeography Letters, 4(2), 47--. doi:10.2307/2997753
+
+Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010. https://doi.org/10.1007/978-3-642-03647-7_14.
