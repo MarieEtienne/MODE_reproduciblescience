@@ -14,7 +14,7 @@ editor:
     wrap: 72
 ---
 
-```{r}
+```{r, echo=FALSE,warning = FALSE, message=FALSE}
 library(ggplot2) # graph package
 library(tinytex) # Pour la sortie pdf
 library(corrplot)# Correlation matrix calculus
@@ -29,29 +29,32 @@ library(lattice)# multipanel graphics
 # INTRODUCTION
 ## THE STATISTICAL TEST
 The purpose of statistics is to test a hypothesis. You would need to follow these steps:
-###1. The null and alternative hypotheses 
+
+### 1. The null and alternative hypotheses 
 They define different proposed relationships between dependent and independent variable(s).
-*Null hypothesis H0* = no relationship between dependent and independent
-variables.
+
+*Null hypothesis H0* = no relationship between dependent and independent variables.
+
 *Alternative hypothesis H1* = some expected relationship between the variables.
 
-###2. Calculation of the observed value Tobs 
+### 2. Calculation of the observed value Tobs 
 The observed value Tobs of the test statistic T is calculated from data given that the T variable has a probability distribution known under H0.
 
-###3. The P-value 
+### 3. The P-value 
 To get this value, you need to calculate the probability of observing Tobs value in this T distribution knowing the distribution of the test statistic T under H0.
 
-###4. Rejection or validation of the hypothesis 
+### 4. Rejection or validation of the hypothesis 
 If the P-value is less than (or equal to) $\alpha$, then the null hypothesis is rejected in favor of the alternative hypothesis and if the P-value is greater than $\alpha$ then the null hypothesis is not rejected. 
 WARNING : never say that the null hypothesis is validated. You just know that you cannot reject it with the information you have. There could be relationships that have not been detected.
 
 ## STATISTICAL MODELLING
 Linear modelling is widely used in statistics to model observed data, by considering their random nature. It explains one dependent variable, noted Y (random variable, also called **the response variable**) in function to independent variables (also called **predictors** or **explanatory variables**), also observed/measured on statistical units of the sample. In this chapter, you will see different models corresponding to different statistical tests. It happens that several tests can be conducted for the same dataset and hypothesis ; in this case, you will select the most powerful test. It is the one with the lowest $\beta$-error (given at the end).
 
-#I. GENERAL LINEAR MODELS 
+# I. GENERAL LINEAR MODELS 
 First let's get to know the most basic and simple linear models. We also call them *'Gaussian'* because of their allure. They are used and validated following three eligibility conditions that you will find in part 'Model validation'.
 
-##1) ANOVA 
+## 1) ANOVA 
+
 ### INTRODUCTION 
 ANOVA (Analysis of variance) is one of the most widespread techniques in data analysis. We use it to test the effect of one or more independent quantitative variables (Xs) on a dependent qualitative variable (Y). The categorical qualitative variables are named 'factors', et each factor has different levels that are chosen and fixed.
 
@@ -80,18 +83,29 @@ Let's consider an experimental data originated to an ANOVA example developed by 
 In this data analysis, we will focus on experimental data with two factors that are both applied to all statistical individuals. An ecologist wants to test the effects of metal contamination on the number of species found in sessile marine invertebrates (i.e. sponges). This ecologist would precisely like to know whether copper enrichment reduces species richness, but also know that the richness of invertebrates can depend on whether the substrate is vertical or horizontal. In order to do this, they made an experiment where species richness was recorded in replicate samples in each of the six combinations of copper enrichment ($“None”$,$“Low”$,$“High”$) and orientation ($“Vertical”$,$“Horizontal”$). The experimental design is **factorial** because all levels of one treatment are represented in all levels of the other treatment (i.e. crossed factors).
 
 In consequence, the factorial ANOVA will test whether there are:
-- any differences in species richness among the three levels of copper enrichment - any differences in species richness among the two levels of substrate orientation
+
+- any differences in species richness among the three levels of copper enrichment 
+
+- any differences in species richness among the two levels of substrate orientation
+
 - any interactions between copper and orientation (i.e. the effect of the copper enrichment depends on the substrate orientation and reciprocally).
 
 We have three null hypotheses:
+
 - there is no difference between the means for each level of copper enrichment, H0: $\mu_{None}$=$\mu_{Low}$=$\mu_{High}$
+
 - there is no difference between the means for each level of orientation, H0: $\mu_{Vertical}$=$\mu_{Horizontal}$
+
 - there is no interaction between both factors (i.e. if factor effects exist, the factors do not interact)
 
 Let's perform a two-factor ANOVA, something far better than running two separate single factor ANOVAs that contrast copper effects for each level of the substrate orientation, for 3 reasons:
+
 - (1) we have more statistical power (higher degrees of freedom)
+
 - (2) we can test whether the main effects interact or not 
+
 - (3) we reduce the risk of statistical error (i.e. we can't forget that each time we perform a separate statistical analysis, we get $\alpha$ and $\beta$ risks)
+
 ```{r, echo=TRUE,include=TRUE}
 # Dataset import
 datasessile <- read.table("sessile.txt", dec=".", header = TRUE)
@@ -106,15 +120,22 @@ colSums(is.na(datasessile))
 
 ### Data exploration
 Before any statistical analysis, we **MUST** explore the data in order to prevent any error. Here is the list of explorations to perform before modelling:
+
 1.  Check presence of outliers in $Y$ and distribution of $Y$ values
-2.  If $X$ is a quantitative independent variable, check presence of outliers in X and distribution of X values\
+
+2.  If $X$ is a quantitative independent variable, check presence of outliers in X and distribution of X values
+
 2b. If $X$ is a qualitative independent variable, analyse the number of levels and the number of individuals per level
+
 3.  Analyse the potential relationships between $Y$ and the $X_{s}$
+
 4.  Check presence of interactions between $X_{s}$
+
 5.  Check presence of collinearity between $X_{s}$
 
 ### Statistical analysis
 **Model building**
+
 For the statistical modelling, we first analyse the full model (model containing all independent variables and interactions to test).
 ```{r,include=TRUE}
 # Model formulation
@@ -137,16 +158,23 @@ This table detailed the coefficients of the model with coefficients associated w
 
 From this table, coefficients are : 
 **COPPER FACTOR**
+
 - $Copper_{High}$ = 0 (the baseline of the factor COPPER)
+
 - $Copper_{Low}$ = $0.4^{NS}$
+
 - $Copper_{None}$ = $14.2^{***}$
 
 **ORIENTATION FACTOR**
+
 - $Orientation_{Horizontal}$ = 0 (the baseline of the factor ORIENTATION)
+
 - $Orientation_{Vertical}$= $-11.7^{***}$
 
 **ORIENTATION:COPPER INTERACTION**
+
 - $Copper_{Low}$ : $Orientation_{Vertical}$ = $15.1^{***}$
+
 - $Copper_{None}$ : $Orientation_{Vertical}$ = $8^{***}$
 
 So, the candidate model is: $$ Species\:Richness = 55.4  $$
@@ -161,18 +189,25 @@ boxplot(datasessile$Richness~datasessile$Copper*datasessile$Orientation, varwidt
 ```
 
 **Multiple comparisons**
+
 If we're able to detect any significant differences in the ANOVA, we are then interested in knowing exactly which levels of a given factor differ from one another, and which do not. Remember that a significant p value in the F-test we just ran would reject the null hypothesis where the means were the same across all factor levels, but not identify which were different from each other. Here, we have two factors with their own coefficients:
 
 **ORIENTATION FACTOR**
-- $Orientation_{Horizontal}$ = 0 (the baseline of the factor
-ORIENTATION)
+
+- $Orientation_{Horizontal}$ = 0 (the baseline of the factor ORIENTATION)
+
 - $Orientation_{Vertical}$= $-11.7^{***}$ 
+
 Those coefficients suggest that the species richness is lowest in vertical habitats.
 
 **COPPER FACTOR**
+
 - $Copper_{High}$ = 0 (the baseline of the factor COPPER)
+
 - $Copper_{Low}$ = $0.4^{NS}$\
+
 - $Copper_{None}$ = $14.2^{***}$ 
+
 Those coefficients suggest that the species richness is highest in absence of Copper enrichment (level $None$ > $High$). But as the level $High$ is the baseline, we can't detect whether the levels $None$ and $Low$ are different or not. So, we must change the level baseline and re-analyse the coefficients of the model to detect difference or not between those two factor levels.
 ```{r, echo=TRUE}
 # Change the COPPER factor baseline: put 'Low' level as the baseline
@@ -184,12 +219,17 @@ summary(mod2)
 ```
 
 Now, the coefficients of the COPPER factor are: **COPPER FACTOR**
+
 - $Copper_{Low}$ = 0 (the new baseline of the factor COPPER)
+
 - $Copper_{High}$ = $-0.4^{NS}$
+
 - $Copper_{None}$ = $13.8^{***}$ 
+
 Those coefficients suggest that the species richness is highest in absence of Copper enrichment ($None$ > $Low$). In conclusion, $Richness_{Copper_{High}}$ = $Richness_{Copper_{Low}}$\< $Richness_{Copper_{None}}$
 
 **Model explanation: R²**
+
 Let's determine the part of the $Y$ variation explained by the model.
 ```{r,include=TRUE}
 # R² of the model
@@ -200,16 +240,22 @@ In this output, the adjusted R² is equal to 0.8893, which means that about 89% 
 ### Model validation: Check the assumptions
 *See part III/.*
 
-##2) ANCOVA 
-###INTRODUCTION 
+## 2) ANCOVA 
+
+### INTRODUCTION 
 ANCOVA (i.e. Analysis of Covariance) is a statistical technique widely used in various disciplines like the previous analysis presented, ANOVA and the linear regression . It is used to model the relationship between a quantitative dependent variable Y, called the response variable, and several independant variable X1, X2... called explanatory variables or predictors). The difference between ANOVA and ANCOVA, is that the predictors can be **quantitative** and **qualitative**. For example, we could use an ANCOVA to test whether the size (continuous), sex (categorical), reproductive status (categorical), habitat (categorical), age (continuous) of a sperm whale are good predictors of its weight (the response variable). As the ANCOVA includes quantitative and categorical independent variables, this technique represents between linear regression and ANOVA.
 
 We can give an example and write the model with one continuous and one categorical independent variables, the model takes the form:
 $$ Y_{ij} = \mu + \alpha_{i}+ \beta.X_{ij}+\gamma_{i}.X_{ij}+\epsilon_{ij}$$
+
 - $\mu$ is the overall mean, the intercept 
+
 - $\alpha_{i}$ is the effect of the modality i of the categorical variable) 
+
 - $\beta$ is the slope (amount of change in Y for each unit of the quantitative covariate), it is the effect of the quantitative variable$X_{j}$ 
+
 - $\gamma_{i}$ is the interactive coefficient between the modality i of the factor and the quantitative covariate 
+
 - $\epsilon_{ij}$ is the error term (residuals).
 The inclusion of the error term $\epsilon_{ij}$, also called the stochastic part of the model, that makes the model statistical rather than mathematical. The error term is drawn from a statistical distribution that integers the random variability in the response. In standard linear model, this is assumed to be **a normal (Gaussian) distribution** with parameter 0 et $\sigma^2$, avec $\sigma$ l'écart type.
 
@@ -247,6 +293,7 @@ str(dataFly)
 
 ### Statistical analysis
 **Model building**
+
 For the statistical modelling, we first analyse the full model (model containing all independent variables to test). We will test the effects of the main effects (3 continuous and 2 categorical independent variables) and their interactions (by excluding interactions between quantitative independent variables). To get the candidate model we will perform a **backward selection**. It consist in testing the full model first, then we drop the least significant interaction, we perform this step until all the remaining interaction effect are significant. We do the qsame approach for the main effect. By following these two steps, candidate model is found. We use the function drop (F test) to test the significant at each step and choose the lest significant effect. Keep in mind that if a variable is involved in an interaction effect you must keep it as a main effect in the model.
 
 **Backward selection**
@@ -260,7 +307,7 @@ drop1(mod1,test="F")
 ```
 
 From this significance output, we will exclude the interaction that is 'the less significant' = 'Sex:Fat Content'
-```{r}
+```{r, echo = FALSE}
 # Model formulation
 mod1<-lm(DryWeight~ Sex
         + Habitat
@@ -280,7 +327,7 @@ drop1(mod1,test="F")
 From this new significance list, we will exclude the interaction that is 'the less significant'... and so on.
 
 After the non significant interaction deletions, the model contains only 2 significant interactions = 'Habitat:Width' and 'Habitat:WaterContent'. That means that the main effects 'Habitat', 'Width' and 'WaterContent' are maintained in the model as included in significant interactions.
-```{r}
+```{r, echo = FALSE}
 # Model formulation
 mod1<-lm(DryWeight~ Sex
         + Habitat
@@ -295,7 +342,7 @@ drop1(mod1,test="F")
 ```
 
 From the previous listing, we decide to first exclude the 'Sex' factor.
-```{r}
+```{r, echo = FALSE}
 # Model formulation
 mod1<-lm(DryWeight~ Habitat
         + Width
@@ -324,19 +371,31 @@ To understand how main effects and interactions influence the dry weight of the 
 summary(mod1)
 ```
 This output presents a table detailing the coefficients of the model with coefficients associated with each significant main effect and interaction. Remind that for a factor, one level is called 'the baseline' meaning that its coefficient is 0 (also called the reference level). From this table, coefficients are:
+
 **HABITAT FACTOR**
+
 - $Habitat_{Coast}$ = 0 (the baseline of the factor Habitat)
+
 - $Habitat_{Inland}$ = $-2.43^{**}$
+
 **WIDTH COVARIATE**
+
 - $\beta_{Width}$ = $0.21^{NS}$
+
 **WATER CONTENT COVARIATE**
+
 - $\beta_{WaterContent}$ = $0.31^{***}$
+
 **HABITAT:WIDTH INTERACTION**
+
 - $\beta_{Width_{Inland}}$ = $2.34^{***}$
+
 **HABITAT:WATER CONTENT INTERACTION**
+
 - $\beta_{WaterContent_{Inland}}$ = $- 0.21^{***}$
 
 **Model explanation: R²**
+
 You can determine the part of the $Y$ variation explained by your model.
 See the output of the model summary.
 ```{r}
@@ -346,16 +405,20 @@ summary(mod1)
 In this output, you get that the adjusted R² = 0.6067. That means that about 61% of the variance of the dry weight of the flies is explained by its relationship with their habitat, water content and width and the interactions between these predictors.
 
 **Model expression**
+
 You can write the model with the coefficient. Be careful: you have a different expression for each modality.
 $$ Dry\:Weight = 0.05\:+\:(Habitat_{Coast} = 0 \:;\:Habitat_{Inland} = -2.43^{**}) $$
 $$ +\:0.21^{NS}. Width\:+\:0.31^{***}. Water\:Content $$
 $$ + (if\:Habitat=Inland:\:+ 2.34^{***}. Width\: -\: 0.21^{***}.Water\:Content)$$
 
 **Biological interpretation**
+
 Before drawing any conclusions from your result, you have to validate the model (part model validation). The assumptions of ANCOVA are the same as for all general linear models (i.e. regressions, ANOVAs), you have to check *independence of residuals*, *normality of residuals* and *homogeneity of variances*.
 
-##3) REGRESSION 
+## 3) REGRESSION 
+
 ### INTRODUCTION 
+
 You have certainly used the technique of regression many times in various exercises. It is used to model the relationship between a **quantitative dependent variable** $Y$ (the **response**, that is continuous, and one or several **explanatory quantitative variable(s)** (the **predictors**, that are independant). $X_{1}$,$X_{2}$...$X_{p}$. For example, we could use a linear regression to test whether the weight of a dog (i.e. the explanatory variable) is a good predictor of its lifespan (the response variable).
 
 ### MODEL WRITING
@@ -366,7 +429,9 @@ The inclusion of the error term $\epsilon$, also called the stochastic part of t
 The error term is drawn from a statistical distribution that integers the random variability in the response. In standard linear regression, this is assumed to be a **normal (Gaussian) distribution**.
 
 There are two different regression types: 
+
 • the *simple linear regression* includes a single $X$ in your analysis. The model takes the form: $$ Y = \alpha + \beta.X + \epsilon $$ where $\alpha$ is the intercept (value of $Y$ when $X$ = 0), $\beta$ is the regression slope (amount of change in $Y$ for each unit of $X$), and $\epsilon$ is the error term (i.e. residuals).
+
 • the *multiple linear regression* includes several $X_{s}$ in your
 analysis. The model takes the form: $$ Y_{i} = \alpha + \beta_{1}.X{i1}+ \beta_{2}.X{i2}+\beta_{3}.X{i3}+...\beta_{p}.X{ip}+ \epsilon_{i}$$
 
@@ -376,15 +441,17 @@ This data was published in 'Latitudinal variation in light levels drives human v
 Ambient light levels influence visual system size in birds and primates and Pearce and Dunbar (2011) argue that the same is true for humans. Using linear regression techniques, they want to test the relationship between (absolute) latitude and human orbital volume, an index of eyeball size. Pearce and Dunbar (2011) measured cranial capacity (CC), orbital volume and foramen magnum (FM) dimensions for 73 healthy adult crania from the Oxford University Museum of Natural History and Duckworth Collection, University of Cambridge.
 
 List of the variables:
-- **MeanOrbitalVolume** = Index for eyeball size, continuous variable
-(the response) - **CranialCapacity** = measure of the volume of the
+- **MeanOrbitalVolume** = Index for eyeball size, continuous variable (the response)
+
+- **CranialCapacity** = measure of the volume of the
 interior of the cranium, continuous variable
-- **Minimum_Illuminance** = log scale of the minimum of illuminance of
-the sample site, continuous variable
-- **Minimum_Temperature** = Minimum temperature of the sample site,
-continuous variable
-- **AbsoluteLatitude** = Absolute values of latitude of the sample,
-continuous variable
+
+- **Minimum_Illuminance** = log scale of the minimum of illuminance of the sample site, continuous variable
+
+- **Minimum_Temperature** = Minimum temperature of the sample site, continuous variable
+
+- **AbsoluteLatitude** = Absolute values of latitude of the sample, continuous variable
+
 - **Population** = country/region of the sample, Categorical variable
 
 The response variable is mean orbital volume and the rest are assumed covariates. The Population variable is a descriptor of the samples, so not included in the modelling. Each value for orbital volume represents the mean of 3 replicate measurements from the same skull.
@@ -414,6 +481,7 @@ dataHVS$Response<-dataHVS$MeanOrbitalVolume
 
 ### Statistical analysis
 **Model building**
+
 You need to first analyse the full model containing all the independent variables in order to test their significance (i.e. see if they are relevant in the modelling) and decide whether you keep them or not.
 ```{r, echo=TRUE, include=TRUE}
 # Model formulation
@@ -433,6 +501,7 @@ $$ Orbital\:Volume = 15.4 \:+\: 0.04.Latitude\: +\: 0.005.Cranial\:Capacity  $$
 Those coefficients suggest that the orbital volume increases with the latitude (in relation with Temperature and Illuminance) and the cranial capacity.
 
 **Model explanation: R²**
+
 Let's determine the part of the $Y$ variation explained by your model.
 ```{r,include=TRUE}
 # R² of the model
@@ -440,7 +509,8 @@ summary(mod1)
 ```
 You can read the adjusted R² = 0.345. That means that about 35% of the variance of the Orbital Volume is explained by its relationship with the Latitude (Temperature & Illuminance) and the Cranial Capacity.
 
-**Model validation: check the assumptions**
+**Model validation**: check the assumptions
+
 *See III/.*
 
 You must want to have the best visual representation of your model !
@@ -468,13 +538,17 @@ scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red",
           surf = list(x = x.pred, y = y.pred, z = z.pred,  
           facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9),           border="black"), main = " ")
 ```
+
 So ! Does it look cool to you ?
 
-#II/ GENERALIZED LINEAR MODELS
+# II/ GENERALIZED LINEAR MODELS
+
 In absence of **normality of residuals** and **homoscedasticity** only, you may use Generalized Linear Models. You will need a **link function** to 'force' the linear relationship between Y and the independant variables (see examples).
 
-##1) Binomial Law
+## 1) Binomial Law
+
 ### INTRODUCTION 
+
 X is a binary variable with two modalities: 1 (success) and 0 (failure). The probability of success is: $$ P(X = 1) = \pi $$ Then, Y, a variable corresponding to N randoms and independent draws of X, follows a binomial law whose parameters are N and $\pi$.
 
 The density function of Y is:
@@ -489,26 +563,41 @@ Thus, the predicted value is: $$\mu_{y}= \frac {e^{\eta}}{1+e^{\eta}} $$
 ### BINOMIAL LAW EXAMPLE
 ### Dataset presentation and objectives of the analysis
 Let's apply this on the example of the dataset "badger.txt" from the book: Zuur et al. 2009 "Mixed effects models and extensions in ecology with R" - Springer. This dataset comes from a survey carried out on 36 farms in South-West England over 8 consecutive seasons running from autumn 2003 to summer 2005. It contains 277 rows and the columns: 
+
 - **year**: Calendar year
+
 - **season**: spring, summer, autumn, winter
+
 - **farm_code**: farm identifier
+
 - **survey**: which of the 8 survey occasions (i.e. a time indicator)
+
 - **badger_activity**: presence-absence of signs of badgers activity
+
 - **N_setts_in_fields**: number of badger 'homes' observed
+
 - **N_buildings**: number of buildings on farm
-- **N_cattle_in_buildings**: number of cattle housed in the building
-yard - **accessible_feed_store_present**: presence-absence of a feed's
-store in farm
-- **accessible_cattle_house_present**: presence-absence of a direct
-access to cattle house
-- **accessible_feed_present**: presence-absence of accessible feed on
-farm
+
+- **N_cattle_in_buildings**: number of cattle housed in the building yard
+
+- **accessible_feed_store_present**: presence-absence of a feed's store in farm
+
+- **accessible_cattle_house_present**:presence-absence of a direct access to cattle house
+
+- **accessible_feed_present**: presence-absence of accessible feed on farm
+
 - **grass_silage**: presence-absence of grass_silage
+
 - **cereal_silage**: presence-absence of cereal_silage
+
 - **hay_straw**: presence-absence of hay_straw
+
 - **cereal_grains**: presence-absence of cereal_grains
+
 - **concentrates**: presence-absence of concentrates
+
 - **sugar_beet**: presence-absence of sugar beet
+
 - **molasses**: presence-absence of molasses
 
 For the example, the binary variable that will be explained is the badger activity and any other variables are taken as explanatory variables. The objective is to find a model that predict the occurrence of signs of badger activity on farms in order to find a way to reduce the rates of badgers' visits to farms. This objective is motivated by the numerous transmissions of bovine tuberculosis from badgers to cattle.
@@ -547,6 +636,7 @@ colSums(is.na(dataBadger))
 
 ### Statistical analysis
 **Model building**
+
 We will use a backward selection with the most complete model, considered here, for a question of simplicity, as the model with all the explanatory variables but no interactions.
 ```{r,echo = TRUE, include=TRUE}
 # Let's define the model with the function "glm" with the family "binomial" and the link function "logit" 
@@ -578,6 +668,7 @@ The candidate model is:
 $$  logit(Presence\:of\:badger\:activity) = - 3.64 0.27*Number\:of\:Setts\: +\: 0.004* Number\:of\:Cattles $$
 
 **Model explanation**
+
 However there is no $R^2$ in Generalized Linear Models, we can still calculate a $pseudo\:R^2* to estimate how far the candidate model is from the null model by determining the distance between deviance of the null model and the residual deviance of the candidate model.
 ```{r, include=TRUE}
 # Estimate of deviance explained
@@ -587,12 +678,16 @@ However there is no $R^2$ in Generalized Linear Models, we can still calculate a
 ```
 From these code lines, we deduce that the estimate of deviance explained is 22 %. We found about the same thing with the $Pseudo\:R^2$ estimate (package 'rcompanion').
 
-**Model validation: check the assumptions**
+**Model validation**: check the assumptions
+
 *See III/.*
+
 Nota Bene : For this example, the validation will show a dependency that could be resolved by using a mixed model with "Farm_code" as random factor.
 
-##2) POISSON LAW 
-###INTRODUCTION 
+## 2) POISSON LAW 
+
+### INTRODUCTION 
+
 Here we will focus on count data. This count data is a positive discrete variable. There are two types of distribution for this type of data. It can follow a Poisson or a Negative Binomial law. We will first focus on a **Poisson law**.
 
 For the Poisson law, we have: $$ E(y)= Var(y)=\lambda $$
@@ -610,6 +705,7 @@ Let's take an example to illustrate the use of the Poisson law:
 
 ### POISSON LAW EXAMPLE
 ###Dataset representation and objectives of the analysis
+
 The study of Gotelli and Ellison in 2002 is a good example to apply the Poisson law. It is named "Biogeography at a regional scale: determinants of ants species density in New England bogs and forests". At each of 22 sites, 25 pitfall traps were set in two 8x8m arrays, one in the center of the bog and one in adjacent upland forest 50 to 500m from the corresponding bog. Traps are treated as 50 independent replicate observations. The data are in the file BogAnts.txt.
 ```{r, echo=TRUE,include=TRUE}
 # Dataset importation 
@@ -628,6 +724,7 @@ For this research we can wonder: which continuous or categorical variables drive
 
 ### Data exploration
 *See I/1).* 
+
 However, before continuing, we need to transform the variable 'Area', as in the exploration we can see a presence of outliers due to presence of very extensive bogs. We will therefore perform a log-transformation of this covariate.
 ```{r, include=TRUE, fig.height=4, fig.width=9}
 par(mfrow=c(1,3))
@@ -656,10 +753,12 @@ hist(ants$LogArea,col='blue',xlab="LogBog Area",main="")
 qqnorm(ants$LogArea,pch=16,col='blue',xlab='')
 qqline(ants$LogArea,col='red')
 ```
+
 Now we can use the 'Area' variable.
 
 ### Statistical analysis
 **Model building**
+
 As every model building, we will search for the candidate model by first analysing the full model with all the independent variables and their interactions. Then a backward selection will be used to select the best model based on term significance. Successively, the non-significant interactions are deleted, and then the non-significant main effects. However, a non-significant main effect is deleted only if it is non-significant AND not contained in a significant interaction.
 
 Here we perform a Poisson generalized linear model with these code lines:
@@ -671,7 +770,7 @@ drop1(mod1,test="Chi")
 ```
 
 Here any interaction is significant. We delete the less significant interaction : Location:Latitude and do this code lines until there are only significant effects.
-```{r}
+```{r, echo = FALSE}
 # The model is : 
 mod1<-glm(Nsp~ Location
         + Latitude
@@ -686,7 +785,7 @@ drop1(mod1,test="Chi")
 ```
 
 The less significant interaction is Location:LogArea. So we delete this interaction and continue.
-```{r}
+```{r, echo = FALSE}
 # The model is : 
 mod1<-glm(Nsp~ Location
         + Latitude
@@ -700,7 +799,7 @@ drop1(mod1,test="Chi")
 ```
 
 The less significant interaction is Location:Elevation. So, we delete this interaction and continue.
-```{r}
+```{r, echo = FALSE}
 # The model is : 
 mod1<-glm(Nsp~ Location
         + Latitude
@@ -713,7 +812,7 @@ drop1(mod1,test="Chi")
 ```
 
 The less significant effect is LogArea. So, we delete this effect and continue.
-```{r}
+```{r, echo = FALSE}
 # The model is : 
 mod1<-glm(Nsp~ Location
         + Latitude
@@ -738,6 +837,7 @@ $$ log(Species\:Richness) = 11.93 + (Location_{Bog} = 0 ;\:Location_{Forest} = +
 Be careful here, for a factor, there is a level called "the baseline" which mean that its coefficient is 0. It is the reference level.
 
 **Model explanation**
+
 In generalized linear models, there is no R2, so we need to calculate a pseudo R2 with the distance between the null model deviance and the residual deviance of the model with this formula:
 $$Pseudo\:R^2=100\:.\:\frac{Null\:Deviance- Residual\:Deviance}{Null\:Deviance}$$
 
@@ -791,6 +891,7 @@ Let's begin quickly with a **Poisson model** in order to see the problems and th
 
 ### Statistical analysis
 **Model building**
+
 We perform a backward selection as explained previously, with a Poisson model:
 ```{r,echo=TRUE,include=TRUE}
 # Model formulation
@@ -824,7 +925,7 @@ drop1(modNB,test="Chi")
 ```
 We have a significant effect for the interaction between Area and Length but not for the main effect Sex. We need to keep the main factor Area and Length and delete the variable Sex, contrary to the Poisson model.
 
-```{r}
+```{r, echo = FALSE}
 # Model formulation
 modNB<-glm.nb(Number~ Area
         + Length
@@ -835,7 +936,7 @@ drop1(modNB,test="Chi")
 ```
 Here, the interaction is still significant, with the two main effect. So we have found the candidate model. Now we need to test the overdispersion, the same way as before.
 
-```{r}
+```{r,echo = FALSE}
 # Overdisperion checking of the NB model
 # Scale parameter calculation
 E1 <- resid(modNB, type = "pearson") # (Y - mu) / sqrt(mu)
@@ -849,6 +950,7 @@ testDispersion(modNB)
 We found 1.35, which is below/under 1.5. So we succeed to delete the overdispersion. The DHARMa test validates the absence of overdispersion.
 
 **Model explanation**
+
 Now we can examine the coefficients of the candidate model in order to understand how the number of parasites in fish is influenced.
 ```{r}
 # Coefficients of the model
@@ -872,9 +974,10 @@ nagelkerke(modNB)
 ```
 
 **Model validation**
+
 *See III/.*
 
-#III/ MODEL VALIDATION 
+# III/ MODEL VALIDATION 
 To be able to conclude with your results you have to validate your model. All **general linear models** (linear regression, ANOVA, ANCOVA) need to verify the 3 following criteria: *normality of residuals*, *homogeneity of variances*, and *independance of residuals*. **Generalized linear model**, due to the hypothetis made on Y, only need to verify the last criterion: the *independance of the residuals*.
 ```{r, echo=FALSE}
 #Import of other data for example
@@ -934,6 +1037,7 @@ hist(resid,col='blue',xlab="residuals",main="Check Normality ex 3")
 qqnorm(resid,pch=16,col='blue',xlab='')
 qqline(resid,col='red')
 ```
+
 As you can see on the first example, the residuals lie mostly on the red line so we can say the residuals are normally distributed.
 
 However, if a small deviation from normality is detected as on the second example, the Fisher test is considered fairly resistant to these deviations and you can still validate the model.
@@ -977,10 +1081,15 @@ plot(resid~fitted(mod3)
       , pch=16, main="Graph5")
 abline(h = 0)
 ```
+
 - As you can see in graph 1, the variation in the residuals is approximately equal across the range of the fitted values and there is no pattern, so we can conclude that the variance is homogeneous.
+
 - The variance of a qualitative variable is studied with a boxplot. For the second graph, we can see that the variance is similar, so we can conclude that it is homogeneous.
+
 - In the third graph, we can see that the variance is not stable, as we have a funnel shape. So we can't conclude that it is homogeneous.
+
 - On the fourth graph, we can see that the variance is not stable, as the boxplots do not have the same height. It is therefore not possible to conclude that they are homogeneous.
+
 - The fifth graph shows a linear pattern so we cannot conclude positively on the homogeneity of the variance.
 
 Statistical tests are rather resistant to deviations from homogeneity, and can tolerate deviations of around 16 units. If the variance exceeds this threshold, is not stable or shows a pattern, it can be transformed to solve the problem.
@@ -1002,33 +1111,50 @@ linear kind of connection in the form: $$ Y = B*X + E $$
 Statistical analysis of linear models takes 3 main steps:
 
 **I - Data exploration** 
-1 - Verifying that there is no outliers in the distribution of Y and the Xs by using boxplots and Clevelandplots. A transformation of Y and/or the Xs can be performed to settle the potential issues. 
+
+1 - Verifying that there is no outliers in the distribution of Y and the Xs by using boxplots and Clevelandplots. A transformation of Y and/or the Xs can be performed to settle the potential issues.
+
 2 - Checking the colinearity of the Xs (corrplots, boxplot, VIF).
+
 3 - Checking the relationships between Y and the Xs (plot, boxplot).
+
 4 - Checking if there are potential interactions between the Xs (boxplot, plot, table).
 
 **II - Model building** 
+
 In this chapter, We developped two types of linear models: **General linear models** and **Generalized linear models**. 
 In **general linear models**, Y is a *continuous quantitative variable* whose residuals follow a *normal law*. The *explanatory variables* can be: 
+
 - Only quantitative: *Simple* (only one explanatory variable) or *Multiple regression models* 
+
 - Only qualitative: *ANOVA models* 
+
 - Qualitative and Quantitative : *ANCOVA models* 
 The estimate method is the **least square method**.
 
 In **generalized linear models**, Y's law (and so its residuals' law) is not normal and can follow, for instance: 
+
 - A **Binomial law** when the variable is *binary* (link function: *logit*). *Example of application: mark and recapture and presence/absence of data*. 
+
 - A **Poisson law** when the variable is a *counting variable* with a low expectancy (link function : *log*) *Example of application: species abundance or proportion*. 
+
 - A **Negative Binomial law** when the variable is a *counting variable* with a higher expectancy (link function : *log*)
+
 This time the estimate method is based on the maximum of likelihood (minimum of deviance). The relation between Y and the Xs is not direct and the mean value $\mu$ of Y is estimated through a link function g which associate it to a predicted value $\eta$ so that : $\eta$ = g($\mu$). 
 NB: You can draw hypotheses on Y distribution based on other laws such as the **Gamma law**, the **Beta Law** or the **Lognormal Law** (not detailed here).
 
 **III - Model validation** 
+
 There are 3 conditions to validate a linear model: 
-- **Non-correlation of the residuals** 
+
+- **Non-correlation of the residuals**
+
 - **Homoscedasticity of the variance** (plot residuals vs fitted) (*Essential for general linear models but not for generalized linear models*)
+
 - **Normality of the residuals** (*Only for general linear models*). You can use these models to show a significant effect on Y and also to draw predictions on its distribution (function *predict*).
 
 To go further: In general and generalized linear models, all the explanatory variables have fixed effects and are independent. However, in ecology, it is not always the case. Other models can allow to take into account a dependency between explanatory variables by considering a random effect (*see chapter on mixed models*) or considering spatial or temporal dependency with spatial and time models. In order to model more complex ecological issues that do not fit classical statistical models, or to estimate ecological parameters, you will need to use another approach: Bayesian statistics (*see Chapter "Bayesian Statistics*.)
 
 Examples from Yannick Outreman's course
-Written by Léa Morel, Sarah Derrien, Fanny Kuttler, Clément Berthelot and Lucia Oliveira-cruz
+
+Written by Clément Berthelot, Sarah Derrien, Fanny Kuttler, Léa Morel and Lucia Oliveira-cruz
