@@ -17,9 +17,7 @@ Depending on the structure of the autocorrelation and especially if the process 
 
 ### 3.1.Stationary process
 
-For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. 
-Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction.
-Anisotropy may be caused for example by environmental factors like the wind or water currents. 
+For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
 
 #### 3.1.1. Spatially lagged X model
 
@@ -30,6 +28,18 @@ This model estimate how well the response variable at one site reflect the respo
 to which will be added an extra parameter, a distance-weighted function of the neighboring response value, called the autocovariate.
 
 ![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/autocovariate_function.png)
+
+A can be calculated as either the weighted sum : 
+![](~/cours/Master 2/S1/OCR/MODE_reproduciblescience/images projet/weighted_sum.png)
+
+or as the weighted average:
+
+![](~/cours/Master 2/S1/OCR/MODE_reproduciblescience/images projet/weighted_average.png)
+(*y*j = the value of y at the site j i's set of *k*i neighbors
+*w*ij = the weight given to the site j's influence over site i)
+
+This function is usually related to the distance between data points or to the environnemental distance.
+
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
