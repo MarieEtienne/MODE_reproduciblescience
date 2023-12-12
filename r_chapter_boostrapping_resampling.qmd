@@ -10,19 +10,22 @@ output:
    toc_float: true
 ---
 
+**Authors:** Lucien Ricome, Youna Douchet, Pierre-Alexandre Quitter, Bastien Clémot
+
 # General introduction
 
-  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the reliability of estimations.  
-  Many well-studied statistical distributions can be useful in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, whether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
-  In this situation, resampling procedures become interesting. It is a non-parametric statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" [@sinharay_jackknife_2010]. This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
-  
-Before diving into the subject, let's load some libraries:
+While studying random variables, it is useful to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the reliability of estimations.\
+Many well-studied statistical distributions can be useful in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, whether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.\
+In this situation, resampling procedures become interesting. It is a non-parametric statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" [@sinharay_jackknife_2010]. This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test).
 
-```{r}
+Before diving into the subject, let's load some packages:
+
+```{r, warning=FALSE}
+# Load packages
 library(ggplot2)
+library(gridExtra)
 library(bootstrap)
 ```
-
 
 # Confidence interval estimation: Jackknife and Bootstrap methods
 
@@ -40,7 +43,7 @@ Suppose we're interested in determining the average width of the sepals in a wil
 
 Let's first imagine that we only sampled 100 individuals within our population.
 
-```{r, out.width="50%", fig.show='hold'}
+```{r}
 # Our real population
 irisPopulation <- iris$Sepal.Width
 
@@ -49,20 +52,23 @@ set.seed(42)
 data_sample <- irisPopulation[sample(1:150,100)]
 
 # Histogram
-ggplot()+
+plot1 <- ggplot()+
   geom_histogram(aes(x = data_sample),colour = "black", fill = "white", bins = 8)+
   xlab("Sepal width")+
-  labs(title = " Sepal width distribution in the sub-sample (n=100)") +
+  labs(title = "Sepal width distribution (n=100)") +
   theme_classic()
 
 # QQ-plot
-ggplot()+
+plot2 <- ggplot()+
   stat_qq(aes(sample=data_sample))+
   stat_qq_line(aes(sample=data_sample), color="red")+
   xlab("Normal theoretical quantiles")+
   ylab("Sub-sample quantiles")+
   labs(title = " Sepal width QQ-plot (n=100)") +
   theme_classic()
+
+# Print
+grid.arrange(plot1,plot2,ncol=2)
 ```
 
 The sample being normally distributed, we can compute its mean ($\mu$), as well as its confidence interval as below:
@@ -76,6 +82,7 @@ low <- mean(data_sample)-1.96*sd(data_sample)/sqrt(length(data_sample))
 high <- mean(data_sample)+1.96*sd(data_sample)/sqrt(length(data_sample))
 cat("Lower bound : ",round(low,2), "    Upper bound = ",round(high,2))
 ```
+
 > Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
 
 Then, we can easily compare this result with the actual mean of our wild population, that theoretically we do not know:
@@ -91,25 +98,29 @@ The mean of our population falls within our confidence interval!
 
 Now, let's consider that we were only able to sample 15 individuals within our wild population.
 
-```{r, out.width="50%", fig.show='hold'}
+```{r}
 # Randomly sample 15 individuals
+set.seed(42)
 data_sample <- irisPopulation[sample(1:150,15)]
 
 # Histogram
-ggplot()+
+plot1 <- ggplot()+
   geom_histogram(aes(x = data_sample),colour = "black", fill = "white", bins = 8)+
   xlab("Sepal width")+
-  labs(title = " Sepal width distribution in the sub-sample (n=15)") +
+  labs(title = " Sepal width distribution (n=15)") +
   theme_classic()
 
 # QQ-plot
-ggplot()+
+plot2 <- ggplot()+
   stat_qq(aes(sample=data_sample))+
   stat_qq_line(aes(sample=data_sample), color="red")+
   xlab("Normal theoretical quantiles")+
   ylab("Sub-sample quantiles")+
   labs(title = " Sepal width QQ-plot (n=15)") +
   theme_classic()
+
+# Print
+grid.arrange(plot1,plot2,ncol=2)
 ```
 
 This time, our sample size is too small, and its distribution is no longer normal. In this very common scenario, what options do we have to estimate a confidence interval around any of our parameters of interest, like the mean? This is where resampling methods get interesting.
@@ -133,8 +144,8 @@ data_sample
 And we can represent some subsamples:
 
 ```{r}
-cat("1er subsample : \n",data_sample[-1], "\n")
-cat("4ème subsample : \n",data_sample[-4], "\n")
+cat("1st subsample : \n",data_sample[-1], "\n")
+cat("4th subsample : \n",data_sample[-4], "\n")
 ```
 
 ### Calculation of pseudo-values
@@ -148,7 +159,7 @@ $$
 with the following variables:
 
 |      Variable       | Meaning                                                                              |
-|:------------------:|----------------------------------------------------|
+|:----------------:|------------------------------------------------------|
 |       $v_{i}$       | Pseudo value of the $i^{th}$ subsample                                               |
 |         $n$         | Total number of observations                                                         |
 |   $\overline{X}$    | Mean of the initial sample                                                           |
@@ -228,7 +239,6 @@ $$
 
 > Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
 
-
 ```{r, echo=FALSE}
 ## Compute confidence interval
 cat(" Lower bound : ",
@@ -238,10 +248,9 @@ cat(" Lower bound : ",
     as.character(round(x = mean_pv + 1.96*SE,digits = 2)))
 ```
 
-
 The estimated Jackknife mean is $3.15$ with the following confidence interval : $[2.94\:;\:3.35]$. The real value $\mu = 3.05$ is captured within the bounds of the confidence interval which indicate the robustness of the estimation process.
 
-### R package 
+### R package
 
 On r, functions already exist to automatically execute the Jackknife. For instance, in the package `bootstrap` [@tibshirani_bootstrap_2019], there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
 
@@ -255,12 +264,12 @@ The output of the function include the standard error (`$jack.se`) as describe a
 
 ### Strengths of the method
 
-As seen precedently, the Jackknife allows to calculate a confidence intervall when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance [@sinharay_jackknife_2010]. In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not [@miller_jackknife--review_1974].  
+As seen precedently, the Jackknife allows to calculate a confidence intervall when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance [@sinharay_jackknife_2010]. In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not [@miller_jackknife--review_1974].\
 The Jackknife method was a good tool in the last century as it was easy to apply manually but it is nowaday surpassed by other methods which emerged thanks to the evolution of computers.
 
 ### Weaknesses of the method
 
-This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum [@miller_jackknife--review_1974]. But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.  
+This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum [@miller_jackknife--review_1974]. But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.
 
 For more informations about applications of the Jackknife you can read the paper: Jackknife a Review by Rupert G. Miller @miller_jackknife--review_1974.
 
