@@ -12,11 +12,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install jags
+        run: apt-get install jags
       - name: Install R packages
         run: Rscript -e "install.packages('nlme', 'predictmeans')"
       - name: Install R packages as Requested in PR 21
         run: Rscript -e "install.packages('ade4', 'vegan', 'corrplot', 'RVAideMemoire', 'PerformanceAnalytics')"
       - name: Install R packages as Requested in PR 22
         run: Rscript -e "install.packages('plot3D', 'rcompanion', 'DHARMAa', 'lattice')"
+      - name: Install R packages as Requested in PR 23
+        run: Rscript -e "install.packages('rjags', 'ggforce', 'deSolve', 'ggmcmc', 'sm')"
       - name: Generate slides
         run: "quarto render"
