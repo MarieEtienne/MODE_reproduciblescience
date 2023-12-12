@@ -12,13 +12,9 @@ output:
 
 # General introduction
 
-While studying random variables, it is useful to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the reliability of estimations.
-
-\
-Many well-studied statistical distributions can be useful in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, whether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.
-
-\
-In this situation, resampling procedures become interesting. It is a non-parametric statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" (https://www.sciencedirect.com/topics/mathematics/resampling-method ). This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test).
+  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
+  Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
+  In this situation, resampling procedures become interesting. It is a non-parametrical statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" [@sinharay_jackknife_2010]. This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
 
 # Confidence interval estimation: Jackknife and Bootstrap methods
 
@@ -111,9 +107,9 @@ This time, our sample size is too small, and its distribution is no longer norma
 
 ## The Jackknife resampling method
 
-This method was first proposed in 1949 by Maurice Quenouille ( **Source Quenouille** ). The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics (**Source Abdi)**. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
+This method was first proposed in 1949 by Maurice Quenouille [@quenouille_approximate_1949]. The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics [@abdi_jackknife_2010]. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
 
-### Principle of the leave-one-out Jackknife (source: shinaray & cours eric petit)
+### Principle of the leave-one-out Jackknife [@sinharay_jackknife_2010 ; @petit_techniques_2022]
 
 The main goal of the jackknife method is to calculate a confidence interval around a statistic when classical statistics can not apply to the data.The principle is to create subsamples of the initial sample by successively removing some of the observations. Then, on each subsample, a pseudo-value will be calculated. With all the pseudo-values, it is possible to calculate an estimator of the statistic and to estimate its confidence interval.
 
@@ -210,6 +206,7 @@ $$
 
 > Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
 
+
 ```{r, echo=FALSE}
 ## Compute confidence interval
 cat(" Lower bound : ",
@@ -219,29 +216,32 @@ cat(" Lower bound : ",
     as.character(round(x = mean_pv + 1.96*SE,digits = 2)))
 ```
 
-### R package
 
-On r, functions already exist to automatically execute the Jackknife. For instance, in the package bootstrap, there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
+The estimated Jackknife mean is $3.15$ with the following confidence interval : $[2.94\:;\:3.35]$. The real value $\mu = 3.05$ is captured within the bounds of the confidence interval which indicate the robustness of the estimation process.
+
+## R package 
+
+On r, functions already exist to automatically execute the Jackknife. For instance, in the package `bootstrap` [@tibshirani_bootstrap_2019], there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
 
 ```{r}
 # Package function
 library("bootstrap")
-print(jackknife(x= data_sample,
-                theta = function(x) mean(x)))
+bootstrap :: jackknife(x= data_sample$Sepal.Width,
+                theta = function(x) mean(x))
 ```
 
 The output of the function include the standard error (`$jack.se`) as describe above. It also include the bias (`$jack.bias`) which is the difference between the initial sample statistic and the jackknife estimated statistic. It is important to note that the output `$jack.values` does not correspond to the pseudo values but to the statistic of interest calculated on every subsample. In our example, it correspond to the mean of each subsample.
 
-### Advantages of the method
+### Strengths of the method
 
-As seen precedently, the Jackknife allows to calculate a confidence interval when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance. (**Shinaray**). In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not. (**Miller**).\
+As seen precedently, the Jackknife allows to calculate a confidence intervall when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance [@sinharay_jackknife_2010]. In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not [@miller_jackknife--review_1974].  
 The Jackknife method was a good tool in the last century as it was easy to apply manually but it is nowaday surpassed by other methods which emerged thanks to the evolution of computers.
 
-### Disadvantages of the method
+### Weaknesses of the method
 
-This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum (**Miller**). But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.
+This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum [@miller_jackknife--review_1974]. But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.  
 
-For more informations about applications of the Jackknife you can read the following paper https://www.jstor.org/stable/pdf/2334280.pdf?refreqid=fastly-default%3Af728183558d4928f9eddd7a58f8406a9&ab_segments=&origin=&initiator=&acceptTC=1
+For more informations about applications of the Jackknife you can read the paper: Jackknife a Review by Rupert G. Miller @miller_jackknife--review_1974.
 
 ## The bootstrap re-sampling method
 
@@ -375,7 +375,7 @@ Overall, bootstrap's major advantages lie in its broader applicability across va
 
 ### To go further
 
-This section on the bootstrap method offers a fundamental understanding, providing explicit R scripts for pedagogical purposes. If you find yourself needing to utilize bootstrap, we highly recommend exploring the capabilities of the `boot` R package, which streamlines bootstrap implementation. Moreover, the bootstrap method extends beyond basic parameter estimation, offering various derivatives and applications catering to diverse needs:
+This section on the bootstrap method offers a fundamental understanding, providing explicit R scripts for pedagogical purposes. If you find yourself needing to utilize bootstrap, we highly recommend exploring the capabilities of the precedently presented `bootstrap` R package, which streamlines bootstrap implementation. Moreover, the bootstrap method extends beyond basic parameter estimation, offering various derivatives and applications catering to diverse needs:
 
 -   **Parametric bootstrap:** Assumes a specific parametric distribution, generating bootstrap samples from this fitted distribution and allowing inference within a particular statistical model.
 -   **Smooth bootstrap:** Incorporates smoothing techniques to reduce variability in resampling, ideal for noisy or irregular data.
