@@ -12,23 +12,13 @@ output:
 
 # Introduction
 
-? changer le titre en : Permutation tests and Resampling
+? changer le titre en : Resampling methods
 
-classical statistics : useful to calculate p-values & confidence intervals (recoupe l'introduction de PA, est-ce qu'elle ne serait pas utile ici ? )
-problem when not enough data and/or does not follow known distribution
+  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
+  Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
+  In this situation, resampling procedures become interesting. It is a non-parametrical statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" (https://www.sciencedirect.com/topics/mathematics/resampling-method ). This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
 
--> non parametric tests = tests which does not require a particular distribution of the variables
-resampling : 
-https://www.sciencedirect.com/topics/mathematics/resampling-method
-    - jackknife
-    - bootstrap
-
-permutations
-https://www.sciencedirect.com/topics/mathematics/permutation-test
-    - mantel (multivariate)
-
-
-To illustrate the following methods, lets use a dataset:
+To illustrate the following methods, an example dataset will be used:
 
 ```{r}
 data <- iris
