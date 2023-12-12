@@ -12,125 +12,114 @@ output:
 
 # General introduction
 
-  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
-  Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
-  In this situation, resampling procedures become interesting. It is a non-parametrical statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" (https://www.sciencedirect.com/topics/mathematics/resampling-method ). This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
+While studying random variables, it is useful to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the reliability of estimations.
 
-To illustrate the following methods, an example dataset will be used:
+\
+Many well-studied statistical distributions can be useful in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, whether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.
+
+\
+In this situation, resampling procedures become interesting. It is a non-parametric statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" (https://www.sciencedirect.com/topics/mathematics/resampling-method ). This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test).
+
+# Confidence interval estimation: Jackknife and Bootstrap methods
+
+To illustrate the following methods, we'll use the Iris RBase dataset.
 
 ```{r}
+# Original dataset
 data <- iris
 head(iris)
 ```
 
-## Confidence interval on a sample
+Suppose we're interested in determining the average width of the sepals in a wild population of Iris flowers. However, it's practically impossible to measure the sepals of every single flower in the population. Instead, we've sampled and measured a specific number of individuals in the field. To simplify, let's consider our Iris dataset as a representation of the complete wild population (which, in reality, is inaccessible) and select only a small number of individuals to mimic our field sampling.
 
-```{r}
-library(ggplot2)
+### Normally distributed sample
 
-ggplot(data)+
-  geom_histogram(aes(x = Sepal.Width),colour = "black", fill = "white", bins = 12)+
+Let's first imagine that we only sampled 100 individuals within our population.
+
+```{r, out.width="50%", fig.show='hold'}
+# Our real population
+irisPopulation <- iris$Sepal.Width
+
+# Randomly sample 100 individuals
+set.seed(42)
+data_sample <- irisPopulation[sample(1:150,100)]
+
+# Histogram
+ggplot()+
+  geom_histogram(aes(x = data_sample),colour = "black", fill = "white", bins = 8)+
   xlab("Sepal width")+
-  labs(title = " Sepal width distribution in the dataset") +
+  labs(title = " Sepal width distribution in the sub-sample (n=100)") +
   theme_classic()
 
-shapiro.test(data$Sepal.Width)
-
-ggplot(data)+
-  stat_qq(aes(sample=Sepal.Width))+
-  stat_qq_line(aes(sample=Sepal.Width), color="red")+
+# QQ-plot
+ggplot()+
+  stat_qq(aes(sample=data_sample))+
+  stat_qq_line(aes(sample=data_sample), color="red")+
   xlab("Normal theoretical quantiles")+
-  ylab("Dataset quantiles")+
-  labs(title = " Sepal width QQ-plot ") +
+  ylab("Sub-sample quantiles")+
+  labs(title = " Sepal width QQ-plot (n=100)") +
   theme_classic()
-
 ```
 
-The sample being normally distributed, we can estimate a confidence interval as below:
-
+The sample being normally distributed, we can compute its mean, as well as its confidence interval as below:
 
 ```{r}
-low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
-high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
+# Compute sample mean
+print(mean(data_sample))
+
+# Compute confidence interval
+low <- mean(data_sample)-1.96*sd(data_sample)/sqrt(length(data_sample))
+high <- mean(data_sample)+1.96*sd(data_sample)/sqrt(length(data_sample))
 print(c(low,high))
 ```
 
-## Confidence interval on a sub-sample
-
-Let's imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.
-
+Then, we can easily compare this result with the actual mean of our wild population, that theoretically we do not know:
 
 ```{r}
-mu <- mean(data$Sepal.Width)
-print(mu)
+# Compute population mean
+mean(irisPopulation)
 ```
 
-Here $\mu$ is the "real" mean of the population that theoretically we do not know.\
-We only have access to the following sub-sample of 15 observations:
+The mean of our population falls within our confidence interval!
 
+### Non-normally distributed sample
 
-```{r}
-set.seed(42)
-data_sample <- data[sample(1:150,15),]
+Now, let's consider that we were only able to sample 15 individuals within our wild population.
 
-ggplot(data_sample)+
-  geom_histogram(aes(x = Sepal.Width),colour = "black", fill = "white", bins = 12)+
+```{r, out.width="50%", fig.show='hold'}
+# Randomly sample 15 individuals
+data_sample <- irisPopulation[sample(1:150,15)]
+
+# Histogram
+ggplot()+
+  geom_histogram(aes(x = data_sample),colour = "black", fill = "white", bins = 8)+
   xlab("Sepal width")+
-  labs(title = " Sepal width distribution in the sub-sample ") +
+  labs(title = " Sepal width distribution in the sub-sample (n=15)") +
   theme_classic()
 
-ggplot(data_sample)+
-  stat_qq(aes(sample=Sepal.Width))+
-  stat_qq_line(aes(sample=Sepal.Width), color="red")+
+# QQ-plot
+ggplot()+
+  stat_qq(aes(sample=data_sample))+
+  stat_qq_line(aes(sample=data_sample), color="red")+
   xlab("Normal theoretical quantiles")+
   ylab("Sub-sample quantiles")+
-  labs(title = " Sepal width QQ-plot ") +
+  labs(title = " Sepal width QQ-plot (n=15)") +
   theme_classic()
 ```
 
-This sample is not normally distributed.
+This time, our sample size is too small, and its distribution is no longer normal. In this very common scenario, what options do we have to estimate a confidence interval around any of our parameters of interest, like the mean? This is where resampling methods get interesting.
 
-
-```{r}
-mean(data_sample$Sepal.Width)
-```
-
-The mean is 3.15, the problem is that we can not estimate if the mean that we observe is far from the true mean. We don't have any method with classical statistics to estimate a confidence interval. This is where resampling methods can become interesting.
-
-# The Jackknife resampling method
+## The Jackknife resampling method
 
 This method was first proposed in 1949 by Maurice Quenouille ( **Source Quenouille** ). The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics (**Source Abdi)**. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
 
-## Principle of the leave-one-out Jackknife (source: shinaray & cours eric petit)
+### Principle of the leave-one-out Jackknife (source: shinaray & cours eric petit)
 
 The main goal of the jackknife method is to calculate a confidence interval around a statistic when classical statistics can not apply to the data.The principle is to create subsamples of the initial sample by successively removing some of the observations. Then, on each subsample, a pseudo-value will be calculated. With all the pseudo-values, it is possible to calculate an estimator of the statistic and to estimate its confidence interval.
 
-The most famous jackknife is the the leave-one-out jackknife (or order 1 jackknife) for which all the subsamples contain all the observations except one. Concretely, for a sample of $n$ observations, there will be $n$ subsamples of size $(n-1)$. The $i^{th}$ subsample will be composed of observations from $1$ to $n$ minus the $i^{th}$ observation. 
+The most famous jackknife is the the leave-one-out jackknife (or order 1 jackknife) for which all the subsamples contain all the observations except one. Concretely, for a sample of $n$ observations, there will be $n$ subsamples of size $(n-1)$. The $i^{th}$ subsample will be composed of observations from $1$ to $n$ minus the $i^{th}$ observation.
 
-```{r,echo=FALSE, results='hide'}
-# A simple representation of all the subsamples is proposed below with the subsamples in lines and the observation numbers in columns.
-
-
-subsample_representation <- cbind(rep(seq(1,nrow(data_sample)),nrow(data_sample)),
-                                  sort(rep(seq(1,nrow(data_sample)),
-                                           nrow(data_sample))),
-                                  rep(1,nrow(data_sample)*nrow(data_sample)))
-
-colnames(subsample_representation) <- c("subsample", "observation", "value")
-subsample_representation <- as.data.frame(subsample_representation)
-subsample_representation[subsample_representation$subsample == subsample_representation$observation,"value"] <- 0
-
-
-ggplot(subsample_representation)+
-  geom_tile(aes(x = observation ,y = subsample, fill = as.factor(value)), color = "white")+
-  theme_classic()+
-  scale_fill_manual(values = c("#CCCCFF","#666699"),name = "", labels = c("Removed of \n the subsample", "Kept in \n the subsample"))+
-  ylab("Subsample number")+
-  xlab("Observation number")+
-  labs(title = "Representation of the subsamples in the leave-one-out \n jackknife method")
-```
-
-## Calculation of pseudo-values
+### Calculation of pseudo-values
 
 After creating the subsamples, the next step is to calculate pseudo-values for each of the new subsamples. The formula for pseudo-values depend on the statistic of interest. In our case we want to estimate the mean, the formula will then be:
 
@@ -138,23 +127,23 @@ $$
 v_{i} = n\overline{X} - (n-1)\overline{X}_{-i}
 $$
 
-
 with the following variables:
 
-|      Variable       | Meaning                                                                             |
-|:-------------------:|-------------------------------------------------------------------------------------|
-|       $v_{i}$       | Pseudo value of the $i^{th}$ subsample                                              |
+|      Variable       | Meaning                                                                              |
+|:------------------:|----------------------------------------------------|
+|       $v_{i}$       | Pseudo value of the $i^{th}$ subsample                                               |
 |         $n$         | Total number of observations                                                         |
-|   $\overline{X}$    | Mean of the initial sample                                                          |
+|   $\overline{X}$    | Mean of the initial sample                                                           |
 | $\overline{X}_{-i}$ | Mean of the $i^{th}$ subsample, corresponding to all observations except the $i{th}$ |
 
 Let's write a function which create the subsamples and calculate their pseudo values:
 
 ```{r}
+# Function for pseudo-values
 pseudo_val <- function(data, theta){
-  #entry : data = the vector of data to which we want to apply the Jackknife
-  #entry : theta = function for the statistic of interest
-  #output : a vector of pseudo values for each subsample
+  # entry : data = the vector of data to which we want to apply the Jackknife
+  # entry : theta = function for the statistic of interest
+  # output : a vector of pseudo values for each subsample
   n <- length(data)
   mean_init <- theta(data)
   pv <- rep(NA,n) #to keep in memory each pseudo value
@@ -169,12 +158,13 @@ pseudo_val <- function(data, theta){
 To try the function:
 
 ```{r}
-pv <- pseudo_val(data =  data_sample$Sepal.Width,
+# Function test
+pv <- pseudo_val(data =  data_sample,
                   theta = mean)
 print(pv)
 ```
 
-## Test statistic
+### Statistical test
 
 The jackknife estimator $\theta$ of the mean will then be calculated as follow:
 
@@ -187,8 +177,8 @@ $$
 
 It corresponds to the mean of the pseudo values $v_i$.
 
-
 ```{r}
+# Compute mean of the pseudo-values
 mean_pv <- mean(pv)
 mean_pv
 ```
@@ -205,11 +195,12 @@ $$
 With $\overline{v}$ being the mean of the pseudo values (and the jackknife estimator).
 
 ```{r}
+# Compute standard error
 SE <- sqrt(var(pv)/length(pv))
 SE
 ```
 
-## Confidence interval
+### Confidence interval
 
 From these we can calculate a confidence interval:
 
@@ -220,6 +211,7 @@ $$
 > Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
 
 ```{r, echo=FALSE}
+## Compute confidence interval
 cat(" Lower bound : ",
     as.character(round(x = mean_pv - 1.96*SE,digits = 2)),
     "\n",
@@ -227,33 +219,33 @@ cat(" Lower bound : ",
     as.character(round(x = mean_pv + 1.96*SE,digits = 2)))
 ```
 
-## R package 
+### R package
 
 On r, functions already exist to automatically execute the Jackknife. For instance, in the package bootstrap, there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
 
 ```{r}
+# Package function
 library("bootstrap")
-print(jackknife(x= data_sample$Sepal.Width,
+print(jackknife(x= data_sample,
                 theta = function(x) mean(x)))
 ```
 
 The output of the function include the standard error (`$jack.se`) as describe above. It also include the bias (`$jack.bias`) which is the difference between the initial sample statistic and the jackknife estimated statistic. It is important to note that the output `$jack.values` does not correspond to the pseudo values but to the statistic of interest calculated on every subsample. In our example, it correspond to the mean of each subsample.
 
-## Advantages of the method
+### Advantages of the method
 
-As seen precedently, the Jackknife allows to calculate a confidence intervall when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance.  (**Shinaray**). In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not. (**Miller**).  
+As seen precedently, the Jackknife allows to calculate a confidence interval when data are not following a normal distribution and to estimate the bias induced when only a sample of the statistical population is observed. These two characteristic does not only apply to univariate estimators such as the mean. It can be used on correlation coefficients and regression parameters for instance. (**Shinaray**). In that case, each subsample leave one observations out with all its associated variables. The jackknife method is peticularly interesting when it comes to make inferences about variance ratio. It can perform as good as the Fisher test if variables are normally distributed and better if they are not. (**Miller**).\
 The Jackknife method was a good tool in the last century as it was easy to apply manually but it is nowaday surpassed by other methods which emerged thanks to the evolution of computers.
 
-## Disadvantages of the method
+### Disadvantages of the method
 
-This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum (**Miller**). But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.  
+This method is not always efficient, it is not recomanded for time series analysis where some time period are successively removed to create the subsample. Moreover it has little succes when it comes to the estimation of single order statistics (specific values in an ordered set of observations or data points) such as the median or the maximum (**Miller**). But for this last point, other jackknife can be used such as the deleted-d jackknife which perform better for the median. In this method, subsamples are of size $(n-d)$ and there are $\binom{n}{d}$ subsamples.
 
+For more informations about applications of the Jackknife you can read the following paper https://www.jstor.org/stable/pdf/2334280.pdf?refreqid=fastly-default%3Af728183558d4928f9eddd7a58f8406a9&ab_segments=&origin=&initiator=&acceptTC=1
 
-For more informations about applications of the Jackknife you can read the following paper https://www.jstor.org/stable/pdf/2334280.pdf?refreqid=fastly-default%3Af728183558d4928f9eddd7a58f8406a9&ab_segments=&origin=&initiator=&acceptTC=1 
+## The bootstrap re-sampling method
 
-# The bootstrap re-sampling method
-
-## Introduction and Principle
+### Introduction and Principle
 
 Now that we've thoroughly explored jackknife resampling in the previous section, let's delve into another resampling technique: the bootstrap method.
 
@@ -263,25 +255,15 @@ The fundamental difference between jackknife and bootstrap lies in their resampl
 
 After generating these $i$ bootstrap samples, the intended statistical parameters are computed for each of these samples. As a result, we obtain a distribution of $i$ data points derived from these samples, forming what is known as our empirical distribution function. Subsequently, the analysis of this distribution allows us to estimate precision, particularly in establishing the confidence interval for our statistical parameters.
 
-## Practice and Application
+### Practice and Application
 
 If the previous introduction seemed a bit perplexing, don't worry---we'll use an example to illustrate this concept.
 
-For this demonstration, we'll once again employ the Iris RBase dataset. Suppose we're interested in determining the average width of the sepals in a wild population of Iris flowers. However, it's practically impossible to measure the sepals of every single flower in the population. Instead, we've sampled and measured a specific number of individuals in the field. To simplify, let's consider our Iris dataset as a representation of the complete wild population (which, in reality, is inaccessible) and select only a small number of individuals to mimic our field sampling.
-
-```{r}
-# Our real population
-irisPopulation <- iris$Sepal.Width
-# Our field sampling
-set.seed(42)
-irisSampling <- irisPopulation[sample(1:150,15)]
-```
-
-From this field sampling, let's proceed with the calculation of the mean.
+For this demonstration, we'll once again consider our non-normally distributed sampling of 15 individuals. Let's proceed with the calculation of the mean.
 
 ```{r}
 # Field sampling mean
-mean(irisSampling)
+mean(data_sample)
 ```
 
 So, we've obtained a mean value of 3.15, which is great. However, this mean value can't be reliably generalized to the entire population because we lack information about the variability induced by the specific individuals we chose to sample. As highlighted in our previous code, we only sampled $n=15$ individuals in the field. Clearly, this limited sampling isn't sufficient to confidently assert that our estimated mean is truly representative of the entire population. Hence, it becomes essential to gain insights into the variability of the mean we've just calculated. This is precisely where the bootstrap method comes into play.
@@ -300,7 +282,7 @@ bootstrapSamples <- vector("list",B)
 # bootstrap resampling algorithm
 for (i in 1:B) {
   # Randomly sample n elements with replacement
-  bootstrapSamples[[i]] <- sample(irisSampling, replace = TRUE)
+  bootstrapSamples[[i]] <- sample(data_sample, replace = TRUE)
 }
 ```
 
@@ -308,7 +290,7 @@ For pedagogical purposes, let's examine a few resamples while comparing them to 
 
 ```{r}
 # Our original field sampling
-sort(irisSampling)
+sort(data_sample)
 ```
 
 ```{r}
@@ -337,7 +319,7 @@ The computation of the distribution for our parameter of interest is complete. W
 ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
   geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
   geom_density(alpha = 0.5, fill = "orange") +
-  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed", linewidth = 1.5) +
+  geom_vline(xintercept = mean(data_sample), color = "red", linetype = "dashed", linewidth = 1.5) +
   labs(title = "Empirical probability distribution of mean values",
        x = "Mean",
        y = "Density") +
@@ -364,7 +346,7 @@ For educational purposes, let's proceed to plot these percentiles in green.
 ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
   geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
   geom_density(alpha = 0.5, fill = "orange") +
-  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = mean(data_sample), color = "red", linetype = "dashed", linewidth = 1) +
   geom_vline(xintercept = quantile(iterationMeans, probs = 0.025), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
   geom_vline(xintercept = quantile(iterationMeans, probs = 0.975), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
   labs(title = "Empirical probability distribution of mean values",
@@ -400,60 +382,3 @@ This section on the bootstrap method offers a fundamental understanding, providi
 -   **Bayesian bootstrap:** Generates bootstrap samples from posterior distributions, useful for uncertainty estimation in Bayesian analysis (see more in Bayesian chapter of this book).
 
 Lastly, bootstrap resampling isn't limited to parameter estimation. It can also be employed to assess statistical tests, a topic we'll delve into in our upcoming section.
-
-# Tests de permutation
-
-## Introduction
-
-Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l'effet d'une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations. Autrement dit, même si les données de notre échantillon ne suive pas une loi classique (e.g. gaussienne), l'inférence statistique reste possible. Ce sont des tests dont le fonctionnement est intuitifs, facile à mettre en place et leur robustenne les rend particulièrement pratique dans un grand nombre de situations.
-
-## Fondements des Tests de Permutations
-
-### Principe Fondamental
-
-A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$...), les tests de permutations sont basés sur une distribution d'une statistique de test sous l'hypothèse nulle. La distribution sous l'hypothèse nulle correspond à la distribution théorique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dépendante). Dans les tests statistiques classiques, cette distribution correspond à différentes lois connues, la plus connue étant la loi Gaussienne, mais ça peut-être la distribution de Student, la distribution $\chi 2$ etc. La particularité des tests de permutations est que l'on va générer cette distribution théorique de façon empirique directement à partir des données. Les tests de permutation sont des tests non-paramétriques (ils ne font pas d'approximation de distribution) et exacts (basés sur les données uniquement).
-
-Selon les règles du théorème centrale limite, répéter un grand nombre de fois une observation d'une variable aléatoire (ici la statistique de test) ménera à une distribution Gaussienne dans laquelle on pourra placer la statistique de test observée (i.e. calculée sur notre échantillon) et ainsi définir la significativité de l'effet de nos variables explicatives. En d'autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.
-
-### Statistique de Test
-
-La statistique d'un test est une mesure numérique utilisée pour évaluer si les différences observées entre les groupes dans une étude sont statistiquement significatives. Elle permet de quantifier l'écart entre les observations observées et celles qui pourraient être attribuées au hasard. Voici quelques exemples de statistiques de tests connues : \$\$ \begin{align*}
-F [\text{ANOVA}] &: \quad F = \frac{MS_{\text{intergroupes}}}{MS_{\text{intragroupes}}} \quad \sim \mathcal{F(ddl_{\text{intergroupes}}, ddl_{\text{intragroupes}})} &&\\
-\\
-t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \quad \sim t(ddl) &&\\
-\\
-\chi^2 [\text{Test du } \chi^2] &: \quad \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} \quad \sim \chi^2(ddl) &&\\
-\end{align*}
-
-\$\$ Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté, $\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$, $n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$ observée, $E_i$ la distance $\chi^2$ attendue.
-
-Ces statistiques suivent des loi de distribution connues, on va donc comparer la statistique observée (calculé sur l'échantillon de données) à la distribution nulle de cette statistique et obtenir ainsi une p-valeur.
-
-Ces staomme La statistique de test pour les tests de permutations dépend du type d'étude et de la relation entre les données (indépendance ou non-indépendance). Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :
-
-\[ T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}} \sqrt{\frac{n_1 n_2}{n_1 + n_2}}, \]
-
-où (\bar{X}\_1) et (\bar{X}*2) sont les moyennes des deux groupes, (s*{\text{pooled}}) est l'écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons.
-
-## Mise en œuvre des Tests de Permutations
-
-### Étapes du Test
-
-Les étapes typiques pour mettre en œuvre un test de permutations comprennent :
-
-1.  Formuler les hypothèses nulle et alternative.
-2.  Calculer la statistique de test à partir des données observées.
-3.  Générer toutes les permutations possibles des données.
-4.  Calculer la statistique de test pour chaque permutation.
-5.  Comparer la statistique observée à la distribution nulle des statistiques de test.
-6.  Conclure sur l'acceptation ou le rejet de l'hypothèse nulle.
-
-## Exemples Pratiques
-
-### Test de Permutations pour la Différence de Moyennes
-
-Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l'équation ci-dessus.
-
-### Test de Permutations pour la Corrélation
-
-Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
