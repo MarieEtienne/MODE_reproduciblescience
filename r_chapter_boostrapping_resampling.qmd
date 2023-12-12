@@ -10,10 +10,9 @@ output:
    toc_float: true
 ---
 
-
 # Packages
 
-```{r, result = F, message = F, comment=F}
+```{r, result = F, message = F, comment=F, warnings = F}
 library(tidyverse)
 library(latex2exp)
 library(datasets)
@@ -77,7 +76,6 @@ qqline(data_sample$Sepal.Width)
 
 On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C'est là que je Jackknife devient intéressant.
 
-
 ## a - Principe
 
 ## b - exemple d'implémentation
@@ -105,7 +103,6 @@ shapiro.test(group)
 
 ## c - Avantages et inconvénients de la méthode
 
-
 # Permutation Tests
 
 Permutation tests are a robust statistical tool for comparing groups and assessing the impact of one variable on another. In contrast to bootstrap methods that generate confidence intervals, their aim is to calculate a p-value, providing a basis for making statistical conclusions. What sets permutation tests apart is that, unlike some other tests, they don't depend on specific assumptions about the data distribution. This makes them particularly sturdy, especially in situations where the number of data points is limited. Permutation tests are straightforward to understand, easy to put into action, and their resilience makes them highly practical for real-world applications.
@@ -117,7 +114,6 @@ Permutation tests are a robust statistical tool for comparing groups and assessi
 Permutation tests differ from classical statistical tests such as Student's t-test or the $\chi$ -square test in that they do not rely on specific assumptions about the distribution of data. Unlike traditional tests that assume a theoretical distribution of the test statistic under the null hypothesis, often based on well-known laws like the Gaussian distribution, permutation tests empirically generate this theoretical distribution directly from the data. This categorizes them as exact tests and non-parametric tests.
 
 According to the central limit theorem, repeating a large number of observations of a random variable (in this case, the test statistic) leads to a Gaussian distribution. This distribution allows us to position the observed test statistic (calculated on our sample) and determine the significance of the effect of our explanatory variables. In other words, we generate a large number of permutations of the observations, calculate the test statistic for each permutation, and then compare the observed statistic to this null distribution. We'll get into some reminder on what is the statistic of a test, a null distribution and a how p-values are generated to dive into the world of permutation test.
-
 
 ### **Parametric tests** : test statistic, null distribution and p-value
 
@@ -135,7 +131,7 @@ $$
 
 With $MS$ as the mean square error, $df$ as the degrees of freedom, $\bar{X}_i$ as the mean of group $i$, $s^2_i$ as the variance of group $i$, $n_i$ as the number of replicates in group $i$, $O_i$ as the observed $\chi^2$ distance, and $E_i$ as the expected $\chi^2$ distance.
 
-You may recall that these statistics typically follow well-established distributional laws. But what does "known distributional laws" mean? It means we know the probability of a given value of a statistical test (referred to as its probability distribution) based on certain parameter values (e.g., the degree of freedom for Student distribution). Hence, the term parametric tests! The probability distribution of a statistic under a specific parameter, such as the degrees of freedom \[ddl\] for a Student's t-distribution, forms the basis of the null hypothesis in statistical testing. The null hypothesis represents the idea that any observed differences or effects are purely due to chance variation within this established distribution. By comparing our calculated statistic (the one coming from our data) to the expected distribution under the null hypothesis, we can assess whether the observed result is consistent with what we would anticipate if there were no real effect. In essence, this comparison allows us to make informed decisions about the significance of our findings in the context of the null hypothesis. Then, the p-value merely represent the probability of observe your observed statistic under this null distribution / hypothesis.  
+You may recall that these statistics typically follow well-established distributional laws. But what does "known distributional laws" mean? It means we know the probability of a given value of a statistical test (referred to as its probability distribution) based on certain parameter values (e.g., the degree of freedom for Student distribution). Hence, the term parametric tests! The probability distribution of a statistic under a specific parameter, such as the degrees of freedom \[ddl\] for a Student's t-distribution, forms the basis of the null hypothesis in statistical testing. The null hypothesis represents the idea that any observed differences or effects are purely due to chance variation within this established distribution. By comparing our calculated statistic (the one coming from our data) to the expected distribution under the null hypothesis, we can assess whether the observed result is consistent with what we would anticipate if there were no real effect. In essence, this comparison allows us to make informed decisions about the significance of our findings in the context of the null hypothesis. Then, the p-value merely represent the probability of observe your observed statistic under this null distribution / hypothesis.
 
 In simpler terms, when we talk about "known distributional laws," it means we know how likely certain test results are under specific conditions. In the testing process, the null hypothesis proposes that any observed differences are merely random occurrences within the expected pattern. By comparing our actual result to what we would expect by chance, the p-value indicates the probability of our result occurring in this random scenario. If the likelihood of this chance scenario is highly improbable (typically below the 5% threshold), we reject the assumption that differences are random (reject the null hypothesis!). Conversely, if the chance scenario is 'too probable' (more than 5%), we conclude that it's not safe to assert our effect is not due to chance and refrain from rejecting the null hypothesis.
 
@@ -146,7 +142,7 @@ Enough talking, let's illustrate with a graphical example. Let's imagine we want
 boxplot(
   iris$Sepal.Length[iris$Species == "versicolor"],
   iris$Sepal.Length[iris$Species == "virginica"],
-  col = c(rgb(1, 0, 0, alpha = .5), rgb(0, 0, 1, alpha = .5)),
+  col = c("skyblue", "orange"),
   ylab = "Sepal Length",
   xlab = "",
   main = "",
@@ -178,7 +174,7 @@ Let's get more precise on how do we get the p-value associated with this compari
 curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t")
 ```
 
-This distribution shows the probability associated with each value of the $t$ statistic for a similar degree of freedom ($98$) with our data. It contains all the probabilities of the statistical tests assuming that 'sepal length means do not differ between both species.' Now, our task is to position the $t_{obs}$ representing the observed test statistic we calculated from our data, which is $t_{obs} = 5.6$, in this null distribution. The goal is to figure out how probable is the value 5.6 in the probability distribution of the Student's t-distribution with $df=98$.  
+This distribution shows the probability associated with each value of the $t$ statistic for a similar degree of freedom ($98$) with our data. It contains all the probabilities of the statistical tests assuming that 'sepal length means do not differ between both species.' Now, our task is to position the $t_{obs}$ representing the observed test statistic we calculated from our data, which is $t_{obs} = 5.6$, in this null distribution. The goal is to figure out how probable is the value 5.6 in the probability distribution of the Student's t-distribution with $df=98$.
 
 Since we conducted a two-sided test, meaning no a priori assumption about the direction of the effect, we split the 5% of the $\alpha$ threshold between both sides of the distribution. We will visually identify the values of $t$ for which less than $2.5%$ and more than $97.5%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5%$ or above the $97.5%$ threshold, we consider the observed difference statistically significant.
 
@@ -214,7 +210,7 @@ $$
 P = \bar{X}_1 - \bar{X}_2
 $$
 
-where ($\bar{X}_1$) and ($\bar{X}_2$) are the means of the two groups compared. In the absence of a predefined theoretical distribution, like the Student distribution mentioned earlier, we need to determine where to place the observed test statistic $P_{obs}$. To do this, we construct a null distribution. This involves randomly shuffling each value between the two groups and calculating the test statistic $P_{H0}$ for this newly arranged dataset. Essentially, each data point is randomly assigned to either group 1 or group 2, reflecting the idea that belonging to one group or the other has no effect on the response variable since the data has been randomly shuffled.  
+where ($\bar{X}_1$) and ($\bar{X}_2$) are the means of the two groups compared. In the absence of a predefined theoretical distribution, like the Student distribution mentioned earlier, we need to determine where to place the observed test statistic $P_{obs}$. To do this, we construct a null distribution. This involves randomly shuffling each value between the two groups and calculating the test statistic $P_{H0}$ for this newly arranged dataset. Essentially, each data point is randomly assigned to either group 1 or group 2, reflecting the idea that belonging to one group or the other has no effect on the response variable since the data has been randomly shuffled.
 
 We repeat this process many times, extracting the $P_{H0}$ each time to build a distribution of the test statistic under the null hypothesis ($H_0$). According to the central limit theorem, which suggests that the distribution of random variables repeated a large number of times tends to follow a bell curve, regardless of the original distribution shape of those variables. Once we have this null distribution, we follow a similar procedure as described earlier for parametric tests. We compare our $P_{obs}$ to this null distribution and determine its probability. Just like in parametric tests, in permutation tests, the p-value corresponds to the number of iterations where $P_{H0}$ is above or below (depending on the direction of our hypothesis) the $P_{obs}$ value.
 
@@ -258,9 +254,10 @@ sub_data <- filter_data[sample(1:nrow(filter_data), size = 20),]
 
 Let's plot the sub-dataset.
 
-```{r, echo = F, out.width="50%", fig.show='hold', , fig.height=4, fig.width=4}
-hist(sub_data$Sepal.Length[sub_data$Species == "versicolor"], col = rgb(1, 0, 0, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Versicolor")
-hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = rgb(0, 0, 1, alpha = .5), ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
+```{r, echo = F, out.width="50%"}
+par(mfrow = c(1, 2))
+hist(sub_data$Sepal.Length[sub_data$Species == "versicolor"], col = "skyblue", ylab = "Frequency", xlab = "Sepal Length", main = "Versicolor")
+hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = "orange", ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
 
 ```
 
@@ -358,7 +355,7 @@ Here, the p-value of the test is 0.0037, meaning the test statistic observed $P_
 
 #### Paired data (e.g. comparison of correlation)
 
-In this section, we'll demonstrate how to conduct a permutation test on paired data using the iris data set. For this purpose, we'll imagine a scenario where a fertilizer has been applied to each individual plant. The question will still focus on sepal length, exploring whether the fertilizer induces sepal length growth in a before-and-after experimental paradigm. Consequently, the data are paired by individuals. To ensure the independence of each unit of permutation, we must constrain how values are permuted **within** individuals. Unlike previous permutation procedures where all data were shuffled together, here we need to permute the data within each individual to account for the non-independence of the measures within each individual.  
+In this section, we'll demonstrate how to conduct a permutation test on paired data using the iris data set. For this purpose, we'll imagine a scenario where a fertilizer has been applied to each individual plant. The question will still focus on sepal length, exploring whether the fertilizer induces sepal length growth in a before-and-after experimental paradigm. Consequently, the data are paired by individuals. To ensure the independence of each unit of permutation, we must constrain how values are permuted **within** individuals. Unlike previous permutation procedures where all data were shuffled together, here we need to permute the data within each individual to account for the non-independence of the measures within each individual.
 
 To simplify the procedure, we will only consider the species *I. versicolor*. Let's create the sub-data and generate the new variable.
 
@@ -387,12 +384,11 @@ data_versicolor <-
 
 Let's plot this relation:
 
-
 ```{r}
 boxplot(
   data_versicolor$Sepal.Length.T1,
   data_versicolor$Sepal.Length.T2,
-  col = c(rgb(1, 0, 0, alpha = .5), rgb(0, 0, 1, alpha = .5)),
+  col = c("skyblue", "orange"),
   ylab = "Sepal Length",
   xlab = "",
   main = "",
@@ -422,9 +418,8 @@ Let's follow step by step the permutation procedure :
 
     As long as the statistic enable comparing both conditions, it will work ! That is part of the magic of permutation test. We calculate the test statistic for $P_{obs}$:
 
-
     ```{r}
-    p_obs <- mean(data_versicolor$Sepal.Length.T1) - mean(data_versicolor$Sepal.Length.T2) 
+    p_obs <- sum(data_versicolor$Sepal.Length.T1) - sum(data_versicolor$Sepal.Length.T2) 
     p_obs
     ```
 
@@ -451,7 +446,7 @@ Let's follow step by step the permutation procedure :
         ))
 
       # --- Difference of means of both species under h0
-      p_h0 <- mean(permuted_data[,1]) - mean(permuted_data[,2])
+      p_h0 <- sum(permuted_data[,1]) - sum(permuted_data[,2])
       
       # --- Add to null distribution
       null_distribution <- c(null_distribution, p_h0)
@@ -481,7 +476,7 @@ Let's follow step by step the permutation procedure :
     # POSITION P_OBS
     abline(v = p_obs, lwd = 2, col = "blue", lty = 2)
     text(x = -5, y = 750, labels = TeX("$P_{obs}$"), col = "blue")
-    
+
     ```
 
     In this section, we hypothesized a direction of the effect by stating that the sepal length would be greater after the use of the fertilizer. Hence, we'll calculate the p-value as the number of null observations greater than the observed test statistic (not in absolute value!):
@@ -493,7 +488,6 @@ Let's follow step by step the permutation procedure :
 5.  **Conclude on accepting or rejecting the null hypothesis**
 
     As $p > 0.05$, we don't reject the null hypothesis, suggesting that a difference is not observed before and after fertilizer usage.
-
 
 \
 
@@ -511,13 +505,11 @@ While permutation tests can be computationally intensive (especially when combin
 
 In the next chapter, we delve into the Mantel test, a statistical method used to assess the correlation between two distance matrices. This test is particularly valuable in fields such as ecology and genetics, where understanding the spatial or temporal relationships between entities is crucial.
 
-
 # Regressions and Mantel tests
 
 ## Regressions
 
-What to do when we have only quantitative variables?
-Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1, X_2,., X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is classically expressed as follows:
+What to do when we have only quantitative variables? Regression is a method of empirically modeling a response variable (here called $Y$) as a function of one or more explanatory variables ( $X_1, X_2,., X_n$ where $n$ is the number of explanatory variables). Linear regressions are the ones most commonly used in statistics, mainly because they are easy to apply. Let's place ourselves in this linear world. The linear model is classically expressed as follows:
 
 $$ 
 Y_i = \alpha + \sum_{j=1}^{n}b_j \times X_{ij} +\epsilon_i\sim\mathcal{N}(0,,\sigma)
@@ -541,7 +533,7 @@ $$
 
 ### Statistical test on the coefficients.
 
-We got the coefficients! Now we need to make sure that the relationship between the variables is not due to random. In other terms, The way to do that is to verify if the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of a random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ concerning $X_ij$ or vice versa. Here, permutations allow to simulation of random relationships between variables. 
+We got the coefficients! Now we need to make sure that the relationship between the variables is not due to random. In other terms, The way to do that is to verify if the values of the parameters $b$ and $\alpha$ are different from the hypothesis of random. So, we call this hypothesis of a random relationship between the variables the null hypothesis (H0). The permutation test is used to define H0. The idea is to permute the values of $Y_i$ concerning $X_ij$ or vice versa. Here, permutations allow to simulation of random relationships between variables.
 
 Here is an example of one permutation of the $Y_i$ from the $X_i$.
 
@@ -635,6 +627,7 @@ abline(v = obs[2], lwd = 2.5, col = "red")
 
 
 ```
+
 The observations seems to be out of H0, we need to make sure using statistics !
 
 ## Calculation of test statistics
@@ -669,14 +662,12 @@ Note that you can make permutation tests on all regression coefficients if $Y_i$
 
 ### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances.
-The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability? 
-
-
+The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances. The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability?
 
 ### Correspondence (distances) matrices.
 
-The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix. 
+The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix.
+
 ```{r}
 library(vegan)
 
@@ -710,9 +701,10 @@ library(ade4)
 set.seed(seed = 1.5) # Have same results
 mantel.rtest(as.dist(station.dists), as.dist(ozone.dists[,-1]), nrepet = 1000)
 ```
+
 The coefficient of correlation observed is -0.2061116 and the p-value is 0.6793207. If we put the threshold of significance at 0.05. The correlation is not significant here!
 
-Another example of a package is the vegan package which allows to use of different correlation statistics. In our case, we chose the Pearson correlation. 
+Another example of a package is the vegan package which allows to use of different correlation statistics. In our case, we chose the Pearson correlation.
 
 ```{r}
 #Using the vegan package, pearson correlation
@@ -720,5 +712,5 @@ Another example of a package is the vegan package which allows to use of differe
 mantel(xdis = station.dists, ydis = ozone.dists, permutations = 1000)
 
 ```
-Using this package, the results are similar. well! The p-value is indicated after the term "Significance:" and the correlation coefficient follows the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware of the length of our data set. 
 
+Using this package, the results are similar. well! The p-value is indicated after the term "Significance:" and the correlation coefficient follows the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware of the length of our data set.
