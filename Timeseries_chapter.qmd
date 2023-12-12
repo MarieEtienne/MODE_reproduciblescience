@@ -90,7 +90,7 @@ Autocorrelation is given by the expression: $$\rho(k) = \frac{E(X_tX_{t+1}) - E(
 
 With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$. 
 
-Autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation). 
+On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation). 
 
 ```{r}
 par(mfrow=c(2,3),mar=c(1,4,4,0))
