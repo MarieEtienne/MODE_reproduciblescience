@@ -11,6 +11,24 @@ output:
 
 Temporal dependency means that values sampled at a given time can be related to the value sampled before. Therefore, the variable can be correlated to itself and create **pseudoreplication**. 
 
+
+Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
+```{r, echo = F}
+## Install and load the packages required
+
+library(tidyverse) # Data cleaning, ordering, etc.
+library(lubridate) # Helps manage the date format data
+library(ade4)      # Study ecological data
+library(nlme)      # glm and gls
+library(car)       # Type II anova.
+
+#To install older version of a package to use the arimax function.
+require(devtools)
+install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
+install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
+library(TSA)       # Time series analysis
+```
+
 ### The dataset
 
 To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures. 
@@ -24,7 +42,7 @@ head(dataT)       # What are the data
 summary(dataT)    # Summary of the spread of each variable
 ```
 
-Two colonies 'C' and 'O' are studied from 1972 to 2003. In particular, the reproductive sucess (sucess), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies. 
+Two colonies 'C' and 'O' are studied from 1972 to 2003. In particular, the reproductive success (success), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies. 
 
 ```{r}
 ## Arrange the dataset
@@ -59,32 +77,18 @@ plot(O[,2],O[,5], pch=16, xlab="year", ylab="Number of pairs")
 lines(O[,2],O[,5])
 mtext(text="Parameter for Colony O",side=1,line=-14.5,outer=TRUE)
 ```
+Through time, all the variables do not have the same behaviour for both of the colonies. 
+Some variables fluctuate in time like the O colony growth rate, or can evolve gradually, like the number of pairs for the O colony.
 
-
-
-
-
-
-
+The irregularity in time of the variables can mean that the data are correlated to the precedent ones.
 A key parameter to know if there really is a correlation of the variable to itself is **autocorrelation**.
 
 
-Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
-```{r, echo = F}
-## Install and load the packages required
+### Autocorrelation
 
-library(tidyverse) # Data cleaning, ordering, etc.
-library(lubridate) # Helps manage the date format data
-library(ade4)      # Study ecological data
-library(nlme)      # glm and gls
-library(car)       # Type II anova.
+Autocorrelation is given by the expression: $$\rho(k) = \frac{E(X_tX_{t+1}) - E(X_t)E(X{t+1})}{\sqrt{E(X_t^2)E(X_{t+1}^2)}}$$
 
-#To install older version of a package to use the arimax function.
-require(devtools)
-install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
-install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
-library(TSA)       # Time series analysis
-```
+With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$. 
 
 Autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation). 
 
