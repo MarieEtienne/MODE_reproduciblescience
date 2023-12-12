@@ -13,6 +13,8 @@ library(deSolve)
 library(rjags)
 library(ggmcmc)
 library(sm)
+library(ggplot2)
+library(gridExtra)
 ```
 
 # Introduction
