@@ -26,4 +26,20 @@ library(tidyverse)
 library(lubridate)
 ```
 
+# 1. Time series
+
+C'est quoi les séries temporelles ? 
+  Donner un exemple qui fait office de fil rouge
+  
+Quand est-ce qu'on sait si on a une série temporelle ou non ? 
+  Stationnarité (changement des paramètres au cours du temps : moyenne et variance). Mesure de l'autocorrélation. Si on a un processus stationnaire on arrive vite à une autocorrélation de 0. 
+
+Pourquoi c'est important de savoir si les données sont indépendantes ou non et si non selon quoi ? 
+  La plupart des tests statistiques nécessitent l'indépendance des données (donner des raisons concrètes, ANOVA...). 
+  
+Evaluation du risque alpha et beta 
+
+
+# 2. 
+
 A citation @bauer2023writing
