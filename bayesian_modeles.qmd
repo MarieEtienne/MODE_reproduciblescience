@@ -8,7 +8,6 @@ output: html_document: toc: true toc_float: true
 ```{r setup}
 #| include: false
 library(tidyverse)
-library(ggforce)
 library(deSolve)
 library(rjags)
 library(ggmcmc)
@@ -526,7 +525,8 @@ for(i in 1:length(y_means)){
 }
 data = data.frame(Y3, class, IDclass)
 ggplot(data)+
-  geom_sina(aes(class,Y3))+
+  geom_point(aes(class,Y3))+
+  geom_violin(aes(class,Y3), alpha =0.2)+
     main_theme
 ```
 
