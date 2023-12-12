@@ -10,7 +10,7 @@ output:
    toc_float: true
 ---
 
-# Introduction
+# General introduction
 
   While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
   Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
@@ -48,6 +48,7 @@ ggplot(data)+
 
 The sample being normally distributed, we can estimate a confidence interval as below:
 
+
 ```{r}
 low <- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
 high <- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))
@@ -58,6 +59,7 @@ print(c(low,high))
 
 Let's imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.
 
+
 ```{r}
 mu <- mean(data$Sepal.Width)
 print(mu)
@@ -65,6 +67,7 @@ print(mu)
 
 Here $\mu$ is the "real" mean of the population that theoretically we do not know.\
 We only have access to the following sub-sample of 15 observations:
+
 
 ```{r}
 set.seed(42)
@@ -86,6 +89,7 @@ ggplot(data_sample)+
 ```
 
 This sample is not normally distributed.
+
 
 ```{r}
 mean(data_sample$Sepal.Width)
@@ -133,6 +137,7 @@ After creating the subsamples, the next step is to calculate pseudo-values for e
 $$
 v_{i} = n\overline{X} - (n-1)\overline{X}_{-i}
 $$
+
 
 with the following variables:
 
@@ -246,24 +251,173 @@ This method is not always efficient, it is not recomanded for time series analys
 
 For more informations about applications of the Jackknife you can read the following paper https://www.jstor.org/stable/pdf/2334280.pdf?refreqid=fastly-default%3Af728183558d4928f9eddd7a58f8406a9&ab_segments=&origin=&initiator=&acceptTC=1 
 
+# The bootstrap re-sampling method
+
+## Introduction and Principle
+
+Now that we've thoroughly explored jackknife resampling in the previous section, let's delve into another resampling technique: the bootstrap method.
+
+Similar to jackknife, bootstrap aims to estimate descriptive parameters of a sample and assess the accuracy of these estimates for making inferences about the actual population. It is yet another statistical inference method that involves generating multiple datasets through resampling from the original dataset. Essentially, the concept revolves around using resampling techniques to create a probability distribution for a chosen parameter. This distribution, known as the empirical distribution function, serves as an estimation of the true probability distribution of our parameter in the population. In practice, similar to the earlier section, our objective here is to compute parameters of interest from our sample (such as mean, median, or even the $R^2$ of a regression, among others) and establish confidence intervals around these estimates.
+
+The fundamental difference between jackknife and bootstrap lies in their resampling methodologies. In each of its $i$ iterations, bootstrap randomly resamples $n$ elements from an initial sample of $n$ data points with replacement. This leads to two crucial distinctions from the resampling method employed in jackknife: i) The new samples generated through bootstrap maintain the same size $n$ as the original dataset. ii) Given the sampling with replacement approach, a particular element can occur multiple times in a new sample or might not appear at all during the resampling process.
+
+After generating these $i$ bootstrap samples, the intended statistical parameters are computed for each of these samples. As a result, we obtain a distribution of $i$ data points derived from these samples, forming what is known as our empirical distribution function. Subsequently, the analysis of this distribution allows us to estimate precision, particularly in establishing the confidence interval for our statistical parameters.
+
+## Practice and Application
+
+If the previous introduction seemed a bit perplexing, don't worry---we'll use an example to illustrate this concept.
+
+For this demonstration, we'll once again employ the Iris RBase dataset. Suppose we're interested in determining the average width of the sepals in a wild population of Iris flowers. However, it's practically impossible to measure the sepals of every single flower in the population. Instead, we've sampled and measured a specific number of individuals in the field. To simplify, let's consider our Iris dataset as a representation of the complete wild population (which, in reality, is inaccessible) and select only a small number of individuals to mimic our field sampling.
+
+```{r}
+# Our real population
+irisPopulation <- iris$Sepal.Width
+# Our field sampling
+set.seed(42)
+irisSampling <- irisPopulation[sample(1:150,15)]
+```
+
+From this field sampling, let's proceed with the calculation of the mean.
+
+```{r}
+# Field sampling mean
+mean(irisSampling)
+```
+
+So, we've obtained a mean value of 3.15, which is great. However, this mean value can't be reliably generalized to the entire population because we lack information about the variability induced by the specific individuals we chose to sample. As highlighted in our previous code, we only sampled $n=15$ individuals in the field. Clearly, this limited sampling isn't sufficient to confidently assert that our estimated mean is truly representative of the entire population. Hence, it becomes essential to gain insights into the variability of the mean we've just calculated. This is precisely where the bootstrap method comes into play.
+
+We'll now systematically apply our algorithm to resample the initial dataset obtained from our field sampling. This resampling process will be utilized to construct the probability distribution of our mean.
+
+1.  **bootstrap resampling iterations**
+
+```{r}
+# Fix our number of bootstrap iterations
+B = 1000
+
+# Create an empty list to stock our resamplings
+bootstrapSamples <- vector("list",B)
+
+# bootstrap resampling algorithm
+for (i in 1:B) {
+  # Randomly sample n elements with replacement
+  bootstrapSamples[[i]] <- sample(irisSampling, replace = TRUE)
+}
+```
+
+For pedagogical purposes, let's examine a few resamples while comparing them to our initial field sampling dataset.
+
+```{r}
+# Our original field sampling
+sort(irisSampling)
+```
+
+```{r}
+# A few resampling
+sort(bootstrapSamples[[5]])
+sort(bootstrapSamples[[777]])
+```
+
+Observe how certain values are repeated more frequently than in our initial dataset. Additionally, note that some values aren't sampled at all. For instance, the value 2.5 appeared only once in our initial set and consequently was seldom or perhaps never resampled. Conversely, the value 2.8 was more prevalent in our initial dataset and consequently was sampled more frequently
+
+2.  **Compute mean for every resampled datasets**
+
+Now, we'll compute the parameter of interest for each of our resampled datasets. This process will yield our set of $i=1000$ mean values, which we'll utilize to construct our empirical distribution in the subsequent step.
+
+```{r}
+# Compute mean for each bootstrap samples
+iterationMeans <- sapply(bootstrapSamples, mean)
+```
+
+3.  **Plot the probability distribution**
+
+The computation of the distribution for our parameter of interest is complete. We can now proceed to plot it, providing us with an understanding of the variability surrounding our estimated mean value.
+
+```{r}
+# Probability distribution plot
+ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_density(alpha = 0.5, fill = "orange") +
+  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed", linewidth = 1.5) +
+  labs(title = "Empirical probability distribution of mean values",
+       x = "Mean",
+       y = "Density") +
+  theme_classic()
+```
+
+Hence, this probability distribution provides us with insights into the variability around the mean value estimated from our field sampling. As anticipated, and as indicated by the red dashed line, this distribution is centered around the estimated mean value.
+
+4.  **Compute Confidence Interval around our mean estimate**
+
+Recall the primary objective of the bootstrap method: to assess the precision of our parameter estimation to make inferences about the broader population. To accomplish this, we'll utilize the bootstrap percentiles. For instance, suppose we aim to calculate the 95% Confidence Interval. In this case, we'll allocate 5% of the error evenly on both sides of our distribution, corresponding to the values at the 2.5th and 97.5th percentiles in our empirical distribution.
+
+```{r}
+# Get percentile 2.5%
+quantile(iterationMeans, probs = c(0.025,0.975))
+```
+
+And thus, we've successfully obtained our confidence interval for the mean estimation: $2.97 \leq \overline{x} \leq 3.33$.
+
+For educational purposes, let's proceed to plot these percentiles in green.
+
+```{r}
+# Probability distribution plot
+ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_density(alpha = 0.5, fill = "orange") +
+  geom_vline(xintercept = mean(irisSampling), color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = quantile(iterationMeans, probs = 0.025), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
+  geom_vline(xintercept = quantile(iterationMeans, probs = 0.975), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
+  labs(title = "Empirical probability distribution of mean values",
+       x = "Mean",
+       y = "Density") +
+  theme_classic()
+```
+
+5.  **Compare with population mean value**
+
+The bootstrap resampling method has facilitated the construction of a confidence interval around our mean estimate with a 5% margin of error. Now, let's compare this interval with the actual value of our Iris population.
+
+```{r}
+mean(irisPopulation)
+```
+
+The actual sepal width mean of our population falls within the bounds of our confidence interval, which is highly encouraging! Consequently, we've effectively inferred information about the population mean in a scenario where we had limited data, made no normality assumptions, and where the standard computation of confidence intervals might not have been sufficiently robust and accurate.
+
+### Strengths and Weaknesses
+
+As we've seen, bootstrap is a powerful resampling technique used in statistics for estimating the precision of parameters. One of its primary advantages lies in its versatility across a wide spectrum of statistical estimations. Indeed, this resampling technique is applicable to various parameters, such as mean, variance, regression coefficients, and more. Furthermore, this method is particularly robust in handling complex data structure without strict distributional assumptions, meaning that it can easily works with non-normally distributed datasets with little observations, which is really relevant in real-word scenarios. In those cases, bootstrap ends up being more accurate than the standard intervals obtained under normality assumption.
+
+However, one significant concern is its computational intensity, especially noticeable with larger datasets or complex models. Generating numerous bootstrap samples can demand, in certain cases, substantial computing resources. Additionally, bootstrap might display biased estimation of the accuracy of estimates, depending on whether or not the sampling dataset is representative of the actual population.
+
+Overall, bootstrap's major advantages lie in its broader applicability across various statistical estimations, but which comes with higher computational demands. In contrast, Jackknife might be less versatile, but tends to offer a better computational efficiency and less biased parameters, making it a favorable choice under certain conditions.
+
+### To go further
+
+This section on the bootstrap method offers a fundamental understanding, providing explicit R scripts for pedagogical purposes. If you find yourself needing to utilize bootstrap, we highly recommend exploring the capabilities of the `boot` R package, which streamlines bootstrap implementation. Moreover, the bootstrap method extends beyond basic parameter estimation, offering various derivatives and applications catering to diverse needs:
+
+-   **Parametric bootstrap:** Assumes a specific parametric distribution, generating bootstrap samples from this fitted distribution and allowing inference within a particular statistical model.
+-   **Smooth bootstrap:** Incorporates smoothing techniques to reduce variability in resampling, ideal for noisy or irregular data.
+-   **Bayesian bootstrap:** Generates bootstrap samples from posterior distributions, useful for uncertainty estimation in Bayesian analysis (see more in Bayesian chapter of this book).
+
+Lastly, bootstrap resampling isn't limited to parameter estimation. It can also be employed to assess statistical tests, a topic we'll delve into in our upcoming section.
 
 # Tests de permutation
+
 ## Introduction
+
 Les tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l'effet d'une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations. Autrement dit, même si les données de notre échantillon ne suive pas une loi classique (e.g. gaussienne), l'inférence statistique reste possible. Ce sont des tests dont le fonctionnement est intuitifs, facile à mettre en place et leur robustenne les rend particulièrement pratique dans un grand nombre de situations.
 
-
 ## Fondements des Tests de Permutations
+
 ### Principe Fondamental
 
 A l'instar des autres tests statistiques classiques (e.g. T de Student, test du $\chi 2$...), les tests de permutations sont basés sur une distribution d'une statistique de test sous l'hypothèse nulle. La distribution sous l'hypothèse nulle correspond à la distribution théorique de la statistique du test en supposant que l'effet que nous testons n'a pas d'impact (i.e. que nos variables explicatives n'ont pas d'effet sur la variable dépendante). Dans les tests statistiques classiques, cette distribution correspond à différentes lois connues, la plus connue étant la loi Gaussienne, mais ça peut-être la distribution de Student, la distribution $\chi 2$ etc. La particularité des tests de permutations est que l'on va générer cette distribution théorique de façon empirique directement à partir des données. Les tests de permutation sont des tests non-paramétriques (ils ne font pas d'approximation de distribution) et exacts (basés sur les données uniquement).
 
 Selon les règles du théorème centrale limite, répéter un grand nombre de fois une observation d'une variable aléatoire (ici la statistique de test) ménera à une distribution Gaussienne dans laquelle on pourra placer la statistique de test observée (i.e. calculée sur notre échantillon) et ainsi définir la significativité de l'effet de nos variables explicatives. En d'autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.
 
-
 ### Statistique de Test
-La statistique d'un test est une mesure numérique utilisée pour évaluer si les différences observées entre les groupes dans une étude sont statistiquement significatives. Elle permet de quantifier l'écart entre les observations observées et celles qui pourraient être attribuées au hasard. Voici quelques exemples de statistiques de tests connues :
-$$
-\begin{align*}
+
+La statistique d'un test est une mesure numérique utilisée pour évaluer si les différences observées entre les groupes dans une étude sont statistiquement significatives. Elle permet de quantifier l'écart entre les observations observées et celles qui pourraient être attribuées au hasard. Voici quelques exemples de statistiques de tests connues : \$\$ \begin{align*}
 F [\text{ANOVA}] &: \quad F = \frac{MS_{\text{intergroupes}}}{MS_{\text{intragroupes}}} \quad \sim \mathcal{F(ddl_{\text{intergroupes}}, ddl_{\text{intragroupes}})} &&\\
 \\
 t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \quad \sim t(ddl) &&\\
@@ -271,19 +425,15 @@ t [\text{t de Student}] &: \quad t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_
 \chi^2 [\text{Test du } \chi^2] &: \quad \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} \quad \sim \chi^2(ddl) &&\\
 \end{align*}
 
-$$
-Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté, $\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$, $n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$ observée, $E_i$ la distance $\chi^2$ attendue. 
+\$\$ Avec $MS$ l'erreur moyenne carrée, $ddl$ le degré de liberté, $\bar{X}_i$ la moyenne du groupe $i$, $s^2_i$ la variance du groupe $i$, $n_i$ le nombre de réplicats du groupe $i$, $O_i$ la distance $\chi^2$ observée, $E_i$ la distance $\chi^2$ attendue.
 
 Ces statistiques suivent des loi de distribution connues, on va donc comparer la statistique observée (calculé sur l'échantillon de données) à la distribution nulle de cette statistique et obtenir ainsi une p-valeur.
 
-
 Ces staomme La statistique de test pour les tests de permutations dépend du type d'étude et de la relation entre les données (indépendance ou non-indépendance). Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :
 
-\[
-T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}} \sqrt{\frac{n_1 n_2}{n_1 + n_2}},
-\]
+\[ T = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{pooled}}} \sqrt{\frac{n_1 n_2}{n_1 + n_2}}, \]
 
-où \(\bar{X}_1\) et \(\bar{X}_2\) sont les moyennes des deux groupes, \(s_{\text{pooled}}\) est l'écart-type combiné des groupes, et \(n_1\) et \(n_2\) sont les tailles des échantillons.
+où (\bar{X}\_1) et (\bar{X}*2) sont les moyennes des deux groupes, (s*{\text{pooled}}) est l'écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons.
 
 ## Mise en œuvre des Tests de Permutations
 
@@ -291,15 +441,15 @@ où \(\bar{X}_1\) et \(\bar{X}_2\) sont les moyennes des deux groupes, \(s_{\tex
 
 Les étapes typiques pour mettre en œuvre un test de permutations comprennent :
 
-1. Formuler les hypothèses nulle et alternative.
-2. Calculer la statistique de test à partir des données observées.
-3. Générer toutes les permutations possibles des données.
-4. Calculer la statistique de test pour chaque permutation.
-5. Comparer la statistique observée à la distribution nulle des statistiques de test.
-6. Conclure sur l'acceptation ou le rejet de l'hypothèse nulle.
-
+1.  Formuler les hypothèses nulle et alternative.
+2.  Calculer la statistique de test à partir des données observées.
+3.  Générer toutes les permutations possibles des données.
+4.  Calculer la statistique de test pour chaque permutation.
+5.  Comparer la statistique observée à la distribution nulle des statistiques de test.
+6.  Conclure sur l'acceptation ou le rejet de l'hypothèse nulle.
 
 ## Exemples Pratiques
+
 ### Test de Permutations pour la Différence de Moyennes
 
 Considérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l'équation ci-dessus.
@@ -307,5 +457,3 @@ Considérons un exemple où nous voulons tester si la différence de moyennes en
 ### Test de Permutations pour la Corrélation
 
 Dans le cas d'une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman. Les étapes décrites précedemment devront être suivi également.
-
-
