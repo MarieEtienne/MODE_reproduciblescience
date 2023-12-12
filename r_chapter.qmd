@@ -30,6 +30,8 @@ For the models described here, it is required for the processes to be stationary
 
 This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
+The idea behind this analysis is that the state of a neighbor region will affect our region. 
+
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
 
 ![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/equation_glm%20.png)
@@ -50,7 +52,7 @@ or as the weighted average:
 
 This function is usually related to the distance between data points or to the environmental distance.
 
-In R,
+In R
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
