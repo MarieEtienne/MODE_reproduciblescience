@@ -634,3 +634,9 @@ postSamples_df2 %>%
 Purple full lines represent the means of posterior distributions and doted line are the true values of the data. The utility to have posterior distribution and not only compute the mean or the standard error is that we can know the probability of each mean or sd values, therefore we have a good estimation of the confidence that we should have when making conclusion on values.
 
 ## More specific ecological studies that employed Bayesian methods
+
+### Predator-prey body size:
+For example, predators are often gape-limited, meaning that larger predators should be able to eat larger prey and smaller predators, smaller preys, depending on the size of their mouth. It is known from the existing literature that predators are 2 or 3 times larger than their prey (Trebilco et al. 2013). So, in this example we could use a prior mean of the intercept to a value below zero, like an average predator/prey mass comparison (Wesner and Pomeranz 2021).
+
+## Spider abundance according to the presence of fish:
+In this example from a study done by Warmbold and Wesner in 2018, they hypothesized that fish would reduce the emergence of adult aquatic insects by eating their larvae, causing a reduction in terrestrial spiders that feed on the adult forms of those insects. 
