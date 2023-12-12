@@ -28,6 +28,9 @@ library(bootstrap)
 library(tidyverse)
 library(latex2exp)
 library(datasets)
+library(vegan)
+library(ade4)
+library(kableExtra)
 ```
 
 # Confidence interval estimation: Jackknife and Bootstrap methods
@@ -520,7 +523,7 @@ With $\alpha$ the type-I error (here 5%). Hence $t_{obs}$ is in the significance
 
 The method for inference in permutation test is very similar in conception in the sense they are based on a statistic test, a null hypothesis and the generation of a p-value. In permutation test, the statistic test $P_{obs}$ have to be defined. It can basically be anything that link the different conditions of our experimental design. For example, if we want to compare an effect on a response variable dispatch into two conditions (e.g. levels of a preditive categorical variable), the statistic test could be the difference of the sums, the variances, means... of the values of both groups. For example, let's consider a difference in means as statistic test:
 
-
+$$
 P = \bar{X}_1 - \bar{X}_2
 $$
 
@@ -815,7 +818,7 @@ $$
 $$
 
 
-With $\beta$ representing the intercept, $\alpha$ as the regression coefficient, and $\epsilon$ denoting the error, the objective is to ascertain (i) the confidence interval of the regression estimate $\alpha$ and (ii) the associated p-value. To achieve this, we will utilize a subset of the iris dataset comprising 25 randomly selected samples of the *I. versicolor* species:
+With $\beta$ representing the intercept, $\alpha$ as the regression coefficient, and $\epsilon$ denoting the error. The objective is to ascertain (i) the confidence interval of the regression estimate $\alpha$ and (ii) the associated p-value. To achieve this, we will utilize a subset of the iris dataset comprising 25 randomly selected samples of the *I. versicolor* species:
 
 ```{r}
 set.seed(123)
@@ -930,14 +933,13 @@ So $0.87 \in [0.40, 1.84]$ ! With only half the original sample size, we achieve
 
 #### Uses
 
-The Mantel test (Mantel, 1967) is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances. The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability?
+The Mantel test [@mantel_detection_1967] is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances. The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability?
 
 #### Correspondence (distances) matrices
 
 The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix.
 
 ```{r}
-library(vegan)
 
 # Download a dataset and create distance matrices
 ozone <- read.table("https://stats.idre.ucla.edu/stat/r/faq/ozone.csv", sep=",", header=T)
@@ -967,7 +969,6 @@ There are some packages available to perform the Mantel test. For example, the a
 ```{r}
 # Using the ade4 package
 
-library(ade4)
 set.seed(seed = 1.5) # Have same results
 mantel.rtest(as.dist(station.dists), as.dist(ozone.dists[,-1]), nrepet = 1000)
 ```
