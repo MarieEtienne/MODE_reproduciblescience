@@ -363,7 +363,7 @@ The bootstrap resampling method has facilitated the construction of a confidence
 mean(irisPopulation)
 ```
 
-The actual sepal width mean of our population falls within the bounds of our confidence interval, which is highly encouraging! Consequently, we've effectively inferred information about the population mean in a scenario where we had limited data, made no normality assumptions, and where the standard computation of confidence intervals might not have been sufficiently robust and accurate.
+The actual sepal width mean of our population falls within the bounds of our confidence interval, which is highly encouraging! Comparing it to the interval estimated using the jackknife method, we notice that this interval is narrower and more precise. Consequently, we've effectively inferred information about the population mean in a scenario where we had limited data, made no normality assumptions, and where the standard computation of confidence intervals might not have been sufficiently robust and a
 
 ### Strengths and Weaknesses
 
