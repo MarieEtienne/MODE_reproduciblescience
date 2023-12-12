@@ -9,22 +9,106 @@ output:
    toc_float: true
 ---
 
-Temporal dependency means that values sampled at a given time can be related to the value sampled before. Therefore, the variable can be correlated to itself, it is **autocorrelation**.
+Temporal dependency means that values sampled at a given time can be related to the value sampled before. Therefore, the variable can be correlated to itself and create **pseudoreplication**. 
 
-Therefore, we have to test if the temporal relationship exists.
+### The dataset
 
+To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures. 
 
+```{r}
+## Load the data
+setwd("C:/Users/User/Onedrive/Bureau/MODE/M2/ASA/Le Gouar")
+dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
 
-```{r, echo = F}
-library(tidyverse)
-library(lubridate)
+head(dataT)       # What are the data
+summary(dataT)    # Summary of the spread of each variable
 ```
+
+Two colonies 'C' and 'O' are studied from 1972 to 2003. In particular, the reproductive sucess (sucess), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies. 
+
+```{r}
+## Arrange the dataset
+dataT_ordered=dataT %>% arrange(col,year)
+## Create 2 sub-datasets for the 2 colonies
+C=dataT[dataT$col=="C",]
+O=dataT[dataT$col=="O",]
+```
+
+### Data exploration
+
+```{r}
+## Data representation
+# Window size
+par(mfrow=c(2,3),mar=c(2,4,2.5,0),oma=c(2,2,2,4)) 
+
+## Colony C
+plot(C[,2],C[,3], xlab="year", ylab="mean reproductive success")
+lines(C[,2],C[,3])
+plot(C[,2],C[,4], pch=17, xlab="year", ylab="Colony growth rate")
+lines(C[,2],C[,4])
+plot(C[,2],C[,5],pch=16, xlab="year", ylab="Number of pairs")
+lines(C[,2],C[,5])
+mtext(text="Parameter for Colony C",side=3,line=-1,outer=TRUE)
+
+## Colony O
+plot(O[,2],O[,3],  xlab="year", ylab="mean reproductive success")
+lines(O[,2],O[,3])
+plot(O[,2],O[,4],pch=17, xlab="year", ylab="Colony growth rate")
+lines(O[,2],O[,4])
+plot(O[,2],O[,5], pch=16, xlab="year", ylab="Number of pairs")
+lines(O[,2],O[,5])
+mtext(text="Parameter for Colony O",side=1,line=-14.5,outer=TRUE)
+```
+
+
+
+
+
+
+
+A key parameter to know if there really is a correlation of the variable to itself is **autocorrelation**.
+
+
+Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
+```{r, echo = F}
+## Install and load the packages required
+
+library(tidyverse) # Data cleaning, ordering, etc.
+library(lubridate) # Helps manage the date format data
+library(ade4)      # Study ecological data
+library(nlme)      # glm and gls
+library(car)       # Type II anova.
+
+#To install older version of a package to use the arimax function.
+require(devtools)
+install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
+install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
+library(TSA)       # Time series analysis
+```
+
+Autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation). 
+
+```{r}
+par(mfrow=c(2,3),mar=c(1,4,4,0))
+acf(C[,3], main="Reproductive success for C")
+acf(C[,4], main="Growth rate for C")
+acf(C[,5], main="Density for C")
+acf(O[,3], main="Reproductive success for O")
+acf(O[,4], main="Growth rate for O")
+acf(O[,5], main="Density for O")
+```
+
+
+--------------------------------------
+
 
 # 1. Time series
 
 ## What are time series?
 C'est quoi les séries temporelles ? 
   Donner un exemple qui fait office de fil rouge
+  
+Dataset avec les vautours de Pascaline. Reprendre le .rmd avec les exemples + mes notes. 
 
 ## What to do if we don't know if the series has a time dependency?
 Quand est-ce qu'on sait si on a une série temporelle ou non ? 
@@ -36,10 +120,22 @@ Pourquoi c'est important de savoir si les données sont indépendantes ou non et
   
 Evaluation du risque alpha et beta 
 
+Having a variable with dependant data can create cases of **pseudoreplication**. 
+
 ## What tests can we do? 
 - AR
 - MA
 - ARIMA
+
+#### AR
+AR stands for 'Autoregression'
+
+#### MA
+MA stands for 'Moving Average'. 
+
+#### ARIMA
+ARIMA is a combination of both AR and MA.
+It has 3 parameters: p, d and q. 
 
 ## What conditions needs to be verified? 
 
