@@ -26,7 +26,7 @@ Biostatistics is a mathematical discipline based on statistics applied to living
 
 ## Explanation in the special case of conjugation between prior and posterior
 
-For context First, let's take a simple example to explain the idea behind the Bayesian method. We want to estimate the mean abundance per $m^2$ of one fungus in a forest. To do that, we set up some sampling areas in which we count the number of mushrooms. We can simulate the data by taking random observations in a Poisson distribution. Let's suppose that our study has 200 sampling area. **Because it is count data, the number of mushrooms that we will count should follow a Poisson distribution :**
+For context first, let's take a simple example to explain the idea behind the Bayesian method. We want to estimate the mean abundance per $m^2$ of one fungus in a forest. To do that, we set up some sampling areas in which we count the number of mushrooms. We can simulate the data by taking random observations in a Poisson distribution. Let's suppose that our study has 200 sampling area. **Because it is count data, the number of mushrooms that we will count should follow a Poisson distribution :**
 
 ```{r}
 n_sample = 200 # sampling area
@@ -90,7 +90,108 @@ for(n_obs in list(0,1:5,1:10,1:50,1:100,1:200)){
 }
 ```
 
-When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increasing the number of data gives us a better approximation of the true mean. The density of probability is also higher with a lot of data because we have more confidence in the approximation. \# When approximation by com5/5putation is needed In Bayesian statistics, as mentioned earlier, the goal is to update our beliefs about the parameters of a model by combining prior knowledge with the observed information in our collected field data. However, the direct calculation of the posterior distribution can often be challenging to compute analytically, especially in complex models. Resorting to conjugate distribution laws is one solution to overcome the problem, but this is not always feasible. This is where Markov Chain Monte Carlo (MCMC) algorithms come into play to estimate the posterior distributions of parameters. There are multiple MCMC algorithms (Metropolis-Hastings, Gibbs sampler, Hamiltonian Monte Carlo), each with its own advantages and disadvantages, and the choice of the algorithm depends on the application scenario. However, they all share the same theoretical foundation. The essential idea of an MCMC algorithm is to create a sequence of dependent random numbers via a Markov chain. When the chain reaches equilibrium (stationary state), it forms a sampling within the posterior distribution, allowing the calculation of quantities of interest such as means, variances, quantiles, and so on.
+When we add no data in the computation of the posterior, it is normal that we don't see any modifications from the prior. Adding 5 observation already bring some good information, the prior and the posterior have no longer the same shape and we have a better estimation of the true $\lambda$. Increasing the number of data gives us a better approximation of the true mean. The density of probability is also higher with a lot of data because we have more confidence in the approximation.
+
+# Prior Selection in Ecology
+
+## The role of prior knowledge
+
+In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.
+
+Bayesian analyses differ from frequentist analyses by incorporating prior information via conditional probabilities, known as Bayes' rule (Nathan P. Lemoine, 2019): $$\frac{[\theta]\cdot[Y\mid\theta]}{[Y]}=[\theta\mid Y]$$ With Pr(θ) = the probability of the parameter or hypothesis θ based on prior information Pr(Y\|θ) = the likelihood of the data conditioned on the hypothesis Pr(Y) = the normalization constant Pr(θ\|Y) = the posterior probability of the of the hypothesis conditioned on the observed data.
+
+Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.
+
+## Informative and non-informative priors
+
+Use of informative priors: In practice, we want to base our decisions on all available information. Therefore, it is considered responsible to include informative priors in applied research whenever possible. Priors allow you to combine information from the literature, from the data, or to combine information from different datasets.
+
+Use of non-informative priors: In basic research where the results should only reflect the information in the current dataset. Results from a case study can be used in a meta-analysis which assumes independence between the different included studies.
+
+An illustration of how two different priors affect the posterior distribution in a Beta-Binomial model:
+
+
+```{r}
+# Setup the aesthetic of future plot
+main_theme = theme_bw()+
+  theme(line = element_blank(),
+        axis.line = element_line(colour = "black"),
+        panel.border = element_blank(),
+        axis.ticks =  element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", size=14,
+                                   angle = 45, hjust = 1),
+        axis.text.y = element_text(colour = "black", size=14),
+        legend.title = element_text(colour = "black", size=14),
+        legend.title.align=0.5,
+        legend.text = element_text(colour = "black", size=14),
+        axis.title=element_text(size=22),
+        strip.background = element_rect(fill="white"))
+```
+
+```{r}
+# for non-informative uniform prior
+# Define the range of theta values
+theta <- seq(0, 1, by = 0.01)
+# Define the number of trials and successes
+n <- 10
+x <- 5
+# Calculate likelihood, prior, and posterior for non-informative uniform prior
+
+likelihood <- dbinom(x = x, size = n, prob =theta)
+prior_uniform <- dunif(min = 0, max = 1,x = theta)
+posterior_uniform <- likelihood * prior_uniform 
+# Create data frame for plotting
+df_uniform <- data.frame(theta, likelihood, prior_uniform, posterior_uniform)
+# Plotting the graph 
+graph1 <- ggplot(data = df_uniform, aes(x = theta)) +
+  geom_line(aes(y = posterior_uniform, color = "Posterior"), linewidth = 1) +
+  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", linewidth = 1) +
+  geom_line(aes(y = prior_uniform, color = "Prior"), linewidth = 1) +
+
+  labs(title = "With Non-informative Uniform Prior",
+       x = "Theta (Probability of Success)",
+       y = "Density",
+       color = "Legend") +
+  scale_color_manual(values = c("black",'purple', "orange"),
+                     labels = c("Likelihood","Posterior", "Prior"))+
+  main_theme 
+
+## for highly informative uniform prior
+
+# Calculate new prior, and posterior for highly informative prior
+
+prior_informative <- dbeta(theta, 2, 2)
+posterior_informative <- likelihood * prior_informative
+# posterior_rescaled <- posterior_informative * (max_likelihood / max_posterior) * scale_factor_posterior
+# # Create data frame for plotting
+df_informative <- data.frame(theta, likelihood, prior_informative, posterior_informative)
+# Plotting the graph 
+graph2 <- ggplot(data = df_informative, aes(x = theta)) +
+  geom_line(aes(y = posterior_informative, color = "Posterior"), linewidth = 1) +
+  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", linewidth = 1) +
+
+  geom_line(aes(y = prior_informative, color = "Prior"), linewidth = 1) +
+
+  labs(title = "With Highly Informative Prior",
+       x = "Theta (Probability of Success)",
+       y = "Density",
+       color = "Legend") +
+
+  scale_color_manual(values = c("black", 'purple', "orange"),
+                     labels = c("Likelihood", "Posterior", "Prior"))+
+  main_theme
+
+graph1
+graph2
+
+```
+
+Here we illustrate the posterior distribution with a non informative prior is equal to the likelihood. But with knowledge, we can take an informative prior,it is shown on the second figure where we have a strong prior center on a value of success of 0.5, thus the posterior isn't equal to the likelihood anymore. This emphasizes that the impact of the chosen prior influences the posterior distribution with both its shape and the quantity of information it holds compared to the information within the data.
+
+
+# When approximation by computation is needed 
+
+In Bayesian statistics, as mentioned earlier, the goal is to update our beliefs about the parameters of a model by combining prior knowledge with the observed information in our collected field data. However, the direct calculation of the posterior distribution can often be challenging to compute analytically, especially in complex models. Resorting to conjugate distribution laws is one solution to overcome the problem, but this is not always feasible. This is where Markov Chain Monte Carlo (MCMC) algorithms come into play to estimate the posterior distributions of parameters. There are multiple MCMC algorithms (Metropolis-Hastings, Gibbs sampler, Hamiltonian Monte Carlo), each with its own advantages and disadvantages, and the choice of the algorithm depends on the application scenario. However, they all share the same theoretical foundation. The essential idea of an MCMC algorithm is to create a sequence of dependent random numbers via a Markov chain. When the chain reaches equilibrium (stationary state), it forms a sampling within the posterior distribution, allowing the calculation of quantities of interest such as means, variances, quantiles, and so on.
 
 ## Metropolis-Hastings algorithm : implementation
 
@@ -297,92 +398,6 @@ ylims <- c(1, 6)
 
 The figure 1 represents the joint sampling of the two parameters. At each iteration, a new pair of parameters is proposed, and the ratio calculation assigns a weight to the proximity of the candidate parameter pair to the prior. Figure 2 represents the joint distribution of the two parameters formed by the sampling. It is from this joint distribution that the marginal posterior distributions of the two parameters arise. Therefore, we can also calculate the statistics (mean, standard deviation, etc.) of interest on these marginal posterior distributions.
 
-# Prior Selection in Ecology
-
-## The role of prior knowledge
-
-In Bayesian statistics, prior knowledge and beliefs play a central role in the formulation and interpretation of Bayesian models. As explained before, the fundamentals of Bayesian inference lies in combining prior information with observed data to obtain updated or posterior probabilities.
-
-Bayesian analyses differ from frequentist analyses by incorporating prior information via conditional probabilities, known as Bayes' rule (Nathan P. Lemoine, 2019): $$\frac{[\theta]\cdot[Y\mid\theta]}{[Y]}=[\theta\mid Y]$$ With Pr(θ) = the probability of the parameter or hypothesis θ based on prior information Pr(Y\|θ) = the likelihood of the data conditioned on the hypothesis Pr(Y) = the normalization constant Pr(θ\|Y) = the posterior probability of the of the hypothesis conditioned on the observed data.
-
-Incorporating existing information to a data set can be based on previous studies, expert opinions, historical data or simply known subjective beliefs. It will allow the future model to avoid over-fitting and favor a more plausible and simple estimation.
-
-## Informative and non-informative priors
-
-Use of informative priors: In practice, we want to base our decisions on all available information. Therefore, it is considered responsible to include informative priors in applied research whenever possible. Priors allow you to combine information from the literature, from the data, or to combine information from different datasets.
-
-Use of non-informative priors: In basic research where the results should only reflect the information in the current dataset. Results from a case study can be used in a meta-analysis which assumes independence between the different included studies.
-
-An illustration of how two different priors affect the posterior distribution in a Beta-Binomial model:
-
-```{r}
-# for non-informative uniform prior
-# Define the range of theta values
-theta <- seq(0, 1, by = 0.01)
-# Define the number of trials and successes
-n <- 10
-x <- 5
-# Calculate likelihood, prior, and posterior for non-informative uniform prior
-likelihood <- choose(n, x) * theta^x * (1 - theta)^(n - x)
-prior_uniform <- rep(0.05, length(theta))
-posterior_uniform <- likelihood * prior_uniform * 12
-# Create data frame for plotting
-df_uniform <- data.frame(theta, likelihood, prior_uniform, posterior_uniform)
-# Plotting the graph 
-graph1 <- ggplot(data = df_uniform, aes(x = theta)) +
-  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", size = 1) +
-  geom_line(aes(y = prior_uniform, color = "Posterior"), size = 1) +
-  geom_line(aes(y = posterior_uniform, color = "Prior"), size = 1) +
-  labs(title = "With Non-informative Uniform Prior",
-       x = "Theta (Probability of Success)",
-       y = "Density",
-       color = "Legend") +
-  theme_minimal() +
-  scale_color_manual(values = c("black", "blue", "orange"),
-                     labels = c("Likelihood", "Prior", "Posterior")) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank(),legend.position = "none")
-
-# for highly informative uniform prior
-# Define the range of theta values
-theta <- seq(0.25, 1, by = 0.01)
-# Define the number of trials and successes
-n <- 10
-x <- 9
-# Calculate likelihood, prior, and posterior for highly informative prior
-likelihood <- choose(n, x) * theta^x * (1 - theta)^(n - x)
-prior_informative <- dbeta(theta, 10, 9)
-posterior_informative <- likelihood * prior_informative
-# Rescale distributions to position them as desired
-max_likelihood <- max(likelihood)
-max_prior <- max(prior_informative)
-max_posterior <- max(posterior_informative)
-# Scale factors for prior and posterior to position them below likelihood
-scale_factor_prior <- 0.9
-scale_factor_posterior <- 0.9
-# Rescale prior and posterior
-prior_rescaled <- prior_informative * (max_likelihood / max_prior) * scale_factor_prior
-posterior_rescaled <- posterior_informative * (max_likelihood / max_posterior) * scale_factor_posterior
-# Create data frame for plotting
-df_informative <- data.frame(theta, likelihood, prior_rescaled, posterior_rescaled)
-# Plotting the graph 
-graph2 <- ggplot(data = df_informative, aes(x = theta)) +
-  geom_line(aes(y = likelihood, color = "Likelihood"), linetype = "dashed", size = 1) +
-  geom_line(aes(y = prior_rescaled, color = "Prior"), size = 1) +
-  geom_line(aes(y = posterior_rescaled, color = "Posterior"), size = 1) +
-  labs(title = "With Highly Informative Prior",
-       x = "Theta (Probability of Success)",
-       y = "Density",
-       color = "Legend") +
-  theme_minimal() +
-  scale_color_manual(values = c("black", "blue", "orange"),
-                     labels = c("Likelihood", "Posterior", "Prior")) + 
-  theme(axis.text.x = element_blank(), axis.text.y = element_blank())
-
-grid.arrange(graph1, graph2, nrow = 1)
-
-```
-
-Here we illustrate the result of updating the prior with the likelihood, it gives us the posterior distribution. This shows that the impact of the chosen prior influences the posterior distribution with both its shape and the quantity of information it holds compared to the information within the dataset.
 
 # Case Studies in Bayesian Ecology
 
@@ -456,23 +471,6 @@ postSamples1 <- coda.samples(mjags1,
 postSamples_df1 <-  postSamples1 %>% ggs()
 ```
 
-Setup the aesthetic of future plot
-
-```{r}
-main_theme = theme_bw()+
-  theme(line = element_blank(),
-        axis.line = element_line(colour = "black"),
-        panel.border = element_blank(),
-        axis.ticks =  element_line(colour = "black"),
-        axis.text.x = element_text(colour = "black", size=14,
-                                   angle = 45, hjust = 1),
-        axis.text.y = element_text(colour = "black", size=14),
-        legend.title = element_text(colour = "black", size=14),
-        legend.title.align=0.5,
-        legend.text = element_text(colour = "black", size=14),
-        axis.title=element_text(size=22),
-        strip.background = element_rect(fill="white"))
-```
 
 Always verify if the markov chain are stationary. (otherwise, you will have a bad estimation of the posterior distribution)
 
@@ -528,7 +526,8 @@ for(i in 1:length(y_means)){
 }
 data = data.frame(Y3, class, IDclass)
 ggplot(data)+
-  geom_sina(aes(class,Y3))
+  geom_sina(aes(class,Y3))+
+    main_theme
 ```
 
 ```{r}
@@ -635,9 +634,9 @@ postSamples_df2 %>%
 
 Purple full lines represent the means of posterior distributions and doted line are the true values of the data. The utility to have posterior distribution and not only compute the mean or the standard error is that we can know the probability of each mean or sd values, therefore we have a good estimation of the confidence that we should have when making conclusion on values.
 
-## More specific ecological studies that employed Bayesian methods
+# More specific ecological studies that employed Bayesian methods
 
-### Predator-prey body size:
+## Predator-prey body size:
 For example, predators are often gape-limited, meaning that larger predators should be able to eat larger prey and smaller predators, smaller preys, depending on the size of their mouth. It is known from the existing literature that predators are 2 or 3 times larger than their prey (Trebilco et al. 2013). So, in this example we could use a prior mean of the intercept to a value below zero, like an average predator/prey mass comparison (Wesner and Pomeranz 2021).
 
 ## Spider abundance according to the presence of fish:
@@ -648,4 +647,4 @@ As said before, bayesian inference not only uses the sample data but also any av
 
 ### Modeling the life cycle of a fish
 The paper shows an integrated life cycle model using Hierarchical Bayesian Models (HBMs) for marine fish species, highlighting larval drift processes, the contribution of several nurseries to recruitment, as well as natural and marine mortality. the Peach.
- These MBHs, associated with Markov chain Monte Carlo methods, make it possible to incorporate complex demographic models into statistical frameworks, while processing varied data. This approach aims to provide inferences while robustly assessing the uncertainty surrounding parameter estimates and predictions. The widespread use of MBHs in fish population dynamics demonstrates their potential for increasing biological realism.
+These MBHs, associated with Markov chain Monte Carlo methods, make it possible to incorporate complex demographic models into statistical frameworks, while processing varied data. This approach aims to provide inferences while robustly assessing the uncertainty surrounding parameter estimates and predictions. The widespread use of MBHs in fish population dynamics demonstrates their potential for increasing biological realism.
