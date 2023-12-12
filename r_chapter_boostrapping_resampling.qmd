@@ -1,5 +1,5 @@
 ---
-title: "Chapter : Bootstrapping and Resampling"
+title: "Chapter : Resampling methods"
 
 bibliography: references.bib
 execute: 
@@ -11,8 +11,6 @@ output:
 ---
 
 # Introduction
-
-? changer le titre en : Resampling methods
 
   While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
   Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
