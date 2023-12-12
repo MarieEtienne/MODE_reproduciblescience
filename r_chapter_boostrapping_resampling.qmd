@@ -12,9 +12,17 @@ output:
 
 # General introduction
 
-  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the fiability of estimations.  
-  Many well-studied statistical distributions can be usefull in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, wether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
-  In this situation, resampling procedures become interesting. It is a non-parametrical statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" [@sinharay_jackknife_2010]. This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
+  While studying random variables, it is usefull to know which statistical distribution they are following. Such knowledge allows to make inferences about the statistical population when only sub-samples are available. For instance, it is needed in order to calculate confidence intervals around an estimated statistic or to calculate p-values to test hypothesis. In other words, recognizing a statistical distribution of the sampled data is essential to estimate the reliability of estimations.  
+  Many well-studied statistical distributions can be useful in this situation, some of the most famous being the Normal distribution, the Poisson distribution or the Binomial distribution. Despite the diversity of studied distribution, sampled data distribution often differ, whether because they do not follow any studied statistical distribution or because too few data are available making it difficult to recognize any distribution.  
+  In this situation, resampling procedures become interesting. It is a non-parametric statistic which has many usages, such as calculating confidence intervals or estimating p-values. The principle of resampling is to "draw samples from the observed data to draw certain conclusions about the population of interest" [@sinharay_jackknife_2010]. This chapter will discuss three resampling techniques: the jackknife, the bootstrap and the permutation (with a focus on the mantel test). 
+  
+Before diving into the subject, let's load some libraries:
+
+```{r}
+library(ggplot2)
+library(bootstrap)
+```
+
 
 # Confidence interval estimation: Jackknife and Bootstrap methods
 
@@ -57,23 +65,24 @@ ggplot()+
   theme_classic()
 ```
 
-The sample being normally distributed, we can compute its mean, as well as its confidence interval as below:
+The sample being normally distributed, we can compute its mean ($\mu$), as well as its confidence interval as below:
 
 ```{r}
 # Compute sample mean
-print(mean(data_sample))
+cat("mu = ",mean(data_sample),"\n")
 
 # Compute confidence interval
 low <- mean(data_sample)-1.96*sd(data_sample)/sqrt(length(data_sample))
 high <- mean(data_sample)+1.96*sd(data_sample)/sqrt(length(data_sample))
-print(c(low,high))
+cat("Lower bound : ",round(low,2), "    Upper bound = ",round(high,2))
 ```
+> Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.
 
 Then, we can easily compare this result with the actual mean of our wild population, that theoretically we do not know:
 
 ```{r}
 # Compute population mean
-mean(irisPopulation)
+cat("mean = ",mean(irisPopulation))
 ```
 
 The mean of our population falls within our confidence interval!
@@ -107,13 +116,26 @@ This time, our sample size is too small, and its distribution is no longer norma
 
 ## The Jackknife resampling method
 
-This method was first proposed in 1949 by Maurice Quenouille [@quenouille_approximate_1949]. The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics [@abdi_jackknife_2010]. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
+This method was first proposed by @quenouille_approximate_1949. The name "Jackknife" comes from the fact that it is often referenced as a "quick and dirty" tool of statistics [@abdi_jackknife_2010]. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.
 
 ### Principle of the leave-one-out Jackknife [@sinharay_jackknife_2010 ; @petit_techniques_2022]
 
 The main goal of the jackknife method is to calculate a confidence interval around a statistic when classical statistics can not apply to the data.The principle is to create subsamples of the initial sample by successively removing some of the observations. Then, on each subsample, a pseudo-value will be calculated. With all the pseudo-values, it is possible to calculate an estimator of the statistic and to estimate its confidence interval.
 
 The most famous jackknife is the the leave-one-out jackknife (or order 1 jackknife) for which all the subsamples contain all the observations except one. Concretely, for a sample of $n$ observations, there will be $n$ subsamples of size $(n-1)$. The $i^{th}$ subsample will be composed of observations from $1$ to $n$ minus the $i^{th}$ observation.
+
+To illustrate, here is our sample:
+
+```{r}
+data_sample
+```
+
+And we can represent some subsamples:
+
+```{r}
+cat("1er subsample : \n",data_sample[-1], "\n")
+cat("4ème subsample : \n",data_sample[-4], "\n")
+```
 
 ### Calculation of pseudo-values
 
@@ -219,14 +241,13 @@ cat(" Lower bound : ",
 
 The estimated Jackknife mean is $3.15$ with the following confidence interval : $[2.94\:;\:3.35]$. The real value $\mu = 3.05$ is captured within the bounds of the confidence interval which indicate the robustness of the estimation process.
 
-## R package 
+### R package 
 
 On r, functions already exist to automatically execute the Jackknife. For instance, in the package `bootstrap` [@tibshirani_bootstrap_2019], there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).
 
 ```{r}
 # Package function
-library("bootstrap")
-bootstrap :: jackknife(x= data_sample$Sepal.Width,
+bootstrap :: jackknife(x= data_sample,
                 theta = function(x) mean(x))
 ```
 
