@@ -12,7 +12,7 @@ editor:
     wrap: sentence
 ---
 
-```{r Importation des packages,fig.align='center'}
+```{r,fig.align='center'}
 library(nlme)
 library(ggplot2)
 library(gridExtra)
@@ -25,12 +25,12 @@ library(sp)
 
 ## Introduction
 
-**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ($X_1, X_2, ..., X_n$).
+**General Linear Models**, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ($X_1, X_2, ..., X_n$). 
 These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals.
-Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology.
+Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology.  
 However, it is crucial to validate the non-collinearity of residuals.
 
-In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated.
+In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated. 
 This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites.
 In such cases, it becomes necessary to employ **mixed models**.
 These models, extensions of both general and generalized linear models, consider the correlation of measurements by introducing individuals, regions, families, or other factors as **random effects** in the models.
@@ -43,14 +43,14 @@ To clarify the distinction between fixed and random effects, let's examine two e
 -   **Example 1: Comparing individual cars**
 
     Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars.
-    They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns.
+    They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns. 
     The data set consists of one factor with four levels (representing the four cars) and five replicates each.
     Performing a one-way ANOVA allows them to determine which car is the most economical.
     In this scenario, the factor "car" is **fixed**, and the analysis provides conclusions specific to the four studied cars.
 
 -   **Example 2: Assessing homogeneity within a car model**
 
-    A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption.
+    A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption. 
     Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a data set with one factor and four levels, each with five replicates.
     Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars.
     Here, a mixed model with the factor 'car' as a **random factor** should be used.
@@ -121,7 +121,7 @@ The model parameters include $\theta$ for the expectation and $\psi$ for the var
 It is possible to encounter (mixed) linear models written under their matrix form, for their concision.
 It is therefore natural to present this form in the context of mixed models.
 
-As a reminder, a linear model, like linear regression, with $p$ explanatory variables can be written $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, where $y_i$ represent an observation of the response variable $Y$ for the individual $i$, $\beta_0$ the intercept, $\beta_1,...,\beta_p$ the coefficients associated to each explanatory variable $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ the $p$ observations (for the $p$ explanatory variables) for the individual $i$, and $e_i$ an error term associated to the individual $i$.
+As a reminder, a linear model, like linear regression, with $p$ explanatory variables can be written $$y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i$$, where $y_i$ represent an observation of the response variable $Y$ for the individual $i$, $\beta_0$ the intercept, $\beta_1,...,\beta_p$ the coefficients associated to each explanatory variable $X_1,...,X_p$, $x_i^{(1)},...,x_i^{(p)}$ the $p$ observations (for the $p$ explanatory variables) for the individual $i$, and $e_i$ an error term associated to the individual $i$. 
 We can see $e_i$ as a realization of a random variable $E_i$ distributed according to a normal law $\mathcal{N}(0,\sigma^2)$.
 Noting $$y=\begin{pmatrix}
 y_1\\
@@ -139,8 +139,8 @@ y_n\\
 \varepsilon_1\\
 \vdots\\
 \varepsilon_n\\
-\end{pmatrix}$$, we can rewrite the previous model under the form $$y=X\theta+e$$Here, $e$ is a vector of $n$ independent realizations or a random variable $E_i$ following a normal distribution $\mathcal{N}(0,\sigma^2)$.
-Hence, $e$ is a realization of a random variable $E$ following the distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ is an observation of the random variable $E_i$ distributed according to a normal law $\mathcal{N}(0,\sigma^2)$).
+\end{pmatrix}$$, we can rewrite the previous model under the form $$y=X\theta+e$$Here, $e$ is a vector of $n$ independent realizations or a random variable $E_i$ following a normal distribution $\mathcal{N}(0,\sigma^2)$. 
+Hence, $e$ is a realization of a random variable $E$ following the distribution $\mathcal{N}_n(0,\sigma^2I_n)$ ($e_i$ is an observation of the random variable $E_i$ distributed according to a normal law $\mathcal{N}(0,\sigma^2)$). 
 Similarly, $y$ is an observation of $Y=X\theta+E$ where $Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)$ ($y_i$ is an observation of $Y_i$ distributed according to a normal law $\mathcal{N}((X\theta)_i,\sigma^2)$).
 Hence, by introducing $Y$ and $E$, the previous model can be written $Y=X\theta+E$ where $\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)$.
 
@@ -196,17 +196,17 @@ Note that the diagonal blocks are of the same dimensions if the number of descen
 
 ## 3. Dependency structures
 
-This part is inspired by [@LBel2023]
+This part of the chapter is inspired by [@LBel2023]'s book. 
 
 ### 3.1 Case of repeated measurements
 
 We want to evaluate the effect of different diet on weight gain in rats.
 Several animals ($j$) follow each diet ($i$), and they kept the same diet across all the experiment.
 Each week animal weight ($Y_{ij}$) is measured, during T weeks.
-In this case, measures are repeated across time, such measurements are called *longitudinal data*.
-To analyse this data, the temporal dependency must be taken into account, for this, the following model can be used:
+In this case, measures are repeated across time, such measurements are called *longitudinal data*. 
+To analyse this data, the temporal dependency must be taken into account, for this, the following model can be used: 
 
-**Model** The model proposed here takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.
+**Model** The model proposed here takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.   
 We assume that the weights are Gaussian with the following expected values :
 
 $$ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}.$$
@@ -267,7 +267,7 @@ summary(time_model)
 
 In this example, the time correlation ρ has a value of 0.989.
 The sequence of weight values was highly correlated.
-The model allowed this temporal dependency to be taken into account.
+The model allowed this temporal dependency to be taken into account. 
 
 ### 3.2 Case of spatial autocorrelation
 
