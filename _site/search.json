@@ -9,39 +9,71 @@
   {
     "objectID": "r_chapter_boostrapping_resampling.html",
     "href": "r_chapter_boostrapping_resampling.html",
-
-    "title": "Tests de permutation",
-
+    "title": "Chapter : Bootstrapping and Resampling",
     "section": "",
-    "text": "title: “Chapter : Bootstrapping and Resampling”\nbibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —"
+    "text": "A dataframe:\n\ndata &lt;- iris\nhead(iris)\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          5.1         3.5          1.4         0.2  setosa\n2          4.9         3.0          1.4         0.2  setosa\n3          4.7         3.2          1.3         0.2  setosa\n4          4.6         3.1          1.5         0.2  setosa\n5          5.0         3.6          1.4         0.2  setosa\n6          5.4         3.9          1.7         0.4  setosa\n\n\n\n\n\nhist(data$Sepal.Width)\n\n\n\nshapiro.test(data$Sepal.Width)\n\n\n    Shapiro-Wilk normality test\n\ndata:  data$Sepal.Width\nW = 0.98492, p-value = 0.1012\n\nqqnorm(data$Sepal.Width)\nqqline(data$Sepal.Width)\n\n\n\n\nThe sample being normally distributed, we can estimate a confidence interval as below:\n\nlow &lt;- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))\nhigh &lt;- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))\nprint(c(low,high))\n\n[1] 2.987580 3.127086\n\n\n\n\n\nLet’s imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.\n\nmu &lt;- mean(data$Sepal.Width)\nprint(mu)\n\n[1] 3.057333\n\n\nHere \\(\\mu\\) is the “real” mean of the population that theoretically we do not know.\nWe only have access to the following sub-sample of 15 individuals:\n\nset.seed(42)\ndata_sample &lt;- data[sample(1:150,15),]\npar(mfrow=c(2,1))\nhist(data_sample$Sepal.Width)\nqqnorm(data_sample$Sepal.Width)\nqqline(data_sample$Sepal.Width)\n\n\n\n\nThis sample is not normally distributed.\n\nmean(data_sample$Sepal.Width)\n\n[1] 3.146667\n\n\nThe mean is 3.15, the problem is that we can not estimate if the mean that we observe is far from the true mean. We don’t have any method with classical statistics to estimate a confidence interval. This is where resampling methods can become interesting."
   },
   {
-
-    "objectID": "r_chapter_boostrapping_resampling.html#introduction",
-    "href": "r_chapter_boostrapping_resampling.html#introduction",
-    "title": "Tests de permutation",
-    "section": "Introduction",
-    "text": "Introduction\nLes tests de permutations sont une méthode statistique puissante pour comparer des groupes et évaluer l’effet d’une variable sur une autre. Contrairement aux tests paramétriques, les tests de permutations ne reposent pas sur des hypothèses spécifiques concernant la distribution des données, les rendant ainsi plus robustes dans certaines situations."
+    "objectID": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sample",
+    "href": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sample",
+    "title": "Chapter : Bootstrapping and Resampling",
+    "section": "",
+    "text": "hist(data$Sepal.Width)\n\n\n\nshapiro.test(data$Sepal.Width)\n\n\n    Shapiro-Wilk normality test\n\ndata:  data$Sepal.Width\nW = 0.98492, p-value = 0.1012\n\nqqnorm(data$Sepal.Width)\nqqline(data$Sepal.Width)\n\n\n\n\nThe sample being normally distributed, we can estimate a confidence interval as below:\n\nlow &lt;- mean(data$Sepal.Width)-1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))\nhigh &lt;- mean(data$Sepal.Width)+1.96*sd(data$Sepal.Width)/sqrt(length(data$Sepal.Width))\nprint(c(low,high))\n\n[1] 2.987580 3.127086"
   },
   {
-    "objectID": "r_chapter_boostrapping_resampling.html#fondements-des-tests-de-permutations",
-    "href": "r_chapter_boostrapping_resampling.html#fondements-des-tests-de-permutations",
-    "title": "Tests de permutation",
-    "section": "Fondements des Tests de Permutations",
-    "text": "Fondements des Tests de Permutations\n\nPrincipe Fondamental\nLe principe fondamental des tests de permutations repose sur la distribution nulle de la statistique de test sous l’hypothèse nulle. En d’autres termes, on génère toutes les permutations possibles des observations, calculons la statistique de test pour chaque permutation, puis comparons la statistique observée à cette distribution nulle.\n\n\nStatistique de Test\nLa statistique de test pour les tests de permutations dépend du type d’étude. Pour un test de différence de moyennes entre deux groupes, par exemple, la statistique de test pourrait être définie comme suit :\n[ T = , ]\noù ({X}_1) et ({X}2) sont les moyennes des deux groupes, (s{}) est l’écart-type combiné des groupes, et (n_1) et (n_2) sont les tailles des échantillons."
+    "objectID": "r_chapter_boostrapping_resampling.html#confidence-interval-on-multiple-sub-samples-means",
+    "href": "r_chapter_boostrapping_resampling.html#confidence-interval-on-multiple-sub-samples-means",
+    "title": "General introduction",
+    "section": "Confidence interval on multiple sub-samples means",
+    "text": "Confidence interval on multiple sub-samples means\nSi on veut désormais estimer \\(\\mu\\), la taille moyenne des étudiants sur les trois promotions du jeu de données.\n\n(mu &lt;- mean(size$Etudiant_e))\n\n[1] 170.5755\n\n\nmu correspond à la taille moyenne qu’on veut estimer mais dont on ne connait pas la véritable valeur.\nImaginons que nous ayons seulement accès à des moyennes de sous échantillons et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.\n\ngroup &lt;- c()\nsampled_data &lt;- c()\nfor (i in 1:20) { #au total, 100 individus auront été échantillonnés\n  set.seed(i)\n  sample_temp &lt;- sample(setdiff(1:139,sampled_data),5)\n  sampled_data &lt;- c(sampled_data,sample_temp)\n  group &lt;- c(group,mean(size[sample_temp,\"Etudiant_e\"]))\n  \n}\n\nLe vecteur group contient les moyennes de plusieurs sous échantillons de 5 étudiants\n\nhist(group)\n\n\n\nqqnorm(group)\nqqline(group)\n\n\n\nshapiro.test(group)\n\n\n    Shapiro-Wilk normality test\n\ndata:  group\nW = 0.98028, p-value = 0.9377\n\n\nLa distribution des moyennes suit une loi normale -&gt; TCL ????\nOn peut définir l’intervalle de confiance suivant:\n\nmean(group)\n\n[1] 171.12\n\nlow &lt;- mean(group)-1.96*sd(group)\nhigh &lt;- mean(group)+1.96*sd(group)\nprint(c(low,high))\n\n[1] 162.6425 179.5975\n\n\nLa moyenne est dans intervalle, mais intervalle grand !!!!!!!!!!!! JCP si l’exemple est ok. !!!!!!!!!!!!!!"
   },
   {
-    "objectID": "r_chapter_boostrapping_resampling.html#mise-en-œuvre-des-tests-de-permutations",
-    "href": "r_chapter_boostrapping_resampling.html#mise-en-œuvre-des-tests-de-permutations",
-    "title": "Tests de permutation",
-    "section": "Mise en œuvre des Tests de Permutations",
-    "text": "Mise en œuvre des Tests de Permutations\n\nÉtapes du Test\nLes étapes typiques pour mettre en œuvre un test de permutations comprennent :\n\nFormuler les hypothèses nulle et alternative.\nCalculer la statistique de test à partir des données observées.\nGénérer toutes les permutations possibles des données.\nCalculer la statistique de test pour chaque permutation.\nComparer la statistique observée à la distribution nulle des statistiques de test.\nConclure sur l’acceptation ou le rejet de l’hypothèse nulle."
+    "objectID": "r_chapter_boostrapping_resampling.html#a---principe",
+    "href": "r_chapter_boostrapping_resampling.html#a---principe",
+    "title": "General introduction",
+    "section": "a - Principe",
+    "text": "a - Principe"
   },
   {
-    "objectID": "r_chapter_boostrapping_resampling.html#exemples-pratiques",
-    "href": "r_chapter_boostrapping_resampling.html#exemples-pratiques",
-    "title": "Tests de permutation",
-    "section": "Exemples Pratiques",
-    "text": "Exemples Pratiques\n\nTest de Permutations pour la Différence de Moyennes\nConsidérons un exemple où nous voulons tester si la différence de moyennes entre deux groupes est statistiquement significative. La statistique de test est définie comme dans l’équation ci-dessus.\n\n\nTest de Permutations pour la Corrélation\nDans le cas d’une corrélation, la statistique de test pourrait être basée sur la mesure de corrélation de Spearman."
+    "objectID": "r_chapter_boostrapping_resampling.html#b---exemple-dimplémentation",
+    "href": "r_chapter_boostrapping_resampling.html#b---exemple-dimplémentation",
+    "title": "General introduction",
+    "section": "b - exemple d’implémentation",
+    "text": "b - exemple d’implémentation"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#c---avantages-et-inconvénients-de-la-méthode",
+    "href": "r_chapter_boostrapping_resampling.html#c---avantages-et-inconvénients-de-la-méthode",
+    "title": "General introduction",
+    "section": "c - Avantages et inconvénients de la méthode",
+    "text": "c - Avantages et inconvénients de la méthode"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sub-sample",
+    "href": "r_chapter_boostrapping_resampling.html#confidence-interval-on-a-sub-sample",
+    "title": "Chapter : Bootstrapping and Resampling",
+    "section": "",
+    "text": "Let’s imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.\n\nmu &lt;- mean(data$Sepal.Width)\nprint(mu)\n\n[1] 3.057333\n\n\nHere \\(\\mu\\) is the “real” mean of the population that theoretically we do not know.\nWe only have access to the following sub-sample of 15 individuals:\n\nset.seed(42)\ndata_sample &lt;- data[sample(1:150,15),]\npar(mfrow=c(2,1))\nhist(data_sample$Sepal.Width)\nqqnorm(data_sample$Sepal.Width)\nqqline(data_sample$Sepal.Width)\n\n\n\n\nThis sample is not normally distributed.\n\nmean(data_sample$Sepal.Width)\n\n[1] 3.146667\n\n\nThe mean is 3.15, the problem is that we can not estimate if the mean that we observe is far from the true mean. We don’t have any method with classical statistics to estimate a confidence interval. This is where resampling methods can become interesting."
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#a---the-leave-one-out-jackknife",
+    "href": "r_chapter_boostrapping_resampling.html#a---the-leave-one-out-jackknife",
+    "title": "Chapter : Bootstrapping and Resampling",
+    "section": "a - The leave-one-out Jackknife",
+    "text": "a - The leave-one-out Jackknife\nThe principle of the jackknife is to create subsamples of the initial sample by successively removing one of the individuals. This is the leave-one-out technique.\nConcretely, for a sample of \\(n\\) individuals, there will be \\(n\\) subsamples of size \\((n-1)\\). The \\(i^{th}\\) subsample will be composed of individuals from \\(1\\) to \\(n\\) minus the \\(i^{th}\\) individual. A simple representation of all the subsamples is proposed below with the subsamples in lines and the individual numbers in columns.\n\n\n\n\n\nThe next step is to calculate pseudo-values for each of the new subsamples. The formula for pseudo-values depend on the statistic of interest. In our case we want to estimate the mean, the formula will then be:\n\\[\nv_{i} = n\\overline{X} - (n-1)\\overline{X}_{-i}\n\\]\nwith the following variables:\n\n\n\n\n\n\n\nVariable\nMeaning\n\n\n\n\n\\(v_{i}\\)\nPseudo value of the \\(i^{th}\\) subsample\n\n\n\\(n\\)\nTotal number of individuals\n\n\n\\(\\overline{X}\\)\nMean of the initial sample\n\n\n\\(\\overline{X}_{-i}\\)\nMean of the \\(i^{th}\\) subsample, corresponding to all individuals except the \\(i{th}\\)\n\n\n\nLet’s write a function which create the subsamples and calculate their pseudo values:\n\npseudo_val &lt;- function(data, theta){\n  #entry : data = the vector of data to which we want to apply the Jackknife\n  #entry : theta = function for the statistic of interest\n  #output : a vector of pseudo values for each subsample\n  n &lt;- length(data)\n  mean_init &lt;- theta(data)\n  pv &lt;- rep(NA,n) #to keep in memory each pseudo value\n  for (i in 1:n) {\n    pv[i] &lt;- n*mean_init - (n-1)*theta(data[-i])\n  }\n  return(pv)\n}\n\nTo try the function:\n\n(pv &lt;- pseudo_val(data =  data_sample$Sepal.Width, \n                  theta = mean))\n\n [1] 3.7 2.9 2.8 3.0 2.8 3.0 3.0 3.8 3.3 3.2 2.8 3.0 3.6 3.8 2.5\n\n\nThe jackknife estimator of the mean will then be calculated as follow:\n\\[\n\\begin{align}\n\\hat{\\theta} & = \\frac{\\sum_{i=1}^{n}v_{i}}{n} \\\\\n\\hat{\\theta} & = \\overline{v}\n\\end{align}\n\\]\nIt corresponds to the mean of the pseudo values \\(v_i\\).\n\n(mean_pv &lt;- mean(pv))\n\n[1] 3.146667\n\n\nThe Jackknife estimator obtained is 3.15. Note that here it is the same as the initial sample mean but it is not always the case. This technique supposes that the Jackknife estimator is normally distributed and its standard error is calculated as follow:\n\\[\n\\begin{align}\nSE_\\hat{X} & = \\sqrt{\\frac{\\sum_{i=1}^{n}(v_{i}-\\overline{v})}{n(n-1)}} \\\\\nSE_\\hat{X} & = \\sqrt{\\frac{\\sigma_{v}^{2}}{n}}\n\\end{align}\n\\]\nWith \\(\\overline{v}\\) being the mean of the pseudo values (and the jackknife estimator).\n\n(SE &lt;- sqrt(var(pv)/length(pv)))\n\n[1] 0.1050472\n\n\nFrom these we can calculate a confidence interval:\n\\[\n[\\, \\overline{v} - 1.96 \\, SE_\\hat{X} ; \\overline{v} + 1.96 \\, SE_\\hat{X} \\,]\n\\]\nNote: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.\n\ncat(\" Lower bound : \",\n    as.character(mean_pv - 1.96*SE),\n    \"\\n\",\n    \"Higher bound : \",\n    as.character(mean_pv + 1.96*SE))\n\n Lower bound :  2.94077409489412 \n Higher bound :  3.35255923843921\n\n\nOn r, functions already exist to automatically execute the Jackknife. For instance, in the package bootstrap, there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).\n\nlibrary(\"bootstrap\")\nprint(jackknife(x= data_sample$Sepal.Width,\n                theta = function(x) mean(x)))\n\n$jack.se\n[1] 0.1050472\n\n$jack.bias\n[1] 0\n\n$jack.values\n [1] 3.107143 3.164286 3.171429 3.157143 3.171429 3.157143 3.157143 3.100000\n [9] 3.135714 3.142857 3.171429 3.157143 3.114286 3.100000 3.192857\n\n$call\njackknife(x = data_sample$Sepal.Width, theta = function(x) mean(x))\n\n\nThe output of the function include the standard error ($jack.se) as describe above. It also include the bias ($jack.bias) which is the difference between the initial sample statistic and the jackknife estimated statistic. It is important to note that the output $jack.values does not correspond to the pseudo values but to the statistic of interest calculated on every subsample. In out example, it correspond to th mean of each subsample."
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#b---the-grouped-jackknife",
+    "href": "r_chapter_boostrapping_resampling.html#b---the-grouped-jackknife",
+    "title": "Chapter : Bootstrapping and Resampling",
+    "section": "b - The grouped Jackknife",
+    "text": "b - The grouped Jackknife"
+  },
+  {
+    "objectID": "r_chapter_boostrapping_resampling.html#c--",
+    "href": "r_chapter_boostrapping_resampling.html#c--",
+    "title": "Chapter : Bootstrapping and Resampling",
+    "section": "c -",
+    "text": "c -"
   }
 ]

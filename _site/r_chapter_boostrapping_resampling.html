@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.433">
 
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>The Companion book a M1 MODE student should have! – r_chapter_boostrapping_resampling</title>
+<title>The Companion book a M1 MODE student should have! - Chapter : Bootstrapping and Resampling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,8 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-
- /* CSS for syntax highlighting */
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -56,7 +54,6 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-
 </style>
 
 
@@ -99,7 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -185,167 +181,262 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#general-introduction" id="toc-general-introduction" class="nav-link active" data-scroll-target="#general-introduction">General introduction</a>
   <ul class="collapse">
   <li><a href="#confidence-interval-on-a-sample" id="toc-confidence-interval-on-a-sample" class="nav-link" data-scroll-target="#confidence-interval-on-a-sample">Confidence interval on a sample</a></li>
-  <li><a href="#confidence-interval-on-multiple-sub-samples-means" id="toc-confidence-interval-on-multiple-sub-samples-means" class="nav-link" data-scroll-target="#confidence-interval-on-multiple-sub-samples-means">Confidence interval on multiple sub-samples means</a></li>
+  <li><a href="#confidence-interval-on-a-sub-sample" id="toc-confidence-interval-on-a-sub-sample" class="nav-link" data-scroll-target="#confidence-interval-on-a-sub-sample">Confidence interval on a sub-sample</a></li>
   </ul></li>
   <li><a href="#the-jackknife-resampling-method" id="toc-the-jackknife-resampling-method" class="nav-link" data-scroll-target="#the-jackknife-resampling-method">The Jackknife resampling method</a>
   <ul class="collapse">
-  <li><a href="#a---principe" id="toc-a---principe" class="nav-link" data-scroll-target="#a---principe">a - Principe</a></li>
-  <li><a href="#b---exemple-dimplémentation" id="toc-b---exemple-dimplémentation" class="nav-link" data-scroll-target="#b---exemple-dimplémentation">b - exemple d’implémentation</a></li>
-  <li><a href="#c---avantages-et-inconvénients-de-la-méthode" id="toc-c---avantages-et-inconvénients-de-la-méthode" class="nav-link" data-scroll-target="#c---avantages-et-inconvénients-de-la-méthode">c - Avantages et inconvénients de la méthode</a></li>
+  <li><a href="#a---the-leave-one-out-jackknife" id="toc-a---the-leave-one-out-jackknife" class="nav-link" data-scroll-target="#a---the-leave-one-out-jackknife">a - The leave-one-out Jackknife</a></li>
+  <li><a href="#b---the-grouped-jackknife" id="toc-b---the-grouped-jackknife" class="nav-link" data-scroll-target="#b---the-grouped-jackknife">b - The grouped Jackknife</a></li>
+  <li><a href="#c--" id="toc-c--" class="nav-link" data-scroll-target="#c--">c -</a></li>
   </ul></li>
-
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter : Bootstrapping and Resampling</h1>
+</div>
 
 
-<hr>
-<p>title: “Chapter : Bootstrapping and Resampling”</p>
-<p>bibliography: references.bib # Fichier bibliographie execute: freeze: auto output: html_document: toc: true toc_float: true —</p>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
 <section id="general-introduction" class="level1">
 <h1>General introduction</h1>
-<p>For a course in genetic, a teacher gathered the size of the students for three years. We take the size vector as an example in this chapter. The values are sizes in centimeters.</p>
+<p>A dataframe:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/youy0/Desktop/master/S9/OCR"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"taille.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> iris</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Annee Sexe Etudiant_e Mere Pere Soeur Frere Demi_soeur Demi_frere
-1  2019    F        175  169  186    NA   180         NA         NA
-2  2019    F        163  165  173    NA   178         NA         NA
-3  2019    F        153  160  166    NA    NA         NA         NA
-4  2019    F        162  164  174    NA   178         NA         NA
-5  2019    F        157  158  169    NA   161         NA         NA
-6  2019    F        167  163  180    NA   181         NA         NA</code></pre>
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</code></pre>
 </div>
 </div>
 <section id="confidence-interval-on-a-sample" class="level2">
 <h2 class="anchored" data-anchor-id="confidence-interval-on-a-sample">Confidence interval on a sample</h2>
-<p>Peut-on estimer la taille de la population française féminine à l’aide de ce jeu de données</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>size_W <span class="ot">&lt;-</span> size[size<span class="sc">$</span>Sexe<span class="sc">==</span><span class="st">"F"</span>,<span class="st">"Etudiant_e"</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data<span class="sc">$</span>Sepal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(data<span class="sc">$</span>Sepal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
 
-data:  size_W
-W = 0.977, p-value = 0.1235</code></pre>
+data:  data$Sepal.Width
+W = 0.98492, p-value = 0.1012</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(size_W)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(size_W)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(data<span class="sc">$</span>Sepal.Width)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(data<span class="sc">$</span>Sepal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or iris dataset ? </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>L’échantillon est normalement distribué, on peut donc calculer l’intervalle de confiance de la moyenne de la manière suivante:</p>
+<p>The sample being normally distributed, we can estimate a confidence interval as below:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>low <span class="ot">&lt;-</span> <span class="fu">mean</span>(size_W)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(size_W)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(size_W))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>high <span class="ot">&lt;-</span> <span class="fu">mean</span>(size_W)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(size_W)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(size_W))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(low,high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>low <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>Sepal.Width)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(data<span class="sc">$</span>Sepal.Width)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(data<span class="sc">$</span>Sepal.Width))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>high <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>Sepal.Width)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(data<span class="sc">$</span>Sepal.Width)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(data<span class="sc">$</span>Sepal.Width))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(low,high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 165.1479 167.8521</code></pre>
+<pre><code>[1] 2.987580 3.127086</code></pre>
 </div>
 </div>
-<p>rq: source INSEE taille moyenne F = 1 m 62, et https://ourworldindata.org/grapher/average-height-by-year-of-birth?time=latest&amp;country=~FRA taille moyenne = 1m6488 pour les gens nés en 1996 (pas de date après) Not in intervall, pop grow, + ech non représentatif de la pop française</p>
 </section>
-<section id="confidence-interval-on-multiple-sub-samples-means" class="level2">
-<h2 class="anchored" data-anchor-id="confidence-interval-on-multiple-sub-samples-means">Confidence interval on multiple sub-samples means</h2>
-<p>Si on veut désormais estimer <span class="math inline">\(\mu\)</span>, la taille moyenne des étudiants sur les trois promotions du jeu de données.</p>
+<section id="confidence-interval-on-a-sub-sample" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-interval-on-a-sub-sample">Confidence interval on a sub-sample</h2>
+<p>Let’s imagine now that we only have access to a smaller data set. The full iris dataset is the population from which we want to estimate a statistical parameter for instance the mean.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(size<span class="sc">$</span>Etudiant_e))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>Sepal.Width)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 170.5755</code></pre>
+<pre><code>[1] 3.057333</code></pre>
 </div>
 </div>
-<p>mu correspond à la taille moyenne qu’on veut estimer mais dont on ne connait pas la véritable valeur.</p>
-<p>Imaginons que nous ayons seulement accès à des moyennes de sous échantillons et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.</p>
+<p>Here <span class="math inline">\(\mu\)</span> is the “real” mean of the population that theoretically we do not know.<br>
+We only have access to the following sub-sample of 15 individuals:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sampled_data <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) { <span class="co">#au total, 100 individus auront été échantillonnés</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  sample_temp <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">setdiff</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">139</span>,sampled_data),<span class="dv">5</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  sampled_data <span class="ot">&lt;-</span> <span class="fu">c</span>(sampled_data,sample_temp)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  group <span class="ot">&lt;-</span> <span class="fu">c</span>(group,<span class="fu">mean</span>(size[sample_temp,<span class="st">"Etudiant_e"</span>]))</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Le vecteur group contient les moyennes de plusieurs sous échantillons de 5 étudiants</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data_sample <span class="ot">&lt;-</span> data[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">150</span>,<span class="dv">15</span>),]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data_sample<span class="sc">$</span>Sepal.Width)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(data_sample<span class="sc">$</span>Sepal.Width)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(data_sample<span class="sc">$</span>Sepal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(group)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Shapiro-Wilk normality test
-
-data:  group
-W = 0.98028, p-value = 0.9377</code></pre>
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>La distribution des moyennes suit une loi normale -&gt; TCL ????</p>
-<p>On peut définir l’intervalle de confiance suivant:</p>
+<p>This sample is not normally distributed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data_sample<span class="sc">$</span>Sepal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 171.12</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>low <span class="ot">&lt;-</span> <span class="fu">mean</span>(group)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(group)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>high <span class="ot">&lt;-</span> <span class="fu">mean</span>(group)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="fu">sd</span>(group)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(low,high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 162.6425 179.5975</code></pre>
+<pre><code>[1] 3.146667</code></pre>
 </div>
 </div>
-<p>La moyenne est dans intervalle, mais intervalle grand !!!!!!!!!!!! JCP si l’exemple est ok. !!!!!!!!!!!!!!</p>
+<p>The mean is 3.15, the problem is that we can not estimate if the mean that we observe is far from the true mean. We don’t have any method with classical statistics to estimate a confidence interval. This is where resampling methods can become interesting.</p>
 </section>
 </section>
 <section id="the-jackknife-resampling-method" class="level1">
 <h1>The Jackknife resampling method</h1>
-<p>Imaginons mantenant que nous ayons seulement accès à un échantillon et qu’on veuille estimer la taille moyenne des étudiants de ces trois promotions.</p>
+<p>This method was first proposed in 1949 by Maurice Quenouille ( <strong>Source Quenouille</strong> ). The name “Jackknife” comes from the fact that it is often referenced as a “quick and dirty” tool of statistics (<strong>Source Abdi)</strong>. It means that it is usable in many situations but it is often not the best tool. The technique allows us to estimate a confidence interval for some statistics when the dataset is too small and/or when it does not follow a known distribution.</p>
+<section id="a---the-leave-one-out-jackknife" class="level2">
+<h2 class="anchored" data-anchor-id="a---the-leave-one-out-jackknife">a - The leave-one-out Jackknife</h2>
+<p>The principle of the jackknife is to create subsamples of the initial sample by successively removing one of the individuals. This is the leave-one-out technique.</p>
+<p>Concretely, for a sample of <span class="math inline">\(n\)</span> individuals, there will be <span class="math inline">\(n\)</span> subsamples of size <span class="math inline">\((n-1)\)</span>. The <span class="math inline">\(i^{th}\)</span> subsample will be composed of individuals from <span class="math inline">\(1\)</span> to <span class="math inline">\(n\)</span> minus the <span class="math inline">\(i^{th}\)</span> individual. A simple representation of all the subsamples is proposed below with the subsamples in lines and the individual numbers in columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">121</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>size_sample <span class="ot">&lt;-</span> size[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">139</span>,<span class="dv">30</span>),]</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(size_sample<span class="sc">$</span>Etudiant_e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 167.9333</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(size_sample<span class="sc">$</span>Etudiant_e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="r_chapter_boostrapping_resampling_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>On a seulement accès à cet échantillon non normalement distribué. La dessus, nous ne pouvons pas calculer les intervalles de confiance comme vu précedemment. C’est là que je Jackknife devient intéressant.</p>
-<p>…</p>
-<section id="a---principe" class="level2">
-<h2 class="anchored" data-anchor-id="a---principe">a - Principe</h2>
+<p>The next step is to calculate pseudo-values for each of the new subsamples. The formula for pseudo-values depend on the statistic of interest. In our case we want to estimate the mean, the formula will then be:</p>
+<p><span class="math display">\[
+v_{i} = n\overline{X} - (n-1)\overline{X}_{-i}
+\]</span></p>
+<p>with the following variables:</p>
+<table class="table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(v_{i}\)</span></td>
+<td>Pseudo value of the <span class="math inline">\(i^{th}\)</span> subsample</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(n\)</span></td>
+<td>Total number of individuals</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\overline{X}\)</span></td>
+<td>Mean of the initial sample</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\overline{X}_{-i}\)</span></td>
+<td>Mean of the <span class="math inline">\(i^{th}\)</span> subsample, corresponding to all individuals except the <span class="math inline">\(i{th}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s write a function which create the subsamples and calculate their pseudo values:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pseudo_val <span class="ot">&lt;-</span> <span class="cf">function</span>(data, theta){</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#entry : data = the vector of data to which we want to apply the Jackknife</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#entry : theta = function for the statistic of interest</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#output : a vector of pseudo values for each subsample</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(data)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  mean_init <span class="ot">&lt;-</span> <span class="fu">theta</span>(data)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  pv <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,n) <span class="co">#to keep in memory each pseudo value</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    pv[i] <span class="ot">&lt;-</span> n<span class="sc">*</span>mean_init <span class="sc">-</span> (n<span class="dv">-1</span>)<span class="sc">*</span><span class="fu">theta</span>(data[<span class="sc">-</span>i])</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pv)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To try the function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(pv <span class="ot">&lt;-</span> <span class="fu">pseudo_val</span>(<span class="at">data =</span>  data_sample<span class="sc">$</span>Sepal.Width, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theta =</span> mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 3.7 2.9 2.8 3.0 2.8 3.0 3.0 3.8 3.3 3.2 2.8 3.0 3.6 3.8 2.5</code></pre>
+</div>
+</div>
+<p>The jackknife estimator of the mean will then be calculated as follow:</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{\theta} &amp; = \frac{\sum_{i=1}^{n}v_{i}}{n} \\
+\hat{\theta} &amp; = \overline{v}
+\end{align}
+\]</span></p>
+<p>It corresponds to the mean of the pseudo values <span class="math inline">\(v_i\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(mean_pv <span class="ot">&lt;-</span> <span class="fu">mean</span>(pv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.146667</code></pre>
+</div>
+</div>
+<p>The Jackknife estimator obtained is 3.15. Note that here it is the same as the initial sample mean but it is not always the case. This technique supposes that the Jackknife estimator is normally distributed and its standard error is calculated as follow:</p>
+<p><span class="math display">\[
+\begin{align}
+SE_\hat{X} &amp; = \sqrt{\frac{\sum_{i=1}^{n}(v_{i}-\overline{v})}{n(n-1)}} \\
+SE_\hat{X} &amp; = \sqrt{\frac{\sigma_{v}^{2}}{n}}
+\end{align}
+\]</span></p>
+<p>With <span class="math inline">\(\overline{v}\)</span> being the mean of the pseudo values (and the jackknife estimator).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(pv)<span class="sc">/</span><span class="fu">length</span>(pv)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1050472</code></pre>
+</div>
+</div>
+<p>From these we can calculate a confidence interval:</p>
+<p><span class="math display">\[
+[\, \overline{v} - 1.96 \, SE_\hat{X} ; \overline{v} + 1.96 \, SE_\hat{X} \,]
+\]</span></p>
+<p>Note: the 1.96 value comes from the normal distribution table to obtain a 95% confidence interval.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">" Lower bound : "</span>,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.character</span>(mean_pv <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>SE),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Higher bound : "</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.character</span>(mean_pv <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>SE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Lower bound :  2.94077409489412 
+ Higher bound :  3.35255923843921</code></pre>
+</div>
+</div>
+<p>On r, functions already exist to automatically execute the Jackknife. For instance, in the package bootstrap, there is a function jackknife. The function take as entry a vector containing the data (x) and a function indicating which statistic needs to be estimated (theta).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"bootstrap"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">jackknife</span>(<span class="at">x=</span> data_sample<span class="sc">$</span>Sepal.Width,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">theta =</span> <span class="cf">function</span>(x) <span class="fu">mean</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$jack.se
+[1] 0.1050472
+
+$jack.bias
+[1] 0
+
+$jack.values
+ [1] 3.107143 3.164286 3.171429 3.157143 3.171429 3.157143 3.157143 3.100000
+ [9] 3.135714 3.142857 3.171429 3.157143 3.114286 3.100000 3.192857
+
+$call
+jackknife(x = data_sample$Sepal.Width, theta = function(x) mean(x))</code></pre>
+</div>
+</div>
+<p>The output of the function include the standard error ($jack.se) as describe above. It also include the bias ($jack.bias) which is the difference between the initial sample statistic and the jackknife estimated statistic. It is important to note that the output $jack.values does not correspond to the pseudo values but to the statistic of interest calculated on every subsample. In out example, it correspond to th mean of each subsample.</p>
 </section>
-<section id="b---exemple-dimplémentation" class="level2">
-<h2 class="anchored" data-anchor-id="b---exemple-dimplémentation">b - exemple d’implémentation</h2>
+<section id="b---the-grouped-jackknife" class="level2">
+<h2 class="anchored" data-anchor-id="b---the-grouped-jackknife">b - The grouped Jackknife</h2>
 </section>
-<section id="c---avantages-et-inconvénients-de-la-méthode" class="level2">
-<h2 class="anchored" data-anchor-id="c---avantages-et-inconvénients-de-la-méthode">c - Avantages et inconvénients de la méthode</h2>
+<section id="c--" class="level2">
+<h2 class="anchored" data-anchor-id="c--">c -</h2>
 
 
 </section>
 </section>
-
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
