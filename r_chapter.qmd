@@ -48,9 +48,11 @@ $$(A_{i}) = \displaystyle \sum_{j\in k_{i}}w_{ij}y{j]} $$
 
 or as the weighted average:
 
-$$(A_{i}) = \displaystyle \frac{\sum_{j\in k_{i}}w_{ij}y{j]}}{\sum_{j\in k_{i}}w_{ij}} $$\
+$$(A_{i}) = \displaystyle \frac{\sum_{j\in k_{i}}w_{ij}y{j]}}{\sum_{j\in k_{i}}w_{ij}} $$
 
-(**y**j = the value of y at the site j among site i's set of *k*i neighbors **w**ij = the weight given to the site j's influence over site i)
+( $y_{i}$= the value of y at the site j among site i's set of $k_{i}$ neighbors.
+
+$w_{ij}$ = the weight given to the site j's influence over site i)
 
 This function is usually related to the distance between data points or to the environmental distance.
 
@@ -76,15 +78,38 @@ A specific diagnostic can be made to chose between either one.
 
 ##### 3.1.2.2. Lag models
 
+In this model, we assume that the autoregressif process is in the response variable. 
+As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
+
+It would for exemple be liked a stone thrown in a lake. This creates waves that propagate to the whole lake.
+
 The lag model is used to take into account a autoregressif process only occuring in the response variable. Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
 
 The model will take the form of :
 
-**Y =** $\rho$ **WY +X**$\beta$ + $\epsilon$
+**Y =**$\rho$**WY +X**$\beta$ + $\epsilon$
+
+**ρ** is the autoregression parameter
+**W** is the spatial weights matrix
+
+
 
 ##### 3.1.2.3. Error models
 
+When using the error model, we assume that the autoregressif process is only in the residuals.
+
+When dealing with such model, an interpretation may be that some spatially correlated variable are missing in the dataset.
+
+this model takes the form of :
+
+**Y = X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
+
+The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. 
+$\mu$ is the spatially dependant error term.
+
 ##### 3.1.2.4. Mixed models
+
+**Y =** $\rho$**WY +X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
 
 ### 3.2. - Non stationary process
 
