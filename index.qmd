@@ -22,3 +22,4 @@ Table of Contents
 
 * [Mixed models in Ecology](Mixed_models.html)
 * [Dependent Data](chapter_dependance.html)
+* [Bayesian models](bayesian_modeles.html)
