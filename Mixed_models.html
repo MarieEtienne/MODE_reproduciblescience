@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -89,7 +108,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -185,31 +205,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction:</a></li>
-  <li><a href="#model-création-du-model-abdou" id="toc-model-création-du-model-abdou" class="nav-link" data-scroll-target="#model-création-du-model-abdou">Model: création du model : Abdou</a></li>
-  <li><a href="#calcule-matriciel-antoine" id="toc-calcule-matriciel-antoine" class="nav-link" data-scroll-target="#calcule-matriciel-antoine">Calcule matriciel : Antoine</a></li>
-  <li><a href="#structure-de-dependance-odin" id="toc-structure-de-dependance-odin" class="nav-link" data-scroll-target="#structure-de-dependance-odin">Structure de dependance : Odin</a>
+  <li><a href="#mixed-models-in-ecology" id="toc-mixed-models-in-ecology" class="nav-link active" data-scroll-target="#mixed-models-in-ecology">Mixed models in ecology</a>
   <ul class="collapse">
-  <li><a href="#cas-des-mesures-répétées" id="toc-cas-des-mesures-répétées" class="nav-link" data-scroll-target="#cas-des-mesures-répétées">Cas des Mesures répétées</a></li>
-  <li><a href="#cas-de-lautocorrelation-spatiale" id="toc-cas-de-lautocorrelation-spatiale" class="nav-link" data-scroll-target="#cas-de-lautocorrelation-spatiale">Cas de l’autocorrelation spatiale</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#formalization-of-the-linear-mixed-model" id="toc-formalization-of-the-linear-mixed-model" class="nav-link" data-scroll-target="#formalization-of-the-linear-mixed-model">1. Formalization of the linear mixed model</a></li>
+  <li><a href="#matrix-computation-in-mixed-models" id="toc-matrix-computation-in-mixed-models" class="nav-link" data-scroll-target="#matrix-computation-in-mixed-models">2. Matrix computation in mixed models</a></li>
+  <li><a href="#dependency-structures" id="toc-dependency-structures" class="nav-link" data-scroll-target="#dependency-structures">3. Dependency structures</a>
+  <ul class="collapse">
+  <li><a href="#case-of-repeated-measurements" id="toc-case-of-repeated-measurements" class="nav-link" data-scroll-target="#case-of-repeated-measurements">3.1 Case of repeated measurements</a></li>
+  <li><a href="#case-of-spatial-autocorrelation" id="toc-case-of-spatial-autocorrelation" class="nav-link" data-scroll-target="#case-of-spatial-autocorrelation">3.2 Case of spatial autocorrelation</a></li>
   </ul></li>
-  <li><a href="#questiion-pour-la-prof-comment-combiner-efffet-aléatoire-de-groupe-et-effet-aléatoire-spatialtemporelle" id="toc-questiion-pour-la-prof-comment-combiner-efffet-aléatoire-de-groupe-et-effet-aléatoire-spatialtemporelle" class="nav-link" data-scroll-target="#questiion-pour-la-prof-comment-combiner-efffet-aléatoire-de-groupe-et-effet-aléatoire-spatialtemporelle">Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?</a>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">4. Application</a>
   <ul class="collapse">
-  <li><a href="#application-ael" id="toc-application-ael" class="nav-link" data-scroll-target="#application-ael">Application : Ael</a></li>
+  <li><a href="#dataset-presentation-and-objectives-of-the-analysis" id="toc-dataset-presentation-and-objectives-of-the-analysis" class="nav-link" data-scroll-target="#dataset-presentation-and-objectives-of-the-analysis">4.1 Dataset presentation and objectives of the analysis</a></li>
+  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration">4.2 Data exploration</a></li>
+  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis">4.3 Statistical analysis</a></li>
+  <li><a href="#model-validation" id="toc-model-validation" class="nav-link" data-scroll-target="#model-validation">4.4 Model validation</a></li>
   </ul></li>
-  <li><a href="#importation-des-donnees" id="toc-importation-des-donnees" class="nav-link" data-scroll-target="#importation-des-donnees">IMPORTATION DES DONNEES</a></li>
-  <li><a href="#exploration-des-données" id="toc-exploration-des-données" class="nav-link" data-scroll-target="#exploration-des-données">EXPLORATION DES DONNÉES</a>
-  <ul class="collapse">
-  <li><a href="#valeurs-aberrantes-dans-y-et-distribution-de-y" id="toc-valeurs-aberrantes-dans-y-et-distribution-de-y" class="nav-link" data-scroll-target="#valeurs-aberrantes-dans-y-et-distribution-de-y">1.Valeurs aberrantes dans <span class="math inline">\(Y\)</span> et distribution de <span class="math inline">\(Y\)</span></a></li>
-  <li><a href="#a-pour-les-xs-qui-sont-quantitatifs-vérifier-les-valeurs-aberrantes-et-la-distribution" id="toc-a-pour-les-xs-qui-sont-quantitatifs-vérifier-les-valeurs-aberrantes-et-la-distribution" class="nav-link" data-scroll-target="#a-pour-les-xs-qui-sont-quantitatifs-vérifier-les-valeurs-aberrantes-et-la-distribution">2.a Pour les <span class="math inline">\(Xs\)</span> qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution</a></li>
-  <li><a href="#b-pour-les-xs-qui-sont-catégoriques-nombre-de-niveaux-et-nombre-dindividus-par-niveau" id="toc-b-pour-les-xs-qui-sont-catégoriques-nombre-de-niveaux-et-nombre-dindividus-par-niveau" class="nav-link" data-scroll-target="#b-pour-les-xs-qui-sont-catégoriques-nombre-de-niveaux-et-nombre-dindividus-par-niveau">2.b Pour les <span class="math inline">\(Xs\)</span> qui sont catégoriques : nombre de niveaux et nombre d’individus par niveau</a></li>
-  <li><a href="#analyse-des-relations-potentielles-y-vs-xs" id="toc-analyse-des-relations-potentielles-y-vs-xs" class="nav-link" data-scroll-target="#analyse-des-relations-potentielles-y-vs-xs">Analyse des relations potentielles Y vs Xs</a></li>
-  <li><a href="#analyse-des-interactions-possibles-entre-les-deux-variables-indépendantes" id="toc-analyse-des-interactions-possibles-entre-les-deux-variables-indépendantes" class="nav-link" data-scroll-target="#analyse-des-interactions-possibles-entre-les-deux-variables-indépendantes">Analyse des interactions possibles entre les deux variables indépendantes</a></li>
-  <li><a href="#vérifier-la-colinéarité-entre-les-x" id="toc-vérifier-la-colinéarité-entre-les-x" class="nav-link" data-scroll-target="#vérifier-la-colinéarité-entre-les-x">Vérifier la colinéarité entre les X</a></li>
-  </ul></li>
-  <li><a href="#analyse-statistique" id="toc-analyse-statistique" class="nav-link" data-scroll-target="#analyse-statistique">ANALYSE STATISTIQUE</a>
-  <ul class="collapse">
-  <li><a href="#construction-du-modèle" id="toc-construction-du-modèle" class="nav-link" data-scroll-target="#construction-du-modèle">Construction du modèle</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -234,64 +246,105 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>MERCI DE CHARGER ICI LES PACKAGES QUE VOUS UTILISEE</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(predictmeans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: glmmTMB</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in checkMatrixPackageVersion(getOption("TMB.check.Matrix", TRUE)): Package version inconsistency detected.
+TMB was built with Matrix version 1.6.4
+Current Matrix version is 1.6.1.1
+Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lme4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lme4'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:nlme':
+
+    lmList</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lmerTest</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lmerTest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lme4':
+
+    lmer</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    step</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="mixed-models-in-ecology" class="level1">
+<h1>Mixed models in ecology</h1>
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction:</h2>
-<p><strong>General Linear Models</strong>, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables ((X_1, X_2, …, X_n)). These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology. However, it is crucial to validate the non-collinearity of residuals.</p>
-<p>In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated. This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites. In such cases, it becomes necessary to employ <strong>mixed models</strong>. These models, extensions of both general and generalized linear models, consider the correlation of measurements by introducing individuals, regions, families, or other factors as <strong>random effects</strong> in the models. This incorporation allows for a more accurate representation of the complex dependencies present in the data.</p>
-<section id="what-is-a-random-effect-and-how-do-i-determine-if-my-effect-is-random-or-fixed" class="level4">
-<h4 class="anchored" data-anchor-id="what-is-a-random-effect-and-how-do-i-determine-if-my-effect-is-random-or-fixed">What is a random effect, and how do I determine if my effect is random or fixed?</h4>
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p><strong>General Linear Models</strong>, such as linear regressions, ANOVA, and ANCOVA, are commonly employed to depict the relationships between a dependent variable, denoted as (Y), and one or more independent variables (<span class="math inline">\(X_1, X_2, ..., X_n\)</span>).&nbsp; These models are based on several assumptions, including homoscedasticity of the variance, non-collinearity of residuals, and normality of residuals. Generalized Linear Models (GLMs) can address homoscedasticity and normality assumptions by accommodating data from different distributions like Poisson, binomial, or Gamma distributions, which are often encountered in ecology.&nbsp;&nbsp; However, it is crucial to validate the non-collinearity of residuals.</p>
+<p>In biological and ecological experiments, the assumption of independence of measurements, necessary for non-collinearity of residuals, is frequently violated.&nbsp; This is because measurements are often correlated within families, regions, repeated on the same individuals, or across time and sites. In such cases, it becomes necessary to employ <strong>mixed models</strong>. These models, extensions of both general and generalized linear models, consider the correlation of measurements by introducing individuals, regions, families, or other factors as <strong>random effects</strong> in the models. This incorporation allows for a more accurate representation of the complex dependencies present in the data.</p>
+<p><em>What is a random effect, and how do I determine if my effect is random or fixed ?</em></p>
 <p>To clarify the distinction between fixed and random effects, let’s examine two examples:</p>
 <ul>
-<li><p><strong>Example 1: Comparing Individual Cars</strong></p>
-<p>Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars. They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns. The dataset consists of one factor with four levels (representing the four cars) and five replicates each. Performing a one-way ANOVA allows them to determine which car is the most economical. In this scenario, the factor “car” is <strong>fixed</strong>, and the analysis provides conclusions specific to the four studied cars.</p></li>
-<li><p><strong>Example 2: Assessing Homogeneity within a Car Model</strong></p>
-<p>A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption. Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a dataset with one factor and four levels, each with five replicates. Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars. Here, a mixed model with the factor ‘car’ as a <strong>random factor</strong> should be used.</p>
-<p>In summary, a factor is designated as fixed when the experimenter intentionally chooses a limited number of levels for investigation, aiming to assess the impact of each level on the response variable. On the other hand, a factor is considered random when the selected levels represent only a sample from all possible levels. In this case, the objective is to understand the variability in the response variable attributed to this factor.</p></li>
+<li><p><strong>Example 1: Comparing individual cars</strong></p>
+<p>Abdel, Antonio, Odeline, and Aela want to compare the oil consumption of their individual cars. They conduct a test by measuring oil consumption during a 30-kilometer drive, repeated five times in a day, with consistent traffic conditions and driving patterns.&nbsp; The data set consists of one factor with four levels (representing the four cars) and five replicates each. Performing a one-way ANOVA allows them to determine which car is the most economical. In this scenario, the factor “car” is <strong>fixed</strong>, and the analysis provides conclusions specific to the four studied cars.</p></li>
+<li><p><strong>Example 2: Assessing homogeneity within a car model</strong></p>
+<p>A car constructor aims to evaluate the homogeneity of oil consumption within a car model, treating the model as a population of cars with expected heterogeneity in gas consumption.&nbsp; Similar to Example 1, they measure oil consumption by driving each car 30 kilometers, five times in a day, resulting in a data set with one factor and four levels, each with five replicates. Unlike the first example, the cars in this case were sampled from a larger population, and the objective is to draw conclusions about the entire population, not just the sampled cars. Here, a mixed model with the factor ‘car’ as a <strong>random factor</strong> should be used.</p></li>
 </ul>
-<p>For example, let’s consider a researcher investigating the influence of the number of training sessions per week on the concentration of red blood cells in recreational athletes. The researcher collects data from 50 athletes in a local club who train between 1 and 5 times a week. Initially planning a simple ANOVA with the number of training sessions as the main factor, the researcher discovers that most athletes in the dataset belong to only 10 families, leading to non-independent measurements. To address this issue, the researcher opts for a mixed model, treating the number of training sessions as a fixed factor and the family as a random factor. This approach allows the exploration of variability between families without the intention of directly comparing them.</p>
+<p>In summary, a factor is designated as fixed when the experimenter intentionally chooses a limited number of levels for investigation, aiming to assess the impact of each level on the response variable. A factor is considered random when the selected levels represent only a sample from all possible levels. In this case, the objective is to understand the variability in the response variable attributed to this factor.</p>
+<p>For example, let’s consider a researcher investigating the influence of the number of training sessions per week on the concentration of red blood cells in recreational athletes. The researcher collects data from 50 athletes in a local club who train between 1 and 5 times a week. Initially planning a simple ANOVA with the number of training sessions as the main factor, the researcher discovers that most athletes in the data set belong to only 10 families, leading to non-independent measurements. To address this issue, the researcher opts for a mixed model, treating the number of training sessions as a fixed factor and the family as a random factor. This approach allows the exploration of variability between families without the intention of directly comparing them.</p>
 <p>Now that we have a general understanding of what mixed models are, we can delve into the mathematical formalism of these models. In this chapter, you will discover how <strong>matrices</strong> can be employed to create mixed models, explore the various <strong>dependency structures</strong> that exist, and ultimately, find an <strong>implementation</strong> of mixed models in R.</p>
 </section>
-</section>
-<section id="model-création-du-model-abdou" class="level2">
-<h2 class="anchored" data-anchor-id="model-création-du-model-abdou">Model: création du model : Abdou</h2>
+<section id="formalization-of-the-linear-mixed-model" class="level2">
+<h2 class="anchored" data-anchor-id="formalization-of-the-linear-mixed-model">1. Formalization of the linear mixed model</h2>
 <p>The linear mixed model can be formulated as follows:</p>
 <p><span class="math display">\[
 Y_{i} = \beta X_{i} + \gamma_i Z_{i} + \varepsilon_{i}
 \]</span></p>
 <p>where:</p>
 <ul>
-<li><span class="math inline">\(Y_i = n_i \times 1\)</span> measurements for subject <span class="math inline">\(i\)</span></li>
-<li><span class="math inline">\(X_i = n_i \times p\)</span> matrix of vectors for fixed effects</li>
-<li><span class="math inline">\(beta_i= p \times 1\)</span> parameters for fixed effects</li>
+<li><span class="math inline">\(Y_i = n_i \times 1\)</span> measurements for subject <span class="math inline">\(i\)</span>, where <span class="math inline">\(n\)</span> is the number of observations</li>
+<li><span class="math inline">\(X_i = n_i \times p\)</span> matrix of vectors for fixed effects, where <span class="math inline">\(p\)</span> is the number of fixed parameters</li>
+<li><span class="math inline">\(\beta_i= p \times 1\)</span> parameters for fixed effects</li>
 <li><span class="math inline">\(Z_i = n_i \times p\)</span> matrix of vectors for random effects</li>
-<li><span class="math inline">\(gamma_i = r \times 1\)</span> parameters for random effects</li>
-<li><span class="math inline">\(varepsilon_i = n_i \times 1\)</span> residuals for individual <span class="math inline">\(i\)</span></li>
+<li><span class="math inline">\(\gamma_i = r \times 1\)</span> parameters for random effects, where <span class="math inline">\(p\)</span> is the number of random parameters</li>
+<li><span class="math inline">\(\varepsilon_i = n_i \times 1\)</span> residuals for individual <span class="math inline">\(i\)</span></li>
 </ul>
-<p>A mixed effects model incorporates random effects (<span class="math inline">\(\gamma_i\)</span>), or a combination of both random and fixed effects (<span class="math inline">\(\beta\)</span>), whereas a standard linear model includes only fixed effects. The distinction between these two lies in the nature of the effects related to the treatment under study.</p>
-<p>When it is evident that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.</p>
+<p><span class="citation" data-cites="RochGiorgi">(<a href="#ref-RochGiorgi" role="doc-biblioref">Giorgi 2020</a>)</span></p>
+<p>A mixed effects model incorporates <strong>random effects</strong> (<span class="math inline">\(\gamma_i\)</span>), or a combination of both <strong>random and fixed effects</strong> (<span class="math inline">\(\beta\)</span>), whereas a standard linear model includes only fixed effects.</p>
+<p>When it is clear that the researcher intends to compare particular, predefined levels of a treatment, those levels are considered fixed effects. Conversely, when the levels of the treatment are drawn from a larger population of possible levels, the treatment is treated as a random effect.</p>
 <p>In addition, random effects are included in a model when there is a correlation or dependence among the observations that cannot be ignored.</p>
-<p><strong>RANDOM VARIABLE</strong> = « something that could not be known before sampling/measurement/observation”.</p>
+<p><strong>RANDOM VARIABLE</strong> = “<em>something that could not be known before sampling/measurement/observation</em>”.</p>
 <p>In matrix form, the mixed model is written as:</p>
 <p><span class="math display">\[
 Y \sim \mathcal{N{n}}(X\theta, \Sigma)
 \]</span> where:</p>
-<p><span class="math inline">\(Y\)</span> is the response vector of the observations, <span class="math inline">\(X\theta\)</span> is the expectation of the response vector <span class="math inline">\(Y\)</span> and <span class="math inline">\(\Sigma\)</span> is the variance matrix. We can note that if the response vector <span class="math inline">\(Y\)</span> is of dimension <span class="math inline">\(n\)</span>, the matrix <span class="math inline">\(\Sigma\)</span> is of dimensions <span class="math inline">\(n \times n\)</span>. Since <span class="math inline">\(\Sigma\)</span> is symmetric, it comprises <span class="math inline">\(n(n + 1)/2\)</span> parameters. This is because, in a symmetric matrix, the elements above (or below) the main diagonal are the same as those below (or above), reducing the total number of parameters needed to describe the matrix.</p>
+<p><span class="math inline">\(Y\)</span> is the response vector of the observations, <span class="math inline">\(X\theta\)</span> is the expectation of the response vector <span class="math inline">\(Y\)</span> and <span class="math inline">\(\Sigma\)</span> is the variance matrix.</p>
+<p>We can note that if the response vector <span class="math inline">\(Y\)</span> is of dimension <span class="math inline">\(n\)</span>, the matrix <span class="math inline">\(\Sigma\)</span> is of dimensions <span class="math inline">\(n \times n\)</span>. Since <span class="math inline">\(\Sigma\)</span> is symmetric, it comprises <span class="math inline">\(n(n + 1)/2\)</span> parameters. This is because, in a symmetric matrix, the elements above (or below) the main diagonal are the same as those below (or above), reducing the total number of parameters needed to describe the matrix.</p>
 <p>However, the limitation of the available data prevents considering models where all these <span class="math inline">\(n(n + 1)/2\)</span> parameters are free. This restriction arises from the need to have a significant amount of data to reliably estimate each parameter, which quickly becomes unrealistic with a limited dataset.</p>
 <p>To address this issue, the linear mixed-effects model proposes an approach where a structure is imposed on the variance matrix <span class="math inline">\(\Sigma\)</span>. This structure, governed by a limited number of parameters called “variance parameters,” denoted <span class="math inline">\(\psi\)</span>, reduces the number of parameters needed to describe the covariance matrix. Consequently, the model can be realistically adapted even with a limited amount of data, while accounting for the correlation between observations within the framework of linear mixed-effects models. The model parameters include <span class="math inline">\(\theta\)</span> for the expectation and <span class="math inline">\(\psi\)</span> for the variance.</p>
 </section>
-<section id="calcule-matriciel-antoine" class="level2">
-<h2 class="anchored" data-anchor-id="calcule-matriciel-antoine">Calcule matriciel : Antoine</h2>
-<p><span class="math display">\[
-  M_{2\times2} = \left( {\begin{array}{cc}
-    A &amp; B \\
-    C &amp; D \\
-  \end{array} } \right)
-\]</span> Il est possible de rencontrer des modèles linéaires (mixtes) sous forme matricielle, de part la concision de la forme. Il est donc naturel de présenter cette forme dans le cadre des modèles mixtes.</p>
-<p>Pour rappel, un modèle linéaire, de type regression linéaire, avec <span class="math inline">\(p\)</span> variables explicatives peut s’écrire sous la forme <span class="math display">\[y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i\]</span>, où <span class="math inline">\(y_i\)</span> représente une observation de la variable réponse <span class="math inline">\(Y\)</span> pour l’individu <span class="math inline">\(i\)</span>, <span class="math inline">\(\beta_0\)</span> l’ordonnée à l’origine, <span class="math inline">\(\beta_1,...,\beta_p\)</span> les coefficients associés à chaque variables explicatives <span class="math inline">\(X_1,...,X_p\)</span>, <span class="math inline">\(x_i^{(1)},...,x_i^{(p)}\)</span> p observations (pour les p variables explicatives) pour l’individu <span class="math inline">\(i\)</span>, et <span class="math inline">\(e_i\)</span> un terme d’erreur associé à cet individu <span class="math inline">\(i\)</span>. On peut voir <span class="math inline">\(e_i\)</span> comme une réalisation d’une variable aléatoire <span class="math inline">\(E_i\)</span> distribuée selon une loi normale <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>. En notant <span class="math display">\[y=\begin{pmatrix}
+<section id="matrix-computation-in-mixed-models" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-computation-in-mixed-models">2. Matrix computation in mixed models</h2>
+<p>It is possible to encounter (mixed) linear models written under their matrix form, for their concision. It is therefore natural to present this form in the context of mixed models.</p>
+<p>As a reminder, a linear model, like linear regression, with <span class="math inline">\(p\)</span> explanatory variables can be written <span class="math display">\[y_i = \beta_0 + \beta_1x_i^{(1)} + \ldots + \beta_px_i^{(p)} + \varepsilon_i\]</span>, where <span class="math inline">\(y_i\)</span> represent an observation of the response variable <span class="math inline">\(Y\)</span> for the individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\beta_0\)</span> the intercept, <span class="math inline">\(\beta_1,...,\beta_p\)</span> the coefficients associated to each explanatory variable <span class="math inline">\(X_1,...,X_p\)</span>, <span class="math inline">\(x_i^{(1)},...,x_i^{(p)}\)</span> the <span class="math inline">\(p\)</span> observations (for the <span class="math inline">\(p\)</span> explanatory variables) for the individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(e_i\)</span> an error term associated to the individual <span class="math inline">\(i\)</span>.&nbsp; We can see <span class="math inline">\(e_i\)</span> as a realization of a random variable <span class="math inline">\(E_i\)</span> distributed according to a normal law <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>. Noting <span class="math display">\[y=\begin{pmatrix}
 y_1\\
 \vdots\\
 y_n\\
@@ -303,44 +356,64 @@ y_n\\
 \beta_0\\
 \vdots\\
 \beta_p\\
-\end{pmatrix}\]</span> et <span class="math display">\[e=\begin{pmatrix}
-\varepsilon_0\\
+\end{pmatrix}\]</span> and <span class="math display">\[e=\begin{pmatrix}
+\varepsilon_1\\
 \vdots\\
 \varepsilon_n\\
-\end{pmatrix}\]</span>, on peut réécrire le modèle précédent sous la forme <span class="math display">\[y=X\theta+e\]</span>. Ici, <span class="math inline">\(e\)</span> est un vecteur de n réalisations indépendantes d’une variable aléatoire <span class="math inline">\(E_i\)</span> suivant une loi noramle <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>. Ainsi, <span class="math inline">\(e\)</span> est lui même une réalisation d’une variable aléatoire <span class="math inline">\(E\)</span> de distribution <span class="math inline">\(\mathcal{N}_n(0,\sigma^2I_n)\)</span> (<span class="math inline">\(e_i\)</span> est une observation de la variable aléatoire <span class="math inline">\(E_i\)</span> distribuée selon une loi normale <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>). De la même manière, <span class="math inline">\(y\)</span> est une observation de <span class="math inline">\(Y=X\theta+E\)</span> où <span class="math inline">\(Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)\)</span> (<span class="math inline">\(y_i\)</span> est l’observation de <span class="math inline">\(Y_i\)</span> distribuée selon une loi normale <span class="math inline">\(\mathcal{N}((X\theta)_i,\sigma^2)\)</span>). Ainsi, en introduisant <span class="math inline">\(Y\)</span> et <span class="math inline">\(E\)</span>, le modèle précédent peut s’écrire <span class="math inline">\(Y=X\theta+E\)</span> où <span class="math inline">\(\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)\)</span>.</p>
-<p>Par définition, la réponse moyenne est de <span class="math inline">\(X\theta\)</span>, plus ou moins un terme d’erreur qui en moyenne vaut 0 mais qui varie de <span class="math inline">\(\sigma^2I_n\)</span>. Ainsi, on peut écrire <span class="math inline">\(Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)\)</span>. On remarque qu’en écrivant <span class="math inline">\(\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)\)</span>, toutes les erreurs ont la même variance (<span class="math inline">\(\sigma^2\)</span>) et deux individus (statistiques) car tous les échantillons sont indépendants. On verra par la suite que si cette condition d’indépendance n’est pas respectée, toutes les erreurs n’ont pas la même variance, on parle de structure de dépendance. La dépendance entre les mesures détermine la structure de dépendance (mesures répétées dans le temps, individus groupés par une ascendance commune,…).</p>
+\end{pmatrix}\]</span>, we can rewrite the previous model under the form <span class="math display">\[y=X\theta+e\]</span>Here, <span class="math inline">\(e\)</span> is a vector of <span class="math inline">\(n\)</span> independent realizations or a random variable <span class="math inline">\(E_i\)</span> following a normal distribution <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>.&nbsp; Hence, <span class="math inline">\(e\)</span> is a realization of a random variable <span class="math inline">\(E\)</span> following the distribution <span class="math inline">\(\mathcal{N}_n(0,\sigma^2I_n)\)</span> (<span class="math inline">\(e_i\)</span> is an observation of the random variable <span class="math inline">\(E_i\)</span> distributed according to a normal law <span class="math inline">\(\mathcal{N}(0,\sigma^2)\)</span>).&nbsp; Similarly, <span class="math inline">\(y\)</span> is an observation of <span class="math inline">\(Y=X\theta+E\)</span> where <span class="math inline">\(Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)\)</span> (<span class="math inline">\(y_i\)</span> is an observation of <span class="math inline">\(Y_i\)</span> distributed according to a normal law <span class="math inline">\(\mathcal{N}((X\theta)_i,\sigma^2)\)</span>). Hence, by introducing <span class="math inline">\(Y\)</span> and <span class="math inline">\(E\)</span>, the previous model can be written <span class="math inline">\(Y=X\theta+E\)</span> where <span class="math inline">\(\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)\)</span>.</p>
+<p>By definition, the mean response is equal to <span class="math inline">\(X\theta\)</span>, more or less an error term equals to 0 in average but that varies of <span class="math inline">\(\sigma^2I_n\)</span>. Thus, we can write <span class="math display">\[Y\sim\mathcal{N}_n(X\theta,\sigma^2I_n)\]</span>We note that when writing <span class="math inline">\(\mathrm{E}\stackrel{iid}\sim\mathcal{N}_n(0,\sigma^2I_n)\)</span>, each error has got the same variance (<span class="math inline">\(\sigma^2\)</span>) because every samples are independent. We will see subsequently that if this independence condition is not respected, all the errors do not have the same variance, we speak of a dependence structure. The dependence between the measurements determines the dependence structure (measurements repeated over time, individuals grouped by common ancestry, etc.). We will see here that in the context of mixed models, the previous equation is written <span class="math display">\[Y\sim\mathcal{N}_n(X\theta,\sum)\]</span>. When writing this, we note that the average response does not change. Generalization concerns errors. Now, let’s study study the components of variance <span class="math inline">\(\sum\)</span> by following an example. We decide to study the heritability of a trait (height for example). We want to see if individuals from one ascendant are more similar than those from another ascendant. We have <span class="math inline">\(m\)</span> ascendants, numbered <span class="math inline">\(i=1,...,m\)</span>, from a larger population, each having <span class="math inline">\(n\)</span> descendants numbered <span class="math inline">\(j=1,...,n\)</span>. We pose <span class="math inline">\(Y_{ij}=\)</span> the trait value for the j-ème descendant of the i-ème ascendant. Individuals with the same ascendant are therefore grouped by their belonging to the same ascendant. The fact of sampling ancestors from a larger population (random effect) introduces a correlation between the traits measured on the descendants of the same ancestor. This correlation is uniform between individuals. The descendants between the groups (for different ancestors) are independent. Thus, we write <span class="math display">\[
+\mathbb{Cov}(Y_{ij},Y_{i'j'}) = \left\{
+    \begin{array}{ll}
+        \gamma^2 &amp; \mbox{si } i=i'\\
+        0 &amp; \mbox{sinon.}
+    \end{array}
+\right.
+\]</span> This model therefore includes a variance associated with the ascendant effect <span class="math inline">\(\gamma^2\)</span> and a residual variance <span class="math inline">\(\sigma^2\)</span>. We precise that <span class="math inline">\(\gamma^2\)</span> represent the variability between the ascendants. Starting from the linear model <span class="math inline">\(Y=X\theta+E\)</span> where <span class="math inline">\(E\)</span> is still <span class="math inline">\(\sigma^2I_n\)</span>, we just have to take into account this variance associated with the ascendant effect. To do this, we introduce the matrix <span class="math inline">\(Z\)</span>, of dimension <span class="math inline">\(n\times m\)</span>, where <span class="math display">\[
+Z_{a,i} = \left\{
+    \begin{array}{ll}
+        1 &amp; \mbox{l'individu } a=(i,j) \mbox{ est le descendant de l'ascendant }i\\
+        0 &amp; \mbox{sinon.}
+    \end{array}
+\right.
+\]</span> and the vector <span class="math inline">\(U\)</span> of dimension <span class="math inline">\(m\)</span> including the random effects <span class="math inline">\(\gamma^2\)</span>. Hence, the previous model can be rewritten <span class="math inline">\(Y=X\theta+ZU+E\)</span>. We remind that <span class="math inline">\(U\)</span> and <span class="math inline">\(E\)</span> are independents, gaussiens centered, and that <span class="math inline">\(\mathbb{Var}(U)=\gamma^2I_m\)</span>. Consequently, <span class="math inline">\(\mathbb{E}(Y)=X\theta\)</span> and <span class="math inline">\(\sum = \mathbb{V}(Y)=Z\mathbb{V}(U)Z'+\mathbb{V}(E) = \gamma^2ZZ'+\sigma^2(I_n)\)</span>. We get back to the matrix form <span class="math inline">\(Y\sim\mathcal{N}(X\theta,\sum)\)</span> with <span class="math display">\[\sum=\begin{pmatrix}
+R&amp;0 &amp; \ldots &amp; 0\\
+0 &amp; \ddots &amp; \ddots &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots &amp; 0 \\
+0 &amp; \ldots &amp; 0 &amp; R
+\end{pmatrix}\]</span>, where <span class="math display">\[R=\begin{pmatrix}
+\sigma^2+\gamma^2&amp;\gamma^2 &amp; \ldots &amp; \gamma^2\\
+\gamma^2 &amp; \ddots &amp; \ddots &amp; \gamma^2 \\
+\vdots &amp; \ddots &amp; \ddots &amp; \gamma^2 \\
+\gamma^2 &amp; \ldots &amp; \gamma^2 &amp; \sigma^2+\gamma^2
+\end{pmatrix}\]</span><span class="math inline">\(R\)</span> corresponds to the representation of the variances due to the random effect and residuals. Note that the diagonal blocks are of the same dimensions if the number of descendants is identical for each ascendant.</p>
 </section>
-<section id="structure-de-dependance-odin" class="level2">
-<h2 class="anchored" data-anchor-id="structure-de-dependance-odin">Structure de dependance : Odin</h2>
-<section id="cas-des-mesures-répétées" class="level3">
-<h3 class="anchored" data-anchor-id="cas-des-mesures-répétées">Cas des Mesures répétées</h3>
-<p>On considère cette fois une expérience visant à évaluer l’effet d’un régime sur la prise de poids d’un animal au cours du temps. Plusieurs animaux (indicés par <span class="math inline">\(j\)</span>) reçoivent chaque régime (noté <span class="math inline">\(i\)</span>) et un animal ne reçoit qu’un régime au cours de l’expérience. On mesure le poids, noté <span class="math inline">\(Y_{ij}\)</span>, de chaque animal au bout de t semaines (<span class="math inline">\(t = 1, . . . , T\)</span>). On parle donc de mesures répétées, au cours du temps sur un même individu. De telles mesures sont aussi fréquemment appelées données <em>longitudinales</em>. Pour analyser ces résultats, on veut tenir compte du fait que les mesures faites au cours du temps sur un même animal ne sont pas indépendantes. A cette fin, on pourrait utiliser le modèle :</p>
-<p><span class="math display">\[E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}\]</span></p>
-<p>avec</p>
-<p><span class="math display">\[Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
-  \begin{array}{ll}
-  σ^2ρ \ \ si \ \ (i, j) = (i_0, j_0) \\
-     0 \ sinon \
-   \end{array}
-  \right.\]</span></p>
-<p>Dans ce modèle, la covariance entre deux mesures faites aux temps t et t’ sur un même modèle est constante, quel que soit l’intervalle de temps qui sépare les deux mesures.</p>
-<p><strong>Modèle</strong> On propose ici un modèle qui prend en compte l’aspect cinétique de l’expérience et prévoit que la dépendance entre deux mesures dépend de l’intervalle de temps qui les sépare. Une telle dépendance n’admet pas de représentation simple sous la forme d’un eet aléatoire. On suppose donc que les poids sont gaussiens d’espérances respectives.</p>
-<p><span class="math display">\[ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} \]</span> <strong>Structure de dépendance</strong> On suppose de plus que toutes les mesures ont la même variance</p>
-<p><span class="math display">\[ V(Y_{ijt} =  σ^2) \]</span> et que la covariance entre elles vaut</p>
+<section id="dependency-structures" class="level2">
+<h2 class="anchored" data-anchor-id="dependency-structures">3. Dependency structures</h2>
+<p>This part of the chapter is inspired by <span class="citation" data-cites="LBel2023">(<a href="#ref-LBel2023" role="doc-biblioref">L. Bel 2016</a>)</span>’s book.&nbsp;</p>
+<section id="case-of-repeated-measurements" class="level3">
+<h3 class="anchored" data-anchor-id="case-of-repeated-measurements">3.1 Case of repeated measurements</h3>
+<p>We want to evaluate the effect of different diet on weight gain in rats. Several animals (<span class="math inline">\(j\)</span>) follow each diet (<span class="math inline">\(i\)</span>), and they kept the same diet across all the experiment. Each week animal weight (<span class="math inline">\(Y_{ij}\)</span>) is measured, during T weeks. In this case, measures are repeated across time, such measurements are called <em>longitudinal data</em>.&nbsp; To analyse this data, the temporal dependency must be taken into account, for this, the following model can be used:&nbsp;</p>
+<p><strong>Model</strong> The model proposed here takes into account the kinetic aspect of the experiment and predicts that the dependence between two measurements depends on the time interval between them.&nbsp;&nbsp;&nbsp; We assume that the weights are Gaussian with the following expected values :</p>
+<p><span class="math display">\[ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it}.\]</span></p>
+<p><strong>Dependency structure</strong> We assume that all measurements have the same variance</p>
+<p><span class="math display">\[ V(Y_{ijt} =  σ^2) \]</span></p>
+<p>and the covariance between them is</p>
 <p><span class="math display">\[Cov(Y_{ijt}, Y_{i'j't'}) = \left\{
   \begin{array}{ll}
   σ^2ρ^{|t-t'|} \ \ si \ \ (i, j) = (i', j') \\
      0 \ sinon \
    \end{array}
-  \right.\]</span> Cette structure suppose que les mesures faites sur des animaux diérents sont indépendantes. On suppose de plus que |ρ| &lt; 1, ce qui implique que celles faites sur un même animal sont d’autant moins corrélées que l’intervalle de temps est grand. Cette forme de covariance correspond à un processus auto-régressif d’ordre 1, généralement noté AR(1). Ce modèle comporte deux paramètres de variance (aussi appelés composantes de la variance) : la corrélation temporelle ρ et la variance de chaque observation σ 2, soit</p>
+  \right.\]</span></p>
+<p>This structure assumes that measurements made on different animals are independent. It is also assumed that |ρ| &lt; 1, which implies that the longer the time interval, the less correlated the tests on the same animal. This form of covariance corresponds to an autoregressive process of order 1, generally denoted AR(1). This model has two variance parameters: the temporal correlation ρ and the variance of each observation <span class="math inline">\(σ^2\)</span>.</p>
 <p><span class="math display">\[
   ψ = \left( {\begin{array}{cc}
     ρ \\
     σ^2 \\
   \end{array} } \right)
-\]</span> <em>Ecriture matricielle</em> Du fait de l’indépendance entre les mesures obtenues sur des animaux différents, la matrice de variance Σ a aussi une même forme diagonale par blocs mais le bloc R diffère :</p>
-<p><span class="math display">\[
-  R = \left( {\begin{array}{cc}
+\]</span></p>
+<p>Because of the independence between the measurements obtained on different animals, the variance matrix Σ also has the same diagonal block shape, but the block (R) differs.</p>
+<p><span class="math display">\[  
+R = \left( {\begin{array}{cc}
      σ^2 &amp; σ^2ρ &amp; σ^2ρ^2 &amp; ... &amp; σ^2ρ^{T-1}\\
      σ^2ρ &amp; ... &amp; ... &amp; ... &amp; ...\\
      σ^2ρ^2 &amp; ... &amp; σ^2 &amp; ... &amp; σ^2ρ^2\\
@@ -348,192 +421,89 @@ y_n\\
     σ^2ρ^{T-1} &amp; ... &amp; σ^2ρ^2 &amp; σ^2ρ &amp; σ^2\\
   \end{array} } \right)
 \]</span></p>
+<p>We are going to use the <em>BodyWeight dataset</em> from the <em>nlme</em> package. In this dataset, weight is measured on 16 rats every 7 days during 64 days (which gives 11 measurements for each rats). Three diets are tested with 88 rats following diet 1 and 44 following diet 2 and 3.</p>
+<p>The research question is: Is weight gain different depending on the diet? The model will be a mixed model with diet and time as fixed factor and individuals as random factor: weight ~ Diet * Time | Rat.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Read the data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>d<span class="ot">=</span><span class="fu">read.delim</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">"http://dnett.github.io/S510/RepeatedMeasures.txt"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Factors</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>Program <span class="ot">=</span> <span class="fu">factor</span>(d<span class="sc">$</span>Program)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>Subj <span class="ot">=</span> <span class="fu">factor</span>(d<span class="sc">$</span>Subj)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>Timef <span class="ot">=</span> <span class="fu">factor</span>(d<span class="sc">$</span>Time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(BodyWeight, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Grouped Data: weight ~ Time | Rat
+   weight Time Rat Diet
+1     240    1   1    1
+2     250    8   1    1
+3     255   15   1    1
+4     260   22   1    1
+5     262   29   1    1
+6     258   36   1    1
+7     266   43   1    1
+8     266   44   1    1
+9     265   50   1    1
+10    272   57   1    1</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>o.ar1 <span class="ot">=</span> <span class="fu">gls</span>(Strength <span class="sc">~</span> Program <span class="sc">*</span> Timef, <span class="at">data =</span> d,<span class="at">correlation =</span> <span class="fu">corAR1</span>(<span class="at">form =</span> <span class="sc">~</span><span class="dv">1</span> <span class="sc">|</span> Subj))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(o.ar1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>time_model <span class="ot">=</span> <span class="fu">gls</span>(weight <span class="sc">~</span> Diet <span class="sc">*</span> Time, <span class="at">data =</span> BodyWeight, <span class="at">correlation =</span> <span class="fu">corAR1</span>(<span class="at">form =</span> <span class="sc">~</span> <span class="dv">1</span> <span class="sc">|</span> Rat))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(time_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Generalized least squares fit by REML
-  Model: Strength ~ Program * Timef 
-  Data: d 
+  Model: weight ~ Diet * Time 
+  Data: BodyWeight 
        AIC      BIC    logLik
-  1312.804 1403.306 -633.4018
+  1152.248 1177.334 -568.1239
 
 Correlation Structure: AR(1)
- Formula: ~1 | Subj 
+ Formula: ~1 | Rat 
  Parameter estimate(s):
       Phi 
-0.9517769 
+0.9895746 
 
 Coefficients:
-                    Value Std.Error  t-value p-value
-(Intercept)      79.68750 0.8200605 97.17271  0.0000
-Program2          1.36012 1.0885218  1.24951  0.2123
-Program3          0.06250 1.1002267  0.05681  0.9547
-Timef4            0.87500 0.2546762  3.43573  0.0007
-Timef6            1.12500 0.3557980  3.16191  0.0017
-Timef8            1.31250 0.4305201  3.04864  0.0025
-Timef10           1.56250 0.4911919  3.18104  0.0016
-Timef12           1.43750 0.5426737  2.64892  0.0084
-Timef14           1.43750 0.5874975  2.44682  0.0149
-Program2:Timef4  -0.25595 0.3380490 -0.75715  0.4494
-Program3:Timef4  -0.67500 0.3416840 -1.97551  0.0489
-Program2:Timef6  -0.26786 0.4722748 -0.56716  0.5709
-Program3:Timef6  -0.87500 0.4773531 -1.83302  0.0676
-Program2:Timef8   0.16369 0.5714584  0.28644  0.7747
-Program3:Timef8  -1.01250 0.5776033 -1.75293  0.0804
-Program2:Timef10  0.00893 0.6519923  0.01369  0.9891
-Program3:Timef10 -1.51250 0.6590031 -2.29513  0.0223
-Program2:Timef12  0.22917 0.7203275  0.31814  0.7506
-Program3:Timef12 -1.58750 0.7280732 -2.18041  0.0298
-Program2:Timef14  0.61012 0.7798251  0.78238  0.4345
-Program3:Timef14 -1.58750 0.7882106 -2.01406  0.0447
+                Value Std.Error   t-value p-value
+(Intercept) 250.11069 13.327526 18.766475  0.0000
+Diet2       203.46561 23.083952  8.814158  0.0000
+Diet3       260.91151 23.083952 11.302723  0.0000
+Time          0.37351  0.090964  4.106160  0.0001
+Diet2:Time    0.62384  0.157554  3.959506  0.0001
+Diet3:Time    0.18780  0.157554  1.191998  0.2349
 
  Correlation: 
-                 (Intr) Prgrm2 Prgrm3 Timef4 Timef6 Timef8 Timf10 Timf12 Timf14
-Program2         -0.753                                                        
-Program3         -0.745  0.562                                                 
-Timef4           -0.155  0.117  0.116                                          
-Timef6           -0.217  0.163  0.162  0.699                                   
-Timef8           -0.262  0.198  0.196  0.564  0.807                            
-Timef10          -0.299  0.226  0.223  0.483  0.690  0.855                     
-Timef12          -0.331  0.249  0.247  0.427  0.610  0.756  0.883              
-Timef14          -0.358  0.270  0.267  0.386  0.551  0.682  0.797  0.901       
-Program2:Timef4   0.117 -0.155 -0.087 -0.753 -0.526 -0.425 -0.364 -0.322 -0.291
-Program3:Timef4   0.116 -0.087 -0.155 -0.745 -0.521 -0.420 -0.360 -0.318 -0.288
-Program2:Timef6   0.163 -0.217 -0.122 -0.526 -0.753 -0.608 -0.520 -0.460 -0.415
-Program3:Timef6   0.162 -0.122 -0.217 -0.521 -0.745 -0.601 -0.514 -0.455 -0.411
-Program2:Timef8   0.198 -0.262 -0.147 -0.425 -0.608 -0.753 -0.644 -0.570 -0.514
-Program3:Timef8   0.196 -0.147 -0.262 -0.420 -0.601 -0.745 -0.638 -0.563 -0.509
-Program2:Timef10  0.226 -0.299 -0.168 -0.364 -0.520 -0.644 -0.753 -0.665 -0.600
-Program3:Timef10  0.223 -0.168 -0.299 -0.360 -0.514 -0.638 -0.745 -0.658 -0.594
-Program2:Timef12  0.249 -0.331 -0.186 -0.322 -0.460 -0.570 -0.665 -0.753 -0.679
-Program3:Timef12  0.247 -0.186 -0.331 -0.318 -0.455 -0.563 -0.658 -0.745 -0.672
-Program2:Timef14  0.270 -0.358 -0.201 -0.291 -0.415 -0.514 -0.600 -0.679 -0.753
-Program3:Timef14  0.267 -0.201 -0.358 -0.288 -0.411 -0.509 -0.594 -0.672 -0.745
-                 Pr2:T4 Pr3:T4 Pr2:T6 Pr3:T6 Pr2:T8 Pr3:T8 P2:T10 P3:T10 P2:T12
-Program2                                                                       
-Program3                                                                       
-Timef4                                                                         
-Timef6                                                                         
-Timef8                                                                         
-Timef10                                                                        
-Timef12                                                                        
-Timef14                                                                        
-Program2:Timef4                                                                
-Program3:Timef4   0.562                                                        
-Program2:Timef6   0.699  0.392                                                 
-Program3:Timef6   0.392  0.699  0.562                                          
-Program2:Timef8   0.564  0.317  0.807  0.453                                   
-Program3:Timef8   0.317  0.564  0.453  0.807  0.562                            
-Program2:Timef10  0.483  0.271  0.690  0.388  0.855  0.480                     
-Program3:Timef10  0.271  0.483  0.388  0.690  0.480  0.855  0.562              
-Program2:Timef12  0.427  0.240  0.610  0.343  0.756  0.425  0.883  0.496       
-Program3:Timef12  0.240  0.427  0.343  0.610  0.425  0.756  0.496  0.883  0.562
-Program2:Timef14  0.386  0.217  0.551  0.310  0.682  0.383  0.797  0.447  0.901
-Program3:Timef14  0.217  0.386  0.310  0.551  0.383  0.682  0.447  0.797  0.506
-                 P3:T12 P2:T14
-Program2                      
-Program3                      
-Timef4                        
-Timef6                        
-Timef8                        
-Timef10                       
-Timef12                       
-Timef14                       
-Program2:Timef4               
-Program3:Timef4               
-Program2:Timef6               
-Program3:Timef6               
-Program2:Timef8               
-Program3:Timef8               
-Program2:Timef10              
-Program3:Timef10              
-Program2:Timef12              
-Program3:Timef12              
-Program2:Timef14  0.506       
-Program3:Timef14  0.901  0.562
+           (Intr) Diet2  Diet3  Time   Dt2:Tm
+Diet2      -0.577                            
+Diet3      -0.577  0.333                     
+Time       -0.222  0.128  0.128              
+Diet2:Time  0.128 -0.222 -0.074 -0.577       
+Diet3:Time  0.128 -0.074 -0.222 -0.577  0.333
 
 Standardized residuals:
         Min          Q1         Med          Q3         Max 
--2.32270892 -0.62422802 -0.02903386  0.63874495  2.83080149 
+-1.44446363 -0.63038331  0.02804647  0.25238087  2.93319234 
 
-Residual standard error: 3.280242 
-Degrees of freedom: 399 total; 378 residual</code></pre>
+Residual standard error: 37.70413 
+Degrees of freedom: 176 total; 170 residual</code></pre>
 </div>
 </div>
+<p>In this example, the time correlation ρ has a value of 0.989. The sequence of weight values was highly correlated. The model allowed this temporal dependency to be taken into account.&nbsp;</p>
 </section>
-<section id="cas-de-lautocorrelation-spatiale" class="level3">
-<h3 class="anchored" data-anchor-id="cas-de-lautocorrelation-spatiale">Cas de l’autocorrelation spatiale</h3>
-<p><em>Structure de dépendance</em> Là encore, on veut prendre en compte la dépendance due à l’éventuelle proximité spatiale entre les sites auxquels ont été effectuées les mesures. Pour cela, on note d(i, i’) la distance qui sépare les sites i et i’ et on pose</p>
+<section id="case-of-spatial-autocorrelation" class="level3">
+<h3 class="anchored" data-anchor-id="case-of-spatial-autocorrelation">3.2 Case of spatial autocorrelation</h3>
+<p><em>Dependency structure</em> We want to take into account the dependency due to the possible spatial proximity between the sites at which the measurements were taken.</p>
+<p>To do this, <span class="math inline">\(d(i, i')\)</span> is the distance separating sites <span class="math inline">\(i\)</span> and <span class="math inline">\(i'\)</span>, and the following equation is used</p>
 <p><span class="math display">\[Cov(Y_i, Y_i{'}) = e^{−δ.d(i,i')}\]</span></p>
-<p><em>Ecriture matricielle</em> Comme dans le cas des mesures répétées, il n’existe pas d’écriture simple en termes d’effets aléatoires. De plus, comme toutes les mesures sont dépendantes, la matrice Σ n’est plus diagonale par bloc et s’écrit :</p>
+<p>As in the case of repeated measurements, there is no simple way of writing this in terms of random effects. Moreover, since all the measurements are dependent, the matrix Σ is no longer diagonal per block and is written as :</p>
 <p><span class="math display">\[
   Σ = \left( {\begin{array}{cc}
-     σ^2 + γ^2 &amp; ...&amp; ...&amp; ...\\
-     ...&amp; σ^2 + γ^2 &amp; e^{−δ.d(i,i')} &amp;...\\
-     ...&amp; e^{−δ.d(i,i')}  &amp; σ^2 + γ^2 &amp;...\\
-...&amp; ...&amp; ... &amp; σ^2 + γ^2\\
+     σ^2 + γ^2 &amp; e^{−δ.d(i,i')}&amp; ...&amp; e^{−δ.d(i,i')}\\
+     e^{−δ.d(i,i')}&amp; σ^2 + γ^2 &amp; e^{−δ.d(i,i')} &amp; \vdots\\
+     \vdots &amp; e^{−δ.d(i,i')}  &amp; σ^2 + γ^2 &amp; e^{−δ.d(i,i')}\\
+e^{−δ.d(i,i')}&amp; \ldots &amp; e^{−δ.d(i,i')} &amp; σ^2 + γ^2\\
   \end{array} } \right)
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">LAT =</span> <span class="fu">runif</span>(n, <span class="dv">144</span>, <span class="dv">150</span>), <span class="at">LONG =</span> <span class="fu">runif</span>(n,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">26</span>, <span class="sc">-</span><span class="dv">20</span>))</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-which was just loaded, will retire in October 2023.
-Please refer to R-spatial evolution reports for details, especially
-https://r-spatial.org/r/2023/05/15/evolution4.html.
-It may be desirable to make the sf package available;
-package maintainers should consider adding sf to Suggests:.
-The sp package is now running under evolution status 2
-     (status 2 uses the sf package in place of rgdal)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">LAT =</span> <span class="fu">seq</span>(<span class="dv">144</span>, <span class="dv">150</span>, <span class="at">l =</span> <span class="dv">100</span>), <span class="at">LONG =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">26</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">20</span>, <span class="at">l =</span> <span class="dv">100</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(grid) <span class="ot">&lt;-</span> <span class="er">~</span>LAT <span class="sc">+</span> LONG</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up distance matrix</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(<span class="fu">as.data.frame</span>(loc)))  <span class="co">#* 1/min(distance[lower.tri(distance)])</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random variable</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Vmat <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">mu =</span> <span class="dv">0</span>, <span class="at">V =</span> <span class="fu">matrix</span>(<span class="dv">1</span>)) {</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">length</span>(mu)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.na</span>(<span class="fu">match</span>(<span class="fu">dim</span>(V), p))))</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Dimension problem!"</span>)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    D <span class="ot">&lt;-</span> <span class="fu">chol</span>(V)</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(<span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), <span class="at">ncol =</span> p) <span class="sc">%*%</span> D <span class="sc">+</span> <span class="fu">rep</span>(mu,</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rep</span>(n, p)))</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">Vmat</span>(<span class="dv">1</span>, <span class="fu">rep</span>(<span class="dv">0</span>, n), <span class="fu">exp</span>(<span class="sc">-</span>delta <span class="sc">*</span> distance))</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">30</span>, <span class="dv">10</span>)</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># image(cbind(simgrid, V))</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> <span class="dv">1</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">60</span> <span class="sc">*</span> V  <span class="co">#+ rnorm(n,0,1)</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>data.spatialCor <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x, loc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data.spatialCor.glsExp <span class="ot">&lt;-</span> <span class="fu">gls</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data.spatialCor,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">correlation =</span> <span class="fu">corExp</span>(<span class="at">form =</span> <span class="sc">~</span>LAT <span class="sc">+</span> LONG, <span class="at">nugget =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"REML"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data.spatialCor.glsExp <span class="ot">&lt;-</span> <span class="fu">gls</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data.spatialCor,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">correlation =</span> <span class="fu">corExp</span>(<span class="at">form =</span> <span class="sc">~</span>LAT <span class="sc">+</span> LONG, <span class="at">nugget =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"REML"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data.spatialCor.glsExp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data.spatialCor.glsExp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Generalized least squares fit by REML
   Model: y ~ x 
@@ -564,30 +534,34 @@ Residual standard error: 47.68716
 Degrees of freedom: 100 total; 98 residual</code></pre>
 </div>
 </div>
+<p>In spatially correlated data, three coefficients are needed to describe the correlation structure. The variance increases with increasing distance up to a point <strong>the sill</strong>. The span of distances over which points are correlated is called <strong>the range</strong>. While we might expect the value of variance at a distance of zero to be zero, in reality we rarely have sampling units that approach such a small distance from one another.The value of variance when distance is equal to zero is <strong>the nugget</strong>.</p>
+<p>Here, in our example, the value of the sill, the range and the nugget are respectively <em>47.68</em>, <em>1.69</em> and <em>0.12</em>.</p>
 </section>
 </section>
-<section id="questiion-pour-la-prof-comment-combiner-efffet-aléatoire-de-groupe-et-effet-aléatoire-spatialtemporelle" class="level2">
-<h2 class="anchored" data-anchor-id="questiion-pour-la-prof-comment-combiner-efffet-aléatoire-de-groupe-et-effet-aléatoire-spatialtemporelle">Questiion pour la prof: comment combiner efffet aléatoire de groupe et effet aléatoire spatial/temporelle ?</h2>
-<p><span class="math display">\[ E(Y_{ijt}) = µ + α_i + γ_t + (αγ)_{it} \]</span></p>
-<section id="application-ael" class="level3">
-<h3 class="anchored" data-anchor-id="application-ael">Application : Ael</h3>
-<p>Pour cet exemple d’application de modèle mixte, nous allons utiliser un modèle mixte linéaire général. C’est un cas particulier de modèle linéaire général, dans lequel la réponse est quantitative et les variables prédictives sont à la fois quantitatives et qualitatives, et le modèle inclut des facteurs aléatoires pour tenir compte de la dépendance des données. Les modèles mixtes doivent respecter la normalité des résidus et l’homogénéité des variances.</p>
-<p>—-&gt; Explications du jeu de données pinguins, présenter les variables (Ici, pourquoi pas expliquer le body mass des pinguins en fonction de species, sex et island, avec year en facteur aléatoire - anova modèle mixte)</p>
-<p>—-&gt; Pas équilibré le nombre d’individus par niveaux pour les <span class="math inline">\(X\)</span>, important ??? —-&gt; Est-ce que les facteurs sont croisés (pour les interactions entre les <span class="math inline">\(X_s\)</span>) ??? —-&gt; Expliquer le graphe (pour les interactions entre les <span class="math inline">\(X_s\)</span>) —-&gt; TESTER LA COLINEARITE CAR LA CONSTRUCTION DU MODELE COMPLET NE MARCHE PAS DU A LA COLINEARITE, LE MODELE AVEC lme4::lmer SEMBLE MARCHER, MAIS IL FAUDRAIT CHECKER ET ENLEVER CETTE COLINEARITE DANS L’EXPLORATION DES DONNES DANS LA PARTIE D’AVANT —-&gt; Cites Yannick Outreman pour la structure et les lignes de code</p>
-</section>
-</section>
-<section id="importation-des-donnees" class="level2">
-<h2 class="anchored" data-anchor-id="importation-des-donnees">IMPORTATION DES DONNEES</h2>
+<section id="application" class="level2">
+<h2 class="anchored" data-anchor-id="application">4. Application</h2>
+<p>For this example of a mixed model application, we will use a general linear mixed model. This is a special case of a general linear model, in which the response is quantitative and the predictor variables are both quantitative and qualitative, and the model includes random factors to take account of data dependency. Mixed models must respect the normality of residuals and the homogeneity of variances. (The structure and lines of code are inspired by <span class="citation" data-cites="YannickOutreman">(<a href="#ref-YannickOutreman" role="doc-biblioref">Outreman 2023</a>)</span>’s courses on linear mixed model.)</p>
+<section id="dataset-presentation-and-objectives-of-the-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-presentation-and-objectives-of-the-analysis">4.1 Dataset presentation and objectives of the analysis</h3>
+<p>For this worked exercise, we will use data from a study performed on penguins. The aim of this study is to test whether species, sex and island influence the body mass of penguins. In the experimental design, the data are collected from one year to the next (from 2007 to 2009), which suggests that the penguin body mass data are dependent on each other from one year to the next. This dependency will be included in the model. The data contains:<br>
+- <strong>species</strong>: three species of penguins (Chinstrap, Adelie, or Gentoo), categorical variable<br>
+- <strong>island</strong>: island name (Dream, Torgersen, or Biscoe) in the Palmer Archipelago (Antarctica), categorical variable<br>
+- <strong>sex</strong>: penguin sex (female, or male), categorical variable<br>
+- <strong>year</strong>: years of data collection (2007, 2008, or 2009), continuous variable<br>
+- <strong>body_mass_g</strong>: body mass of the penguins (in grams), continuous variable<br>
+</p>
+<p>The response variable is the ‘body_mass_g’, while ‘species’ and ‘island’ and ‘sex’ are assumed predictors. To include data dependency, ‘year’ will be included as random factor in model. The underlying question for this research is: do the species, island and sex drive the body mass of penguins?</p>
+<p>Data import :</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importation des données</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"</span>, <span class="at">sep =</span> <span class="st">","</span> , <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bien s'assurer que nos variables 'species', 'island' et 'sex' sont des facteurs</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>species<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>species)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>island<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>island)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sex<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>sex)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># On vérifie qu'il n'y a pas de valeurs manquantes</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data import</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"</span>, <span class="at">sep =</span> <span class="st">","</span> , <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure that our variables 'species', 'island' and 'sex' are all factors in the choice.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>species<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>species)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>island<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>island)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sex<span class="ot">=</span><span class="fu">as.factor</span>(df<span class="sc">$</span>sex)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            rowid           species            island    bill_length_mm 
                 0                 0                 0                 2 
@@ -597,22 +571,22 @@ Degrees of freedom: 100 total; 98 residual</code></pre>
                 0 </code></pre>
 </div>
 </div>
-<p>On voit qu’il y a des valeurs manquantes, dont 2 pour la variable réponse <span class="math inline">\(Y\)</span> “body_mass_g’ et 11 pour la variable explicative <span class="math inline">\(X\)</span> ‘sex’. On va supprimer les lignes qui présentes les valeurs manquantes.</p>
+<p>We can see that there are some missing values, including 2 for the response variable <span class="math inline">\(Y\)</span> ‘body_mass_g’ and 11 for the explanatory variable <span class="math inline">\(X\)</span> ‘sex’. We’re going to delete the rows with the missing values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On repère les lignes qui présentes les valeurs manquantes.</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>body_mass_g), <span class="at">arr.ind=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rows with missing values are marked.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>body_mass_g), <span class="at">arr.ind=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]   4 272</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>sex), <span class="at">arr.ind=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>sex), <span class="at">arr.ind=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]   4   9  10  11  12  48 179 219 257 269 272</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#On supprime les lignes 4, 9, 10, 11, 12, 48, 179, 219, 257, 269, et 272.</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">=</span>df[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">48</span>,<span class="dv">179</span>,<span class="dv">219</span>,<span class="dv">257</span>,<span class="dv">269</span>,<span class="dv">272</span>), ]</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On vérifie qu'il n'y a pas de valeurs manquantes</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We delete the rows 4, 9, 10, 11, 12, 48, 179, 219, 257, 269, and 272.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">=</span>df[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">48</span>,<span class="dv">179</span>,<span class="dv">219</span>,<span class="dv">257</span>,<span class="dv">269</span>,<span class="dv">272</span>), ]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            rowid           species            island    bill_length_mm 
                 0                 0                 0                 0 
@@ -621,170 +595,330 @@ Degrees of freedom: 100 total; 98 residual</code></pre>
              year 
                 0 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Il n'y a plus de valeurs manquante.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ok</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="exploration-des-données" class="level2">
-<h2 class="anchored" data-anchor-id="exploration-des-données">EXPLORATION DES DONNÉES</h2>
-<p>Avant toute analyse statistique, il est INDISPENSABLE d’explorer les données afin d’éviter toute erreur. Voici la liste des explorations à effectuer avant la modélisation :</p>
+<section id="data-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="data-exploration">4.2 Data exploration</h3>
+<p>Before any statistical analysis, it is ESSENTIAL to explore the data in order to avoid any errors. Here is the list of explorations to be carried out before modelling:</p>
 <ol type="1">
-<li>Vérifier la présence de valeurs aberrantes dans <span class="math inline">\(Y\)</span> et la distribution des valeurs de <span class="math inline">\(Y\)</span>.</li>
-<li>Si <span class="math inline">\(X\)</span> est une variable quantitative indépendante, vérifier la présence de valeurs aberrantes dans X et la distribution des valeurs de X. 2b. 2b. Si <span class="math inline">\(X\)</span> est une variable indépendante qualitative, analyser le nombre de niveaux et le nombre d’individus par niveau.</li>
-<li>Analyser les relations potentielles entre <span class="math inline">\(Y\)</span> et les <span class="math inline">\(X_{s}\)</span>.</li>
-<li>Vérifier la présence d’interactions entre <span class="math inline">\(X_{s}\)</span>.</li>
-<li>Vérifier la présence de colinéarité entre <span class="math inline">\(X_{s}\)</span>.</li>
+<li>Check for outliers in <span class="math inline">\(Y\)</span> and the distribution of <span class="math inline">\(Y\)</span> values.</li>
+<li>If <span class="math inline">\(X\)</span> is an independent quantitative variable, check for the presence of outliers in X and the distribution of the values of X. 2b. 2b. If <span class="math inline">\(X\)</span> is a qualitative independent variable, analyse the number of levels and the number of individuals per level.</li>
+<li>Analyse the potential relationships between <span class="math inline">\(Y\)</span> and the <span class="math inline">\(X_{s}\)</span>.</li>
+<li>Check for the presence of interactions between <span class="math inline">\(X_{s}\)</span>.</li>
+<li>Check for collinearity between <span class="math inline">\(X_{s}\)</span>.</li>
 </ol>
-<section id="valeurs-aberrantes-dans-y-et-distribution-de-y" class="level3">
-<h3 class="anchored" data-anchor-id="valeurs-aberrantes-dans-y-et-distribution-de-y">1.Valeurs aberrantes dans <span class="math inline">\(Y\)</span> et distribution de <span class="math inline">\(Y\)</span></h3>
+<section id="outliers-and-distribution-of-y" class="level4">
+<h4 class="anchored" data-anchor-id="outliers-and-distribution-of-y">4.2.1 Outliers and distribution of <span class="math inline">\(Y\)</span></h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel'</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleveland plot</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(df<span class="sc">$</span>body_mass_g,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Masse corporel'</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">"Masse corporel"</span>,<span class="at">main=</span><span class="st">""</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantile-Quantile plot</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(df<span class="sc">$</span>body_mass_g,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">''</span>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel'</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleveland plot</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(df<span class="sc">$</span>body_mass_g,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Masse corporel'</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">"Masse corporel"</span>,<span class="at">main=</span><span class="st">""</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantile-Quantile plot</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(df<span class="sc">$</span>body_mass_g,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">''</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(df<span class="sc">$</span>body_mass_g,<span class="at">col=</span><span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Mixed_models_files/figure-html/datahist-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
-<p>Ici, le Boxplot et le Cleveland Plot nous permettent de voir qu’il n’y a pas d’individus présentant des valeurs aberrantes. Le Cleveland Plot nous montre qu’il semble y avoir un groupe d’individus qui présentent une masse corporel entre 5000 et 6000g, alors que le reste du groupe se situe entre 3000 et 4000g. L’Histogramme et le QQ Plot nous montre que <span class="math inline">\(Y\)</span> suit difficilement un loi Normale… Ce n’est pas très grave, car la validité de modèle se base entre autre sur la normalité des résidus, que l’on démontrera par la suite.</p>
+<p>Here, the Boxplot and Cleveland Plot show no individuals with outliers. The Cleveland Plot shows us that there appears to be a group of individuals with a body mass between 5000 and 6000g, while the rest is between 3000 and 4000g. The Histogram and the QQ Plot show that <span class="math inline">\(Y\)</span> hardly follows a Normal distribution… This is not very important, as the validity of the model is based, among other things, on the normality of the residuals, which we will demonstrate later.</p>
 </section>
-<section id="a-pour-les-xs-qui-sont-quantitatifs-vérifier-les-valeurs-aberrantes-et-la-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="a-pour-les-xs-qui-sont-quantitatifs-vérifier-les-valeurs-aberrantes-et-la-distribution">2.a Pour les <span class="math inline">\(Xs\)</span> qui sont quantitatifs : vérifier les valeurs aberrantes et la distribution</h3>
-<p>Pas de prédicteur quantitatif ici.</p>
-</section>
-<section id="b-pour-les-xs-qui-sont-catégoriques-nombre-de-niveaux-et-nombre-dindividus-par-niveau" class="level3">
-<h3 class="anchored" data-anchor-id="b-pour-les-xs-qui-sont-catégoriques-nombre-de-niveaux-et-nombre-dindividus-par-niveau">2.b Pour les <span class="math inline">\(Xs\)</span> qui sont catégoriques : nombre de niveaux et nombre d’individus par niveau</h3>
+<section id="outliers-in-xs" class="level4">
+<h4 class="anchored" data-anchor-id="outliers-in-xs">4.2.2 Outliers in <span class="math inline">\(Xs\)</span></h4>
+<ul>
+<li>For <span class="math inline">\(Xs\)</span> which are quantitative: check for outliers and distribution</li>
+</ul>
+<p>No quantitative predictor here.</p>
+<ul>
+<li>For categorical <span class="math inline">\(Xs\)</span>: number of levels and number of individuals per level.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Species</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Species</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Adelie Chinstrap    Gentoo 
       146        68       119 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Island</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Island</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Biscoe     Dream Torgersen 
       163       123        47 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Sex</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Factor Sex</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>female   male 
    165    168 </code></pre>
 </div>
 </div>
-<p>La variable ‘species’ présente 3 niveaux : Adelie, Chinstrap et Gentoo. Le nombre d’individus entre les 3 niveaux n’est pas équilibré, avec moins d’individus pour l’espèce Chinstrap. La variable ‘island’ présente 3 niveaux : Biscoe, Dream et Torgersen. Le nombre d’individus entre les 3 niveaux n’est pas équilibré, avec moins d’individus pour l’île Torgersen. La variable ‘sex’ présente 2 niveaux : female et male. Le nombre d’individus par niveau s’approche de l’équilibre.</p>
+<p>The ‘species’ variable has 3 levels: Adelie, Chinstrap and Gentoo. The number of individuals between the 3 levels is not balanced, with fewer individuals for the Chinstrap species.</p>
+<p>The ‘island’ variable has 3 levels: Biscoe, Dream and Torgersen. The number of individuals between the 3 levels is not balanced, with fewer individuals for the Torgersen island.</p>
+<p>The ‘sex’ variable has 2 levels: female and male. The number of individuals per level is close to equilibrium.</p>
 </section>
-<section id="analyse-des-relations-potentielles-y-vs-xs" class="level3">
-<h3 class="anchored" data-anchor-id="analyse-des-relations-potentielles-y-vs-xs">Analyse des relations potentielles Y vs Xs</h3>
-<p>Nous pouvons analyser graphiquement les relations possibles entre Y et X. Attention, cette analyse graphique des relations entre Y et X <strong>ne prédit en aucun cas l’importance de la relation</strong>. La modélisation statistique reste le seul moyen d’identifier les relations.</p>
+<section id="analysis-of-potential-relationships-y-vs-xs" class="level4">
+<h4 class="anchored" data-anchor-id="analysis-of-potential-relationships-y-vs-xs">4.2.3 Analysis of potential relationships Y vs Xs</h4>
+<p>We can graphically analyse the possible relationships between Y and X. Please note that this graphical analysis of the relationships between Y and X <strong>in no way predicts the importance of the relationship</strong>. Statistical modelling is the only way to identify relationships.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Espèces</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>species,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Espèces'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Species</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>species,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Espèces'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Mixed_models_files/figure-html/datagraph-1.png" class="img-fluid" width="576"></p>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Îles</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>island,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Îles'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Islands</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>island,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Îles'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Mixed_models_files/figure-html/datagraph-2.png" class="img-fluid" width="576"></p>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sexe</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>sex,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Sexe'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>sex,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">'Sexe'</span>,<span class="at">ylab=</span><span class="st">'Masse corporel en g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Mixed_models_files/figure-html/datagraph-3.png" class="img-fluid" width="576"></p>
 </div>
 </div>
-<p>COncernant l’espèce, on peut voir que Gentoo présente une masse corporel plus élevée (entre 5000 et 6000g) que les deux autres espèces (entre 3000 et 4000g). Concernant les îles, on peut voir que les individus présents sur Biscoe présentent une masse corporel plus élevée (entre 5000 et 6000g) que les individus présents sur les deux autres îles (entre 3000 et 4000g). Enfin, concernant le sexe, les mâles semblent présenter une masse corporel un peu plus importante que les femelles.</p>
+<p>In terms of species, we can see that Gentoo has a higher body mass (between 5000 and 6000g) than the other two species (between 3000 and 4000g). About the islands, we can see that the individuals present on Biscoe have a higher body mass (between 5000 and 6000g) than the individuals present on the other two islands (between 3000 and 4000g). Finally, in terms of sex, males appear to have a slightly higher body mass than females.</p>
 </section>
-<section id="analyse-des-interactions-possibles-entre-les-deux-variables-indépendantes" class="level3">
-<h3 class="anchored" data-anchor-id="analyse-des-interactions-possibles-entre-les-deux-variables-indépendantes">Analyse des interactions possibles entre les deux variables indépendantes</h3>
-<p>Ici, nous allons considérer l’interaction entre les trois facteurs étudiés. Pour estimer la présence d’effets interactifs, nous développons une approche graphique. Rappelons que l’interaction entre deux facteurs ne peut être testée que si les facteurs sont croisés (c’est-à-dire que tous les niveaux d’un traitement sont représentés dans tous les niveaux de l’autre traitement et réciproquement = un plan factoriel). Ce point doit être testé avant.</p>
+<section id="analysis-of-possible-interactions-between-the-three-independent-variables" class="level4">
+<h4 class="anchored" data-anchor-id="analysis-of-possible-interactions-between-the-three-independent-variables">4.2.4 Analysis of possible interactions between the three independent variables</h4>
+<p>Here, we will consider the interaction between the three factors studied. To estimate the presence of interactive effects, we develop a graphical approach. Remember that the interaction between factors can only be tested if the factors are crossed (i.e.&nbsp;all the levels of one treatment are represented in all the levels of the other treatment and vice versa = a factorial design). This point must be tested first.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Les facteurs sont croisé ? Dépend du design experimental</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Interaction Species:Island:Sex</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>species<span class="sc">*</span>df<span class="sc">$</span>island<span class="sc">*</span>df<span class="sc">$</span>sex, <span class="at">varwidth =</span> <span class="cn">TRUE</span>, <span class="at">xlab =</span> <span class="st">"Espèces.Îles.sexe"</span>, <span class="at">ylab =</span> <span class="st">"Masse corporelle"</span>, <span class="at">col=</span><span class="st">'blue2'</span>, <span class="at">main =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Mixed_models_files/figure-html/dataInterFac-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>Explications</p>
-</section>
-<section id="vérifier-la-colinéarité-entre-les-x" class="level3">
-<h3 class="anchored" data-anchor-id="vérifier-la-colinéarité-entre-les-x">Vérifier la colinéarité entre les X</h3>
-<p>La colinéarité fait référence à la situation dans laquelle deux ou plusieurs variables prédictives de colinéarité sont étroitement liées les unes aux autres. La présence de colinéarité peut poser des problèmes dans le contexte de la régression, car il peut être difficile de séparer les effets individuels des variables colinéaires sur la réponse.</p>
-<p>Ici, nous allons tester la colinéarité entre nos 3 variables prédictives :</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Species by Island</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y=</span>island)) <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p1</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Species by Sex</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y=</span>sex)) <span class="sc">+</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p2</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Island by Sex</span></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>island, <span class="at">y=</span>sex)) <span class="sc">+</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p3</span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Ploting side-by-side</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="fu">marrangeGrob</span>(<span class="fu">list</span>(p1,p2,p3), <span class="at">nrow=</span><span class="dv">1</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">top=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Mixed_models_files/figure-html/dataInterFac-2-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>On peut voir dans notre exemple que pour l’intéraction entre Species et Sex, il y a bien les deux modalités du sexe par espèces, et pour l’intéraction entre Island et Sex, qu’il y a bien les deux modalités du sexe par îles. Seulement, on peut remarquer que pour l’intéraction entre Species et Island, toutes les îles ne comportent pas toutes les espèces! On ne pourra donc pas tester l’influence des îles et des espèces aux vues de ce résultat. On décide donc par la suite de supprimer la variable Island de notre analyse. On testera l’influence de l’espèce et du sexe sur la masse corporelle des pinguins, avec toujours les années en effet aléatoire.</p>
-</section>
-</section>
-<section id="analyse-statistique" class="level2">
-<h2 class="anchored" data-anchor-id="analyse-statistique">ANALYSE STATISTIQUE</h2>
-<section id="construction-du-modèle" class="level3">
-<h3 class="anchored" data-anchor-id="construction-du-modèle">Construction du modèle</h3>
-<p>Pour la modélisation statistique, nous analysons d’abord le modèle complet (modèle contenant toutes les variables indépendantes à tester).</p>
-<p>Pour obtenir le modèle candidat (modèle ne contenant que les termes significatifs) à partir du modèle complet, nous utiliserons le <strong>MODÈLE DE ‘BACKWARD SELECTION’</strong>, c’est-à-dire la sélection du modèle basée sur la significativité des termes. Selon cette approche, on commence par créer le modèle complet avec toutes les variables d’intérêt, puis on abandonne la variable la moins significative, tant qu’elle n’est pas significative. Nous continuons en réajustant successivement des modèles réduits et en appliquant la même règle jusqu’à ce que toutes les variables restantes soient significatives. La suppression des termes non significatifs doit suivre les deux étapes suivantes: - Premièrement, on supprime successivement les interactions non significatives. - Deuxièmement, on supprime successivement les effets principaux non significatifs. Un effet principal n’est supprimé que s’il est non significatif ET s’il n’est pas contenu dans une interaction significative.</p>
-<p>Dans cet exemple, on considère une mesure de dépendance au niveau des années (par ex., une mesure de la masse faite en 2009 dépend de la mesure faite en 2008 qui elle même dépend de la mesure réalisée en 2007). La présence de l’effet aléatoire de l’année s’intégrera non pas avec la fonction lm, mais lme (du package nlme).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle complet</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">#mod1&lt;-lme(fixed=body_mass_g~species*sex,random=~1|year,data=df)</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#lme4::lmer(body_mass_g~species*sex + (1|year), data=df)</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>mod2<span class="ot">&lt;-</span><span class="fu">lme</span>(body_mass_g<span class="sc">~</span>species</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>              <span class="sc">+</span> sex</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>              <span class="sc">+</span> species<span class="sc">:</span>sex</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>              ,<span class="at">random=</span><span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>year</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>              ,<span class="at">data=</span>df)</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Then we check for significance</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The experimental design means that the factors are cross-tabulated (all the levels of each variable are represented in all the levels of the other variables). </span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Interaction table</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>species,df<span class="sc">$</span>sex,df<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            numDF denDF  F-value p-value
-(Intercept)     1   325 61569.82  &lt;.0001
-species         2   325   758.36  &lt;.0001
-sex             1   325   387.46  &lt;.0001
-species:sex     2   325     8.76   2e-04</code></pre>
+<pre><code>, ,  = Biscoe
+
+           
+            female male
+  Adelie        22   22
+  Chinstrap      0    0
+  Gentoo        58   61
+
+, ,  = Dream
+
+           
+            female male
+  Adelie        27   28
+  Chinstrap     34   34
+  Gentoo         0    0
+
+, ,  = Torgersen
+
+           
+            female male
+  Adelie        24   23
+  Chinstrap      0    0
+  Gentoo         0    0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interaction table without island</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>species,df<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           
+            female male
+  Adelie        73   73
+  Chinstrap     34   34
+  Gentoo        58   61</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interaction Species:Sex</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(df<span class="sc">$</span>body_mass_g<span class="sc">~</span>df<span class="sc">$</span>species<span class="sc">*</span>df<span class="sc">$</span>sex, <span class="at">varwidth =</span> <span class="cn">TRUE</span>, <span class="at">xlab =</span> <span class="st">"Species.Sex"</span>, <span class="at">ylab =</span> <span class="st">"Body mass"</span>, <span class="at">col=</span><span class="st">'blue2'</span>, <span class="at">main =</span> <span class="st">""</span>,<span class="at">cex.axis=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Mixed_models_files/figure-html/dataInter-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>In the interaction table, we can see that in every island, not all the species are represented. This can be complicated to analyse. We’ll see in the next section if we remove the “Island” variable. We can see that without the ‘island’ variable, there is the same number of female and male in each species, except for the Gentoo species, with 58 female and 61 male.</p>
+<p>For the interaction graph (still without the ‘island’ variable), we can see that males of all 3 species appear to have a greater body mass than females. We can also see that males and females of the Gentoo species have a higher body mass than individuals of the other species.</p>
+</section>
+<section id="check-collinearity-between-x" class="level4">
+<h4 class="anchored" data-anchor-id="check-collinearity-between-x">4.2.5 Check collinearity between X</h4>
+<p>Colinearity refers to the situation in which two or more predictors of collinearity are closely related to each other.The presence of collinearity can pose problems in the context of regression, as it can be difficult to separate the individual effects of collinear variables on the response.</p>
+<p>Here, we will test for collinearity between our 3 predictor variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Species by Island</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y=</span>island)) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p1</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Species by Sex</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y=</span>sex)) <span class="sc">+</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p2</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ploting Island by Sex</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>island, <span class="at">y=</span>sex)) <span class="sc">+</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="ot">-&gt;</span> p3</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Ploting side-by-side</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">marrangeGrob</span>(<span class="fu">list</span>(p1,p2,p3), <span class="at">nrow=</span><span class="dv">1</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">top=</span><span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Mixed_models_files/figure-html/col-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In our example, we can see that for the interaction between Species and Sex, there are two sex modalities per species, and for the interaction between Island and Sex, there are two sex modalities per island. However, for the interaction between Species and islands based on, not all the islands contain all the species, as we saw in the previous section! We cannot therefore test the influence of islands and species on the basis of this result. We therefore decided to remove the Island variable from our analysis. We will test the influence of species and sex on the body mass of penguins, always with years as a random effect.</p>
+</section>
+</section>
+<section id="statistical-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-analysis">4.3 Statistical analysis</h3>
+<section id="model-construction" class="level4">
+<h4 class="anchored" data-anchor-id="model-construction">4.3.1 Model construction</h4>
+<p>For statistical modelling, we first analyse the full model (model containing all the independent variables to be tested).</p>
+<p>To obtain the candidate model (a model containing only the significant terms) from the full model, we will use the <strong>BACKWARD SELECTION METHOD</strong>, i.e.&nbsp;model selection based on the significance of the terms. In this approach, we start by creating the full model with all the variables of interest, then drop the least significant variable as long as it is not significant. We continue by successively fitting reduced models and applying the same rule until all the remaining variables are significant. The deletion of non-significant terms must follow the following two steps: - First, insignificant interactions are successively removed. - Secondly, the non-significant main effects are successively removed. A main effect is only removed if it is insignificant AND if it is not contained in a significant interaction.</p>
+<p>In this example, we consider a measure of dependence at year level (e.g.&nbsp;a mass measurement made in 2009 depends on the measurement made in 2008, which in turn depends on the measurement made in 2007). The presence of the random effect of the year will be integrated not with the lm function, but lme (from the nlme package).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full model</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>mod1<span class="ot">=</span><span class="fu">lme</span>(body_mass_g<span class="sc">~</span>species</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>              <span class="sc">+</span> sex</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>              <span class="sc">+</span> species<span class="sc">:</span>sex</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>              ,<span class="at">random=</span><span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>year</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>              ,<span class="at">data=</span>df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see from the anova output of our full model that each interaction and each variable is significant (&lt;0.05). The full model is therefore the candidate model.</p>
+</section>
+<section id="models-coefficients-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="models-coefficients-analysis">4.3.2 Model’s coefficients analysis</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients of the model</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed-effects model fit by REML
+  Data: df 
+       AIC      BIC    logLik
+  4718.236 4748.556 -2351.118
+
+Random effects:
+ Formula: ~1 | year
+        (Intercept) Residual
+StdDev:   0.0140241 309.3973
+
+Fixed effects:  body_mass_g ~ species + sex + species:sex 
+                            Value Std.Error  DF  t-value p-value
+(Intercept)              3368.836  36.21222 325 93.03036  0.0000
+speciesChinstrap          158.370  64.24029 325  2.46528  0.0142
+speciesGentoo            1310.906  54.42228 325 24.08767  0.0000
+sexmale                   674.658  51.21181 325 13.17387  0.0000
+speciesChinstrap:sexmale -262.893  90.84950 325 -2.89372  0.0041
+speciesGentoo:sexmale     130.437  76.43559 325  1.70650  0.0889
+ Correlation: 
+                         (Intr) spcsCh spcsGn sexmal spcsC:
+speciesChinstrap         -0.564                            
+speciesGentoo            -0.665  0.375                     
+sexmale                  -0.707  0.399  0.471              
+speciesChinstrap:sexmale  0.399 -0.707 -0.265 -0.564       
+speciesGentoo:sexmale     0.474 -0.267 -0.712 -0.670  0.378
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.67360404 -0.69157224  0.03564805  0.66744876  2.78292473 
+
+Number of Observations: 333
+Number of Groups: 3 </code></pre>
+</div>
+</div>
+<p>From this table, we can determine the coefficients of the model such that:</p>
+<p><strong>Species factor</strong><br>
+- <span class="math inline">\(species_{Adelie}\)</span> = 0 (the baseline of the factor Habitat) - <span class="math inline">\(Species_{Chinstrap}\)</span> = <span class="math inline">\(158.370\)</span> - <span class="math inline">\(Species_{Gentoo}\)</span> = <span class="math inline">\(1310.906\)</span></p>
+<p><strong>Sex factor</strong><br>
+- <span class="math inline">\(Sex_{female}\)</span> = 0 (the baseline of the factor Habitat) - <span class="math inline">\(Sex_{male}\)</span> = <span class="math inline">\(674.658\)</span></p>
+<p><strong>Interaction</strong><br>
+- <span class="math inline">\(Species_{Chinstrap}\)</span>:<span class="math inline">\(Sex_{male}\)</span> = <span class="math inline">\(-262.893\)</span> - <span class="math inline">\(Species_{Gentoo}\)</span>:<span class="math inline">\(Sex_{male}\)</span> = <span class="math inline">\(130.437^{NS}\)</span></p>
+<p>So, the candidate model is: <span class="math display">\[  Species = 3369 + (Adelie = 0, Chinstrap = 158, Gentoo = 1311)  + (Female = 0,\: Male = 675)\]</span> <span class="math display">\[       + (Adelie_{Male} = 0, \:Chinstrap_{Male} = -263,\: Gentoo_{Male} = 130^{NS}) \]</span></p>
+<p>For sake of simplicity, we can write the model depending on the sexe :</p>
+<p>The model for the <em>Female</em> pinguin is : <span class="math display">\[ Sex_{Female} = 3369\:  + (Adelie = 0,\: Chinstrap = 158,\: Gentoo = 1311)\]</span></p>
+<p>The model for the <em>Male</em> pinguin is : <span class="math display">\[Sex_{Male} = 4043\: + (Adelie = 0,\: Chinstrap = - 105,\: Gentoo = 1441)\]</span></p>
+<p>Thus, sex, species, and the interaction of these two variables (except between Male and Gentoo) do have a significant impact on penguin body mass. For example, in Adelie penguins, the female will have a body mass of 3369g, whereas a male will have a body mass of 4043g and in Chinstrap penguins, the female will have a body mass of 3527g, whereas a male will have a body mass of 3938g.</p>
+<p>These results are in line with the graph obtained in the “interactions between factors” section, which showed that males had a greater body mass than females. This also confirms that individuals of the Gentoo species have a greater body mass than individuals (males and females) of the other two species.</p>
+</section>
+</section>
+<section id="model-validation" class="level3">
+<h3 class="anchored" data-anchor-id="model-validation">4.4 Model validation</h3>
+<p>To validate the model, we need to :</p>
+<ul>
+<li><p>Validate the normality of the residuals</p></li>
+<li><p>Histogram and QQplot of the residuals</p></li>
+<li><p>Validate the homogeneity of the variances</p></li>
+<li><p>In addition, check for the presence of observations which would have contributed too much to the model.</p></li>
+</ul>
+<section id="normality-of-the-residuals" class="level4">
+<h4 class="anchored" data-anchor-id="normality-of-the-residuals">4.4.1 Normality of the residuals</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mod1<span class="sc">$</span>residuals,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">"residuals"</span>,<span class="at">main=</span><span class="st">"Check Normality"</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantile-Quantile plot</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(mod1<span class="sc">$</span>residuals,<span class="at">pch=</span><span class="dv">16</span>,<span class="at">col=</span><span class="st">'blue'</span>,<span class="at">xlab=</span><span class="st">''</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(mod1<span class="sc">$</span>residuals,<span class="at">col=</span><span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Mixed_models_files/figure-html/ResidNorm-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We can see that the histogram follows a normal distribution, and the quantile plot points follow the red line: the normality of the residuals is validated.</p>
+</section>
+<section id="homogeneity-of-the-variance" class="level4">
+<h4 class="anchored" data-anchor-id="homogeneity-of-the-variance">4.4.2 Homogeneity of the variance</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># residuals vs fitted</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">residuals</span>(mod1)<span class="sc">~</span><span class="fu">fitted</span>(mod1)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>      , <span class="at">col=</span><span class="st">'blue'</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>      , <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="co"># residuals against Species</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(mod1)<span class="sc">~</span> df<span class="sc">$</span>species, </span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">varwidth =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">ylab =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">xlab =</span> <span class="st">"Species"</span>,</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">main =</span> <span class="st">""</span>)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="co"># residuals against Sex</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(mod1)<span class="sc">~</span> df<span class="sc">$</span>sex, </span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">varwidth =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">ylab =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">xlab =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">main =</span> <span class="st">""</span>)</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Mixed_models_files/figure-html/Residhomo-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>We can see here that for each plot, the variance of the residuals is evenly distributed around the horizontal line. The homogeneity of the variance is validated.</p>
+</section>
+<section id="look-at-influential-observations" class="level4">
+<h4 class="anchored" data-anchor-id="look-at-influential-observations">4.4.3 Look at influential observations</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CookD</span>(mod1,<span class="at">newwd=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see that individuals 314, 315 and 325 contribute slightly more to the model, but this is not an aberrant result.</p>
+
 
 
 </section>
 </section>
+</section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-RochGiorgi" class="csl-entry" role="listitem">
+Giorgi, R. 2020. <span>“Modèles Linéaires à Effets Mixtes.”</span>
+</div>
+<div id="ref-LBel2023" class="csl-entry" role="listitem">
+L. Bel, M. Etienne, JJ Daudin. 2016. <span>“Le Modèle Linéaire Et Ses Extensions.”</span>
+</div>
+<div id="ref-YannickOutreman" class="csl-entry" role="listitem">
+Outreman, Y. 2023. <span>“Courses on Linear Mixed Model.”</span>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
