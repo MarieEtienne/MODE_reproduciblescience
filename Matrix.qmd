@@ -14,14 +14,15 @@ I. Foundations of matric modelling in ecology
 	B. Transform a population into a matrix
 	C. How can we modify a simplified population matrix ?
 
+II. Leslie matrix
+  A. Meerkat life cycle
+  B. Leslie matrix
+
 III. Epidemiology matrices
 	1. Introduction to epidemiology with the SIRS model
 	2. Taking population dynamics and structure into account
 	3. Setting up the model in R
 	4. Visualizing results
-
-
-
 
 
 I. Foundations of matrix modelling in ecology
@@ -457,7 +458,7 @@ So, assuming a stable population, we would need: 60% juveniles, 33% adults and 0
 This stable age structure can be represented as follows: 
 
 ```{r}
-barplot(stable.stage(matrice),names.arg=c("juvénile","adulte","senior"),ylim = c(0,0.7))
+barplot(stable.stage(matrice),names.arg=c("juvenile","adult","senior"),ylim = c(0,0.7))
 ```
 
 We can also calculate the reproductive values for each age class, enabling us to assess the contribution of each age group to reproduction and population growth. The reproductive value of an age class is calculated by taking into account the survival rates and reproductive rates specific to each age class. It represents the average number of offspring that an individual of a particular age class can expect to produce during its lifetime.
@@ -522,7 +523,7 @@ Nevertheless, this stable population situation is not representative of reality.
 So let's try with other initial effectics, with an unbalanced structure. 
 
 ```{r}
-pop.projection(matrice,c(1,4,2),20) #structure désequilibrée
+pop.projection(matrice,c(1,4,2),20) #unbalanced structure
 pop.projection(matrice,c(1,4,2),100)
 ```
 
@@ -532,24 +533,24 @@ To differentiate between the two, we use graphical representations.
 
 ```{r}
 # over 20 years for population size
-plot((pop.projection(matrice,c(60,33,7),20)$pop.sizes),type="l",ylim=c(100,100000),ylab="taille de pop",xlab="année")
+plot((pop.projection(matrice,c(60,33,7),20)$pop.sizes),type="l",ylim=c(100,100000),ylab="population size",xlab="year")
 lines(pop.projection(matrice,c(1,4,2),20)$pop.sizes,type="l",col="red")
-legend("topright",legend=c("equilibre","desequilibre"),text.col=c("black","red")) 
+legend("topright",legend=c("balanced","unbalanced"),text.col=c("black","red")) 
 
 # over 100 years for population size
-plot((pop.projection(matrice,c(60,33,7),100)$pop.sizes),type="l",xlim = c(0,30), ylim=c(100,10000000),ylab="taille de pop",xlab="année")
+plot((pop.projection(matrice,c(60,33,7),100)$pop.sizes),type="l",xlim = c(0,30), ylim=c(100,10000000),ylab="population size",xlab="year")
 lines(pop.projection(matrice,c(1,4,2),100)$pop.sizes,type="l",col="red")
-legend("topright",legend=c("equilibre","desequilibre"),text.col=c("black","red"))  
+legend("topright",legend=c("balanced","Unbalanced"),text.col=c("black","red"))  
 
 # over 20 years for growth rate 
-plot((pop.projection(matrice,c(60,33,7),20)$pop.changes),type="l",xlim = c(0,10),ylim=c(1,3),ylab="taux de croissance réalisé",xlab="année")
+plot((pop.projection(matrice,c(60,33,7),20)$pop.changes),type="l",xlim = c(0,10),ylim=c(1,3),ylab="growth rate",xlab="year")
 lines(pop.projection(matrice,c(1,4,2),20)$pop.changes,type="l",col="red")
-legend("bottomright",legend=c("equilibre","desequilibre"),text.col=c("black","red"))
+legend("bottomright",legend=c("balanced","unbalanced"),text.col=c("black","red"))
 
 # over 100 years on growth rate
-plot((pop.projection(matrice,c(60,33,7),100)$pop.changes),type="l",xlim = c(0,10),ylim=c(1,3),ylab="taux de croissance réalisé",xlab="année")
+plot((pop.projection(matrice,c(60,33,7),100)$pop.changes),type="l",xlim = c(0,10),ylim=c(1,3),ylab="growth rate",xlab="year")
 lines(pop.projection(matrice,c(1,4,2),100)$pop.changes,type="l",col="red")
-legend("bottomright",legend=c("equilibre","desequilibre"),text.col=c("black","red")) 
+legend("bottomright",legend=c("balanced","unbalanced"),text.col=c("black","red")) 
 ```
 
 Finally, using the elasticity() function, we can see that the highest rate will contribute the most to the evolution of our population: 
@@ -1042,4 +1043,32 @@ for (t in 1:10000){
 ```
 
 This result tells us that 58% of the time the meerkat family will end up settling in burrow A1, 26% of the time in burrow B2, 14% of the time in burrow C3 and 2% of the time in burrow D4.
+
+=======
+C) Bibliography : 
+
+N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, (2008)
+
+J. Bair, La matrice de Leslie et la dynamique des populations, Tangente Hors-série no 42, Mathématiques et biologie, éditions Pole, Paris, Pages 90-94, (2012).
+
+J. Bair, J. Mawhin, Modèles de type proie – prédateur, Tangente Hors-série no°42, Mathématiques et biologie, éditions Pole, Paris, Pages 56-59, (2012) 
+
+Hoffman, W.A., Fire and population dynamics of woody plants in a neotropical savanna : matrix model projections, Ecology, Volume 80, Pages 1354-1369, (1999), https://doi.org/10.1890/0012-9658(1999)080[1354:FAPDOW]2.0.CO;2
+
+Abadi, F., Gimenez, O., Ullrich, B., Arlettaz, R. and Schaub, M., Estimation of immigration rate using integrated population models, Journal of Applied Ecology, Volume 47, Pages 393-400, (2010), https://doi.org/10.1111/j.1365-2664.2010.01789.x
+
+Schaub, M., Abadi, F., Integrated population models: a novel analysis framework for deeper insights into population dynamics, J Ornithol, Volume 152 (Suppl 1), Pages 227–237, (2011), https://doi.org/10.1007/s10336-010-0632-7
+
+Frisman, E.Y., Zhdanova, O.L., Kulakov, M.P. et al., Mathematical Modeling of Population Dynamics Based on Recurrent Equations: Results and Prospects, Part I. Biol Bull Russ Acad Sci, Volume 48, Pages 1–15, (2021), https://doi.org/10.1134/S1062359021010064 
+
+Charles S., Les modèles matriciels de type Leslie : Une approche couplée Mathématiques et Statistiques, (2004)
+
+Smith D. and Keyfitz N., Mathematical Demography, Springer Science & Business Media, (2012)
+
+Hoppensteadt F.C., Mathematical Methods pf Population Biology, Cambridge University Press, (1982)
+
+Réserve de Sigean, Animaux : Suricates, (2023)
+
+Girel S., Chapitre 1 : Modèles matriciels de population,  (2020)
+
 
