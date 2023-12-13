@@ -7,6 +7,23 @@ output:
    toc: true
    toc_float: true
 ---
+Sommaire :
+
+I. Foundations of matric modelling in ecology
+	A. Why using matric modelling in ecology
+	B. Transform a population into a matrix
+	C. How can we modify a simplified population matrix ?
+
+III. Epidemiology matrices
+	1. Introduction to epidemiology with the SIRS model
+	2. Taking population dynamics and structure into account
+	3. Setting up the model in R
+	4. Visualizing results
+
+
+
+
+
 I. Foundations of matrix modelling in ecology
 
 	A. Why using matrix modelling in ecology ? 
@@ -280,7 +297,7 @@ Pf = Pn % * % N
 ```
 
 
-III. Matrice en épidémiologie -> Jeanne
+III. Epidemiology matrices
 
 1. Introduction to epidemiology with the SIRS model
 
