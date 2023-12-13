@@ -1,6 +1,5 @@
 ---
 title: "Modèle matrice et applications en écologie"
-bibliography: "Quentin, Alexie, Jeanne et Laurane"
 execute: 
   freeze: auto
 output: 
@@ -1031,8 +1030,27 @@ The eigenvalues of a transition matrix are related to the eigenvectors associate
 
 C) Bibliography : 
 
-N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, 2008
+N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, (2008)
 
-J. Bair, La matrice de Leslie et la dynamique des populations, Tangente Hors-série no 42, Mathématiques et biologie, éditions Pole, Paris, 2012, p. 90-94.
+J. Bair, La matrice de Leslie et la dynamique des populations, Tangente Hors-série no 42, Mathématiques et biologie, éditions Pole, Paris, Pages 90-94, (2012).
 
-J. Bair – J. Mawhin, Modèles de type proie – prédateur, Tangente Hors-série no°42, Mathématiques et biologie, éditions Pole, Paris, 2012, p. 56-59. 
+J. Bair, J. Mawhin, Modèles de type proie – prédateur, Tangente Hors-série no°42, Mathématiques et biologie, éditions Pole, Paris, Pages 56-59, (2012) 
+
+Hoffman, W.A., Fire and population dynamics of woody plants in a neotropical savanna : matrix model projections, Ecology, Volume 80, Pages 1354-1369, (1999), https://doi.org/10.1890/0012-9658(1999)080[1354:FAPDOW]2.0.CO;2
+
+Abadi, F., Gimenez, O., Ullrich, B., Arlettaz, R. and Schaub, M., Estimation of immigration rate using integrated population models, Journal of Applied Ecology, Volume 47, Pages 393-400, (2010), https://doi.org/10.1111/j.1365-2664.2010.01789.x
+
+Schaub, M., Abadi, F., Integrated population models: a novel analysis framework for deeper insights into population dynamics, J Ornithol, Volume 152 (Suppl 1), Pages 227–237, (2011), https://doi.org/10.1007/s10336-010-0632-7
+
+Frisman, E.Y., Zhdanova, O.L., Kulakov, M.P. et al., Mathematical Modeling of Population Dynamics Based on Recurrent Equations: Results and Prospects, Part I. Biol Bull Russ Acad Sci, Volume 48, Pages 1–15, (2021), https://doi.org/10.1134/S1062359021010064 
+
+Charles S., Les modèles matriciels de type Leslie : Une approche couplée Mathématiques et Statistiques, (2004)
+
+Smith D. and Keyfitz N., Mathematical Demography, Springer Science & Business Media, (2012)
+
+Hoppensteadt F.C., Mathematical Methods pf Population Biology, Cambridge University Press, (1982)
+
+Réserve de Sigean, Animaux : Suricates, (2023)
+
+Girel S., Chapitre 1 : Modèles matriciels de population,  (2020)
+
