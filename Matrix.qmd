@@ -284,4 +284,3 @@ N <- matrix(data = c(2, 4) , nrow = 2)
 Pf = Pn % * % N 
 
 ```
-git
