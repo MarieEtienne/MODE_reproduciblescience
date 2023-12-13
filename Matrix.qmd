@@ -5,6 +5,8 @@ date: "2023-11-15"
 output: html_document
 ---
 
+IV. Markov chain
+
 a- the Markov Chain
 
 ![Changement de colonie](C:/Users/qlamb/Documents/R/Schema_suricates.png)
