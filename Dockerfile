@@ -26,4 +26,9 @@ RUN apt install -y jags
 RUN R -e "install.packages(c('rjags'))"
 RUN R -e "install.packages(c('nlme', 'predictmeans', 'ade4', 'vegan', 'corrplot','plot3D', 'DHARMAa', 'lattice'))"
 RUN R -e "install.packages(c('RVAideMemoire', 'PerformanceAnalytics', 'rcompanion'))"
+RUN apt-get install -y --no-install-recommends unzip python3-pip dvipng pandoc wget git make python3-venv && \
+    pip3 install jupyter jupyter-cache flatlatex matplotlib && \
+    apt-get --purge -y remove texlive.\*-doc$ && \
+    apt-get clean
+
 
