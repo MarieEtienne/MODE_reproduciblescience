@@ -942,6 +942,7 @@ T_2 = \left(\begin{array}{cc}
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \end{array}\right)=T_1.T
 $$
+
 So :
 
 $$ 
@@ -1026,4 +1027,19 @@ The "eigen" function therefore returns the eigenvalues and eigenvectors of the m
 The particularity of the eigenvalues of a transition matrix is that they are linked to the eigenvectors associated with the stationary distribution, corresponding to the limit probability of occupying each state in a Markov chain after a large number of iterations. When eigenvalues are equal to 1, their associated eigenvectors are the so-called "stationary distributions" indicating the probabilities of being in each state at equilibrium.
 
 The eigenvalues of a transition matrix are related to the eigenvectors associated with the stationary distribution. The stationary distribution is the limiting probability of occupying each state in a Markov chain after a large number of iterations. The eigenvectors corresponding to the eigenvalues of 1 are the stationary distributions. They indicate the probabilities of being in each state at equilibrium.
+
+However, this property only applies if the dominant eigenvalue is the only one to have this value. In the particular case where it is not the only one, as is the case for the T matrix, we simply need to simulate a very large number of iterations to approximate the stationary distribution. Here is an example for 10000 iterations (remark, in R, T^t doesn't work!) : 
+
+
+```{r}
+T0<-matrix(c(1,0,0,0,0,0,0,0,0),ncol=9,nrow=1)
+
+Tn<-T0%*%T
+
+for (t in 1:10000){
+  Tn<-Tn%*%T
+}
+```
+
+This result tells us that 58% of the time the meerkat family will end up settling in burrow A1, 26% of the time in burrow B2, 14% of the time in burrow C3 and 2% of the time in burrow D4.
 
