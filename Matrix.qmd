@@ -19,10 +19,16 @@ II. Leslie matrix
   B. Leslie matrix
 
 III. Epidemiology matrices
-	1. Introduction to epidemiology with the SIRS model
-	2. Taking population dynamics and structure into account
-	3. Setting up the model in R
-	4. Visualizing results
+	A. Introduction to epidemiology with the SIRS model
+	B. Taking population dynamics and structure into account
+	C. Setting up the model in R
+	D. Visualizing results
+	
+IV. Markov chain
+  A- The Markov Chain
+  B- The transition Matrix 
+  C- Evolution of the system
+  D- Eigenvalues and eigenvectors
 
 
 I. Foundations of matrix modelling in ecology
@@ -839,7 +845,7 @@ An endemic equilibrium is reached with a stable percentage of each health state 
 
 IV. Markov chain
 
-a- the Markov Chain
+A- the Markov Chain
 
 ![Changement de colonie](C:/Users/qlamb/Documents/R/Schema_suricates.png)
 
@@ -849,7 +855,7 @@ For example, our poor meerkats are initially in position O and cannot stay there
 
 The diagram above is what is known as a "Markov Chain" in which the various probabilities are numerically anotated. A Markov chain can be defined as a discrete-time or continuous-time stochastic process with a discrete state space, defined as being "memoryless" because it depends only on the present state and not on previous states. 
 
-b- The transition Matrix 
+B- The transition Matrix 
 
 These different elements and this "Markov Chain" allow us to produce a rather special matrix T, which we call the transition matrix of a "Markov Chain". This defines the transition probabilities from each state at time (t) vertical to each state at time (t+1) horizontal and is shown below: 
 
@@ -888,7 +894,7 @@ As we can see, this matrix works in discrete time because of the transition from
 However, it could also work in continuous time with discrete state spaces, but for the sake of simplicity we will work in discrete time.
 For example, in the matrix above, we can read that the probability of moving from position O (the poor camping tent of our family of beloved meerkats) to colony A is 0.9, or 90%.
 
-c- Evolution of the system
+C- Evolution of the system
 
 If we take into account the fact that at time 0, the meerkats are in their makeshift tent, here is the initial condition:
 
@@ -972,7 +978,7 @@ T_t = \left(\begin{array}{cc}
 \end{array}\right)^t=T_0.T^t
 $$
 
-d- Eigenvalues and eigenvectors
+D- Eigenvalues and eigenvectors
 
 Markov chain theory tells us that, after a certain time, the probability distribution will be independent of the initial distribution and we will see convergence towards different points in the chain.
 
