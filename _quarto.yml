@@ -25,7 +25,9 @@ website:
         - text: Dependent data
           href: chapter_dependance.qmd
         - text: Mixed models in Ecology
-          href: Mixed_models.qmd
+          href: Mixed_models.qmd        
+        - text: Bayesian models in Ecology
+          href: bayesian_modeles.qmd
         - href: simple_chapter.qmd
         - text: A chapter using R
           href: r_chapter.qmd
