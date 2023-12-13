@@ -1036,13 +1036,13 @@ J. Bair, La matrice de Leslie et la dynamique des populations, Tangente Hors-sé
 
 J. Bair – J. Mawhin, Modèles de type proie – prédateur, Tangente Hors-série no°42, Mathématiques et biologie, éditions Pole, Paris, 2012, p. 56-59. 
 
-Hoffman, W.A. (1999), Fire and population dynamics of woody plants in a neotropical savanna : matrix model projections, Ecology, Volume 80, Pages 1354-1369, https://doi.org/10.1890/0012-9658(1999)080[1354:FAPDOW]2.0.CO;2
+Hoffman, W.A., Fire and population dynamics of woody plants in a neotropical savanna : matrix model projections, Ecology, Volume 80, Pages 1354-1369, (1999), https://doi.org/10.1890/0012-9658(1999)080[1354:FAPDOW]2.0.CO;2
 
-Abadi, F., Gimenez, O., Ullrich, B., Arlettaz, R. and Schaub, M. (2010), Estimation of immigration rate using integrated population models. Journal of Applied Ecology, 47: 393-400. https://doi.org/10.1111/j.1365-2664.2010.01789.x
+Abadi, F., Gimenez, O., Ullrich, B., Arlettaz, R. and Schaub, M., Estimation of immigration rate using integrated population models, Journal of Applied Ecology, Volume 47, Pages 393-400, (2010), https://doi.org/10.1111/j.1365-2664.2010.01789.x
 
-Schaub, M., Abadi, F. Integrated population models: a novel analysis framework for deeper insights into population dynamics. J Ornithol 152 (Suppl 1), 227–237 (2011). https://doi.org/10.1007/s10336-010-0632-7
+Schaub, M., Abadi, F., Integrated population models: a novel analysis framework for deeper insights into population dynamics, J Ornithol, Volume 152 (Suppl 1), Pages 227–237, (2011), https://doi.org/10.1007/s10336-010-0632-7
 
-Frisman, E.Y., Zhdanova, O.L., Kulakov, M.P. et al. Mathematical Modeling of Population Dynamics Based on Recurrent Equations: Results and Prospects. Part I. Biol Bull Russ Acad Sci 48, 1–15 (2021). https://doi.org/10.1134/S1062359021010064 
+Frisman, E.Y., Zhdanova, O.L., Kulakov, M.P. et al., Mathematical Modeling of Population Dynamics Based on Recurrent Equations: Results and Prospects, Part I. Biol Bull Russ Acad Sci, Volume 48, Pages 1–15, (2021), https://doi.org/10.1134/S1062359021010064 
 
 Charles S., Les modèles matriciels de type Leslie : Une approche couplée Mathématiques et Statistiques, (2004)
 
