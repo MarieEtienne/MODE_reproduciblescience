@@ -5,15 +5,19 @@ date: "2023-11-15"
 output: html_document
 ---
 
-![Schéma des péripéties suricatiennes](C:/Users/qlamb/Documents/R/Schema_suricates.png)
+a- the Markov Chain
 
-Après ce nouveau coup dur et cette épidémie, les survivants de notre famille de suricate sont de nouveau contraints de se mettre en recherche d'un habitat et de rejoindre une nouvelle colonie. Pour ce choix, plusieurs options et colonies s'offrent à eux, chacune avec une probabilité différente d'être rejointe en fonction de la pénibilité du trajet et des ressources qu'elle contient. Autrement dit, les flèches reliant les habitats représentent les probabilités de les rejoindre. Lorsque les habitats sont rejoints, une nouvelle flèche entre en jeu pour déterminer la probabilité d'être acceptés dans la colonie ; lorsque c'est le cas, les suricates s'installent alors définitivement et cessent leurs déplacements. En revanche, lorsque ceux-ci ne parviennent pas à être acceptés dans une colonie, ils peuvent alors tenter leur chance dans une nouvelle ou retenter d'être acceptés dans une colonie précédente. Ces différentes informations permettent de construire le schéma précédent. 
+![Changement de colonie](C:/Users/qlamb/Documents/R/Schema_suricates.png)
 
-A titre d'exemple, nos pauvres suricates se trouvent initialement en position O et ne peuvent rester à cet endroit. Cependant, ils peuvent gagner une petite colonie proche (colonie A) avec une probabilité d'y arriver de 0.9 et d'y être acceptés de 0.6 ou une colonie plus lointaine (colonie C) avec une probabilité d'y arriver de 0.1 et d'y être acceptés de 0.8. 
+After this latest blow and epidemic, the survivors of our meerkat family are once again forced to look for a habitat and join a new colony. There are several options and colonies to choose from, each with a different probability of being reached depending on the difficulty of the journey and the resources it contains. In other words, the arrows linking the habitats represent the probability of reaching them. When the habitats are reached, a new arrow comes into play to determine the probability of being accepted into the colony; when this is the case, the meerkats settle permanently and stop moving. On the other hand, if they are not accepted in a colony, they can try their luck in a new one or try again to be accepted in a previous colony. This information is used to construct the diagram above. 
 
-Le schéma ci-dessus est ce que l'on appelle une "Chaîne de Markov" dans laquelle les différentes probabilités sont numériquement anotées. Une chaîne de Markov peut se définir comme étant un processus stochastique à temps discret ou à temps continu et à espace d'états discrets définit comme étant "sans mémoire" car dépendant uniquement de l'état présent et non des états antérieurs. 
+For example, our poor meerkats are initially in position O and cannot stay there. However, they can move to a small nearby colony (colony A) with a probability of 0.9 of arriving and 0.6 of being accepted, or to a more distant colony (colony C) with a probability of 0.1 of arriving and 0.8 of being accepted. 
 
-Ces différents éléments et cette "Chaîne de Markov" nous permettent de réaliser une matrice T un peu particulière, que l'on appelle matrice de transition d'une "Chaîne de Markov". Celle-ci définit les probabilités de transition de chaque état au temps (t) vertical vers chaque état au temps (t+1) horizontal et figurant ci-dessous : 
+The diagram above is what is known as a "Markov Chain" in which the various probabilities are numerically anotated. A Markov chain can be defined as a discrete-time or continuous-time stochastic process with a discrete state space, defined as being "memoryless" because it depends only on the present state and not on previous states. 
+
+b- The transition Matrix 
+
+These different elements and this "Markov Chain" allow us to produce a rather special matrix T, which we call the transition matrix of a "Markov Chain". This defines the transition probabilities from each state at time (t) vertical to each state at time (t+1) horizontal and is shown below: 
 
 $$
 T=
@@ -30,7 +34,7 @@ P(O|D4) & P(A|D4) & P(A1|D4) & P(B|D4) & P(B2|D4) & P(C|D4) & P(C3|D4) & P(D|D4)
 \end{array}\right)
 $$
 
-En remplaçant la matrice algébrique précédente avec les valeurs issues du schéma de la chaîne de Markov, nous obtenons donc la matrice T suivante :
+By replacing the previous algebraic matrix with the values from the Markov chain diagram, we obtain the following matrix T :
 
 $$ T=
 \left(\begin{array}{cc} 
@@ -46,18 +50,21 @@ $$ T=
 \end{array}\right)
 $$
 
-Comme nous pouvons le remarquer, cette matrice fonctionne en temps discret du fait du passage du temps t au temps t+1 et de l'absence de période de transition entre les différents compartiments.
-Cependant, elle pourrait également fonctionner en temps continu à espaces d'état discret, mais pour des raisons de simplicité nous allons travailler en conservant le temps discret.
-Par exemple, dans la matrice précédente, nous pouvons lire que la probabilité de passer de la position O (la pauvre tente de camping de notre famille de suricates bien aimés) à la colonie A est de 0.9, soit 90%.
+As we can see, this matrix works in discrete time because of the transition from time t to time t+1 and the absence of a transition period between the different compartments.
+However, it could also work in continuous time with discrete state spaces, but for the sake of simplicity we will work in discrete time.
+For example, in the matrix above, we can read that the probability of moving from position O (the poor camping tent of our family of beloved meerkats) to colony A is 0.9, or 90%.
 
-Si on tient compte du fait qu'au temps 0, les suricates sont dans leur tente de fortune, voici donc la condition initiale :
+c- Evolution of the system
+
+If we take into account the fact that at time 0, the meerkats are in their makeshift tent, here is the initial condition:
 
 $$
 T_0 =\left(\begin{array}{cc} 
 1 & 0 & 0 & 0 & 0 & 0 & 0  & 0 & 0\\
 \end{array}\right)
 $$
-A l'issue du premier pas de temps, nous auront :
+
+At the end of the first time step, we will have :
 
 $$
 T_1 = \left(\begin{array}{cc}
@@ -74,16 +81,17 @@ T_1 = \left(\begin{array}{cc}
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \end{array}\right) = T_0.T
 $$
-Donc :
+So :
 
 $$ 
 T_1 =\left(\begin{array}{cc} 
 0 & 0.9 & 0 & 0 & 0 & 0.1 & 0 & 0 & 0\\
 \end{array}\right)
 $$
-Autrement dit, au bout du premier pas de temps les suricates auront 90% de probabilité de se trouver dans la colonie A et 10% de probabilité de se trouver dans la colonie C.
 
-A l'issue du second pas de temps, nous auront :
+In other words, at the end of the first time step the meerkats will have a 90% probability of being in colony A and a 10% probability of being in colony C.
+
+At the end of the second time step, we will have :
 
 $$
 T_2 = \left(\begin{array}{cc}
@@ -100,7 +108,7 @@ T_2 = \left(\begin{array}{cc}
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \end{array}\right)=T_1.T
 $$
-Donc :
+So :
 
 $$ 
 T_2 =\left(\begin{array}{cc} 
@@ -108,9 +116,9 @@ T_2 =\left(\begin{array}{cc}
 \end{array}\right)
 $$
 
-A l'issue du second pas de temps, la famille de suricate aura 0.25% de probabilité d'être revenu à son campement initial (position 0), 54% de probabilité d'être accepté par la colonie A, 36.25% de probabilité de se retrouver dans la colonie B, 8% de probabilité d'avoir été accepté dans la colonie C et 1.5% de probabilité d'être d'atteindre la colonie D avec les plus grandes quantités de ressources.
+At the end of the second time step, the meerkat family will have a 0.25% probability of having returned to its initial camp (position 0), a 54% probability of having been accepted by colony A, a 36.25% probability of having ended up in colony B, an 8% probability of having been accepted in colony C and a 1.5% probability of having reached colony D with the largest quantities of resources.
 
-De manière générale, nous pouvons convenir du produit matriciel suivant :
+Generally speaking, we can agree on the following matrix product:
 
 $$
 T_t = \left(\begin{array}{cc}
@@ -127,81 +135,20 @@ T_t = \left(\begin{array}{cc}
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \end{array}\right)^t=T_0.T^t
 $$
-La théorie de la chaîne de Markov nous dit qu'au bout d'un certain temps, la loi de probabilité sera indépendante de la loi initiale et nous obtiendrons une convergence vers différents points de la chaîne.
 
-Rappel : Les propriétés d'une matrice stipulent la présence de valeurs et de vecteurs propres. On dit que λ est une valeur propre de la matrice T s'il existe un vecteur propre V tel que T.V = λ.V. On dit alors que λ et V sont un couple propre de la matrice. 
-Les valeurs propres s'obtiennent en résolvant le polynôme caractéristique de la matrice T
+d- Eigenvalues and eigenvectors
 
-Déterminer la loi invariante q de la Matrice de transition T revient à calculer le vecteur propre associé à la valeur propre 1, à savoir :
+Markov chain theory tells us that, after a certain time, the probability distribution will be independent of the initial distribution and we will see convergence towards different points in the chain.
 
-$$
-q.T=q\\
-$$
+Reminder: The properties of a matrix stipulate the presence of eigenvalues and eigenvectors. We say that λ is an eigenvalue of the matrix T if there is an eigenvector V such that T.V = λ.V. We then say that λ and V are an eigenpair of the matrix. 
+The eigenvalues are obtained by solving the characteristic polynomial of the matrix T, which is calculated as follows:
 
-Donc si :
+$$ P(λ) = det|T-λI| $$
+In which I is the "Identity" matrix of the T matrix :
 
 $$
-q=\left(\begin{array}{cc} 
-q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
-\end{array}\right)
-$$
-
-Alors :
-
-$$
+I =
 \left(\begin{array}{cc} 
-q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
-\end{array}\right).
-\left(\begin{array}{cc} 
-0 & 0.9 & 0 & 0 & 0 & 0.1 & 0  & 0 & 0\\
-0 & 0 & 0.6 & 0.4 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0.1 & 0 & 0.7 & 0.2 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
-0.025 & 0 & 0 & 0.025 & 0 & 0 & 0.8 & 0.15 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0.1 & 0 & 0 & 0.9\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
-\end{array}\right)=
-\left(\begin{array}{cc} 
-q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
-\end{array}\right)
-$$
-
-
-
-
-Donc :
-
-$$
-\left(\begin{array}{cc} 
-q_6\cdot0.025 & q_1\cdot 0.9 & q_2\cdot0.6+q_3+q_4\cdot0.1 & q_2\cdot0.4+q_6\cdot0.025 & q_4 \cdot 0.7 + q_5 & 0.1\cdot q_1 + 0.2 \cdot q_4 + 0.1 \cdot q_8 & q_6 \cdot 0.8 + q_7 & 0.15 \cdot q_6 & 0.9 \cdot q_8 + q_9\\
-\end{array}\right) =
-\left(\begin{array}{cc} 
-q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
-\end{array}\right)
-$$
-
-q6=0
-q1=0
-q6.0.025=q4
-q2=0
-q4=0
-0.1*q8=q6
-
-
-
-
-
-$$
-q.T=q.I\\
-q(I-T)=0\\
-$$
-Alors
-$$
-q
-\left(\begin{array}{cc}
-\left(\begin{array}{cc}
 1 & 0 & 0 & 0 & 0 & 0 & 0  & 0 & 0\\
 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -211,89 +158,37 @@ q
 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
-\end{array}\right)-\left(\begin{array}{cc} 
-0 & 0.9 & 0 & 0 & 0 & 0.1 & 0  & 0 & 0\\
-0 & 0 & 0.6 & 0.4 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0.1 & 0 & 0.7 & 0.2 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
-0.025 & 0 & 0 & 0.025 & 0 & 0 & 0.8 & 0.15 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0.1 & 0 & 0 & 0.9\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \end{array}\right)
-\end{array}\right)
-=0
-$$
-$$
-q.
-\left(\begin{array}{cc}
-1 & -0.9 & 0 & 0 & 0 & -0.1 & 0  & 0 & 0\\
-0 & 1 & -0.6 & -0.4 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & -0.1 & 1 & -0.7 & -0.2 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
--0.025 & 0 & 0 & -0.025 & 0 & 1 & -0.8 & -0.15 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & -0.1 & 0 & 1 & -0.9\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-\end{array}\right)
-=0
 $$
 
-Ce qui signifie que :
+and λ is an eigenvalue of the matrix T. P(λ) will therefore be the determinant of the matrix resulting from the difference between the matrix T and the product of λ and the identity matrix of T, i.e. :
 
 $$
-\left(\begin{array}{cc} 
-q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
-\end{array}\right).
-\left(\begin{array}{cc}
-1 & -0.9 & 0 & 0 & 0 & -0.1 & 0  & 0 & 0\\
-0 & 1 & -0.6 & -0.4 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & -0.1 & 1 & -0.7 & -0.2 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
--0.025 & 0 & 0 & -0.025 & 0 & 1 & -0.8 & -0.15 & 0\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0 & -0.1 & 0 & 1 & -0.9\\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-\end{array}\right)
-=0 
+P(λ)=det|\left(\begin{array}{cc} 
+-λ & 0.9 & 0 & 0 & 0 & 0.1 & 0  & 0 & 0\\
+0 & -λ & 0.6 & 0.4 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1-λ & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0.1 & -λ & 0.7 & 0.2 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & -λ & 0 & 0 & 0 & 0\\
+0.025 & 0 & 0 & 0.025 & 0 & -λ & 0.8 & 0.15 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 1-λ & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0.1 & 0 & -λ & 0.9\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1-λ\\
+\end{array}\right)|
 $$
 
-Donc que
+By solving the equation P(λ) = 0, the solutions λ will be the different eigenvalues associated with the matrix T. Since the determinant of a 9*9 matrix is particularly long and difficult to calculate manually, we will determine the eigenvalues and their associated eigenvectors directly on R after creating the matrix and using the following commands:
 
-
-q4=0
-
-q1 + q6*(-0.025) = 0
-q1 = 0
-q2 = 0
-q6 = 0
-q4 = 0
-q8 = 0
-
-
-
-q2 = 0.025
-q3
-q4 = 0.15
-
-
-```{r}
-0.025*(-0.4)+0.15
-
-
-
-x*-0.1=-0.015
-```
-
-
-
-Etant donné qu'aller plus loin "à la main" s'avèrerait particulièrement chronophage, il est également possible d'utiliser le logiciel R :
-On crée tout d'abord la matrice :
 ```{r}
 T<-matrix(c(0,0.9,0,0,0,0.1,0,0,0,0,0,0.6,0.4,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0.1,0,0.7,0.2,0,0,0,0,0,0,0,1,0,0,0,0,0.025,0,0,0.025,0,0,0.8,0.15,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0.1,0,0,0.9,0,0,0,0,0,0,0,0,1),ncol=9,nrow=9,byrow=TRUE)
-vecP<-eigen(T)
+
+VP<-eigen(T)
+
+VP
 ```
 
+The "eigen" function therefore returns the eigenvalues and eigenvectors of the matrix T. Note that the eigenvalues of a matrix can also contain an imaginary part and be defined by complex numbers, but in this case we will only be interested in the 'Real' part, which can be obtained using the Re function.
+
+The particularity of the eigenvalues of a transition matrix is that they are linked to the eigenvectors associated with the stationary distribution, corresponding to the limit probability of occupying each state in a Markov chain after a large number of iterations. When eigenvalues are equal to 1, their associated eigenvectors are the so-called "stationary distributions" indicating the probabilities of being in each state at equilibrium.
+
+The eigenvalues of a transition matrix are related to the eigenvectors associated with the stationary distribution. The stationary distribution is the limiting probability of occupying each state in a Markov chain after a large number of iterations. The eigenvectors corresponding to the eigenvalues of 1 are the stationary distributions. They indicate the probabilities of being in each state at equilibrium.
