@@ -31,4 +31,4 @@ RUN apt-get install -y --no-install-recommends unzip python3-pip dvipng pandoc w
     apt-get --purge -y remove texlive.\*-doc$ && \
     apt-get clean
 
-
+RUN pip3 install numpy matplotlib pandas scikit-learn 
