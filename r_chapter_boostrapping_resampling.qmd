@@ -20,7 +20,7 @@ In this situation, resampling procedures become interesting. It is a non-paramet
 
 Before diving into the subject, let's load some packages:
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE, comment=FALSE}
 # Load packages
 library(ggplot2)
 library(gridExtra)
@@ -165,7 +165,7 @@ $$
 with the following variables:
 
 |      Variable       | Meaning                                                                              |
-|:----------------:|------------------------------------------------------|
+|:-------------------:|---------------------------------------------------|
 |       $v_{i}$       | Pseudo value of the $i^{th}$ subsample                                               |
 |         $n$         | Total number of observations                                                         |
 |   $\overline{X}$    | Mean of the initial sample                                                           |
@@ -402,6 +402,7 @@ mean(irisPopulation)
 The actual sepal width mean of our population falls within the bounds of our confidence interval, which is highly encouraging! Comparing it to the interval estimated using the jackknife method, we notice that this interval is narrower and more precise. Consequently, we've effectively inferred information about the population mean in a scenario where we had limited data, made no normality assumptions, and where the standard computation of confidence intervals might not have been sufficiently robust and a
 
 ### Strengths and Weaknesses
+
 As we've seen, bootstrap is a powerful resampling technique used in statistics for estimating the precision of parameters. One of its primary advantages lies in its versatility across a wide spectrum of statistical estimations. Indeed, this resampling technique is applicable to various parameters, such as mean, variance, regression coefficients, and more. Furthermore, this method is particularly robust in handling complex data structure without strict distributional assumptions, meaning that it can easily works with non-normally distributed datasets with little observations, which is really relevant in real-word scenarios. In those cases, bootstrap ends up being more accurate than the standard intervals obtained under normality assumption.
 
 However, one significant concern is its computational intensity, especially noticeable with larger datasets or complex models. Generating numerous bootstrap samples can demand, in certain cases, substantial computing resources. Additionally, bootstrap might display biased estimation of the accuracy of estimates, depending on whether or not the sampling dataset is representative of the actual population.
@@ -748,7 +749,7 @@ Let's follow step by step the permutation procedure :
     # INITIAL PARAMETERS
     iteration <- 10000  # number of iteration
     null_distribution <- c()  # storage of the statistic for permuted data
-    
+
     # ALGORITHM
     for (i in 1:iteration)
     {
@@ -803,9 +804,89 @@ Let's follow step by step the permutation procedure :
 
     As $p > 0.05$, we don't reject the null hypothesis, suggesting that a difference is not observed before and after fertilizer usage.
 
+In the next part, we delve into the Mantel test, a statistical method used to assess the correlation between two distance matrices. This test is particularly valuable in fields such as ecology and genetics, where understanding the spatial or temporal relationships between entities is crucial.\
+
+## Mantel tests
+
+### Uses
+
+The Mantel test [@mantel_detection_1967] is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances. The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability?
+
+### Correspondence (distances) matrices
+
+The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix.
+
+```{r}
+set.seed(123)
+
+# Download a dataset 
+ozone <- read.table("https://stats.idre.ucla.edu/stat/r/faq/ozone.csv", sep=",", header=T)
+
+# We create a sub sample of the data set
+
+ozone <- ozone[sample(1:nrow(ozone), size = 10, replace = FALSE),]
+
+
+# Create distance matrices of geographical and ozone distances
+station.dists <- dist(cbind(ozone$Lon, ozone$Lat))
+ozone.dists <- dist(ozone$Av8top)
+
+```
+
+```{r,echo=FALSE}
+# Visualisation
+station.dists <- as.matrix(station.dists)
+ozone.dists_visu <- as.matrix(ozone.dists)
+ozone.dists_visu <- cbind(1:nrow(ozone),as.data.frame(ozone.dists_visu))
+
+names(ozone.dists_visu) <- c("",as.character(1:nrow(ozone)))
+round(ozone.dists_visu,2) %>% # Visualizing a distance matrix
+  kable("html", booktabs =TRUE, align = rep("c", 10))%>%
+  kable_minimal()%>%
+  column_spec(1, bold = TRUE)
+```
+
+The distances matrix must be a squared matrix. Now we can apply the Mantel test our to matrix.
+
 \
 
-### Permutation test on bootstrapped data
+### Mantel's test application
+
+There are some packages available to perform the Mantel test. For example, the `ade4` package with the `mantel. rtest()` function as follows:
+
+```{r}
+set.seed(seed = 123) 
+mod_ade <- ade4::mantel.rtest(as.dist(station.dists), as.dist(ozone.dists), nrepet = 1000)
+mod_ade
+```
+
+The coefficient of correlation observed is -0.2 and the p-value is 0.9. If we put the threshold of significance at 0.05 the correlation is not significant here!
+
+Another example of package is the `vegan` package which allows to use of different correlation statistics. In our case, we chose the Pearson correlation.
+
+```{r}
+#Using the vegan package, pearson correlation
+
+mantel(xdis = station.dists, ydis = ozone.dists, permutations = 1000)
+```
+
+Using this package, the results are similar. well! The p-value is indicated after the term "Significance:" and the correlation coefficient follows the term "Mantel statistic r".
+
+\
+
+The mantel test evaluates the significance of the regression line between the two distance matrix. We saw that the mantel test is not significant. We detected no correlations between distances. Let's plot the results:
+
+```{r, out.width="50%", echo = FALSE}
+plot(dist(ozone.dists)~dist(station.dists),
+     xlab = "stations distances",
+     ylab = "Ozone distances")
+abline(lm(dist(ozone.dists)~dist(station.dists)), col = "red",
+       lwd = 2)
+```
+
+\
+
+## Permutation test on bootstrapped data
 
 Exploring the precision of our calculated statistic becomes particularly insightful. To achieve a robust assessment, we could opt for a combined approach, integrating both bootstrap and permutation methodologies. In this process, we would initiate a permutation test on each pseudo-data set generated through bootstrapping. The objective is to collect the statistic for each iteration, resulting in a distribution that effectively communicates the variance of estimation linked to the difference in means. This combined technique not only provides a confidence interval around our statistic but also enhances the overall reliability of our findings by accounting for the complexities and uncertainties inherent in the data. Note that combining both re-sampling techniques can be computationally intensive.
 
@@ -814,9 +895,8 @@ Exploring the precision of our calculated statistic becomes particularly insight
 To illustrate, we will consider construct the following model :
 
 $$
-\text{Sepal length} \sim \beta + \alpha(\text{Sepal Width}) + \epsilon \sim \mathcal{N}(0, \sigma^2)
+\text{Sepal length} = \beta + \alpha(\text{Sepal Width}) + \epsilon \sim \mathcal{N}(0, \sigma^2)
 $$
-
 
 With $\beta$ representing the intercept, $\alpha$ as the regression coefficient, and $\epsilon$ denoting the error. The objective is to ascertain (i) the confidence interval of the regression estimate $\alpha$ and (ii) the associated p-value. To achieve this, we will utilize a subset of the iris dataset comprising 25 randomly selected samples of the *I. versicolor* species:
 
@@ -835,7 +915,8 @@ Now, the plan is to conduct $j$ bootstrap datasets to evaluate the confidence in
 alpha_observed <- round(lm(Sepal.Length ~ Sepal.Width, data = sub_data)$coefficients[[2]], 2)
 alpha_observed
 ```
-Our observed $\alpha = 0.98$. We'll keep it for later. Now, we'll perform the combined bootstrapped / permutation procedure : 
+
+Our observed $\alpha = 0.98$. We'll keep it for later. Now, we'll perform the combined bootstrapped / permutation procedure :
 
 ```{r, message = F, warning=F, message = F, cache = T}
 set.seed(123)
@@ -906,11 +987,12 @@ legend("topright", fill = c("red", "blue"), legend = c("Null distribution", "Boo
 ```
 
 We observe a notable distinction between the bootstrapped distribution and the null distribution. To formalize this, we calculate the p-value, defined as the overlap between both distributions:
+
 ```{r}
 sum(null_distribution > boot_a) / bootstrap_iteration
 ```
 
-We obtain a p-value of $p < 0.0001$, indicating that the coefficient is significantly greater than chance! Now, let's leverage our combined techniques to calculate the confidence interval of this newly established significant $\alpha$ along with the associated p-value:
+We obtain a p-value of $p = 0.0012$, indicating that the coefficient is significantly greater than chance! Now, let's leverage our combined techniques to calculate the confidence interval of this newly established significant $\alpha$ along with the associated p-value:
 
 ```{r}
 round(quantile(boot_a, probs = c(0.025,0.975)), 2)
@@ -926,66 +1008,6 @@ original_data_alpha
 
 So $0.87 \in [0.40, 1.84]$ ! With only half the original sample size, we achieved the exact same conclusion with a bootstrap and permutation procedure. Although it takes a bit more computation time and resources, this procedure is really efficient even with low sample size !
 
-
-\
-
-### Mantel tests
-
-#### Uses
-
-The Mantel test [@mantel_detection_1967] is used to evaluate the relationship between two matrices of correspondences measured on the same individuals. The two correspondence (distances) matrices are denoted by $X$ and $Y$. Here, the null hypothesis describes the independence of the mechanisms governing the distances between individuals. The Mantel test is mainly used for testing correlations between genetics or geographical distances. The H0 distribution is obtained by permuting the individuals between them. We will use the data set "ozone" from the website UCLA (https://stats.idre.ucla.edu/stat/r/faq/ozone.csv). In this case, Mantel's test is used to know more about correlations between ozone differences and geographical distances between stations. In other terms: Is the ozone variability independent of the geographical variability?
-
-#### Correspondence (distances) matrices
-
-The first step is to extract the distances matrix of geographical distances and ozone distances between each station. Here, we select the five first individuals of the distances matrix.
-
-```{r}
-
-# Download a dataset and create distance matrices
-ozone <- read.table("https://stats.idre.ucla.edu/stat/r/faq/ozone.csv", sep=",", header=T)
-station.dists <- dist(cbind(ozone$Lon, ozone$Lat))
-ozone.dists <- dist(ozone$Av8top)
-
-station.dists <- as.matrix(station.dists)[1:5, 1:5]
-ozone.dists <- as.matrix(ozone.dists)[1:5, 1:5]
-ozone.dists <- cbind(c("1","2","3","4","5"),as.data.frame(ozone.dists))
-
-names(ozone.dists) <- c("","1","2","3","4","5")
-ozone.dists %>% # Visualizing a distance matrix
-  kable("html", booktabs =TRUE, align = rep("c", 6))%>%
-  kable_minimal()%>%
-  column_spec(1, bold = TRUE)
-
-```
-
-The distances matrix should have the same shape as the table x. Now we can apply the Mantel test our to matrix.
-
-\
-
-#### Mantel's test application
-
-There are some packages available to perform the Mantel test. For example, the ade4 package with the "mantel. rtest" function as follows.
-
-```{r}
-# Using the ade4 package
-
-set.seed(seed = 1.5) # Have same results
-mantel.rtest(as.dist(station.dists), as.dist(ozone.dists[,-1]), nrepet = 1000)
-```
-
-The coefficient of correlation observed is -0.2061116 and the p-value is 0.6793207. If we put the threshold of significance at 0.05. The correlation is not significant here!
-
-Another example of a package is the vegan package which allows to use of different correlation statistics. In our case, we chose the Pearson correlation.
-
-```{r}
-#Using the vegan package, pearson correlation
-
-mantel(xdis = station.dists, ydis = ozone.dists, permutations = 1000)
-
-```
-
-Using this package, the results are similar. well! The p-value is indicated after the term "Significance:" and the correlation coefficient follows the term "Mantel statistic r:". Note that in our case, the number of possible permutations is limited. We should be aware of the length of our data set.
-
 \
 
 ## Conclusion on permutation tests
@@ -993,6 +1015,3 @@ Using this package, the results are similar. well! The p-value is indicated afte
 In conclusion, permutation tests offer a powerful and flexible approach to statistical inference, especially when traditional parametric assumptions cannot be met. By iteratively permuting the observed data, these tests generate a null distribution under the assumption of no effect, enabling the assessment of the observed statistic's significance. This makes permutation tests applicable in various scenarios, including comparisons of means, medians, correlations, or any other measure of interest.
 
 While permutation tests can be computationally intensive (especially when combined with bootstrap procedures), their key advantage lies in providing reliable results with small sample sizes and non-normally distributed data. Unlike parametric tests, permutation tests do not rely on assumptions about the underlying distribution of the data, making them robust and applicable in a wide range of situations.
-
-In the next chapter, we delve into the Mantel test, a statistical method used to assess the correlation between two distance matrices. This test is particularly valuable in fields such as ecology and genetics, where understanding the spatial or temporal relationships between entities is crucial.
-
