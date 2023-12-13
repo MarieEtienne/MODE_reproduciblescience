@@ -18,13 +18,15 @@ library(tidyverse)
 ## What is autocorrelation ?
 Statistical analyses, including many regression methods, often assume that observations are independent of each other. Most of the time, it seems natural to analyse two different datas, X and Y, assuming their independence. But there may still be a dependency intrinsic to each of them: this is known as autocorrelation. Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power. <br />
 In statistics, autocorrelation is a measure of the linear dependence between the values of one variable itself, at different times or locations. Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series. In other words, this means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if the data at time 2 can be predicted with what we know about the data at time 1, if they are close in space or time. <br />
-Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be :<br />
-- positive : indicating that the observations tend to be similar, <br />
-- or negative, indicating that the observations tend to be opposite to each other.
+Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be:<br />
+- positive: indicating that the observations tend to be similar, <br />
+- negative: indicating that the observations tend to be opposite to each other.
 <br />
 
 ## What types of autocorrelation ?
-Autocorrelation is commonly used to analyze data where the order or location of observations has an important significance, such as time series (data taken at the same location at several points in time), or spatial data (data taken at a given point in time at several locations in the same geographical area, and therefore close in space). 
+Autocorrelation is commonly used to analyze data for which the order or location of observations has an important significance, such as:<br />
+- time series: data taken at the same location at several points in time, <br />
+- spatial data: data taken at a given point in time at several locations in the same geographical area, and therefore close in space. 
 
 ### Time series
 In time series, there may be seasonal autocorrelation, where values observed at the same time each year (seasons) are correlated.
