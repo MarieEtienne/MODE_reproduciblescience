@@ -1001,7 +1001,7 @@ dataHVS$Response<-dataHVS$MeanOrbitalVolume
 mod2<-lm(Response~Lat+Capacity,data=dataHVS)
 
 # Dataset import
-dataBombus <- read.table("Bumblebees.txt", dec=".", header = TRUE)
+dataBombus <- read.table("BumbleBees.txt", dec=".", header = TRUE)
 dataBombus$Castes<-as.factor(dataBombus$Castes)
 dataBombus$Species<-as.factor(dataBombus$Species)
 dataBombus$SQRTMites<-sqrt(dataBombus$TotalMites)
