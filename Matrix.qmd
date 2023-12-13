@@ -36,9 +36,9 @@ partir de la population de suricats et on complexifie au fur et à mesure en int
 
 
 
-I. Modélisation matricielle en écologie
+I. Foundations of matrix modelling in ecology
 
-	A quoi servent les matrices en écologie ? 
+	A. Why using matrix modelling in ecology ? 
 	
 Matrices are mathematical tools for modeling situations. Used in many fields, ecology is no exception . Matrices make it possible to represent populations and make them evolve according to different rules or events. 
 The first uses of these models date back to 1941 by Harro Bernardelli which studied the oscillations of the structure of a population (Smith D. and Keyfitz N., 2012). Others use later matrices to represent populations, including Leslie in 1945 whose work marked a turning point in the use of matrices in ecology (Charles S., 2004). 
@@ -109,7 +109,7 @@ It is important to know that modeling matrices have limitations. They are based 
 By allowing to model as correctly as possible the evolution of a population over time, according to the maximum of parameters that can positively or negatively impact it, we can obtain many very interesting results. Thus, population matrices can allow us to improve species conservation and management. Depending on the dynamics of its population, we can know if the species is threatened in the future and/or impacted by events (example: impact of fire (Hoffmann W.A., 1999)). We can have a more global and real vision of how populations evolve in their environment. 
 However, matrix models may not be always necessary. As for each study, it is important to ask ourselves the right questions, to think about the interest of this mode of analysis compared to others and its relevance for the question/ population studied.
 
-B) Transformer une population en matrice
+B) Transform a population into a matrix
 
 We were able to see what are the interests of making population matrices for our research. From now on, we will see together how to create these matrices.
 
@@ -201,7 +201,7 @@ matrix2
 Here, our model represents a stable population, at the moment t. It does not allow us to observe its evolution for the moment. In order to use it in population dynamics, we will have to make it more complex.
 
 
-C) Comment modifier une matrice basique ?
+C) How can we modify a simplified population matrix ?
 
 Before making our matrix suitable for the study of population dynamics, we will start by seeing how simple matrix manipulations can allow us to modify the matrix representation of our population if the latter is modified. 
 Let’s take our family of meerkats: during the journey, the young male is captured by a predator, which removes a member from the population and therefore changes the matrix. Similarly, later on, a lone male, lost, is welcomed by the family. Thus, our matrix will be successively modified in these ways: 
