@@ -28,7 +28,7 @@ III. Matrice en épidémiologie -> Jeanne
 Epidemiology is the study of disease dynamics within a population.
 Let's imagine that a sick meerkat arrives in a new, healthy colony after having had to leave its previous colony, which has been decimated by disease. The dynamics of the epidemic can be modeled using a basic epidemiological model, the SIRS model.
 
-(Schéma modele SIRS cf Image mais sans la dynamique de pop et avec loss et mortalité lié à la maladie)
+![The SIRS model](C:/Users\thill\Documents\M2 MODE\git\branche_Jeanne\MODE_reproduciblescience\.quarto\_freeze\Matrix\Schema_modele_SIRS.png "The SIRS model" )
 
 In this model, susceptible individuals (S) become infected, and thus pass into the infectious class (I), then either leave the system by dying of the disease, or heal, and thus become cured/immune individuals (R). Finally, immunized individuals can lose their immunity and become susceptible again (S).
 
@@ -90,8 +90,7 @@ $$\begin{aligned}& N = j + a \\
 By combining population dynamics and epidemiological dynamics,
 we end up with a much more complex model:
 
-
-(Schéma du modèle complet)
+![The whole model](C:/Users\thill\Documents\M2 MODE\git\branche_Jeanne\MODE_reproduciblescience\.quarto\_freeze\Matrix\Schema_complet.png "The whole model" )
 
 This model can also be expressed as a system of differential equations:
 
@@ -111,7 +110,7 @@ However, instead of trying to solve this system in continuous time, we'll work i
 
 3. Setting up the model in R
 
-The first step is to create the matrix that will store the population numbers over time. We will therefore create a matrix in 3 dimensions: - The first dimmension (rows) corresponds to the structure of the population into juveniles and adults, with an additional row for the total population.
+The first step is to create the matrix that will store the population numbers over time. We will therefore create a matrix in 3 dimensions: - The first dimension (rows) corresponds to the structure of the population into juveniles and adults, with an additional row for the total population.
 - The second dimension (columns) corresponds to the different states of the individuals (S, I and R).
 - The third dimension is the simulation time in days.
 
@@ -270,13 +269,7 @@ Effectifsplot <- ggplot(Effectifs,aes(x=seq(1,temps,1))) +
 Effectifsplot  
 ```
 
-
-
-faire graphe pour les jeunes et les adultes séparément?
-
-Conclusion equilibre endémique on atteint un equilibre avec pourcentage de chaque état de santé stable au cours du temps, la pop remonte car elle n'est pas au max de la capacité du millieu ? Avec mortalité de la maladie plus forte ?
-
-
+An endemic equilibrium is reached with a stable percentage of each health state over time. If you want to have fun with this model, you can change the parameters of the epidemic dynamics to observe other scenarios, such as the extinction of the population or the extinction of the disease.
 
 
 
