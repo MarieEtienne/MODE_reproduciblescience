@@ -56,7 +56,18 @@ In R
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
+To be able to study an autocorrelation at a larger scale, other models must be used. 
+
+The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location. 
+
+The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows)
+
+
+Depending on where we think the autoregressive process is, the method used will not be the same.
+
 ##### 3.1.2.1. Lagrange Multiplier diagnostic
+
+
 
 ##### 3.1.2.2. Error models
 
