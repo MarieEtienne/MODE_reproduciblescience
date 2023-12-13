@@ -38,23 +38,11 @@ The idea behind this analysis is that the state of a neighbor region will affect
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
 
-An extra parameter : $\rho$A, called the autocovariate is added to the generalized linear model's formula. It is a distance-weighted function of the neighboring response value.
+An extra parameter : WX$\theta$, called the autocovariate is added to the generalized linear model's formula. It is a distance-weighted function of the neighboring response value.
 
-**Y = X**$\beta$ + $\rho$A + $\epsilon$
+**Y = X**$\beta$ + **WX**$\theta$ + $\epsilon$
 
-A can be calculated as either the weighted sum :
-
-$$(A_{i}) = \displaystyle \sum_{j\in k_{i}}w_{ij}y{j]} $$
-
-or as the weighted average:
-
-$$(A_{i}) = \displaystyle \frac{\sum_{j\in k_{i}}w_{ij}y{j]}}{\sum_{j\in k_{i}}w_{ij}} $$
-
-( $y_{i}$= the value of y at the site j among site i's set of $k_{i}$ neighbors.
-
-$w_{ij}$ = the weight given to the site j's influence over site i)
-
-This function is usually related to the distance between data points or to the environmental distance.
+The argument WX$\theta$ is the average of the neigbouring Xs. 
 
 In R
 
@@ -78,8 +66,7 @@ A specific diagnostic can be made to chose between either one.
 
 ##### 3.1.2.2. Lag models
 
-In this model, we assume that the autoregressif process is in the response variable. 
-As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
+In this model, we assume that the autoregressif process is in the response variable. As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
 
 It would for exemple be liked a stone thrown in a lake. This creates waves that propagate to the whole lake.
 
@@ -89,10 +76,7 @@ The model will take the form of :
 
 **Y =**$\rho$**WY +X**$\beta$ + $\epsilon$
 
-**ρ** is the autoregression parameter
-**W** is the spatial weights matrix
-
-
+**ρ** is the autoregression parameter **W** is the spatial weights matrix
 
 ##### 3.1.2.3. Error models
 
@@ -104,10 +88,13 @@ this model takes the form of :
 
 **Y = X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
 
-The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. 
-$\mu$ is the spatially dependant error term.
+The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. $\mu$ is the spatially dependant error term.
 
 ##### 3.1.2.4. Mixed models
+
+If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used. This model include all the parameter added above, and it is the most inclusive model.
+
+It can be noted that this model can also be used in both situation described previously, as the coeffiscient will cancel themselves out if either one is not present.
 
 **Y =** $\rho$**WY +X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
 
