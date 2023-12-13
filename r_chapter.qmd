@@ -26,17 +26,19 @@ library(gwrr)
 
 For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
 
+All the models showed here will be based on the genralized linear model modified to take the spatial autocorrelation into account :
+
+**Y = X**$\beta$ + $\epsilon$
+
 #### 3.1.1. Spatially lagged X model
 
 This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
 The idea behind this analysis is that the state of a neighbor region will affect our region.
 
-This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
+This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
 
-**Y = X**$\beta$ + $\epsilon$
-
-to which will be added an extra parameter : $\rho$A, a distance-weighted function of the neighboring response value, called the autocovariate.
+An extra parameter : $\rho$A, called the autocovariate is added to the generalized linear model's formula. It is a distance-weighted function of the neighboring response value.
 
 **Y = X**$\beta$ + $\rho$A + $\epsilon$
 
