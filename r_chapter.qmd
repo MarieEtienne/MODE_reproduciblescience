@@ -30,7 +30,7 @@ For the models described here, it is required for the processes to be stationary
 
 This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
-The idea behind this analysis is that the state of a neighbor region will affect our region. 
+The idea behind this analysis is that the state of a neighbor region will affect our region.
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
 
@@ -56,18 +56,19 @@ In R
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
-To be able to study an autocorrelation at a larger scale, other models must be used. 
+To be able to study an autocorrelation at a larger scale, other models must be used.
 
-The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location. 
+The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location.
 
-The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows)
+The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows).
 
+The autoregressif process can be found in either the residuals of the data or in the response value. Depending on where this process is thought to be,three models are availble :
 
-Depending on where we think the autoregressive process is, the method used will not be the same.
+-   The **Error model**
+-   The **Lag model**
+-   The **Mix model**
 
 ##### 3.1.2.1. Lagrange Multiplier diagnostic
-
-
 
 ##### 3.1.2.2. Error models
 
