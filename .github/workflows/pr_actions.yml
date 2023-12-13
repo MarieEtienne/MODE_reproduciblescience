@@ -13,6 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install R packages
-        run: Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa'))"
+        run: Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa', 'factoextra'))"
       - name: Generate slides
         run: "quarto render"
