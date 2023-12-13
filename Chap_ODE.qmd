@@ -86,8 +86,7 @@ ecological context
 
 Let's start simply!
 
-First of all, let's define the framework of the study (= cadre de
-l'étude).
+First of all, let's define the framework of the study.
 
 We consider a dynamic system. Or in other words, a physical system whose
 state changes as a function of time. By "state", we mean "physical
