@@ -138,7 +138,60 @@ $$
 q.T=q\\
 $$
 
+Donc si :
+
+$$
+q=\left(\begin{array}{cc} 
+q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
+\end{array}\right)
+$$
+
+Alors :
+
+$$
+\left(\begin{array}{cc} 
+q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
+\end{array}\right).
+\left(\begin{array}{cc} 
+0 & 0.9 & 0 & 0 & 0 & 0.1 & 0  & 0 & 0\\
+0 & 0 & 0.6 & 0.4 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0.1 & 0 & 0.7 & 0.2 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+0.025 & 0 & 0 & 0.025 & 0 & 0 & 0.8 & 0.15 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0.1 & 0 & 0 & 0.9\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+\end{array}\right)=
+\left(\begin{array}{cc} 
+q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
+\end{array}\right)
+$$
+
+
+
+
 Donc :
+
+$$
+\left(\begin{array}{cc} 
+q_6\cdot0.025 & q_1\cdot 0.9 & q_2\cdot0.6+q_3+q_4\cdot0.1 & q_2\cdot0.4+q_6\cdot0.025 & q_4 \cdot 0.7 + q_5 & 0.1\cdot q_1 + 0.2 \cdot q_4 + 0.1 \cdot q_8 & q_6 \cdot 0.8 + q_7 & 0.15 \cdot q_6 & 0.9 \cdot q_8 + q_9\\
+\end{array}\right) =
+\left(\begin{array}{cc} 
+q_1 & q_2 & q_3 & q_4 & q_5 & q_6 & q_7 & q_8 & q_9\\
+\end{array}\right)
+$$
+
+q6=0
+q1=0
+q6.0.025=q4
+q2=0
+q4=0
+0.1*q8=q6
+
+
+
+
 
 $$
 q.T=q.I\\
