@@ -34,19 +34,19 @@ The idea behind this analysis is that the state of a neighbor region will affect
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites. Starting from the usual linear predictor for a generalized linear model :
 
-![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/equation_glm%20.png)
+**Y = X**$\beta$ + $\epsilon$
 
-to which will be added an extra parameter, a distance-weighted function of the neighboring response value, called the autocovariate.
+to which will be added an extra parameter : $\rho$A, a distance-weighted function of the neighboring response value, called the autocovariate.
 
-![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/autocovariate_function.png)
+**Y = X**$\beta$ + $\rho$A + $\epsilon$
 
 A can be calculated as either the weighted sum :
 
-![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/weighted_sum.png)
+$$(A_{i}) = \displaystyle \sum_{j\in k_{i}}w_{ij}y{j]} $$
 
 or as the weighted average:
 
-![](~/cours/Master%202/S1/OCR/MODE_reproduciblescience/images%20projet/weighted_average.png)
+$$(A_{i}) = \displaystyle \frac{\sum_{j\in k_{i}}w_{ij}y{j]}}{\sum_{j\in k_{i}}w_{ij}} $$\
 
 (**y**j = the value of y at the site j among site i's set of *k*i neighbors **w**ij = the weight given to the site j's influence over site i)
 
@@ -68,11 +68,19 @@ The autoregressif process can be found in either the residuals of the data or in
 -   The **Lag model**
 -   The **Mix model**
 
+A specific diagnostic can be made to chose between either one.
+
 ##### 3.1.2.1. Lagrange Multiplier diagnostic
 
-##### 3.1.2.2. Error models
+##### 3.1.2.2. Lag models
 
-##### 3.1.2.3. Lag models
+The lag model is used to take into account a autoregressif process only occuring in the response variable. Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
+
+The model will take the form of :
+
+**Y =** $\rho$ **WY +X**$\beta$ + $\epsilon$
+
+##### 3.1.2.3. Error models
 
 ##### 3.1.2.4. Mixed models
 
