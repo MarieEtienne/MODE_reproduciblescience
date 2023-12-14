@@ -73,15 +73,33 @@ plot(knn2nb(div.knear4), xy, add=TRUE)
 #For a Queen conection
 div.knear8<-knearneigh(as.matrix(xy),8)
 knn2nb(div.knear8)
+plot(knn2nb(div.knear8), xy, add=TRUE)
 
+#Spatial weighted matrix
+pond4.stan<- nb2listw(knn2nb(div.knear4), style="W", zero.policy=TRUE)
+pond8.stan<- nb2listw(knn2nb(div.knear8), style="W", zero.policy=TRUE)
+
+#The argument "style = "w"" allows to determine the weight given to each link. 
+# "W" for standardized = 1/nb of connections
+#if you want to give the same weight to each link, then use the argument "B" instead of "w".
 
 ```
 
-The spatial matrix must then be created. Any type of spatial connection can be used, depending on the study you want to conduct, your field conditions and your data themselves. 
+*(to be able to use the weighted matrix in the analysis, the items must be a class "listw", hence the argument "nb2listw")*
+
+The function used for spatially weighted matrix is "lmslx". 
+In the argument : 
+- First the equation tested in shape of : Y ~ X1+X2+X3 ...
+- the data set (here div35)
+- The weighted matrix ( here pond8.stan)
 
 ```{r}
 lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stand)
 summary(lmsSLX)
+```
+Here 
+
+```{r}
 impacts(lmsSLX)
 summary(impacts(lmsSLX, R=500),zstats=TRUE)
 ```
