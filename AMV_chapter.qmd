@@ -35,7 +35,7 @@ examine the structure of the data by answering the following questions:
 Multivariate analysis methods are therefore used to describe the data
 and generate hypotheses that can then be tested.
 
-# PART 1: PCA
+# PART 1: Principal Component Analysis (PCA)
 
 ## Introduction
 
@@ -373,7 +373,7 @@ Thanks to PCA, we can see that the final score is more linked to the
 score of certain disciplines than others. And therefore, that links
 between certain variables and individuals can be observed.
 
-# PART 2: CA
+# PART 2: Correspondence Analysis (CA)
 
 ## Introduction
 
@@ -837,7 +837,7 @@ In an analysis where the data are not created randomly, but come from
 different individuals from different populations. This could reveal a
 particular typology of one population in relation to another.
 
-# PART 3: MCA
+# PART 3: Multiple Correspondance Analysis (MCA)
 
 ## Introduction
 
@@ -982,7 +982,7 @@ to help interpretation. As they are quantitatives, they would not
 participate to the creation of axis but they may be ploted on the final
 graph.
 
-# PART 4: CCA
+# PART 4: Canonical Correspondence Analysis (CCA)
 
 ## Introduction
 
