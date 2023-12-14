@@ -30,6 +30,8 @@ website:
           href: Mixed_models.qmd        
         - text: Ordinary Differential Equations in Ecology
           href: Chap_ODE.qmd
+        - text: Resampling methods
+          href: r_chapter_boostrapping_resampling.qmd
         - text: Bayesian models in Ecology
           href: bayesian_modeles.qmd
         - href: simple_chapter.qmd

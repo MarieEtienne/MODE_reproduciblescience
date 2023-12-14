@@ -1,5 +1,5 @@
 ---
-title: "Chapter : Resampling methods"
+title: "Resampling methods"
 
 bibliography: references.bib
 execute: 
