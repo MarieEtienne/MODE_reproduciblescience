@@ -1,5 +1,5 @@
 ---
-title: "Modèle matrice et applications en écologie"
+title: "Matrix models and applications in ecology"
 execute: 
   freeze: auto
 output: 
