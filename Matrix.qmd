@@ -104,7 +104,7 @@ It is important to know that modeling matrices have limitations. They are based 
 By allowing to model as correctly as possible the evolution of a population over time, according to the maximum of parameters that can positively or negatively impact it, we can obtain many very interesting results. Thus, population matrices can allow us to improve species conservation and management. Depending on the dynamics of its population, we can know if the species is threatened in the future and/or impacted by events (example: impact of fire (Hoffmann W.A., 1999)). We can have a more global and real vision of how populations evolve in their environment. 
 However, matrix models may not be always necessary. As for each study, it is important to ask ourselves the right questions, to think about the interest of this mode of analysis compared to others and its relevance for the question/ population studied.
 
-B) Transform a population into a matrix
+	B. Transform a population into a matrix
 
 We were able to see what are the interests of making population matrices for our research. From now on, we will see together how to create these matrices.
 
@@ -199,7 +199,7 @@ matrix2
 Here, our model represents a stable population, at the moment t. It does not allow us to observe its evolution for the moment. In order to use it in population dynamics, we will have to make it more complex.
 
 
-C) How can we modify a simplified population matrix ?
+	C. How can we modify a simplified population matrix ?
 
 Before making our matrix suitable for the study of population dynamics, we will start by seeing how simple matrix manipulations can allow us to modify the matrix representation of our population if the latter is modified. 
 Let’s take our family of meerkats: during the journey, the young male is captured by a predator, which removes a member from the population and therefore changes the matrix. Similarly, later on, a lone male, lost, is welcomed by the family. Thus, our matrix will be successively modified in these ways: 
@@ -308,9 +308,9 @@ Pf = Pn % * % N
 
 ```
 
-II/ Leslie matrix
+II. Leslie matrix
 
-A) Meerkat life cycle
+	A. Meerkat life cycle
 
 We're now back with our meerkat family 10 years later. During this decade, our population has evolved and different age classes have formed. 
 First of all, we have the class of juveniles, noted J, which are between 0 and 1 year old and correspond to individuals not yet sexually mature. Only a small proportion of these juveniles reach adulthood, following a rate of passage noted TPa.
@@ -363,7 +363,7 @@ S_{t+1} &= 0 \cdot J_t + 0.3 \cdot A_t + 0.4 \cdot S_t
 \end{align*}
 $$
 
-B) Leslie matrix
+	B; Leslie matrix
 
 This second system allows us to establish a matrix.
 The use of a matrix will enable us to determine various parameters, such as the growth rate, to understand and predict the evolution of the population over time.
@@ -599,7 +599,7 @@ III. Epidemiology matrices
 Epidemiology is the study of disease dynamics within a population.
 Let's imagine that a sick meerkat arrives in a new, healthy colony after having had to leave its previous colony, which has been decimated by disease. The dynamics of the epidemic can be modeled using a basic epidemiological model, the SIRS model.
 
-![The SIRS model](/Schema_modele_SIRS.png "The SIRS model" )
+![The SIRS model](Schema_modele_SIRS.png "The SIRS model" )
 
 In this model, susceptible individuals (S) become infected, and thus pass into the infectious class (I), then either leave the system by dying of the disease, or heal, and thus become cured/immune individuals (R). Finally, immunized individuals can lose their immunity and become susceptible again (S).
 
@@ -661,7 +661,7 @@ $$\begin{aligned}& N = j + a \\
 By combining population dynamics and epidemiological dynamics,
 we end up with a much more complex model:
 
-![The whole model](/Schema_complet.png "The whole model" )
+![The whole model](Schema_complet.png "The whole model" )
 
 This model can also be expressed as a system of differential equations:
 
@@ -844,9 +844,9 @@ An endemic equilibrium is reached with a stable percentage of each health state 
 
 IV. Markov chain
 
-A- the Markov Chain
+	A. the Markov Chain
 
-![Changement de colonie](/Schema_suricates.png)
+![Changement de colonie](Schema_suricates.png)
 
 After this latest blow and epidemic, the survivors of our meerkat family are once again forced to look for a habitat and join a new colony. There are several options and colonies to choose from, each with a different probability of being reached depending on the difficulty of the journey and the resources it contains. In other words, the arrows linking the habitats represent the probability of reaching them. When the habitats are reached, a new arrow comes into play to determine the probability of being accepted into the colony; when this is the case, the meerkats settle permanently and stop moving. On the other hand, if they are not accepted in a colony, they can try their luck in a new one or try again to be accepted in a previous colony. This information is used to construct the diagram above. 
 
@@ -854,7 +854,7 @@ For example, our poor meerkats are initially in position O and cannot stay there
 
 The diagram above is what is known as a "Markov Chain" in which the various probabilities are numerically anotated. A Markov chain can be defined as a discrete-time or continuous-time stochastic process with a discrete state space, defined as being "memoryless" because it depends only on the present state and not on previous states. 
 
-B- The transition Matrix 
+	B. The transition Matrix 
 
 These different elements and this "Markov Chain" allow us to produce a rather special matrix T, which we call the transition matrix of a "Markov Chain". This defines the transition probabilities from each state at time (t) vertical to each state at time (t+1) horizontal and is shown below: 
 
@@ -893,7 +893,7 @@ As we can see, this matrix works in discrete time because of the transition from
 However, it could also work in continuous time with discrete state spaces, but for the sake of simplicity we will work in discrete time.
 For example, in the matrix above, we can read that the probability of moving from position O (the poor camping tent of our family of beloved meerkats) to colony A is 0.9, or 90%.
 
-C- Evolution of the system
+	C. Evolution of the system
 
 If we take into account the fact that at time 0, the meerkats are in their makeshift tent, here is the initial condition:
 
@@ -977,7 +977,7 @@ T_t = \left(\begin{array}{cc}
 \end{array}\right)^t=T_0.T^t
 $$
 
-D- Eigenvalues and eigenvectors
+	D. Eigenvalues and eigenvectors
 
 Markov chain theory tells us that, after a certain time, the probability distribution will be independent of the initial distribution and we will see convergence towards different points in the chain.
 
@@ -1050,7 +1050,7 @@ for (t in 1:10000){
 This result tells us that 58% of the time the meerkat family will end up settling in burrow A1, 26% of the time in burrow B2, 14% of the time in burrow C3 and 2% of the time in burrow D4.
 
 =======
-C) Bibliography : 
+V. Bibliography  
 
 N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, (2008)
 
