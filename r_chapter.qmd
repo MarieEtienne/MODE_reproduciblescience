@@ -15,10 +15,11 @@ Once the structure of the spatial correlation has be estimated, it can then be i
 
 Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
 
-For the analysis under R, it will be important to import the package **spatialreg** as well as **gwrr**
+For the analysis under R, it will be important to import the package **spatialreg**, **sdpep** as well as **gwrr**
 
 ```{r}
 library(spatialreg)
+library(sdpep)
 library(gwrr)
 ```
 
@@ -32,6 +33,8 @@ All the models showed here will be based on the genralized linear model modified
 
 #### 3.1.1. Spatially lagged X model
 
+##### Theory
+
 This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
 The idea behind this analysis is that the state of a neighbor region will affect our region.
@@ -44,9 +47,20 @@ An extra parameter : WX$\theta$, called the autocovariate is added to the genera
 
 The argument WX$\theta$ is the average of the neigbouring Xs. 
 
-In R
+##### Application in R
+
+As this analysis is quite simple the average value of the neighbouring regions can be calculated by hand and then added to the generalized linear formula.
+
+However, there are commands in R in the package sdpep that allows to do the same analysis ans to go a little further, as well as giving the R-squared value and the p value. 
+
+Our exemple here will be the study of plants and bird richness in Ile & Vilaine
+```{r}
+div35=read.table("div35.txt", header=T, dec=",")
+```
+
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
+
 
 To be able to study an autocorrelation at a larger scale, other models must be used.
 
@@ -64,7 +78,13 @@ A specific diagnostic can be made to chose between either one.
 
 ##### 3.1.2.1. Lagrange Multiplier diagnostic
 
+###### Theory
+
+###### Application in R
+
 ##### 3.1.2.2. Lag models
+
+###### Theory
 
 In this model, we assume that the autoregressif process is in the response variable. As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
 
@@ -78,7 +98,11 @@ The model will take the form of :
 
 **ρ** is the autoregression parameter **W** is the spatial weights matrix
 
+###### Application in R
+
 ##### 3.1.2.3. Error models
+
+###### Theory
 
 When using the error model, we assume that the autoregressif process is only in the residuals.
 
@@ -90,7 +114,11 @@ this model takes the form of :
 
 The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. $\mu$ is the spatially dependant error term.
 
+###### Application in R
+
 ##### 3.1.2.4. Mixed models
+
+###### Theory
 
 If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used. This model include all the parameter added above, and it is the most inclusive model.
 
@@ -98,11 +126,17 @@ It can be noted that this model can also be used in both situation described pre
 
 **Y =** $\rho$**WY +X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
 
+###### Application in R
+
 ### 3.2. - Non stationary process
 
 **Graphically weighted models (GWM)**
 
+###### Theory
+
 Few methods exist to deal with non stationary processes
+
+###### Application in R
 
 Bibliography :
 
