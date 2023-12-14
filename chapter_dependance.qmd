@@ -68,6 +68,6 @@ df %>% ggplot() +
 
 # Summary
 
-# Bibliography
+# References
 
 A citation @bauer2023writing
