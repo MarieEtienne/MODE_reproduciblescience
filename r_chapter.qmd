@@ -1,6 +1,7 @@
 ---
 
-title: "Linear modelling in ecology Léa "
+title: "Modèles matriciels et applications"
+group: "Quentin,	Alexie, Jeanne,	Laurane" 
 
 bibliography: references.bib
 execute: 
