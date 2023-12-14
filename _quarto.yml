@@ -20,16 +20,18 @@ website:
 
         
     right:
-      - text: Chapter 0 - Introduction
+      - text: M1 MODE Survival book by the M2 students
         menu:
+        - text: Multivariate Analysis
+          href: AMV_chapter.qmd
+        - text: Dependent data
+          href: chapter_dependance.qmd
+        - text: Mixed models in Ecology
+          href: Mixed_models.qmd        
+        - text: Bayesian models in Ecology
+          href: bayesian_modeles.qmd
         - href: simple_chapter.qmd
-        - text: A chapter using R
-          href: r_chapter.qmd
-        - text: A chapter using Python
-          href: python_chapter.qmd
         aria-label: GitHub
-
-
 
 format:
   html:
