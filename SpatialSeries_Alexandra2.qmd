@@ -9,10 +9,66 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-#2.1) Defining neighbours #2.1.1) Characteristics of the relationships between spatial objects Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
+#2.1) Defining neighbours
 
-Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R² × R² = \[(i, j) : i ∈ R² , j ∈ R²\] of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) \* B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+#2.1.1) Characteristics of the relationships between spatial objects Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
+
+**Mathematical definition of spatial relationships :**
+
+Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ 
+ℝ
+²,  j ∈ 
+ℝ
+
+²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
 
 Figure 2 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
 ![Figure 1 : Codifying spatial correlation (Tiefelsdorf, 1998)](C:/Users%5Calexa%5Cgit%5CMODE_reproduciblescience%5CSpatial%20autocorrelation_%20modelisation%5CFigure%201.png)
+
+First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.
+
+The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
+
+$$w_ij = 
+\{1 if i and j are spatially linked to each other -
+0 otherwise\}
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
