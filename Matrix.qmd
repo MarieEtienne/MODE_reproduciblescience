@@ -594,7 +594,7 @@ In this case, the lambda decreases by 0.36 etc...
 
 III. Epidemiology matrices
 
-1. Introduction to epidemiology with the SIRS model
+	A. Introduction to epidemiology with the SIRS model
 
 
 Epidemiology is the study of disease dynamics within a population.
@@ -629,7 +629,7 @@ $$\begin{aligned}& \frac{d S}{d t}= - trans \cdot S \cdot \frac{I}{N} + loss \cd
 & \frac{d R}{d t}= rec \cdot I - loss \cdot R
 \end{aligned}$$
 
-2. Taking population dynamics and structure into account
+	B. Taking population dynamics and structure into account
 
 
 This model takes no account of population dynamics or structure. To make it more realistic, we will therefore separate the population into two categories: juvenile (j) and adult (a), each with an associated mortality rate (m1 = and m2 =). In addition, adult females (sex ratio sr =) can reproduce with a daily reproduction rate f = and give birth to ? young at a time (portee =). It's important to note that the young are always born healthy. 
@@ -680,7 +680,7 @@ $$\begin{aligned}& \frac{d S_a}{d t}=S_j \cdot t_1 - S_a \cdot (m_2+trans \cdot 
 However, instead of trying to solve this system in continuous time, we'll work in discrete time, using a matrix to track meerkat population numbers.
 
 
-3. Setting up the model in R
+	C. Setting up the model in R
 
 The first step is to create the matrix that will store the population numbers over time. We will therefore create a matrix in 3 dimensions: - The first dimension (rows) corresponds to the structure of the population into juveniles and adults, with an additional row for the total population.
 - The second dimension (columns) corresponds to the different states of the individuals (S, I and R).
@@ -814,7 +814,7 @@ for (t in 1:(temps-1)){
 }# fin boucle temps
 ```
 
-4. Visualizing results
+	D. Visualizing results
 
 Now that the simulation is done, it's easy to visualize the evolution of meerkat numbers by health status over time.
 
@@ -847,7 +847,7 @@ IV. Markov chain
 
 A- the Markov Chain
 
-![Changement de colonie](C:/Users/qlamb/Documents/R/Schema_suricates.png)
+![Changement de colonie](/Schema_suricates.png)
 
 After this latest blow and epidemic, the survivors of our meerkat family are once again forced to look for a habitat and join a new colony. There are several options and colonies to choose from, each with a different probability of being reached depending on the difficulty of the journey and the resources it contains. In other words, the arrows linking the habitats represent the probability of reaching them. When the habitats are reached, a new arrow comes into play to determine the probability of being accepted into the colony; when this is the case, the meerkats settle permanently and stop moving. On the other hand, if they are not accepted in a colony, they can try their luck in a new one or try again to be accepted in a previous colony. This information is used to construct the diagram above. 
 
