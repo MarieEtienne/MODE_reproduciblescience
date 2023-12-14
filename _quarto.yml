@@ -24,10 +24,12 @@ website:
         menu:
         - text: Multivariate Analysis
           href: AMV_chapter.qmd
-        - text: Dependent data
-          href: chapter_dependance.qmd
+        - text: Linear modelling in ecology
+          href: linear_modelling.qmd
         - text: Mixed models in Ecology
           href: Mixed_models.qmd        
+        - text: Dependent data
+          href: chapter_dependance.qmd
         - text: Ordinary Differential Equations in Ecology
           href: Chap_ODE.qmd
         - text: Resampling methods
