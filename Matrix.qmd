@@ -93,7 +93,7 @@ Population dynamic is a concept that is sometimes difficult to study because it 
 
  A matrix will allow to represent the population variation according to these four processes (Schaub M. and Abadi F., 2011 ; Abadi et al., 2010).
 
- (mettre ta figure)
+![Scheme of the population dynamics](Schéma dynamique pop.png "Scheme of the population dynamics")
 
 These representations can be very complete, including differences in age, gender, genetic origin and other individuals. Indeed, not all individuals will have the same impact on their population dynamics. 
 Too young or too old individuals do not participate in reproduction and therefore in the future increase of their group. The number of males will not have the same impact on the number of offspring as the females. 
