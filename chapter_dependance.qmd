@@ -74,6 +74,7 @@ Consider a surface ℜ. This surface can be divided into n mutually exclusive zo
 
 Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R 2 ×R 2 =  (i, j) : i ∈ R 2 , j ∈ R 2 of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) * B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
 
+Figure 2 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
 # Summary
 
