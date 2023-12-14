@@ -320,7 +320,7 @@ For the sake of our story, we'll consider that from the age of 10 our adult meer
 
 With all this information, we can draw the following tree of life: 
 
-![Figure 2 : Meerkat life cycle](C:/Users/Alexie/OneDrive/Bureau/firgure_2.png)
+![Figure 2 : Meerkat life cycle](Figure_2_Leslie_matrix.png "Meerkat life cycle")
 
 To complete this cycle , we search for data corresponding the most to reality in the wild. Thus, we estimate that : 
 
@@ -333,8 +333,7 @@ To complete this cycle , we search for data corresponding the most to reality in
 
 With all this information, we can complete our life cycle:
 
-![Figure 3 : Meerkat life cycle](C:/Users/Alexie/OneDrive/Bureau/Figure_3.png) 
-
+![Figure 3 : Meerkat life cycle](Figure_3_Leslie_matrix.png "Meerkat life cycle) 
 
 If we note, for any instant t (time being counted in years, so that t is an integer), Jt the number of juvenile meerkats, At the number of adults and St the number of seniors, we get :
 
