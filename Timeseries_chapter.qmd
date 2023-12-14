@@ -31,7 +31,7 @@ library(TSA)       # Time series analysis
 
 ### The dataset
 
-To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures. 
+To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures in time. 
 
 ```{r}
 ## Load the data
@@ -90,10 +90,14 @@ Autocorrelation is given by the expression: $$\rho(k) = \frac{E(X_tX_{t+1}) - E(
 
 With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$. 
 
-On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation). 
+In other words, the values are compared to their neighbors to conclude if they are correlated or not.
+
+On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package. 
+
+**Important note:** In order for the afc() function to work, the data have to be sorted according to time with one value per time step. To do so, *NA* or mean values can be added if necessary to fill the dataset accordingly. The package lubridate can be useful to manage dates data.
 
 ```{r}
-par(mfrow=c(2,3),mar=c(1,4,4,0))
+par(mfrow=c(2,3),mar=c(2,4,4,2))
 acf(C[,3], main="Reproductive success for C")
 acf(C[,4], main="Growth rate for C")
 acf(C[,5], main="Density for C")
@@ -101,18 +105,26 @@ acf(O[,3], main="Reproductive success for O")
 acf(O[,4], main="Growth rate for O")
 acf(O[,5], main="Density for O")
 ```
+The plots display the correlation coefficient at the associated time step with the neighbors (lag). The blue dotted lines represent the significance threshold of correlation. 
+
+These plots allow us to know if the time dependency exists and what profile it follows.
+
+- Growth rate of O and reproductive success of C : **White noise**. There is no significant value and particular pattern.
+- Density of C and reproductive success of O : **Short positive dependency**. Some values are significantly positively correlated and a pattern emerges (cyclic here). 
+- Growth rate of C : **Short negative dependency**. Some values are significantly negatively correlated and a pattern emerges (cyclic here).
+- Density of O : **Long term dependency**. Several values are significantly correlated and a pattern appears (linear here).
+
+
 
 
 --------------------------------------
 
+Plan pour se repérer. 
 
 # 1. Time series
 
-## What are time series?
-C'est quoi les séries temporelles ? 
-  Donner un exemple qui fait office de fil rouge
+
   
-Dataset avec les vautours de Pascaline. Reprendre le .rmd avec les exemples + mes notes. 
 
 ## What to do if we don't know if the series has a time dependency?
 Quand est-ce qu'on sait si on a une série temporelle ou non ? 
