@@ -97,7 +97,12 @@ In the argument :
 lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stand)
 summary(lmsSLX)
 ```
-Here 
+Here, 2 coeffiscients are given as well as their p-value. 
+The first one (rich_pp) correspond to the argument X$\beta$ of our original function. The second one (lag.rich_pp) correspond to WX$\theta$.
+
+*Here there is only one X, and therefore only 2 coefficients, but with a bigger model to test, the coeffiscients corresponding to the X will be named just like the original Xs, and the coeffiscients for the autocorrelation will be named "lag.X".*
+
+As always, we only keep the coeffiscients that have a significant p-value.
 
 ```{r}
 impacts(lmsSLX)
