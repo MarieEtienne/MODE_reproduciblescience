@@ -1,5 +1,5 @@
 ---
-title: "Multivariate analysis"
+title: "Multivariate Analysis"
 format: html
 editor: visual
 author: ANSALDI Lucile, BARREAU Julie, BONGIBAULT Baptiste, GUINEBRETIERE Aldric, MOREAU Cyrielle
