@@ -641,7 +641,7 @@ model, such as the interaction coefficients between populations.
 
 **Biological intuition:**\
 In this model, the predator population thrives when prey are plentiful,
-but eventually exhaust their resources and the population declines. When
+but eventually exhaust their resources, and the population declines. When
 the predator population has declined sufficiently, the prey can
 reproduce more, and the population increases again. This dynamic
 continues in a cycle of growth and decline.
