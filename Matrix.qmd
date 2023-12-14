@@ -136,24 +136,6 @@ In our example, we will consider an average of 3 cubs per year. In addition, ind
                                                                            
 We can represent our small, simplified population in a basic matrix form. Thus:
 
-$$     
-begin{table}
-  \centering
-  \caption{Tableau Sexe et Âge}
-  \begin{tabular}{|c|c|c|}
-    \hline
-    \multicolumn{2}{|c|}{Sexe\Age} & \\
-    \hline
-    & Adulte & Jeune \\
-    \hline
-    Mâle & M1 & M2 \\
-    \hline
-    Femelle & F1 & F2 \\
-    \hline
-  \end{tabular}
-\end{table}
-$$  
-
 $$       
 \begin{equation}   
   P_1 = \begin{bmatrix} M_1 & M_2 \\ F_1 & F_2 \end{bmatrix}  
@@ -304,7 +286,7 @@ If we want to multiply several matrices together, we must add the symbol ‘%’
 
 ```{r}
 N <- matrix(data = c(2, 4) , nrow = 2)
-Pf = Pn % * % N 
+Pf = Pn %*% N 
 
 ```
 
@@ -333,7 +315,7 @@ To complete this cycle , we search for data corresponding the most to reality in
 
 With all this information, we can complete our life cycle:
 
-![Figure 3 : Meerkat life cycle](Figure_3_Leslie_matrix.png "Meerkat life cycle) 
+![Figure 3 : Meerkat life cycle](Figure_3_Leslie_matrix.png "Meerkat life cycle") 
 
 If we note, for any instant t (time being counted in years, so that t is an integer), Jt the number of juvenile meerkats, At the number of adults and St the number of seniors, we get :
 
@@ -363,7 +345,7 @@ S_{t+1} &= 0 \cdot J_t + 0.3 \cdot A_t + 0.4 \cdot S_t
 \end{align*}
 $$
 
-	B; Leslie matrix
+	B. Leslie matrix
 
 This second system allows us to establish a matrix.
 The use of a matrix will enable us to determine various parameters, such as the growth rate, to understand and predict the evolution of the population over time.
@@ -415,7 +397,7 @@ matrice<-matrix(data=leslie, nrow = 3,ncol = 3, byrow=TRUE, dimnames = )
 Then, in order to perform all the calculations related to our matrix, we need to install a package called popbio
 
 ```{r}
-install.packages("popbio")
+#install.packages("popbio")
 library(popbio)
 ```
 
@@ -519,7 +501,7 @@ And if we run this simulation over 100 time steps, we get :
 pop.projection(matrice,c(60,33,7),100)
 ```
 
-We would then go from an initial workforce of 1.000000e+02 individuals to a workforce of 1.443784e+27 individuals. 
+We would then go from an initial population of 1.000000e+02 individuals to a population of 1.443784e+27 individuals. 
 In terms of growth rate, we'd go from 1.784000 to 1.795362.
 
 We can thus observe a very significant growth in this population. 
@@ -631,8 +613,8 @@ $$\begin{aligned}& \frac{d S}{d t}= - trans \cdot S \cdot \frac{I}{N} + loss \cd
 	B. Taking population dynamics and structure into account
 
 
-This model takes no account of population dynamics or structure. To make it more realistic, we will therefore separate the population into two categories: juvenile (j) and adult (a), each with an associated mortality rate (m1 = and m2 =). In addition, adult females (sex ratio sr =) can reproduce with a daily reproduction rate f = and give birth to ? young at a time (portee =). It's important to note that the young are always born healthy. 
-The young grow to adulthood with a rate t = , i.e. a duration of 1/t = days corresponding to the time spent as a youngster.
+This model takes no account of population dynamics or structure. To make it more realistic, we will therefore separate the population into two categories: juvenile (j) and adult (a), each with an associated mortality rate (m1 and m2). In addition, adult females (sex ratio : sr) can reproduce with a daily reproduction rate f and give birth to 7 young at a time (portee). It's important to note that the young are always born healthy. 
+The young grow to adulthood with a rate t, i.e. a duration of 1/t days corresponding to the time spent as a youngster.
 In order to avoid the case of exponential population growth, we take into account K the capacity of the environment, which will allow us to adjust the number of births in the model by decreasing it as the total population approaches K.  
 
 ```{r}
@@ -711,7 +693,7 @@ MAT[2,2,1] <- 1;                  # number of sick adults at initial conditions
 
 From these initial conditions, we can calculate the total population by health status. 
 
-MATRIX REMINDER :
+MATRIX REMINDERS :
 
 * Access a part of a matrix that is not a complete row or column:
 
@@ -771,7 +753,7 @@ Now that the initial conditions have been set, it's time to simulate the model. 
 
 $$\begin{aligned}& S_j[t+1]=S_j[t]-S_j[t] \cdot(m_1+t_1+trans\cdot \frac{I[t]}{N[t]})+loss\cdot R_j[t] + sr\cdot portee\cdot N_a[t]\cdot f \cdot (1- \frac{N[t]}{K}) \\
 & I_j[t+1]=I_j[t]-I_j[t] \cdot (m_1+madd+t_1+rec)+trans\cdot \frac{I[t]}{N[t]} \cdot S_j[t]  \\
-& R_j[t]= R_j[t]-R_j[t]*(m_1+t_1+loss) + rec*I_j[t]
+& R_j[t+1]= R_j[t]-R_j[t]*(m_1+t_1+loss) + rec*I_j[t]
 \end{aligned}$$
 
 
@@ -844,7 +826,7 @@ An endemic equilibrium is reached with a stable percentage of each health state 
 
 IV. Markov chain
 
-	A. the Markov Chain
+	A. The Markov Chain
 
 ![Changement de colonie](Schema_suricates.png)
 
@@ -875,7 +857,8 @@ $$
 
 By replacing the previous algebraic matrix with the values from the Markov chain diagram, we obtain the following matrix T :
 
-$$ T=
+$$ 
+T=
 \left(\begin{array}{cc} 
 0 & 0.9 & 0 & 0 & 0 & 0.1 & 0  & 0 & 0\\
 0 & 0 & 0.6 & 0.4 & 0 & 0 & 0 & 0 & 0\\
@@ -984,7 +967,9 @@ Markov chain theory tells us that, after a certain time, the probability distrib
 Reminder: The properties of a matrix stipulate the presence of eigenvalues and eigenvectors. We say that λ is an eigenvalue of the matrix T if there is an eigenvector V such that T.V = λ.V. We then say that λ and V are an eigenpair of the matrix. 
 The eigenvalues are obtained by solving the characteristic polynomial of the matrix T, which is calculated as follows:
 
-$$ P(λ) = det|T-λI| $$
+$$ 
+P(λ) = det|T-λI| 
+$$
 In which I is the "Identity" matrix of the T matrix :
 
 $$
@@ -1049,7 +1034,7 @@ for (t in 1:10000){
 
 This result tells us that 58% of the time the meerkat family will end up settling in burrow A1, 26% of the time in burrow B2, 14% of the time in burrow C3 and 2% of the time in burrow D4.
 
-=======
+
 V. Bibliography  
 
 N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, (2008)
