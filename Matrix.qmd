@@ -15,8 +15,8 @@ I. Foundations of matric modelling in ecology
 	C. How can we modify a simplified population matrix ?
 
 II. Leslie matrix
-  A. Meerkat life cycle
-  B. Leslie matrix
+ 	 A. Meerkat life cycle
+ 	 B. Leslie matrix
 
 III. Epidemiology matrices
 	A. Introduction to epidemiology with the SIRS model
@@ -25,10 +25,10 @@ III. Epidemiology matrices
 	D. Visualizing results
 	
 IV. Markov chain
-  A- The Markov Chain
-  B- The transition Matrix 
-  C- Evolution of the system
-  D- Eigenvalues and eigenvectors
+ 	A- The Markov Chain
+ 	B- The transition Matrix 
+ 	C- Evolution of the system
+  	D- Eigenvalues and eigenvectors
 
 
 I. Foundations of matrix modelling in ecology
