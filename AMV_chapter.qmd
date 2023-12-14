@@ -8,7 +8,7 @@ editor_options:
     wrap: 72
 ---
 
-# Introduction to Multivariates Analysis
+# Introduction to Multivariate Analysis
 
 Biologists' data, whether on individuals, populations or communities,
 are usually presented in the form of rectangular tables, with
