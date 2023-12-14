@@ -59,7 +59,9 @@ The space of principal components can be expressed as :
 
 $$
 Z_p=\Sigma^p_{j=1}ø_j\times X_j
-$$Where :
+$$
+
+Where :
 
 -   $Z_p$ is the principal component $p$
 
@@ -69,7 +71,7 @@ $$Where :
 
 The process begins with a matrix $Y$, where each row represents an observation and each column represents a continuous variable.
 
-![](images/table-inds-vars.png){fig-align="center" width="230"}
+![](images/table-inds-vars.png){fig-align="center" width="230"} #Ce schéma n'a pas de titre et je ne parviens pas à le lire avec le code tel quel.
 
 First, we normalize the observations as follows :
 
@@ -89,7 +91,9 @@ We can then calculate the variance-covariance matrix:
 
 $$
 R = cov(Y_{std})
-$$The decomposition of this matrix provides the matrix $U$ of eigenvectors, which contains the principal components.
+$$
+
+The decomposition of this matrix provides the matrix $U$ of eigenvectors, which contains the principal components.
 
 The eigenvectors, defined as the principal components, have associated eigenvalues. The graphical representation of the distances of observations to these eigenvectors illustrates how each principal component captures the variation in the data.
 
@@ -103,7 +107,9 @@ In addition to representing the variance of the principal components, the eigenv
 
 $$
 Explained\ variance\ of\ v_k = \frac{\lambda_{v_k}}{\Sigma_{i=1}^p\lambda_v}
-$$The conclusion of the PCA involves obtaining the coordinate matrix $F$. This matrix results from the multiplication of matrix $U$ by the standardized matrix $Y_{std}$, enabling a rotation of the new data space. This process aligns the data along the principal components, providing a simplified yet informative view of the underlying structure of the initial data.
+$$
+
+The conclusion of the PCA involves obtaining the coordinate matrix $F$. This matrix results from the multiplication of matrix $U$ by the standardized matrix $Y_{std}$, enabling a rotation of the new data space. This process aligns the data along the principal components, providing a simplified yet informative view of the underlying structure of the initial data.
 
 ## Interpretation
 
