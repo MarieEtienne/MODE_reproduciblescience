@@ -7,7 +7,7 @@ output:
    toc: true
    toc_float: true
 ---
-Sommaire :
+Summary :
 
 I. Foundations of matric modelling in ecology
 	A. Why using matric modelling in ecology
@@ -15,8 +15,8 @@ I. Foundations of matric modelling in ecology
 	C. How can we modify a simplified population matrix ?
 
 II. Leslie matrix
-  A. Meerkat life cycle
-  B. Leslie matrix
+ 	 A. Meerkat life cycle
+ 	 B. Leslie matrix
 
 III. Epidemiology matrices
 	A. Introduction to epidemiology with the SIRS model
@@ -25,10 +25,10 @@ III. Epidemiology matrices
 	D. Visualizing results
 	
 IV. Markov chain
-  A- The Markov Chain
-  B- The transition Matrix 
-  C- Evolution of the system
-  D- Eigenvalues and eigenvectors
+ 	A- The Markov Chain
+ 	B- The transition Matrix 
+ 	C- Evolution of the system
+  	D- Eigenvalues and eigenvectors
 
 
 I. Foundations of matrix modelling in ecology
@@ -93,7 +93,7 @@ Population dynamic is a concept that is sometimes difficult to study because it 
 
  A matrix will allow to represent the population variation according to these four processes (Schaub M. and Abadi F., 2011 ; Abadi et al., 2010).
 
- (mettre ta figure)
+![Scheme of the population dynamics](Schéma dynamique pop.png "Scheme of the population dynamics")
 
 These representations can be very complete, including differences in age, gender, genetic origin and other individuals. Indeed, not all individuals will have the same impact on their population dynamics. 
 Too young or too old individuals do not participate in reproduction and therefore in the future increase of their group. The number of males will not have the same impact on the number of offspring as the females. 
@@ -104,7 +104,7 @@ It is important to know that modeling matrices have limitations. They are based 
 By allowing to model as correctly as possible the evolution of a population over time, according to the maximum of parameters that can positively or negatively impact it, we can obtain many very interesting results. Thus, population matrices can allow us to improve species conservation and management. Depending on the dynamics of its population, we can know if the species is threatened in the future and/or impacted by events (example: impact of fire (Hoffmann W.A., 1999)). We can have a more global and real vision of how populations evolve in their environment. 
 However, matrix models may not be always necessary. As for each study, it is important to ask ourselves the right questions, to think about the interest of this mode of analysis compared to others and its relevance for the question/ population studied.
 
-B) Transform a population into a matrix
+	B. Transform a population into a matrix
 
 We were able to see what are the interests of making population matrices for our research. From now on, we will see together how to create these matrices.
 
@@ -199,7 +199,7 @@ matrix2
 Here, our model represents a stable population, at the moment t. It does not allow us to observe its evolution for the moment. In order to use it in population dynamics, we will have to make it more complex.
 
 
-C) How can we modify a simplified population matrix ?
+	C. How can we modify a simplified population matrix ?
 
 Before making our matrix suitable for the study of population dynamics, we will start by seeing how simple matrix manipulations can allow us to modify the matrix representation of our population if the latter is modified. 
 Let’s take our family of meerkats: during the journey, the young male is captured by a predator, which removes a member from the population and therefore changes the matrix. Similarly, later on, a lone male, lost, is welcomed by the family. Thus, our matrix will be successively modified in these ways: 
@@ -308,9 +308,9 @@ Pf = Pn % * % N
 
 ```
 
-II/ Leslie matrix
+II. Leslie matrix
 
-A) Meerkat life cycle
+	A. Meerkat life cycle
 
 We're now back with our meerkat family 10 years later. During this decade, our population has evolved and different age classes have formed. 
 First of all, we have the class of juveniles, noted J, which are between 0 and 1 year old and correspond to individuals not yet sexually mature. Only a small proportion of these juveniles reach adulthood, following a rate of passage noted TPa.
@@ -320,7 +320,7 @@ For the sake of our story, we'll consider that from the age of 10 our adult meer
 
 With all this information, we can draw the following tree of life: 
 
-![Figure 2 : Meerkat life cycle](C:/Users/Alexie/OneDrive/Bureau/firgure_2.png)
+![Figure 2 : Meerkat life cycle](Figure_2_Leslie_matrix.png "Meerkat life cycle")
 
 To complete this cycle , we search for data corresponding the most to reality in the wild. Thus, we estimate that : 
 
@@ -333,8 +333,7 @@ To complete this cycle , we search for data corresponding the most to reality in
 
 With all this information, we can complete our life cycle:
 
-![Figure 3 : Meerkat life cycle](C:/Users/Alexie/OneDrive/Bureau/Figure_3.png) 
-
+![Figure 3 : Meerkat life cycle](Figure_3_Leslie_matrix.png "Meerkat life cycle) 
 
 If we note, for any instant t (time being counted in years, so that t is an integer), Jt the number of juvenile meerkats, At the number of adults and St the number of seniors, we get :
 
@@ -364,7 +363,7 @@ S_{t+1} &= 0 \cdot J_t + 0.3 \cdot A_t + 0.4 \cdot S_t
 \end{align*}
 $$
 
-B) Leslie matrix
+	B; Leslie matrix
 
 This second system allows us to establish a matrix.
 The use of a matrix will enable us to determine various parameters, such as the growth rate, to understand and predict the evolution of the population over time.
@@ -845,7 +844,7 @@ An endemic equilibrium is reached with a stable percentage of each health state 
 
 IV. Markov chain
 
-A- the Markov Chain
+	A. the Markov Chain
 
 ![Changement de colonie](Schema_suricates.png)
 
@@ -855,7 +854,7 @@ For example, our poor meerkats are initially in position O and cannot stay there
 
 The diagram above is what is known as a "Markov Chain" in which the various probabilities are numerically anotated. A Markov chain can be defined as a discrete-time or continuous-time stochastic process with a discrete state space, defined as being "memoryless" because it depends only on the present state and not on previous states. 
 
-B- The transition Matrix 
+	B. The transition Matrix 
 
 These different elements and this "Markov Chain" allow us to produce a rather special matrix T, which we call the transition matrix of a "Markov Chain". This defines the transition probabilities from each state at time (t) vertical to each state at time (t+1) horizontal and is shown below: 
 
@@ -894,7 +893,7 @@ As we can see, this matrix works in discrete time because of the transition from
 However, it could also work in continuous time with discrete state spaces, but for the sake of simplicity we will work in discrete time.
 For example, in the matrix above, we can read that the probability of moving from position O (the poor camping tent of our family of beloved meerkats) to colony A is 0.9, or 90%.
 
-C- Evolution of the system
+	C. Evolution of the system
 
 If we take into account the fact that at time 0, the meerkats are in their makeshift tent, here is the initial condition:
 
@@ -978,7 +977,7 @@ T_t = \left(\begin{array}{cc}
 \end{array}\right)^t=T_0.T^t
 $$
 
-D- Eigenvalues and eigenvectors
+	D. Eigenvalues and eigenvectors
 
 Markov chain theory tells us that, after a certain time, the probability distribution will be independent of the initial distribution and we will see convergence towards different points in the chain.
 
@@ -1051,7 +1050,7 @@ for (t in 1:10000){
 This result tells us that 58% of the time the meerkat family will end up settling in burrow A1, 26% of the time in burrow B2, 14% of the time in burrow C3 and 2% of the time in burrow D4.
 
 =======
-C) Bibliography : 
+V. Bibliography  
 
 N. Bacaër, Histoire de mathématiques et de populations, Cassini, Paris, (2008)
 
