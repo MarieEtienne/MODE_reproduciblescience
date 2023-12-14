@@ -116,12 +116,15 @@ The first estimate, that regards the response variable is called the **direct ef
 However we can have an idea of the general effect on the whole region by combining the two effects int the **total effect**. 
 
 
-
 ```{r}
 impacts(lmsSLX)
 summary(impacts(lmsSLX, R=500),zstats=TRUE)
 ```
+The function impact only gives the total effect as the sum of the direct and indirect effect.
+Putting the function into a summary allows to show standard error, and the p-values. 
+The total effect represent the overall impact of the variable when applied to the whole map.
 
+*Sometimes, non-significant direct and indirect effect may become significant when looking at the total effect*
 
 #### 3.1.2. - Simultaneous autoregressive models (SAR)
 
