@@ -28,6 +28,8 @@ website:
           href: chapter_dependance.qmd
         - text: Mixed models in Ecology
           href: Mixed_models.qmd        
+        - text: Ordinary Differential Equations in Ecology
+          href: Chap_ODE.qmd
         - text: Bayesian models in Ecology
           href: bayesian_modeles.qmd
         - href: simple_chapter.qmd

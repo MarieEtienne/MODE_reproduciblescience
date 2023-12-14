@@ -23,4 +23,5 @@ Table of Contents
 * [Multivariate analysis](AMV_chapter.html)
 * [Mixed models in Ecology](Mixed_models.html)
 * [Dependent Data](chapter_dependance.html)
+* [Ordinary Differential Equations and their application in Ecology](Chap_ODE.html)
 * [Bayesian models](bayesian_modeles.html)
