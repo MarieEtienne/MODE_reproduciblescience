@@ -30,6 +30,8 @@ website:
           href: Mixed_models.qmd        
         - text: Dependent data
           href: chapter_dependance.qmd
+        - text: Matrix models and applications in ecology
+          href: Matrix.qmd
         - text: Ordinary Differential Equations in Ecology
           href: Chap_ODE.qmd
         - text: Resampling methods
