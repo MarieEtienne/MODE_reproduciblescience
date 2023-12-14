@@ -64,7 +64,16 @@ df %>% ggplot() +
 	geom_boxplot()  
 ```
 
-# Space dependence
+# II - Spatial series
+
+Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
+
+#2.1) Defining neighbours
+#2.1.1) Characteristics of the relationships between spatial objects
+Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
+
+Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R 2 ×R 2 =  (i, j) : i ∈ R 2 , j ∈ R 2 of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) * B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+
 
 # Summary
 
