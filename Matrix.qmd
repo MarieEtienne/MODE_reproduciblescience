@@ -7,7 +7,7 @@ output:
    toc: true
    toc_float: true
 ---
-Sommaire :
+Summary :
 
 I. Foundations of matric modelling in ecology
 	A. Why using matric modelling in ecology
