@@ -7,6 +7,9 @@ output:
   html_document:
    toc: true
    toc_float: true
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r}
@@ -16,37 +19,56 @@ library(tidyverse)
 # Introduction
 
 ## What is autocorrelation ?
-Statistical analyses, including many regression methods, often assume that observations are independent of each other. So it is natural to make independence calculations between data X and Y. But there may still be a dependency intrinsic to each data item: this is known as autocorrelation. Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power.
-Autocorrelation in statistics is a measure of the linear dependence between the values of a single variable itself, at different times or locations. Autocorrelation is only detected on the variable being measured, i.e. the quantitative response variable. Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series. This means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if data 2 can be predicted with what we know about data 1, if they are close in space or time.
-Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be positive, indicating that the observations tend to be similar, or negative, indicating that the observations tend to be opposite to each other.
+
+Statistical analyses, including many regression methods, often assume that observations are independent of each other.
+So it is natural to make independence calculations between data X and Y.
+But there may still be a dependency intrinsic to each data item: this is known as autocorrelation.
+Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power.
+Autocorrelation in statistics is a measure of the linear dependence between the values of a single variable itself, at different times or locations.
+Autocorrelation is only detected on the variable being measured, i.e. the quantitative response variable.
+Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series.
+This means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if data 2 can be predicted with what we know about data 1, if they are close in space or time.
+Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient.
+Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be positive, indicating that the observations tend to be similar, or negative, indicating that the observations tend to be opposite to each other.
 
 ## What types of autocorrelation ?
-Autocorrelation is commonly used to analyze data where the order or location of observations has an important significance, such as time series (data taken at the same location at several points in time), or spatial data (data taken at a given point in time at several locations in the same geographical area, and therefore close in space). 
+
+Autocorrelation is commonly used to analyze data where the order or location of observations has an important significance, such as time series (data taken at the same location at several points in time), or spatial data (data taken at a given point in time at several locations in the same geographical area, and therefore close in space).
 
 ### Time series
+
 In time series, there may be seasonal autocorrelation, where values observed at the same time each year (seasons) are correlated.
-Temporal autocorrelation shows spatial similarities that depend on the scale used. Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes.
-Spatial dependencies can be linked to several factors:
-[Image]
-#### Example of temporal autocorrelation
-An example of temporal autocorrelation in ecology concerns populations of animal or plant species, particularly when studying seasonal variations. Let's imagine a study of annual fluctuations in the population of migratory birds in a given region. Temporal autocorrelation means that the number of birds observed at a given time of the year is correlated with the number of birds observed at the same time of the previous year.
-Suppose the data show positive temporal autocorrelation for a migratory bird species. This would mean that if, for example, in April of the current year, a large number of these birds are observed, it is highly likely that in April of the previous year, a large number of these same birds were also observed. This temporal dependence may be due to seasonal bird migrations, the availability of food resources or other cyclical environmental factors.
+Temporal autocorrelation shows spatial similarities that depend on the scale used.
+Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes.
+Spatial dependencies can be linked to several factors: \[Image\] \#### Example of temporal autocorrelation An example of temporal autocorrelation in ecology concerns populations of animal or plant species, particularly when studying seasonal variations.
+Let's imagine a study of annual fluctuations in the population of migratory birds in a given region.
+Temporal autocorrelation means that the number of birds observed at a given time of the year is correlated with the number of birds observed at the same time of the previous year.
+Suppose the data show positive temporal autocorrelation for a migratory bird species.
+This would mean that if, for example, in April of the current year, a large number of these birds are observed, it is highly likely that in April of the previous year, a large number of these same birds were also observed.
+This temporal dependence may be due to seasonal bird migrations, the availability of food resources or other cyclical environmental factors.
 
 ### Spatial dependence
-In the case of spatial data, spatial autocorrelation refers to the correlation between observations in close spatial locations. This can be important for understanding the spatial distribution of populations, environmental phenomena and so on.
-Spatial autocorrelation shows temporal similarities that depend on the scale used. Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales.
-- It can be due to various factors, such as :
-- Microclimate effects: (local characteristics of terrain, vegetation or topography can influence temperature on a small scale)
-- Dispersion phenomena: (the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation)
-- Biotic interactions: (interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature).
-#### Example of spatial dependence
-An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar.
-Suppose the data show positive spatial autocorrelation. This would mean that, if you have two weather stations located close to each other (say, a few meters apart), the temperatures measured at these two stations at any given time are highly positively correlated. In other words, when one of the stations records a high temperature, the other station will also tend to record a high temperature, and vice versa.
+
+In the case of spatial data, spatial autocorrelation refers to the correlation between observations in close spatial locations.
+This can be important for understanding the spatial distribution of populations, environmental phenomena and so on.
+Spatial autocorrelation shows temporal similarities that depend on the scale used.
+Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales.
+- It can be due to various factors, such as : - Microclimate effects: (local characteristics of terrain, vegetation or topography can influence temperature on a small scale) - Dispersion phenomena: (the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation) - Biotic interactions: (interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature).
+#### Example of spatial dependence An example of spatial autocorrelation is the observation of temperature distribution in a large forest.
+Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations.
+Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar.
+Suppose the data show positive spatial autocorrelation.
+This would mean that, if you have two weather stations located close to each other (say, a few meters apart), the temperatures measured at these two stations at any given time are highly positively correlated.
+In other words, when one of the stations records a high temperature, the other station will also tend to record a high temperature, and vice versa.
 
 ## Why is this important?
-Autocorrelation is an essential concept in statistics, as it can have a significant impact on data analysis. In the presence of pseudoreplications, meaning that several different values are thought to be taken when in fact they are dependent on each other, it may appear that one variable has a significant effect on another, when in reality this effect is biased due to the temporal or spatial dependence of the data. It can therefore have a significant impact on statistical analysis, and often requires adjustments to ensure that results are reliable and unbiased.
-Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses. It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made. It is also essential for understanding patterns of variation in biological data.
 
+Autocorrelation is an essential concept in statistics, as it can have a significant impact on data analysis.
+In the presence of pseudoreplications, meaning that several different values are thought to be taken when in fact they are dependent on each other, it may appear that one variable has a significant effect on another, when in reality this effect is biased due to the temporal or spatial dependence of the data.
+It can therefore have a significant impact on statistical analysis, and often requires adjustments to ensure that results are reliable and unbiased.
+Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses.
+It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made.
+It is also essential for understanding patterns of variation in biological data.
 
 # Time dependence
 
@@ -66,15 +88,18 @@ df %>% ggplot() +
 
 # II - Spatial series
 
-Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
+Spatial relationships are multidirectional and multilateral.
+They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-#2.1) Defining neighbours
-#2.1.1) Characteristics of the relationships between spatial objects
-Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
+#2.1) Defining neighbours 
+#2.1.1) Characteristics of the relationships between spatial objects 
+Consider a surface ℜ. This surface can be divided into n mutually exclusive zones.
+Two adjacent zones are separated by a common boundary.
 
-Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R 2 ×R 2 =  (i, j) : i ∈ R 2 , j ∈ R 2 of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) * B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+    Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R² × R² = [(i, j) : i ∈ R² , j ∈ R²] of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) \* B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
 
-Figure 2 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
+Figure 2 illustrates the codifying process of spatial relationships.
+This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
 # Summary
 
