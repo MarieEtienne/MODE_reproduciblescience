@@ -10,7 +10,7 @@ output:
    toc_float: true
 ---
 
-**Authors:** Lucien Ricome, Youna Douchet, Pierre-Alexandre Quitter, Bastien Clémot
+**Authors:** Lucien Ricome, Youna Douchet, Pierre-Alexandre Quittet, Bastien Clémot
 
 # General introduction
 
@@ -33,6 +33,8 @@ library(ade4)
 library(kableExtra)
 ```
 
+\
+
 # Confidence interval estimation: Jackknife and Bootstrap methods
 
 To illustrate the following methods, we'll use the Iris RBase dataset.
@@ -49,7 +51,7 @@ Suppose we're interested in determining the average width of the sepals in a wil
 
 Let's first imagine that we only sampled 100 individuals within our population.
 
-```{r}
+```{r, fig.align='center'}
 # Our real population
 irisPopulation <- iris$Sepal.Width
 
@@ -104,7 +106,7 @@ The mean of our population falls within our confidence interval!
 
 Now, let's consider that we were only able to sample 15 individuals within our wild population.
 
-```{r}
+```{r, fig.align='center'}
 # Randomly sample 15 individuals
 set.seed(42)
 data_sample <- irisPopulation[sample(1:150,15)]
@@ -279,6 +281,8 @@ This method is not always efficient, it is not recomanded for time series analys
 
 For more informations about applications of the Jackknife you can read the paper: Jackknife a Review by Rupert G. Miller @miller_jackknife--review_1974.
 
+\
+
 ## The bootstrap re-sampling method
 
 ### Introduction and Principle
@@ -350,16 +354,27 @@ iterationMeans <- sapply(bootstrapSamples, mean)
 
 The computation of the distribution for our parameter of interest is complete. We can now proceed to plot it, providing us with an understanding of the variability surrounding our estimated mean value.
 
-```{r}
+```{r, fig.align='center', out.width="75%"}
 # Probability distribution plot
 ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
-  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_histogram(
+    binwidth = 0.05,
+    fill = "skyblue",
+    color = "black",
+    aes(y = after_stat(density))
+  ) +
   geom_density(alpha = 0.5, fill = "orange") +
-  geom_vline(xintercept = mean(data_sample), color = "red", linetype = "dashed", linewidth = 1.5) +
+  geom_vline(
+    xintercept = mean(data_sample),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1.5
+  ) +
   labs(title = "Empirical probability distribution of mean values",
        x = "Mean",
        y = "Density") +
-  theme_classic()
+  theme_classic() +
+  theme(text=element_text(size=15))
 ```
 
 Hence, this probability distribution provides us with insights into the variability around the mean value estimated from our field sampling. As anticipated, and as indicated by the red dashed line, this distribution is centered around the estimated mean value.
@@ -377,18 +392,39 @@ And thus, we've successfully obtained our confidence interval for the mean estim
 
 For educational purposes, let's proceed to plot these percentiles in green.
 
-```{r}
+```{r, fig.align='center', out.width="75%"}
 # Probability distribution plot
 ggplot(data = data.frame(iterationMeans), aes(x = iterationMeans)) +
-  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black", aes(y =after_stat(density))) +
+  geom_histogram(
+    binwidth = 0.05,
+    fill = "skyblue",
+    color = "black",
+    aes(y = after_stat(density))
+  ) +
   geom_density(alpha = 0.5, fill = "orange") +
-  geom_vline(xintercept = mean(data_sample), color = "red", linetype = "dashed", linewidth = 1) +
-  geom_vline(xintercept = quantile(iterationMeans, probs = 0.025), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
-  geom_vline(xintercept = quantile(iterationMeans, probs = 0.975), color = "darkolivegreen4", linetype = "dashed", linewidth = 1.5) +
+  geom_vline(
+    xintercept = mean(data_sample),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  geom_vline(
+    xintercept = quantile(iterationMeans, probs = 0.025),
+    color = "darkolivegreen4",
+    linetype = "dashed",
+    linewidth = 1.5
+  ) +
+  geom_vline(
+    xintercept = quantile(iterationMeans, probs = 0.975),
+    color = "darkolivegreen4",
+    linetype = "dashed",
+    linewidth = 1.5
+  ) +
   labs(title = "Empirical probability distribution of mean values",
        x = "Mean",
        y = "Density") +
-  theme_classic()
+  theme_classic() +
+  theme(text = element_text(size = 15))
 ```
 
 5.  **Compare with population mean value**
@@ -455,8 +491,7 @@ In simpler terms, when we talk about "known distributional laws," it means we kn
 
 Enough talking, let's illustrate with a graphical example. Let's imagine we want to compare the sepal length between the species *I. virginica* and *I. versicolor* using a Student test. First, we plot the data:
 
-```{r, echo = F, fig.height=4, fig.width=4}
-
+```{r, echo = F, out.width="75%", fig.align='center'}
 boxplot(
   iris$Sepal.Length[iris$Species == "versicolor"],
   iris$Sepal.Length[iris$Species == "virginica"],
@@ -465,7 +500,9 @@ boxplot(
   xlab = "",
   main = "",
   names = c("I. versicolor", "I. virginica"),
-  ylim = c(4, 8)
+  ylim = c(4, 8),
+  cex.axis = 1.5,
+  cex.lab = 1.5
 )
 
 ```
@@ -487,18 +524,33 @@ Here we observe a significance difference between the species *I. virginica* and
 
 Let's get more precise on how do we get the p-value associated with this comparison and make the connection with what we saw earlier in this endless introduction paragraph. The Student distribution under null hypothesis ($H0$) is defined according the parameter 'degree of freedom', here equal to $df = 98$. Let's plot this $H0$ probability distribution of the test we just performed:
 
-```{r, fig.height=4, fig.width=4}
+```{r, out.width = "75%", fig.align='center'}
 # Density distribution of the t statistic
-curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t")
+curve(
+  dt(x = x, df = 98),
+  xlim = c(-6, 6),
+  ylab = "Density",
+  xlab = "t",
+  cex.axis = 1.5,
+  cex.lab = 1.5
+)
 ```
 
 This distribution shows the probability associated with each value of the $t$ statistic for a similar degree of freedom ($98$) with our data. It contains all the probabilities of the statistical tests assuming that 'sepal length means do not differ between both species.' Now, our task is to position the $t_{obs}$ representing the observed test statistic we calculated from our data, which is $t_{obs} = 5.6$, in this null distribution. The goal is to figure out how probable is the value 5.6 in the probability distribution of the Student's t-distribution with $df=98$.
 
 Since we conducted a two-sided test, meaning no a priori assumption about the direction of the effect, we split the 5% of the $\alpha$ threshold between both sides of the distribution. We will visually identify the values of $t$ for which less than $2.5%$ and more than $97.5%$ of values are respectively below and above these thresholds. If our $t_{observed}$ falls below the $2.5%$ or above the $97.5%$ threshold, we consider the observed difference statistically significant.
 
-```{r, fig.height=3.8, fig.width=4}
+```{r, out.width = "75%", fig.align='center'}
 # Density distribution of the t statistic
-curve(dt(x = x, df = 98), xlim = c(-6, 6), ylab = "Density", xlab = "t", lwd = 1.5)
+curve(
+  dt(x = x, df = 98),
+  xlim = c(-6, 6),
+  ylab = "Density",
+  xlab = "t",
+  lwd = 1.5,
+  cex.axis = 1.5,
+  cex.lab = 1.5
+)
 
 # Quantile function : values of t associated of a two sided test
 threshold <- qt(p = c(0.025, 0.975), df = 98)
@@ -510,12 +562,12 @@ x <- seq(-6, 6, length.out = 100000)
 y <- dt(x, df = 98)
 polygon(c(x[x<=threshold[1]], threshold[1]), c(y[x<=threshold[1]], y[x == max(x)]), col = "red")
 polygon(c(x[x>=threshold[2]], threshold[2]), c(y[x>=threshold[2]], y[x == max(x)]), col = "red")
-text(x = 3.7, y = 0.3, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = 0.6)
-text(x = -3.5, y = 0.3, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = 0.6)
+text(x = 3.7, y = 0.3, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = .9)
+text(x = -3.5, y = 0.3, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = .9)
 
 # Placing the t_obs value
 abline(v = 5.6, lwd = 1.5, col = "blue")
-text(x = 4.5, y = 0.2, labels = TeX("$t_{obs}$"), col = "blue")
+text(x = 5, y = 0.1, labels = TeX("$t_{obs}$"), col = "blue", cex = 1.2)
 ```
 
 With $\alpha$ the type-I error (here 5%). Hence $t_{obs}$ is in the significance area (in red) meaning the difference is significant. Now we have all the reminders we need to master the conception of permutation test.
@@ -572,10 +624,27 @@ sub_data <- filter_data[sample(1:nrow(filter_data), size = 20),]
 
 Let's plot the sub-dataset.
 
-```{r, echo = F, out.width="50%"}
+```{r, echo = F, out.width="90%", fig.align='center'}
 par(mfrow = c(1, 2))
-hist(sub_data$Sepal.Length[sub_data$Species == "versicolor"], col = "skyblue", ylab = "Frequency", xlab = "Sepal Length", main = "Versicolor")
-hist(sub_data$Sepal.Length[sub_data$Species == "virginica"], col = "orange", ylab = "Frequency", xlab = "Sepal Length", main = "Virginica", ylim = c(0, 5))
+hist(
+  sub_data$Sepal.Length[sub_data$Species == "versicolor"],
+  col = "skyblue",
+  ylab = "Frequency",
+  xlab = "Sepal Length",
+  main = "Versicolor",
+  cex.axis = 1.5,
+  cex.lab = 1.5
+)
+hist(
+  sub_data$Sepal.Length[sub_data$Species == "virginica"],
+  col = "orange",
+  ylab = "Frequency",
+  xlab = "Sepal Length",
+  main = "Virginica",
+  ylim = c(0, 5),
+  cex.axis = 1.5,
+  cex.lab = 1.5
+)
 
 ```
 
@@ -633,7 +702,7 @@ paste0("P_obs = ", p_obs)
 
 So here we have a $P_{obs}$ value of 0.652. We can now plot the null distribution we generated with the permuted data and compare our observed statistic $P_{obs}$ with the null distribution. Let's plot it to have a visual support on how permutation test works.
 
-```{r}
+```{r, fig.align='center'}
 # CALCULATE SIGNIFICANCE THRESHOLD
 bornes <- quantile(null_distribution,c(.025,.975))
 
@@ -644,17 +713,19 @@ hist(null_distribution,
      main = "",
      xlab = TeX("$P_{H0}$"),
      ylab = "Frequency",
-     col = rgb(.5, .5, .5, alpha = .2)
+     col = "skyblue",
+     cex.axis = 1.5,
+     cex.lab = 1.5
      )
 
     # POSITION THRESHOLD 
     abline(v = bornes, col = "red", lwd = 2)
-    text(x = 0.3, y = 1350, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = 0.7)
-    text(x = -0.65, y = 1350, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = 0.7)
+    text(x = 0.3, y = 1350, labels = TeX("$quantile(1 - \\frac{alpha}{2})$"), col = "red", cex = 0.8)
+    text(x = -0.65, y = 1350, labels = TeX("$quantile(\\frac{alpha}{2})$"), col = "red", cex = 0.8)
 
     # POSITION P_OBS
-    abline(v = p_obs, lwd = 2, col = "blue", lty = 2)
-    text(x = .75, y = 1400, labels = TeX("$P_{obs}$"), col = "blue")
+    abline(v = p_obs, lwd = 2, col = "darkolivegreen4", lty = 2)
+    text(x = .75, y = 1400, labels = TeX("$P_{obs}$"), col = "darkolivegreen4", cex = 1)
 ```
 
 As anticipated by the central limit theorem, the distribution of the statistic we use, repeated 10,000 times, follows a normal distribution. It's evident that our observed statistic calculated on the data ($P_{obs}$) stands out from the null distribution. Since we didn't assume any specific direction for the difference (i.e. two sided test), we can determine the p-value as the number of absolut permuted observations ($|P_{H0}|$) greater than the absolute value of $P_{obs}$, divided by the number of iterations:
@@ -702,7 +773,7 @@ data_versicolor <-
 
 Let's plot this relation:
 
-```{r}
+```{r,fig.align='center', out.width="75%"}
 boxplot(
   data_versicolor$Sepal.Length.T1,
   data_versicolor$Sepal.Length.T2,
@@ -711,7 +782,9 @@ boxplot(
   xlab = "",
   main = "",
   names = c("T1", "T2"),
-  ylim = c(3, 9)
+  ylim = c(3, 9),
+  cex.axis = 1.5,
+  cex.lab = 1.5
 )
 
 ```
@@ -772,7 +845,7 @@ Let's follow step by step the permutation procedure :
 
 4.  **Compare the observed statistic to the null distribution of test statistics**
 
-    ```{r}
+    ```{r, fig.align='center'}
     # CALCULATE SIGNIFICANCE THRESHOLD
     bornes <- quantile(null_distribution,c(.95))
     # VISUALISATION
@@ -781,7 +854,9 @@ Let's follow step by step the permutation procedure :
          main = "",
          xlab = TeX("$P_{H0}$"),
          ylab = "Frequency",
-         col = rgb(1/3, 1/3, 1/3, alpha = .1)
+         col = "skyblue",
+         cex.axis = 1.5,
+         cex.lab = 1.5
          )
 
     # POSITION THRESHOLD 
@@ -789,8 +864,8 @@ Let's follow step by step the permutation procedure :
     text(x = 12, y = 750, labels = TeX("$quantile(1 - \\alpha)$"), col = "red", cex = .8)
 
     # POSITION P_OBS
-    abline(v = p_obs, lwd = 2, col = "blue", lty = 2)
-    text(x = -5, y = 750, labels = TeX("$P_{obs}$"), col = "blue")
+    abline(v = p_obs, lwd = 2.5, col = "darkolivegreen4", lty = 2)
+    text(x = -5, y = 750, labels = TeX("$P_{obs}$"), col = "darkolivegreen4")
 
     ```
 
@@ -876,10 +951,12 @@ Using this package, the results are similar. well! The p-value is indicated afte
 
 The mantel test evaluates the significance of the regression line between the two distance matrix. We saw that the mantel test is not significant. We detected no correlations between distances. Let's plot the results:
 
-```{r, out.width="50%", echo = FALSE}
+```{r, out.width="50%", echo = FALSE, fig.align='center'}
 plot(dist(ozone.dists)~dist(station.dists),
      xlab = "stations distances",
-     ylab = "Ozone distances")
+     ylab = "Ozone distances",
+      cex.axis = 1.5,
+      cex.lab = 1.5)
 abline(lm(dist(ozone.dists)~dist(station.dists)), col = "red",
        lwd = 2)
 ```
@@ -978,12 +1055,21 @@ for(j in 1:bootstrap_iteration){
 
 Let's plot our two distributions :
 
-```{r, echo = F}
+```{r, echo = F, fig.align='center'}
+hist(
+  boot_a,
+  breaks = 40,
+  xlab = TeX("$\\alpha$"),
+  xlim = c(min(null_distribution), max(boot_a)),
+  col = "#CD2626",
+  main = NULL,
+  ylim = c(0, 1500),
+  cex.axis = 1.5,
+  cex.lab = 1.5
+)
+hist(null_distribution, breaks = 40, add = T, xlab = NULL, ylab = NULL, col = "skyblue")
 
-hist(boot_a, breaks = 40, xlab = TeX("$\\alpha$"), xlim = c(min(null_distribution), max(boot_a)), col = "blue", main = NULL, ylim = c(0,1500))
-hist(null_distribution, breaks = 40, add = T, xlab = NULL, ylab = NULL, col = "red")
-
-legend("topright", fill = c("red", "blue"), legend = c("Null distribution", "Bootstrapped distribution"), cex = 1)
+legend("topright", fill = c("#CD2626", "skyblue"), legend = c("Bootstrapped distribution", "Null distribution"), cex = 1)
 ```
 
 We observe a notable distinction between the bootstrapped distribution and the null distribution. To formalize this, we calculate the p-value, defined as the overlap between both distributions:
