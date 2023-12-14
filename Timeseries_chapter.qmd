@@ -13,7 +13,7 @@ Temporal dependency means that values sampled at a given time can be related to 
 
 
 Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
-```{r, echo = F}
+```{r, echo = F, error=FALSE}
 ## Install and load the packages required
 
 library(tidyverse) # Data cleaning, ordering, etc.
@@ -145,7 +145,7 @@ $$Y\sim\alpha.X + time$$
 
 **Important note:** If the variance of $Y$ increases beforehand, you will need to perform a **logarithmic** transformation. If the variance of $Y$ decreases beforehand, one would use an **exponential** transformation. Here, the variance increases. 
 
-A useful package on R to manage this kind of models would be nlme.
+A useful package on R to manage glm and gls is be nlme.
 
 
 
