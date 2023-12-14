@@ -609,7 +609,7 @@ duh.
 In ecology, they are mainly used to model dynamics of populations
 interacting.\
 Generally, if we want to quantify the effect of a species on another
-species... What easily comes to mind is that it all depends ob the
+species... What easily comes to mind is that it all depends of the
 population size and the "level" of competitivity of this species.
 
 You've surely already heard about Lotka-Volterra (LV) prey-predator
