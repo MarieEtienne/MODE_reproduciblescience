@@ -1233,8 +1233,8 @@ try to find the behavior
 #### Step 4: Equilibrium point and behavior
 
 Let's study the behavior of our model and its equilibrium points. We're
-going to study S as a function of I First function displays model
-behavior Second draws the lines where the models cancel out.
+going to study S as a function of I. First function displays model
+behavior. Second draws the lines where the models cancel out.
 
 Technical consideration: To have all nullclines you should extend the
 area you want to explore. For example, we only have interest in the area
@@ -1283,7 +1283,7 @@ cond_init = c(X0, Y0)
 ```
 
 What the vector field showed us seems to be confirmed by this graph.
-Let's check our observations with a new functions (promise they're the
+Let's check our observations with new functions (promise they're the
 last)
 
 We'll check the behavior of the center point using the stability
@@ -1375,7 +1375,7 @@ the solutions.
 
 #### Solving Lotka-Volterra with R
 
-Hey R is back! You love last part with how to solve 2 equation ODE in R
+Hey R is back! You loved last part with how to solve 2 equation ODE in R
 ? Now let's find out how to solve a 3 equation system! Unfortunately,
 trying to solve this equation by hand leads to problems: it's not easy
 to find all the equilibrium points. As mentioned in the previous
