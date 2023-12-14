@@ -53,9 +53,37 @@ As this analysis is quite simple the average value of the neighbouring regions c
 
 However, there are commands in R in the package sdpep that allows to do the same analysis ans to go a little further, as well as giving the R-squared value and the p value. 
 
-Our exemple here will be the study of plants and bird richness in Ile & Vilaine
+Our exemple here will be the study of plants and bird richness in Ile & Vilaine. 
+
+*(The dataset "div35" set can be found in the doc called "Saptial autocorrelation_modelisation")*
+
+*(To see how to create weighted matrix, see the previous parts)
+
+
 ```{r}
 div35=read.table("div35.txt", header=T, dec=",")
+
+xy=div35[,3:4] #Extract the coordinates x and y of each points
+
+#For a rook connection
+div.knear4<-knearneigh(as.matrix(xy),4) #extract the neighbour points
+knn2nb(div.knear4) # convert the object of type knn into a type nb # transformation to get as many lists than points/observation
+plot(knn2nb(div.knear4), xy, add=TRUE)
+
+#For a Queen conection
+div.knear8<-knearneigh(as.matrix(xy),8)
+knn2nb(div.knear8)
+
+
+```
+
+The spatial matrix must then be created. Any type of spatial connection can be used, depending on the study you want to conduct, your field conditions and your data themselves. 
+
+```{r}
+lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stand)
+summary(lmsSLX)
+impacts(lmsSLX)
+summary(impacts(lmsSLX, R=500),zstats=TRUE)
 ```
 
 
