@@ -58,12 +58,11 @@ emo::ji("sunglasses")
 
 Welcome to you, young Master 1 student!
 
-It's now been a few chapters since you
-plunged into this adventure full of numbers, formulas and other
-mathematical oddities (🤢). At the moment, you're probably feeling a
-strong need for a change of orientation. I mean, we're doing ecology,
-not maths! And raising goats in Auvergne sounds pretty cool...kinds
-of...🐐
+It's now been a few chapters since you plunged into this adventure full
+of numbers, formulas and other mathematical oddities (🤢). At the
+moment, you're probably feeling a strong need for a change of
+orientation. I mean, we're doing ecology, not maths! And raising goats
+in Auvergne sounds pretty cool...kinds of...🐐
 
 But don't give up! The first (really interesting 😜) chapter is right
 there in front of you!
@@ -95,9 +94,9 @@ etc., which are functions of time (= which evolve over time).
 
 For example, suppose you wanted to study the evolution over time of a
 population of aliens newly landed on Earth (yes, it's possible, I saw
-that in men in black 😎).
+that in Men in Black 😎).
 
-[Your system is]{.underline}: the Alien population.\
+[Your system is]{.underline}: how the Alien population change.\
 [The state of this population is]{.underline}: the number of
 individuals, noted '👽'.\
 This state is a function of time (the number of individuals changes over
@@ -216,11 +215,11 @@ Now, with parameter values and initial values, you can predict what will
 happen in the population at time (t+1). Great!
 
 Now a question: is time discrete or continuous? Continuous, yes! In
-reality, the values of t are defined as follows: $$t \in \mathbb{R}^+$$.
+reality, the values of t are defined as follows: $$t \in \mathbb{R}^+$$
 
-We could take the problem from the beginning... or start again from
-what we have already done, this time integrating the continuous
-dimension of time.
+We could take the problem from the beginning... or start again from what
+we have already done, this time integrating the continuous dimension of
+time.
 
 So we start from: 👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
 
@@ -606,10 +605,10 @@ We will only concentrate on the ecology field to not be overwhelmed by
 all the possibilities... and also because it's the most interesting one
 duh.
 
-In ecology, they are mainly used to model dynamics of populations
+In ecology, they are mainly used to model the dynamics of populations
 interacting.\
 Generally, if we want to quantify the effect of a species on another
-species... What easily comes to mind is that it all depends of the
+species... What easily comes to mind is that it all depends on the
 population size and the "level" of competitivity of this species.
 
 You've surely already heard about Lotka-Volterra (LV) prey-predator
@@ -641,8 +640,8 @@ model, such as the interaction coefficients between populations.
 
 **Biological intuition:**\
 In this model, the predator population thrives when prey are plentiful,
-but eventually exhaust their resources, and the population declines. When
-the predator population has declined sufficiently, the prey can
+but eventually exhaust their resources, and the population declines.
+When the predator population has declined sufficiently, the prey can
 reproduce more, and the population increases again. This dynamic
 continues in a cycle of growth and decline.
 
@@ -656,8 +655,8 @@ what they do before getting started.\
 Don't be afraid by the looks of all those letters, we'll gonna break it
 down to you quite simply:
 
-The main distinction to make in those equation is with "x" and "y":
-make sure to recognize that "x" is referring to the prey population (as
+The main distinction to make in those equation is with "x" and "y": make
+sure to recognize that "x" is referring to the prey population (as
 written in the $$ \frac{d_x}{d_t} $$ at the beginning of the line) and
 that "y" is referring to the predator population (as written in the
 $$ \frac{d_y}{d_t} $$ ). *ax*: Growth term for the prey population:
@@ -828,7 +827,7 @@ populations, instead of endlessly going in circles.
 The equations become:
 $$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{x}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
 
-### Exercices to understand:
+### Exercises to understand:
 
 1.  Supposing that you want to depict the possible seasonal variation of
     the coefficient "a", rewrite the code to simulate a model that
@@ -937,7 +936,7 @@ disease states. The **SIR model** is composed of 3 compartments:
 initially healthy or **susceptible individuals** (S), **infected
 individuals** (I) and cured individuals or **resistent** (R).
 
-$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI-\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
+$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI+\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
 \\
 \\ \begin{align} With : & - \alpha \text{: disease transmission rate}
 \\ & - \beta \text{: cure rate}
@@ -957,8 +956,8 @@ $$ SIR=\begin{cases}\frac{d_S}{d_t}=0 &\text{Susceptible} \\ \frac{d_I}{d_t}=0&\
 
 To do this, we solve:
 
-$$ \begin{align} & \begin{cases} - \alpha SI-\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases}
-\\ \Leftrightarrow & \begin{cases} \alpha SI-\gamma (1-S-I) = 0 \\ \alpha SI-\beta I =0 \end{cases} \end{align} $$
+$$ \begin{align} & \begin{cases} - \alpha SI+\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases}
+\\ \Leftrightarrow & \begin{cases} -\alpha SI+\gamma (1-S-I) = 0 \\ \alpha SI-\beta I =0 \end{cases} \end{align} $$
 
 We first focus on solving:
 
@@ -968,7 +967,7 @@ $$\begin{align} & \alpha SI - \beta I=0
 **If *I = 0***, we integrate I=0 into our "susceptible" equation to
 obtain the solution for S:
 
-$$\begin{align} & \ \ \ \ \ \begin{cases} \alpha S *0 + \gamma (1-S-0)=0 \\ I=0 \end{cases} \\ & \Leftrightarrow \begin{cases} \gamma (1-S)=0 \\ I=O \end{cases} \\ &\text{We thus obtain our first solution:} \\ &\Leftrightarrow \begin{cases} S=1 \\ I=0 \end{cases} \end{align} $$
+$$\begin{align} & \ \ \ \ \ \begin{cases} -\alpha S *0 + \gamma (1-S-0)=0 \\ I=0 \end{cases} \\ & \Leftrightarrow \begin{cases} \gamma (1-S)=0 \\ I=O \end{cases} \\ &\text{We thus obtain our first solution:} \\ &\Leftrightarrow \begin{cases} S=1 \\ I=0 \end{cases} \end{align} $$
 
 It's the **disease-free equilibrium** (DFE).
 
@@ -977,7 +976,7 @@ obtain the solution for I:
 
 $$\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0\\
 S = \frac{\beta}{\alpha} \end{cases}\\
-& \Leftrightarrow \begin{cases} -\beta I + \gamma \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
+& \Leftrightarrow \begin{cases} -\beta I + \gamma- \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
 & \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}\\ 
 & \text{We thus obtain our first solution:}\\
 & \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\
@@ -1087,8 +1086,8 @@ The stability of a linear system is often determined by the real parts
 of the eigenvalues. In this case, the real part is negative which
 indicates a **stable attractive node**.
 
-This sounds complicated, **but don't panic**! In ecology we are lucky
-to have a great tool, R, which allows us to resolve this type of system.
+This sounds complicated, **but don't panic**! In ecology we are lucky to
+have a great tool, R, which allows us to resolve this type of system.
 You can see how to do it on R at the end of Lotka Volterra 3 species.
 
 ### Solving SIR model with R
@@ -1102,10 +1101,10 @@ Use R to study the behavior of our model as double interest.
 To show how you can use phaseR and deSolve to solve ODE we will use the
 SIR we just solved. We hope our calcul is good. In this chapter, we will
 show what's the most common function you can use, but not all the
-parameters you can add. I know you are probably sobbing "wHyYyYyy?"
-(Who has never dreamed of knowing all the difference between the Euler
-and Runge Kunta order 4?) but we let you make your search if you need
-more information.
+parameters you can add. I know you are probably sobbing "wHyYyYyy?" (Who
+has never dreamed of knowing all the difference between the Euler and
+Runge Kunta order 4?) but we let you make your search if you need more
+information.
 
 #### Step 1: Prepare you environnement
 
@@ -1133,9 +1132,10 @@ bother us when we work. Then we load the 3 packages we will use.
 As we talk about programmation we have to talk about technical issues
 you can have. To prevent you from committing this, we put during the
 presentation some technical issues to think of before coding. If you
-want to do the same things as us, you will probably find yourself in some
-problems: don't be afraid R is widely used and you will easily find people
-who have defeated the same problem. Don't be ashamed to search for help!
+want to do the same things as us, you will probably find yourself in
+some problems: don't be afraid R is widely used and you will easily find
+people who have defeated the same problem. Don't be ashamed to search
+for help!
 
 ```{r message=F, warning=FALSE}
 #We erase all data use before
