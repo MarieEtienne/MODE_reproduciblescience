@@ -13,7 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install R packages
-        run: Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa', 'factoextra', 'draw', 'phaseR', 'rgl'))"
+        run: |
+          Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa', 'factoextra'))" 
+          Rscript -e "install.packages(c('draw', 'phaseR', 'rgl', 'bootstrap', 'latex2exp', 'datasets'))"
       - name: Install R packages from Github
         run: Rscript -e "remotes::install_github('hadley/emo')"
       - name: Generate slides
