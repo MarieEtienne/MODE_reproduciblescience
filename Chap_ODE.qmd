@@ -23,13 +23,16 @@ text-align: justify}
 ```
 ```{r init, include=FALSE}
 # Configure your session and load R packages
-rm(list=ls()) # Properly clear workspace
+## MPE very dangerous command, can't erase the full workspace
+## rm(list=ls()) # Properly clear workspace
 
+## 
 # Install packages
-pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools","deSolve","phaseR","rgl")
-inst.pkg <- row.names(installed.packages())
-pkg2inst <- pmatch(pkg, inst.pkg)
-if (any(is.na(pkg2inst[1:4]))) install.packages(pkg[which(is.na(pkg2inst[1:4]))],
+## MPE do not install package within the .qmd
+# pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools","deSolve","phaseR","rgl")
+# inst.pkg <- row.names(installed.packages())
+# pkg2inst <- pmatch(pkg, inst.pkg)
+# if (any(is.na(pkg2inst[1:4]))) install.packages(pkg[which(is.na(pkg2inst[1:4]))],
                                                 repos = "http://cran.at.r-project.org")
 # Load packages
 library(knitr)
@@ -41,7 +44,8 @@ library(devtools)
 library(deSolve)
 library(phaseR)
 library(rgl)
-devtools::install_github("hadley/emo")
+## MPE do not install package within the qmd
+#devtools::install_github("hadley/emo")
 ```
 
 ```{r, include = FALSE}
