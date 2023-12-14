@@ -1,0 +1,1570 @@
+---
+title: "Ordinary Differential Equations and their application in Ecology"
+author: "Amélie Cocchiara, Théo Laguilliez, Clément Monaury, Laura Martinez Anton, Anastasia Paupe"
+date: "`r Sys.Date()`"
+bibliography: references.bib
+execute: 
+  freeze: auto
+output: 
+  html_document:
+   toc: true
+   toc_float: true
+   df_print: paged
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{=html}
+<style>
+body {
+text-align: justify}
+</style>
+```
+```{r init, include=FALSE}
+# Configure your session and load R packages
+## MPE very dangerous command, can't erase the full workspace
+## rm(list=ls()) # Properly clear workspace
+
+## 
+# Install packages
+## MPE do not install package within the .qmd
+# pkg <- c("knitr", "ggplot2", "tidyverse", "draw", "devtools","deSolve","phaseR","rgl")
+# inst.pkg <- row.names(installed.packages())
+# pkg2inst <- pmatch(pkg, inst.pkg)
+# if (any(is.na(pkg2inst[1:4]))) install.packages(pkg[which(is.na(pkg2inst[1:4]))],
+#                                                repos = "http://cran.at.r-project.org")
+# Load packages
+library(knitr)
+opts_chunk$set(echo = TRUE, warning=F, comment = "", cache = TRUE, fig.align = "center")
+library(ggplot2) # graph package
+library(tidyverse)
+library(draw) # To draw some shapes
+library(devtools)
+library(deSolve)
+library(phaseR)
+library(rgl)
+## MPE do not install package within the qmd
+#devtools::install_github("hadley/emo")
+```
+
+```{r, include = FALSE}
+# Generation of the needed emoji
+emo::ji("alien")
+emo::ji("goat")
+emo::ji("vomit")
+emo::ji("silly")
+emo::ji("sunglasses")
+
+```
+
+# Introduction & objectives
+
+Welcome to you, young Master 1 student!
+
+It's now been a few chapters since you plunged into this adventure full
+of numbers, formulas and other mathematical oddities (🤢). At the
+moment, you're probably feeling a strong need for a change of
+orientation. I mean, we're doing ecology, not maths! And raising goats
+in Auvergne sounds pretty cool...kinds of...🐐
+
+But don't give up! The first (really interesting 😜) chapter is right
+there in front of you!
+
+Are you interested in population and epidemiological trends and
+dynamics? Would you like to be able to predict the future (and the past,
+no kidding) from the present?
+
+Then this is the chapter for you! Work it as much as you can! You'll end
+up shining in modelling (and maybe even in society).
+
+At the end, you'll:\
+- know how to define an ordinary differential equation\
+- be able to detect a problem involving the need to use differential
+equations\
+- be able to carry out modelling involving an ODE system in an
+ecological context
+
+# I. Dynamic systems & ODE definition
+
+Let's start simply!
+
+First of all, let's define the framework of the study.
+
+We consider a dynamic system. Or in other words, a physical system whose
+state changes as a function of time. By "state", we mean "physical
+variables" such as a number of individuals, a position, a temperature,
+etc., which are functions of time (= which evolve over time).
+
+For example, suppose you wanted to study the evolution over time of a
+population of aliens newly landed on Earth (yes, it's possible, I saw
+that in Men in Black 😎).
+
+[Your system is]{.underline}: how the Alien population change.\
+[The state of this population is]{.underline}: the number of
+individuals, noted '👽'.\
+This state is a function of time (the number of individuals changes over
+time). We therefore note it: '👽(t)'.
+
+So your aim is to study this system. But as you can imagine, you can't
+start from scratch! To study the evolution of such a system, you need to
+know:\
+- **its initial state**: values of its characteristic variables at the
+initial time of the study (t=0).\
+- **the processes underway in the biological system**: the way of
+gaining (i.e. birth, migration) and/or losing (i.e. mortality)
+individuals for example. Don't hesitate to draw the system on a piece of
+paper, to avoid getting lost (*Figure 1*)!\
+- **the parameters associated with these processes**
+
+Let's make it more concrete:
+
+```{r, include=TRUE, echo=FALSE, fig.height=2.8, fig.width=5}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 5, units = "inches")
+
+# Draw the different shapes of the system on the page
+#     * The rectangle
+drawBox(x = 2.5, y = 2.5, width = 1, height = 1)
+
+#     * The mortality arrow 
+drawLine(x = c(3, 4),
+         y = c(2.5, 2.5))
+drawLine(x = c(3.9, 4),
+         y = c(2.4, 2.5))
+drawLine(x = c(3.9, 4),
+         y = c(2.6, 2.5))
+
+#     * The migration arrow 
+drawLine(x = c(1, 2),
+         y = c(2.5, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.4, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.6, 2.5))
+
+#     * The birth 'arrow' (its a circle) 
+drawCircle(x = 2.5,
+           y = 3.4,
+           radius = 0.4)
+drawLine(x = c(2.5, 2.6),
+         y = c(3, 3.1))
+drawLine(x = c(2.5, 2.6),
+         y = c(3, 2.9))
+
+# Add the text
+#     * For the population
+drawText(x = 2.5, y = 2.5, text = "Population")
+drawText(x = 2.5, y = 2.3, text = "👽(t)")
+
+#     * For the mortality
+drawText(x = 4.45, y = 2.5, text = "Mortality")
+drawText(x = 3.5, y = 2.35, text = "d 👽(t)")
+
+#     * For the migration
+drawText(x = 0.5, y = 2.5, text = "Migration")
+drawText(x = 1.4, y = 2.35, text = "m")
+
+#     * For the birth
+drawText(x = 2.5, y = 3.4, text = "Birth")
+drawText(x = 3.2, y = 3.4, text = "b 👽(t)")
+
+# Add the caption
+drawText(x = 2.5, y = 1.5, text = "Figure 1: Diagram of the 'Alien population' dynamic system")
+```
+
+To keep things simple, we'll take a discrete-time simulation, with a
+time step of 1.
+
+Let define t like that: $$t \in \mathbb{N}^+$$ This means that t belongs
+to the set of natural integer numbers. t can therefore take the values
+0, 1, 2, 3, 4, 5, etc..
+
+Here, the variable of interest (= the state of the system) is the number
+of individuals in the population. This number changes over time, and is
+therefore denoted 👽(t). The biological processes responsible for this
+change over time are:\
+- **mortality**: noted d (for death). d👽 corresponds to the proportion
+of individuals that will die in 1 unit of time\
+- **birth**: denoted b. This means that 👽 individuals will produce b👽
+new individuals in 1 unit of time\
+- **migration**: denoted m. This means that 👽 increases by m
+individuals in 1 unit of time.
+
+Let's try to predict step by step the number of individuals at time
+(t+1), based on the information known at time (t).
+
+What will the number of individuals at time (t+1) depend on?
+
+Firstly, it depends on the number of individuals at time (t)!
+
+We then note: 👽(t+1) = 👽(t)
+
+But defined in this way, our population is constant. It doesn't change
+at all over time.
+
+How can the population increase? - Through migration - Through births
+
+We then note: 👽(t+1) = 👽(t) + migrations + births
+
+But at each time step, the population is also subject to mortality
+(which obviously reduces the number of individuals).
+
+We then note: 👽(t+1) = 👽(t) + migrations + births - mortality
+
+Let's replace these words with their notations: 👽(t+1) = 👽(t) + m +
+b👽(t) - d👽(t)
+
+Now, with parameter values and initial values, you can predict what will
+happen in the population at time (t+1). Great!
+
+Now a question: is time discrete or continuous? Continuous, yes! In
+reality, the values of t are defined as follows: $$t \in \mathbb{R}^+$$
+
+We could take the problem from the beginning... or start again from what
+we have already done, this time integrating the continuous dimension of
+time.
+
+So we start from: 👽(t+1) = 👽(t) + m + b👽(t) - d👽(t)
+
+We know what happens at each time step of 1. What we don't know is what
+happens between each of these time steps! Before working with continuous
+time, we'll try to work with a time step of less than 1.
+
+The time step between each time step of 1 is noted: $$\Delta t < 1$$
+
+We then incorporate this new time step into our formula:
+$$\begin{aligned}[t]
+        & \phantom{=}\left(👽(t+1) = 👽(t) + m + b👽(t) - d👽(t) \right)\\
+        & \Leftrightarrow 👽(t+\Delta t)= 👽(t) + m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
+        & \Leftrightarrow 👽(t+\Delta t) -👽(t) = m\Delta t + b\Delta t👽(t) - d\Delta t👽(t) \\
+        & \Leftrightarrow \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = m + b👽(t) - d👽(t) \\
+        \end{aligned}$$
+
+Great! Now, what do you have to do to really work in continuous time,
+and not just be interested in a very small time step?
+
+We need to be interested in a Δt of zero (or very close to 0).
+
+This gives us:
+$$\lim_{\Delta t \to 0} \frac{👽(t+\Delta t) -👽(t)}{\Delta t} = \frac{d👽}{dt} = 👽'(t) $$
+
+Graphically, this gives (*Figure 2*):
+
+```{r, include=TRUE, echo=FALSE, fig.height=5, fig.width=6}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 4, units = "inches")
+
+# Draw the orthogonal plan on the page
+#     * The x axe 
+drawLine(x = c(0.5, 4),
+         y = c(0.5, 0.5),
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.4, 0.5),
+         lineWidth = 2.5)
+drawLine(x = c(3.9, 4),
+         y = c(0.6, 0.5),
+         lineWidth = 2.5)
+#     * The y axe 
+drawLine(x = c(0.5, 0.5),
+         y = c(0.5, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.4, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+drawLine(x = c(0.6, 0.5),
+         y = c(3.9, 4),
+         lineWidth = 2.5)
+
+# Draw the 'discret' time lines
+#     * The vertical one 
+drawLine(x = c(1.7, 1.7),
+         y = c(0.5, 2),
+         lineWidth = 1)
+#     * The horizontal one
+drawLine(x = c(0.5, 1.7),
+         y = c(2, 2),
+         lineWidth = 1)
+
+# Draw the 'continuous' time lines
+#     * The vertical one 
+drawLine(x = c(2.35, 2.35),
+         y = c(0.5, 3),
+         lineWidth = 1)
+#     * The horizontal one 
+drawLine(x = c(0.5, 2.35),
+         y = c(3, 3),
+         lineWidth = 1)
+
+# Draw of the lines
+drawCurve(x = c(1.5, 4.1),
+          y = c(1, 3.5),
+          angle = 80, # Angle of the curve
+          open = T, # No link btw starting and ending points
+          inflect = F, # No infection points
+          curvature = -0.5,
+          points = 5,
+          square= F,
+          squareShape = 0,
+          lineWidth = 1.5)
+drawLine(x = c(1, 3.7),
+         y = c(0.9234, 5.076),
+         lineWidth = 1.5,
+         lineColor = "blue")
+drawLine(x = c(1.2, 3.7),
+         y = c(0.9234, 6.276),
+         lineWidth = 1.5,
+         lineColor = "red")
+
+# Add the text
+drawText(x = 0.1, y = 4, text = "Number")
+drawText(x = 0, y = 3.8, text = "of individuals")
+drawText(x = 4.2, y = 0.4, text = "Time")
+drawText(x = 2.35, y = 0.4, text = "(t+Δt)")
+drawText(x = 1.7, y = 0.4, text = "(t)")
+drawText(x = 0.1, y = 3, text = "👽(t+Δt)")
+drawText(x = 0.1, y = 2, text = "👽(t)")
+
+drawBox(x = 2.5, y = 4.3, width = 2, height = 0.5,
+        fillColor = 'white', lineColor = 'white')
+
+# Add the caption
+drawText(x = 2.80, y = 0, text = "Figure 2: Schematic graphic representation of the growth")
+drawText(x = 3.15, y = -0.2, text = "of a population over time")
+
+```
+
+The blue line is characterized by the slope:
+$$\frac{👽(t+\Delta t) -👽(t)}{dt}$$
+
+The red line is characterized by the slope: $$\frac{d👽}{dt}$$
+
+There are 3 behaviors to understand: $$\begin{aligned}[t]
+        & \frac{d👽}{dt}>0\Leftrightarrow\text{👽is increasing around t} \\
+        & \frac{d👽}{dt}=0\Leftrightarrow\text{👽 does not vary around t}\\
+        & \frac{d👽}{dt}<0\Leftrightarrow\text{👽 is decreasing around t}\\
+        \end{aligned}$$
+
+This N'(t) thus represents an 'instantaneous' increase over time in the
+number of individuals in the Alien population.
+
+And this is what we call a differential equation:
+$$N'(t) = \frac{d👽}{dt} = m + b👽(t) - d👽(t)$$
+
+In other words, it is an equation that relates a variable (here, 👽(t))
+to its derivatives (here, only d👽/dt). It describes the speed at which
+a variable (in this case 👽: the number of individuals in the Alien
+population) varies over time.
+
+# II. Single ODE system: examples of exponential & logistic models
+
+Let's explore two well-known models to better understand the ODE
+concept.
+
+## II-A. The exponential model or Malthus model
+
+The biological hypothesis behind this first model is as follows: The
+population grows in proportion to its present size.
+
+Let r be defined as follows: $$r \in \mathbb{N}^+$$
+
+This means that a population of N individuals at time t will gain r\*N
+individuals at the next time.
+
+It could be illustrated as follows (*Figure 3*):
+
+```{r, include=TRUE, echo=FALSE, fig.height=2.8, fig.width=5}
+# Create a new drawing page and set the drawing settings
+drawPage(width = 5, height = 5, units = "inches")
+
+# Draw the different shapes of the system on the page
+#     * The rectangle
+drawBox(x = 2.5, y = 2.5, width = 1, height = 1)
+
+
+#     * The r coefficient arrow 
+drawLine(x = c(1, 2),
+         y = c(2.5, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.4, 2.5))
+drawLine(x = c(1.9, 2),
+         y = c(2.6, 2.5))
+
+# Add the text
+#     * For the population
+drawText(x = 2.5, y = 2.5, text = "N")
+
+#     * For the r coefficient
+drawText(x = 1.2, y = 2.65, text = "r * N")
+
+# Add the caption
+drawText(x = 2.5, y = 1.5, text = "Figure 3: The Malthus model dynamic system")
+
+```
+
+We're going to define a discrete and a continuous model here to make
+things very clear!
+
+### II-A-1. Discrete model
+
+Let\
+$$n \in \mathbb{N}^+$$
+
+As mentioned above, the population grows by r\*N(n) per unit time.
+
+In other words, between N(n+1) and N(n), the population
+increases/decreases by r\*N(n).
+
+We therefore have: $$N(n+1)-N(n) = r*N(n)$$
+
+This gives the following model: $$N(n+1) = r*N(n)+N(n)$$
+
+Which gives us the following solution: $$N(n) = (1+r)^n * N(0)$$
+
+We're going to graphically represent this model using r studio. Here are
+the lines of code to achieve this (*Figure 4*):
+
+```{r, include=TRUE, echo=TRUE}
+r = 0.7 # r corresponds to the population growth rate; it ranges from -1 to 1; here, it's positive, so the population is growing.
+N0 = 10 # N0 corresponds to the initial number of individuals. There are 10 here.
+t = seq(0,10,1) # We simply define the duration of the simulation. Here, we start from time 0, up to time 10, with a step of 1.
+pop = c() # We create a list to store the values of N(t)
+for(n in t){
+  N = ((1+r)^n) * N0 # Model solution
+  pop = append(pop,N) # Storing results in the 'pop' list
+}
+
+plot(t, pop, main = "",
+     xlab = "t",
+     ylab = "N(t)") # Display it all in a beautiful graph (feel free to make prettier ones using ggplot2 ^^) 
+
+title(main = "Exponential evolution of population as a function of discrete time", adj=0.75)
+title(sub = "Figure 4")
+```
+
+### II-A-2. Continuous model
+
+Let $$t \in \mathbb{R}^+$$
+
+We had: $$N(n+1)-N(n) = r*N(n)$$
+
+Which gives:\
+$$\begin{aligned}[t]
+        & \phantom{=}\left(N(n+1)-N(n) = r*N(n)\right)\\
+        & \Leftrightarrow N(t+\Delta t)-N(t) = r * \Delta t * N(t)\\
+        & \Leftrightarrow \frac{N(t+\Delta t)-N(t)}{\Delta t} = r * N(t) \\
+        \end{aligned}$$
+
+This gives us:
+$$\lim_{\Delta t \to 0} \frac{N(t+\Delta t)-N(t)}{\Delta t} = \frac{dN(t)}{dt} = N'(t) = r*N(t)$$
+
+This gives the following model: $$\frac{dN(t)}{dt} = r * N(t)$$
+
+The solution of this model is: $$N(t) = \exp(r * t) * N_0$$
+
+We're going to try to simulate this model using r studio. We're going to
+use a package you've seen or will no doubt be seeing very soon: the
+'deSolve' package.
+
+Install and load it:
+
+```{r, include=TRUE, echo=TRUE}
+#install.packages("deSolve")
+#library(deSolve)
+```
+
+There are two important points to bear in mind when using this package:
+
+-   The main function you'll be using is the 'ode()' function. It
+    follows a very specific syntax that you need to remember:
+
+*ode(y=y0, times=time, func=function, parms=parameters)*
+
+with:
+
+-   'y0' = initial value of the variable of interest y (for the first
+    time value)
+
+-   'times' = the times you wish to work on
+
+-   'function' = the function defining the system; this function follows
+    a very specific syntax that you'll also need to remember (see
+    below).
+
+-   'parms' = parameter values
+
+-   concerning the 'function' argument of the 'ode()' function. This
+    corresponds to a function which, although specific to each model,
+    follows a very particular syntax, as explained above. The syntax is
+    as follows:
+
+*name_of_function\<- function(t,y,parameters){* *instructions*
+*list(flux)}* with:
+
+-   't' = corresponds to the 'times' argument of the 'ode()' function\
+-   'y' = corresponds to the variable of interest\
+-   'parameters' = corresponds to the parameters of the 'parms' argument
+    of the 'ode()' function
+
+Knowing all this, we can simulate the exponential model with the
+following script (*Figure 5*):
+
+```{r, include=TRUE, echo=TRUE}
+
+expo <- function(t, N, r){
+  list(r*N)}
+N0 = 10
+r = 0.7
+temps <- seq(from = 0, to = 10, by = 0.01)
+sol <- ode(y = N0, times = temps, func = expo, parms = r)
+plot(sol,main = "")
+title(main = "Exponential evolution of population as a function of continuous time", adj=0.65)
+title(sub = "Figure 5")
+```
+
+### II-A-2. Summary
+
+We can see that, whether using the discrete or continuous model, the
+population is growing. And it's growing exponentially!
+
+Try changing the parameters to vary the trajectories! Try, for example,
+r = 0; r \< 0; N0 = 0, etc. This will enable you to fully understand the
+model!
+
+## II-B. The logistic model or Verhulst model
+
+The biological assumptions behind this second model are:
+
+-   The population grows in proportion to its present size.
+
+-   A density-dependency factor (noted K) is introduced to take account
+    of the limiting effect of resources (which are not infinite): this
+    is intraspecific competition!
+
+Let defined:
+$$r \in \mathbb{N}^+ ; K \in \mathbb{R}^+ ; t \in \mathbb{R}^+  $$
+
+This means that a population of N individuals at time t will gain
+r\*(1-(N/K))\*N individuals at the next time.
+
+This gives the following model:
+$$\frac{dN(t)}{dt} = r * (1-\frac{N(t)}{K}) * N(t)$$
+
+The solution of this model is:
+
+$$N(t) = \frac{K}{1 + \frac{K - N_0}{N_0}\exp(-rt)}$$
+
+Using the explanations about 'deSolve', you can illustrate this as
+follows (*Figure 6*):
+
+```{r, include=TRUE, echo=TRUE}
+
+logi <- function(t, N, param){
+  r = param[1]
+  K = param[2]
+  list(r*N*(1-N/K))}
+N0 = 100
+r = 0.7
+K = 100
+temps <- seq(from = 0, to = 10, by = 0.01)
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r, K))
+plot(sol, main = "",
+     xlim = c(0,10),
+     ylim = c(0,200),
+     col = 'green')
+title(main = "Logistic evolution of population as a function of continuous time", adj=0.65)
+title(sub = "Figure 6")
+N0 = 200
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r,K))
+lines(sol, col = 'red')
+N0 = 2
+sol <- ode(y = N0, times = temps, func = logi, parms = c(r,K))
+lines(sol, col = 'blue')
+
+```
+
+There are a number of different situations here, which can be summarized
+as follows:
+
+-   If K \> N0 \> 0, then ∀t \> 0, N(t) tends towards K (increase; blue
+    trajectory on *Figure 6*)
+-   If N0 = K, then for ∀t \>0, N(t) = N0 (green trajectory on *Figure
+    6*)
+-   If N0 \> K, then for ∀t \>0, N(t) tends towards K (decrease; red
+    trajectory on *Figure 6*)
+
+Once again, try changing the parameters to vary the trajectories! This
+will enable you to fully understand the model!
+
+# III. 2-equations ODE systems: Lotka Volterra model
+
+An ordinary differential equation system with 2 equations represents the
+simultaneous rates of change of two related functions, where each
+equation typically involves the other one, expressing their mutual
+dependence.
+
+ODE systems with 2 equations are widely used in different disciplines.
+We will only concentrate on the ecology field to not be overwhelmed by
+all the possibilities... and also because it's the most interesting one
+duh.
+
+In ecology, they are mainly used to model the dynamics of populations
+interacting.\
+Generally, if we want to quantify the effect of a species on another
+species... What easily comes to mind is that it all depends on the
+population size and the "level" of competitivity of this species.
+
+You've surely already heard about Lotka-Volterra (LV) prey-predator
+model. You may not know this but it IS an ODE system with 2 equations!
+**LV is the most known way to model the dynamic of predator-prey
+populations.**
+
+But Lotka-Volterra also has applications in microbiology (see
+https://journals.asm.org/doi/10.1128/aem.36.1.11-17.1978)
+
+## Lotka-Volterra
+
+A LV prey-predator model represents both equations over time. Although
+we will mostly focus on the cyclic patterns between those equations,
+keep in mind that there *can* be a certain point in time where both
+equations are in equilibrium and the values that are depending on the
+time remain approximately constant.
+
+**Why LV is useful:** - To see that the interactions between populations
+can create periodic dynamics over time;\
+- To study how biodiversity interacts with the parameters put into the
+model, such as the interaction coefficients between populations.
+
+**Assumptions for LV:**\
+- The prey and predator live in a limited space;\
+- The encounters are random;\
+- The prey is only limited by the predator;\
+- A predator can consume an infinite number of preys
+
+**Biological intuition:**\
+In this model, the predator population thrives when prey are plentiful,
+but eventually exhaust their resources, and the population declines.
+When the predator population has declined sufficiently, the prey can
+reproduce more, and the population increases again. This dynamic
+continues in a cycle of growth and decline.
+
+Typically, here's what these equations can look like:
+
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+\*\*\*\*
+
+It's important to really understand how equations are constructed and
+what they do before getting started.\
+Don't be afraid by the looks of all those letters, we'll gonna break it
+down to you quite simply:
+
+The main distinction to make in those equation is with "x" and "y": make
+sure to recognize that "x" is referring to the prey population (as
+written in the $$ \frac{d_x}{d_t} $$ at the beginning of the line) and
+that "y" is referring to the predator population (as written in the
+$$ \frac{d_y}{d_t} $$ ). *ax*: Growth term for the prey population:
+constant a \* current prey population. *bxy*: Death term for the prey
+population. Depends on the size of the prey population and the size of
+the predator's population. The death of the prey population depends
+partly on the predator eating them. It's the same logic the other way
+around for the second equation because it includes the growth rate of
+the predator population with cy and the death rate of the predator
+population with hxy.
+
+In other terms: The prey grows at a linear rate (a) and gets eaten by
+the predator at the rate of (b). Indeed, the rate of predation on prey
+is assumed to be proportional to the frequency of encounters between
+predators and prey; it is equal to bx(t)y(t).\
+The predator gains a certain amount of vitality by eating the prey at a
+rate (c), while dying off at another rate (d).
+
+More precisely, x(t) and y(t) functions follow a malthusian model:\
+The prey population follows an exponential growth in the absence of
+predators. This growth is represented in the equation with the term
+ax(t).\
+The term cy(t) is the natural death of the predators, it is an
+exponential decrease of the population, in absence of preys.
+
+### Demonstration
+
+Let's dive into R, to simulate and plot the evolution of the two
+populations, using the Lotka-Volterra prey-predator model.\
+To simulate this population dynamic, we will use given coefficients,
+initial levels of populations and also a given simulation time and given
+time step size. Indeed, We will use the so-called Euler method, as we
+will be moving through time, and incrementing new values of population
+levels at each time steps, to keep track of the evolution of the two
+populations.
+
+What you will have to keep in mind: In this Euler method, we will think
+of *dt* as $$\Delta t$$
+
+Thus, we can make this approximation:
+$$ \frac{d_x}{d_t} = ax - bxy \\ => dx = (ax - byx) * \Delta t \\ and \\ \frac{d_y}{d_t} = -cy + hxy \\ => dy = (-cy + hxy) * \Delta t $$
+
+#### Defining the terms
+
+Disclaimer: terms' values are not intended to be ecologically relevant,
+but to serve as an example.
+
+To make it more telling, let's say that our prey population is a zebra
+population, whereas the predator population are a group of lions.
+Obviously, we would think that the zebra population starts at a higher
+population size than a simple group of lions. That's what we tell to our
+model:
+
+```{r, echo=TRUE}
+rm(list=ls()) #to clear all the environment
+
+X_init<- 5     #starting value for x
+Y_init<- 3     #starting value for y
+```
+
+The initial values for the populations' sizes have been defined. Now,
+since LV is a dynamic model, evolving over time, and since we do not
+want our simulation to run endlessly, it'd be a good idea to set a time
+limit, wouldn't it be? Let's say we want to follow the population
+dynamics throughout 100 months.
+
+For our example, we will talk about numbers of individuals (Xinit=5
+individuals, Yinit=3 individuals), and we will consider the time unit to
+be months. But we could have chosen days or years, and then chose
+consistent coefficient values:
+
+```{r, echo=TRUE}
+tend<-100    #how long the simulation is going to run for
+delta_t<-0.01    #the size of the time step, as we will be moving through time with discrete steps
+
+# Model coefficients
+a<-0.8 #prey
+b<-0.4 #prey
+c<-0.6 #predator
+h<-0.2 #predator
+```
+
+#### Defining the vectors
+
+We create some vectors to keep track of the variables, as we are moving
+through time. Then those vectors will prove useful when we will want to
+plot the dynamics:
+
+```{r, echo=TRUE}
+X<-c(X_init)    #we will append to this vector, it is going to be filled up with the successive levels of X, during all the time of the simulation
+Y<-c(Y_init)    #idem with Y
+
+t<-c(0)   #this vector will be filled up with all the time steps
+```
+
+#### Simulation
+
+```{r, echo=TRUE}
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a*current_X-b*current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(-c*current_Y + h*current_X*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+
+}
+```
+
+#### Plotting
+
+```{r, echo=TRUE}
+library(ggplot2)
+
+LV <- data.frame(time = t, prey = X, predator = Y)
+
+ggplot(LV, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+```
+
+You can see the cyclic nature of this dynamic as explained earlier: the
+prey thrives when the predator declines, the predator thrives when
+there's a lot of prey...
+
+This dynamic can be seen in a phase space plot i.e. the level of
+predator as a function of the prey level:
+
+```{r, echo=TRUE}
+ggplot(LV, aes(x = prey, y = predator)) +
+  geom_point() +
+  labs(x = "Prey (nb of individuals)", y = "Predator (nb of individuals)") +
+  theme_classic()
+```
+
+### Adding a parameter to make in more realistic
+
+At that point, the model doesn't contain a lot of terms. It is a great
+mathematical setting, we can understand how it works and what is its
+point. However, in nature, there are a lot more parameters controlling
+our populations. Adding some of these parameters would allow the model
+to be more realistic.\
+To cite only one parameter, we can talk about the carrying capacity of
+the environment. It defines how the environment can tolerate the
+species, according to the resources it contains. The more individuals
+from a species there is, the less the environment can keep up, until a
+certain point where there is too much individuals for a limited resource
+so the population declines...
+
+Actually, this notion of carrying capacity (K) can bring us to an
+unaddressed point: reaching an equilibrium for both prey and predator
+populations, instead of endlessly going in circles.
+
+The equations become:
+$$ PP = \begin{cases} \frac{d_x}{d_t}= a x \ (1 - \frac{x}{K}) - b x y &\text{Prey} \\ \frac{d_y}{d_t}= -c y + h x y &\text{Predator} \end{cases}$$
+
+### Exercises to understand:
+
+1.  Supposing that you want to depict the possible seasonal variation of
+    the coefficient "a", rewrite the code to simulate a model that
+    includes the variability of "a" among time. We can consider a
+    variation of "a" over a time period of one year, with an amplitude
+    of 0.6. Moreover, we consider a mean value of "a" of 0.8.
+
+Answer:
+
+```{r,echo=TRUE}
+rm(list=ls())
+
+####DEFINING THE COEFFICIENTS AND VARIABLES####
+X_init<-5
+Y_init<-3
+tend<-100
+delta_t<-0.01
+
+
+####DEFINING THE VECTORS####
+X<-c(X_init)   
+Y<-c(Y_init)
+
+t<-c(0)   #this vector will be filled up with all the time steps
+
+###coefficients of the model
+#function to describe the variation of a among time
+a_seasonal_variation <- function(t) {
+  amplitude <- 0.6  #amplitude of the seaonal variation
+  period <- 12      #seasonal period
+  mean <- 0.8     #mean value of the growth rate
+  return(mean + amplitude * sin(2 * pi * t / period))
+}
+
+b<-0.4
+c<-0.6
+h<-0.2
+
+####SIMULATION####
+
+while (t[length(t)]<tend) 
+{
+  current_X<-X[length(X)]   #we define current_X as the most recent value of X
+  current_Y<-Y[length(Y)]    #idem for Y
+  current_t<-t[length(t)]
+  
+  delta_X<-(a_seasonal_variation(current_t)*current_X-b*current_X*current_Y)*delta_t
+  next_X<-current_X+delta_X
+  
+  delta_Y<-(-c*current_Y + h*current_X*current_Y)*delta_t
+  next_Y<-current_Y+delta_Y
+  
+  next_t<-current_t+delta_t
+  
+  #We append the successive values to the vectors
+  X<-append(X,next_X)
+  Y<-append(Y,next_Y)
+  t<-append(t,next_t)
+  
+}
+
+####PLOTTING#####
+
+library(ggplot2)
+
+LV_exercice <- data.frame(time = t, prey = X, predator = Y)
+
+ggplot(LV_exercice, aes(x = time)) +
+  geom_line(aes(y = prey, color = "Prey"), size = 1.5) +
+  geom_line(aes(y = predator, color = "Predator"), size = 1.5) +
+  labs(x = "Time (months)", y = "Number of Individuals") +
+  scale_color_manual(values = c(Prey = "blue", Predator = "red")) +
+  theme_classic()
+
+
+```
+
+2.  What factors, other than the carrying capacity of the environment,
+    could be added that would have ecological significance?
+
+Answer:
+
+-   sǝʇɐɹ uoᴉʇɔnpoɹdǝɹ ɟo ʎʇᴉlɐuosɐǝS
+-   ǝʇɐɹ uoᴉʇɐpǝɹd ɟo ʎʇᴉlɐuosɐǝS
+-   uoᴉʇɐɹɓᴉꟽ
+-   uoᴉʇᴉʇǝdɯoɔ ɔᴉɟᴉɔǝdsɐɹʇuI
+-   .ɔʇǝ
+
+You can use a online generator to flip the text back up, or just take a
+picture and turn it!
+
+# IV. 3-equations ODE system
+
+We will now make the system more complex by adding an additional
+equation. To solve these systems, two methods are possible. If we are in
+the case of a closed population, then we can remove an equation: see
+example SIR model. If we are in the case of an open population: see
+example of the Lotka-Volterra model with 3 species.
+
+## 1) SIR model and resolution by hand
+
+The most used **models in epidemiology** are mathematical models of
+infectious diseases such as the SIR model. These models are based on
+compartmentalization that divide the population into various possible
+disease states. The **SIR model** is composed of 3 compartments:
+initially healthy or **susceptible individuals** (S), **infected
+individuals** (I) and cured individuals or **resistent** (R).
+
+$$SIR=\begin{cases}\frac{d_S}{d_t}=- \alpha SI+\gamma R &\text{Susceptible} \\ \frac{d_I}{d_t}=\alpha SI-\beta I&\text{Infected} \\ \frac{d_R}{d_t}=\beta I- \gamma R &\text{Resistent}\end{cases} 
+\\
+\\ \begin{align} With : & - \alpha \text{: disease transmission rate}
+\\ & - \beta \text{: cure rate}
+\\ & - \gamma \text{: coefficient of loss of immunity} \end{align}$$
+
+We assume a **closed population**, so:
+$$ S+I+R = 1 \Leftrightarrow R=1-S-I $$
+
+Thus, we **can express R from S and I**, so we can remove the equation
+from our system and we end up with a system with 2 equations.
+
+### Balance points
+
+We look for balance points such as:
+
+$$ SIR=\begin{cases}\frac{d_S}{d_t}=0 &\text{Susceptible} \\ \frac{d_I}{d_t}=0&\text{Infected} \end{cases} $$
+
+To do this, we solve:
+
+$$ \begin{align} & \begin{cases} - \alpha SI+\gamma R = 0 &\text{Susceptible} \\ \alpha SI-\beta I =0 &\text{Infected} \end{cases}
+\\ \Leftrightarrow & \begin{cases} -\alpha SI+\gamma (1-S-I) = 0 \\ \alpha SI-\beta I =0 \end{cases} \end{align} $$
+
+We first focus on solving:
+
+$$\begin{align} & \alpha SI - \beta I=0
+\\ \Leftrightarrow \ & I(\alpha S- \beta) =0 \\ \Leftrightarrow \ & I=0\ or\ S= \frac{\beta}{\alpha} \end{align}$$
+
+**If *I = 0***, we integrate I=0 into our "susceptible" equation to
+obtain the solution for S:
+
+$$\begin{align} & \ \ \ \ \ \begin{cases} -\alpha S *0 + \gamma (1-S-0)=0 \\ I=0 \end{cases} \\ & \Leftrightarrow \begin{cases} \gamma (1-S)=0 \\ I=O \end{cases} \\ &\text{We thus obtain our first solution:} \\ &\Leftrightarrow \begin{cases} S=1 \\ I=0 \end{cases} \end{align} $$
+
+It's the **disease-free equilibrium** (DFE).
+
+**If *S = b/a***, we integrate S into our "susceptible" equation to
+obtain the solution for I:
+
+$$\begin{align} & \ \ \ \ \  \begin{cases} - \alpha \frac{\beta}{\alpha} I + \gamma (1- \frac{\beta}{\alpha} - I) =0\\
+S = \frac{\beta}{\alpha} \end{cases}\\
+& \Leftrightarrow \begin{cases} -\beta I + \gamma- \frac{\beta \gamma}{\alpha} -\gamma I = 0 \\ S = \frac{\beta}{\alpha} \end{cases} \\ 
+& \Leftrightarrow \begin{cases} \beta I + \gamma I = \gamma (1 - \frac{\beta}{\alpha}) \\ S= \frac{\beta}{\alpha} \end{cases}\\ 
+& \text{We thus obtain our first solution:}\\
+& \Leftrightarrow \begin{cases} I= \frac{\gamma (1- \frac{\beta}{\alpha})}{\beta + \gamma} \\
+S=\frac{\beta}{\alpha} \end{cases} \end{align} $$
+
+It's the **endemic equilibrium** (EE).
+
+### Jacobian matrix
+
+Now, let's perform linear stability analysis for each equilibrium point
+by computing the Jacobian matrix:
+
+$$ J=\begin{bmatrix} \frac{\delta S}{\delta S} & \frac{\delta S}{\delta I} \\ \frac{\delta I}{\delta S} & \frac{\delta I}{\delta I}  \end{bmatrix} \Leftrightarrow \begin{bmatrix} - \alpha I- \gamma & - \alpha S- \gamma \\ \alpha I & \alpha S- \beta \end{bmatrix} $$
+
+Analyze the stability of each equilibrium point by examining the signs
+of the real parts of the eigenvalues. If the real parts are all
+negative, the equilibrium is stable; if any are positive, the
+equilibrium is unstable. The stability will depend on the specific
+values of the parameters **α** and **β**.
+
+### For the disease-free equilibrium:
+
+$$ J(1,0)= \begin{bmatrix} -\gamma & - \alpha -\gamma \\ 0 & \alpha - \beta \end{bmatrix} $$
+
+The Jacobian matrix for the pair (1,0) is an upper triangular matrix, so
+the eigenvalues are the diagonal elements:
+$$ \lambda _1 = - \gamma \ \text{and} \ \lambda _2 = \alpha - \beta $$
+
+γ is a coefficient representing loss of immunity, so γ\>0.
+
+So: $$ \begin{align} & \lambda _1 <0 
+\\ & \text{If:} \ - \alpha > \beta , \ \lambda _2 > 0 \ \text{Unstable equilibrium point}
+\\& \ \ \ \  - \alpha < \beta , \ \lambda _2 < 0 \ \text{Asymptotically stable point}  \end{align} $$
+
+In order to better understand the behavior of the unstable point, we
+look for the sign of the determinant of the matrix:
+
+$$ det(J(1,0))= - \gamma (\alpha - \beta ) \\
+\Leftrightarrow \ \gamma (\beta - \alpha)
+\\ \gamma > 0 \ and \ \alpha > \beta
+\\ det(J(1,0)) < 0 \Rightarrow \text{Saddle point} $$
+
+Saddle points exhibit a combination of stable and unstable behavior in
+different directions in the state space.
+
+### For the endemic equilibrium
+
+$$ J(\frac{\beta}{\alpha},\frac{\gamma (1-\frac{\beta}{\alpha})}{\beta + \gamma})= \begin{bmatrix} \frac{\gamma (\beta- \alpha)}{\beta + \gamma} - \gamma & - \beta -\gamma \\ \frac{\gamma (\alpha - \beta)}{\beta + \gamma} & 0 \end{bmatrix} $$
+
+Here, we do not have a characteristic matrix so to determine the
+eigenvalues, it will be necessary to solve the characteristic
+polynomial. We will first look at the sign of the determinant of the
+matrix to study the behavior of the system.
+
+So, we calculate the determinant:
+$$\begin{align} & det(J(\frac{\beta}{\alpha},\frac{\gamma (1-\frac{\beta}{\alpha})}{\beta + \gamma})) = - (- \beta - \gamma) * \frac{\gamma (\alpha - \beta)}{\beta + \gamma} = \gamma (\alpha - \beta) \end{align}$$
+
+If **α** \< **β**, det(J) \< 0: a saddle point.
+
+If **α** \> **β**, det(J) \> 0: look the trace of the matrix.
+
+$$Tr(J(S,I)) = \frac{\gamma (\beta - \alpha)}{\beta - \gamma} - \gamma
+\\
+\\ \gamma > 0 \ \text{and} \ \alpha > \beta
+\\
+\\ \text{So:} \ Tr(J(S,I)) <0 $$
+
+In this case we have a stable point. The specific type of stability
+depends on the signs and nature of the eigenvalues.
+
+Now, we solve the characteristic polynomial to obtain the eigenvalues:
+
+\$\$ \begin{align} & det(J- \lambda Id) = 0\\
+& \text{with Id : identity matrix}\\
+
+&\Leftrightarrow \begin{bmatrix} \frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda 
+& - \beta - \gamma\\
+\frac{\gamma (\alpha - \beta)}{\beta + \gamma} & - \lambda \end{bmatrix} = 0\\
+&\Leftrightarrow - \lambda (\frac{\gamma (\beta - \alpha)}{\beta + \gamma}-\gamma -\lambda) 
+- (- \beta - \gamma )(\frac{\gamma (\alpha - \beta)}{\beta + \gamma}
+) = 0 \\
+&\Leftrightarrow \lambda^2 + \lambda (\gamma +  \frac{\gamma (\alpha- \beta)}{\beta + \gamma})+ \gamma (\alpha - \beta) = 0 \end{align}\$\$
+
+The number of solutions is indicated by the value of the discriminant :
+$$ \begin{align} & \Delta = (\gamma +  \frac{\gamma (\alpha - \beta)}{\beta + \gamma})^2 - 4 (\gamma (\alpha - \beta))
+\\ &\text{With} \ \alpha > \beta
+\\
+\\
+\text{If} \ & \Delta < 0:\ \text{you will have two complex conjugate roots.} \\ &\Delta = 0:\ \text{you will have one real repeated root.} \\ &\Delta>0: \ \text{you will have two distinct real roots.} \end{align} $$
+
+From now,we will assign **numerical values**:
+$$ \alpha = 4, \ \beta = 2 \ and \ \gamma = 1 
+\\
+\Delta = (1 + \frac{1(4-2)}{1+2})^2 - 4(1(4-2))= -5.22 
+\\ So \ \Delta < 0 $$
+
+$$ \begin{align} &\text{Solutions are given by the following formula:}
+\\ & \lambda= \frac{-(\gamma + \frac{
+\gamma (\alpha - \beta)}{\beta + \gamma}) \pm \sqrt \Delta}{2}i
+\\ & \frac{\sqrt \Delta}{2}i: \ \text{imaginary part.}
+\\ & \frac{-(\gamma + \frac{\gamma (\alpha - \beta)}{\beta +\gamma})}{2}: \ \text{real part.} 
+\\
+\\ & \text{Real part}= -\frac{5}{3}
+\end{align} $$
+
+The stability of a linear system is often determined by the real parts
+of the eigenvalues. In this case, the real part is negative which
+indicates a **stable attractive node**.
+
+This sounds complicated, **but don't panic**! In ecology we are lucky to
+have a great tool, R, which allows us to resolve this type of system.
+You can see how to do it on R at the end of Lotka Volterra 3 species.
+
+### Solving SIR model with R
+
+Use R to study the behavior of our model as double interest.
+
+-   Verify if our theoretical calcul is okay
+
+-   Help you to have an idea of the behavior of the model
+
+To show how you can use phaseR and deSolve to solve ODE we will use the
+SIR we just solved. We hope our calcul is good. In this chapter, we will
+show what's the most common function you can use, but not all the
+parameters you can add. I know you are probably sobbing "wHyYyYyy?" (Who
+has never dreamed of knowing all the difference between the Euler and
+Runge Kunta order 4?) but we let you make your search if you need more
+information.
+
+#### Step 1: Prepare you environnement
+
+Let's start by erasing all the data in our environment in order to don't
+bother us when we work. Then we load the 3 packages we will use.
+
+-   The most famous library to solve and study ODE is deSolve you can
+    also compute yourself if you want but it will be a harsh task. A
+    great point of deSolve it's its simplicity to use and we hope you
+    will agree with us a the end of this chapter
+
+-   phaseR Performs a qualitative analysis of one- and two-dimensional
+    autonomous ordinary differential equation systems, using phase plane
+    methods
+
+-   We will also use ggplot to make a beautiful graph. It's also a
+    little more intuitive way to create and manipulate plot than using a
+    basic ploting system in r
+
+-   rgl is a package which give you tools to creat 3d plot and objects
+
+-   tidyr is like ggplot but for data manipulation. It doesn't bring
+    very special tools but able us to transform easily our table
+
+As we talk about programmation we have to talk about technical issues
+you can have. To prevent you from committing this, we put during the
+presentation some technical issues to think of before coding. If you
+want to do the same things as us, you will probably find yourself in
+some problems: don't be afraid R is widely used and you will easily find
+people who have defeated the same problem. Don't be ashamed to search
+for help!
+
+```{r message=F, warning=FALSE}
+#We erase all data use before
+rm(list = ls())
+#load library we need
+library(ggplot2)
+library(deSolve)
+library(phaseR)
+library(rgl)
+library(tidyr)
+```
+
+#### Step 2: Define your model
+
+It's time to start modeling! The first step is to create our function
+which gives us the evolution of our population according to time. This
+function takes a step of time, the initial population value, and the
+value of different parameters. The output of this function needs to be a
+list of the new populations. To have the behavior of our function we
+have to use the same hypothesis as in the calculation part so we will
+not code how the Recover compartment evaluates (R). If we need the
+Recover evolution we will use:
+$$1 = S + I + R \Leftrightarrow R = 1 - S - I $$ Technical
+consideration: When you build your function you are free to make some
+modification BUT the order of the input has to be time, population, and
+parameter value because the ODE function want you to do this!
+
+```{r}
+mod_SIR <- function(t , dy , parameters){
+#we take our population and give give to to different variable
+  S <- dy[1]
+  I <- dy[2]
+
+#We give the value of parameters to the variable (there is greater way to do this but i let you find out)
+  alpha <- parameters[1]
+  beta <- parameters[2]
+  gamma <- parameters[3]
+
+#sol is the vector where we stock our solution
+  sol <- numeric(2)
+
+#We compute the equation need
+  sol[1] <- - alpha * S * I + gamma * (1 - S - I)
+  sol[2] <- alpha * S * I  - beta * I
+  
+#And list solution 
+  list(sol)
+}
+
+```
+
+#### Step 3: Study how the system evaluates among time
+
+Now we have done the heart of our model let's study it with ODE. It's
+from the deSolve package to solve our model. To do this we define some
+quantities. For the time we use the seq function which creates a vector
+that goes from 0 to 600 by 0.01 step. For parameter values, we create a
+vector in the same order as in our function. And value we start to form
+
+Then we use ODE to simulate how our population evolves at each time in
+our vectors. We take the output from ODE and manipulate it a little bit
+to make visualization easier.
+
+```{r}
+#Definition of parameters we will need for the suite
+param <- c(alpha = 0.2, beta = 0.1, gamma = 0.2)
+times = seq(from = 0 , to = 600, by = 0.01)
+depart = c(0.99 , 0.001 )
+
+#Calculation of the evolution of our population 
+resolnum <- ode(y = depart, times = times, func = mod_SIR , parms = param)
+
+#Transfortmation of data in order to be use easely
+resolnum <- as.data.frame(resolnum)
+resolnum$R<- 1-  resolnum[,2] + resolnum[,3] 
+
+colnames(resolnum) <- as.factor(c("Times" , "Susceptible" ,"Infectious" ,"Recovered"))
+
+
+
+#Plotting time
+ggplot(resolnum,aes(x=Times))+
+  geom_line(aes(x = Times, y = Susceptible),color ="chartreuse" ,size =1.5)+
+  geom_line(aes(x = Times,y = Infectious),color = "red" ,size =1.5)+
+  geom_line(aes(x = Times,y = Recovered),color = "darkviolet" ,size =1.5)+
+  labs(title = "Population evolution among times", y = "Population")+
+  theme_classic()
+
+
+```
+
+Now we have an idea of how our population evaluates thought time we can
+try to find the behavior
+
+#### Step 4: Equilibrium point and behavior
+
+Let's study the behavior of our model and its equilibrium points. We're
+going to study S as a function of I. First function displays model
+behavior. Second draws the lines where the models cancel out.
+
+Technical consideration: To have all nullclines you should extend the
+area you want to explore. For example, we only have interest in the area
+where S and I go to 0 at 1(we made the hypothesis the sum of all
+compartments should be equal to 1) but in our simulation, we go from
+-0.1 to 1.1.
+
+```{r}
+#Plot the velocity field
+  field<-flowField(mod_SIR ,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,add = F,xlab = "Susceptible" , ylab = "Infectious")
+  #Draw the isoclines of our model
+nullc<-nullclines(mod_SIR ,xlim=c(-0.1,1.1),ylim=c(-0.1,1.1),parameters = param,points = 100, add = T,add.legend = F,size =2)
+
+```
+
+As we can see at crossing of nullclines we have two equilibrium points.
+The first is at the center of our phase diagram, and the arrows seem to
+show that we're tending towards this point. A second is present where I
+= 0 and S = 1 on the contrary, we seem to be moving away from it. If
+this graph allows us to observe 2 points of equilibrium, it is not easy
+to determine their behavior.
+
+To look at the behavior near these points, we can use the trajectory
+function, which will plot the trajectories of our system as a function
+of a starting point. Here we repeat the trajectory functions in order to
+have a 51 scenario.
+
+```{r message = FALSE}
+
+
+#we define our initials conditions
+X0 <- sample(x = seq(0,1,0.01),size =1)
+Y0 <- sample(x = seq(0,1-X0,0.01),size =1)
+cond_init = c(X0, Y0)
+#We simulate what's happened for one trajectory
+  t<-trajectory(mod_SIR ,cond_init,tlim= c(0,50),parameters = param,col = "black",add = F,xlim=c(0,1),ylim = c(0,1),xlab = "Susceptible" , ylab = "Infectious")
+  
+#We repeat the same process for 50 other trajectory
+for(i in 1:50){
+  X0 <- sample(x = seq(0,1,0.01),size =1)
+Y0 <- sample(x = seq(0,1-X0,0.01),size =1)
+
+cond_init = c(X0, Y0)
+  traj<-trajectory(mod_SIR ,cond_init,tlim= c(0,50),parameters = param,col = i,add = T)
+}
+```
+
+What the vector field showed us seems to be confirmed by this graph.
+Let's check our observations with new functions (promise they're the
+last)
+
+We'll check the behavior of the center point using the stability
+function. We could also have used the findEquilibrum function to find
+all the equilibrium points, but we'll let you have your fun.
+
+```{r}
+# Checking stability of the point we see
+stability(SIR,ystar = c(0.5,0.5),parameters = param )$classification[1]
+```
+
+The two functions confirm our observations and the calculations made
+just before - what more could you ask for?
+
+There are still other functions in the deSolve and pahse R packages that
+could be of interest, but which are useful in more specific cases, so we
+won't look at them here.
+
+## 2) Lotka-Volterra: A three-species model
+
+Biotic interactions are complex, requiring the interaction of numerous
+parameters. If we take the **Lotka-Volterra** example, it only considers
+the **interactions between two species**, prey and predator. It assumes
+a constant mortality rate among predators, regardless of prey. However,
+**predators are themselves the prey of other super-predators**. Their
+mortality rate should therefore depend on the super-predators they
+encounter. Thus, the **prey-predator-superpredator** extension of the
+Lotka-Volterra model would be a good representation of natural trophic
+interactions.
+
+In this case, we considerer a **superpredator**, a **predator** an a
+**prey**.
+
+A superpredator is an organism that reaches adulthood at the top of the
+food chain. Thus, by definition, a superpredator is not the prey of any
+other species. The predator is consider to be in the middle of the food
+chain and the prey at the bottom.
+
+The model can be written as the following system of differential
+equations:
+
+$$ PPS=\begin{cases} \frac{d_x}{d_t}=ax-bxy &\text{Prey} \\ \frac{d_y}{d_t}=-cy+hxy-eyz&\text{Predator} \\ \frac{d_z}{d_t}=-fz+gyz &\text{Superpredator} \end{cases} $$
+
+The model parameters are:
+
+-   *a*: *x* natural growth rate
+
+-   *-f* and *-c*: natural death rate of *y* and *z*
+
+-   The growth rate of *y* and *z* depends on the number of prey caught.
+    It is modeled by *hxy* for *y* and by *gyz* for *z*.
+
+-   The death rate of *x* and *y* depends on the number of top predators
+    *y* for *x* and *z* for *y*. It is modeled by *-bxy* for *x* and by
+    *-eyz* for *y*.
+
+This model is only useful for chains of predators. It doesn't take into
+account the presence of several predators with different dynamics on the
+same prey.
+
+Let's try to solve this system: To do this, the first step is to find
+the balance of the model, that is to say the values (x,y,z) so that:
+
+$$\frac{d_x}{d_t}=\frac{d_y}{d_t}=\frac{d_z}{d_t}=0$$
+
+We take our previous systems that we factored:
+
+$$ PPS=\begin{cases}\frac{d_x}{d_t}=x(a-by) &\text{Prey} \\ \frac{d_y}{d_t}=y(hxy-c-ez)&\text{Predator} \\ \frac{d_z}{d_t}=z(gy-f) &\text{Superpredator}\end{cases} $$
+
+The obvious solution is (0,0,0) but is not the only one. Indeed, for the
+derivatives to be equal to 0, then we must find the following solution:
+
+$$(a-by)=(gy-f)=(hx-c-ez)=0$$
+
+We first solve:
+$$a-by=0\Leftrightarrow a=by \Leftrightarrow y=\frac{a}{b}$$
+$$gy-f=0\Leftrightarrow f=by \Leftrightarrow y=\frac{f}{g}$$
+
+So, a solution for a yeq is: $$y_{eq}=\frac{a}{b}=\frac{f}{g}$$
+Therefore, there is an equilibrium when: $$ga=fb$$
+
+In order to determine the other solutions, we must solve the following
+jacobian matrix:
+$$ J=\begin{bmatrix}a-by&-bx&0\\hy&-c+hx-ez&-ey\\0&gz&gy-f\end{bmatrix}$$
+
+The steps are the same as for the SIR model but here the matrix is 3x3.
+We invite you to look at the chapter on matrix calculation to determine
+the solutions.
+
+#### Solving Lotka-Volterra with R
+
+Hey R is back! You loved last part with how to solve 2 equation ODE in R
+? Now let's find out how to solve a 3 equation system! Unfortunately,
+trying to solve this equation by hand leads to problems: it's not easy
+to find all the equilibrium points. As mentioned in the previous
+section, phaseR is not suitable for solving three-equation systems. We
+can compute our function but unless you a nerd or MODE you don't want to
+do this. the solution we choose in this paragraph it's to only study
+numercally system. So let's start again what we just do! We use the same
+library as in last part.
+
+We create a function with the same limitation as in our first example.
+
+```{r}
+rm(list = ls())
+PPS <- function(t , dy , parameters){
+
+  x <- dy[1]
+  y <- dy[2]
+  z <- dy[3]
+  
+  r1 <- parameters[1]
+  r2 <- parameters[2]
+  r3 <- parameters[3]
+  b1 <- parameters[4]
+  b2 <- parameters[5]
+  c1 <- parameters[6]
+  c2 <- parameters[7]
+  
+  sol <- numeric(3)
+  
+  sol[1] <- r1 * x - b1 * y * x
+  sol[2] <- - r2 * y + b2 * x * y  - c1 * y * z 
+  sol[3] <- - r3 * z + c2 * z * y 
+ 
+  list(sol)
+}
+
+```
+
+In order to determine the behavior of our system we should use the ode
+function to make many graph and try to understand numerically which
+parameter ar important. In the following example we pass this step and
+present you 2 cases we can have in our system.
+
+```{r echo=FALSE}
+#Paramters definition
+param <- c(r1 = 0.5, r2 = 0.2 , r3 = 0.1, b1 = 0.04, b2 = 0.04, c1 = 0.09, c2 = 0.01)
+temps = seq(from = 0 , to = 100, by = 0.01)
+depart = c(20 , 10 , 5)
+#Simulation
+resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
+resolnum <- as.data.frame(resolnum)
+colnames(resolnum) <- c("Times" , "Prey" ,"Predators" ,"SuperPredators")
+
+#Plotting some results
+
+
+ggplot(resolnum)+
+  geom_line(aes(x = Times, y = Prey),color ="chartreuse" ,size =1.5)+
+  geom_line(aes(x = Times,y = Predators),color = "red" ,size =1.5)+
+  geom_line(aes(x = Times,y = SuperPredators),color = "darkviolet",size =1.5)+
+  theme_classic()+
+  labs(title = "Case 1: Runaway")
+
+
+ggplot(resolnum)+
+   geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)+
+  theme_classic()
+
+ggplot(resolnum)+
+   geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)+
+  theme_classic()
+
+ggplot(resolnum)+
+   geom_point(aes(x =  SuperPredators, y = Predators),color ="black" ,size =1.5)+
+theme_classic()
+
+plot3d(resolnum$Prey,resolnum$Predators,resolnum$SuperPredators,xlab ="Prey",ylab ="Predators",zlab ="SuperPredators")
+rglwidget()
+```
+
+This first case is a very special one, since we observe a runaway
+system, with the number of prey increasing exponentially without being
+limited by predators. While mathematically this model makes sense, it is
+not very common in nature, due to the absence of infinite resources.
+
+```{r}
+param <- c(r1 = 0.01, r2 = 0.2 , r3 = 0.1, b1 = 0.04, b2 = 0.04, c1 = 0.09, c2 = 0.01)
+temps = seq(from = 0 , to = 1000, by = 0.01)
+depart = c(20 , 10 , 5)
+resolnum <- ode(y = depart, times = temps, func = PPS, parms = param)
+
+resolnum <- as.data.frame(resolnum)
+colnames(resolnum) <- c("Times" , "Prey" ,"Predators" ,"SuperPredators")
+
+
+
+ggplot(resolnum)+
+  geom_line(aes(x = Times, y = Prey),color ="chartreuse" ,size =1.5)+
+  geom_line(aes(x = Times,y = Predators),color = "red" ,size =1.5)+
+  geom_line(aes(x = Times,y = SuperPredators),color = "darkviolet",size =1.5)+
+  theme_classic()+
+  labs(title = "Case 2: Balance system")
+
+ggplot(resolnum)+
+   geom_point(aes(x = Prey, y = Predators),color ="black" ,size =1.5)+
+theme_classic()
+
+ggplot(resolnum)+
+   geom_point(aes(x = Prey, y = SuperPredators),color ="black" ,size =0.2)+
+theme_classic()
+
+ggplot(resolnum)+
+   geom_point(aes(x =  SuperPredators, y = Predators),color ="black" ,size =1.5)+
+theme_classic()
+
+plot3d(resolnum$Prey,resolnum$Predators,resolnum$SuperPredators,xlab ="Prey",ylab ="Predators",zlab ="SuperPredators")
+rglwidget()
+
+```
+
+In this case, our system moves towards a balance between prey and
+predators. This time, however, superpredators are excluded from our
+system.
+
+For a more thorough analysis, we'd have to simulate the same model but
+draw our parameters randomly, but unfortunately this takes a lot of
+time, so we'd have to do it with very few simulations. To get a better
+idea of the model's behavior, more advanced simulations should be
+carried out, but unfortunately the fun has to stop at some point.
+
+If you eat graphics cards and want to delve deeper into the subject, the
+book Solving Differential Equations in R may be of some interest, even
+if it deals with much more complex and interesting problems than we do.
+
+## 3) Generalizations of the three-species model and other examples
+
+### a) Generalizations of the three-species model
+
+The three-species model presented previously is a **simplified model**
+that models a perfectly linear trophic chain. However, nature is more
+complex and a species can be preyed upon by multiple predators and
+predators can predate multiple prey items.
+
+We invite you to go see the course of Lalith Devireddy (2016) entitled
+"Extending the Lotka-Volterra Equations" which develops this model and
+its resolutions.
+
+Many models with 3-ODE systems exist to model ecological dynamics. Here
+we will present one additional ones to you but we will not develop their
+resolution.
+
+### b) NPZ model
+
+The NPZ model makes it possible to **model the lake production of a
+pelagic ecosystem**. This model studies variations in nutrients,
+phytoplankton and zooplankton that are linked to each other.
+
+Here are the equations of the system, but it will not be worked up here.
+$$
+\begin{align} & NPZ = \begin{cases} \frac{dP}{dt}= \frac{V_m N}{k_s + N}P -mP -ZR_m(1-e^{-\Lambda P}) & \text{Pythoplankton}
+\\ \frac{dZ}{dt}= \gamma ZR_m(1-e^{- \Lambda P}-dZ) & \text{Zooplakton}
+\\ \frac{dN}{dt}=-\frac{V_m N}{k_s + N}P+mP+dZ+(1- \gamma ) ZR_m (1-e^{- \Lambda P}) & \text{Nutrients} \end{cases}
+\\ 
+\\ & \text{Definitions of variable:}
+\\ & - V_m: \ \text{Maximum phytoplankton growth rate}
+\\ & - N: \ \text{Nutrient concentration}
+\\ & - k_s: \ \text{Half saturation constant for nutrients}
+\\ & - P: \ \text{Phytoplankton stock size}
+\\ & -m: \ \text{Phytoplankton mortality rate}
+\\ & -Z: \ \text{Zooplankton stock size}
+\\ & - \gamma : \ \text{Zooplankton growth efficiency}
+\\ & - R_m : \ \text{Maximum zooplankton ration}
+\\ & - \Lambda : \ \text{Ivlev constant}
+\\ & -d: \ \text{mortality rate} \end{align} $$
+
+# Conclusion & motivation words!
+
+What can we conclude from all this?
+
+An Ordinary Differential Equation (ODE): - has many applications: in
+mechanics, physics, geometry and biology - is an equation relating a
+variable to its derivative(s) - describes the rate at which a variable
+varies over time - has an infinite number of solutions, so it's
+important to define the initial conditions
+
+It is possible to solve ODE systems with one, two, three... equations
+that may contain ODEs of order 1, 2 or 3... But this is complex to
+solve!
