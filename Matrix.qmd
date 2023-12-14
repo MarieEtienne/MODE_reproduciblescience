@@ -600,7 +600,7 @@ III. Epidemiology matrices
 Epidemiology is the study of disease dynamics within a population.
 Let's imagine that a sick meerkat arrives in a new, healthy colony after having had to leave its previous colony, which has been decimated by disease. The dynamics of the epidemic can be modeled using a basic epidemiological model, the SIRS model.
 
-![The SIRS model](/Schema_modele_SIRS.png "The SIRS model" )
+![The SIRS model](Schema_modele_SIRS.png "The SIRS model" )
 
 In this model, susceptible individuals (S) become infected, and thus pass into the infectious class (I), then either leave the system by dying of the disease, or heal, and thus become cured/immune individuals (R). Finally, immunized individuals can lose their immunity and become susceptible again (S).
 
@@ -662,7 +662,7 @@ $$\begin{aligned}& N = j + a \\
 By combining population dynamics and epidemiological dynamics,
 we end up with a much more complex model:
 
-![The whole model](/Schema_complet.png "The whole model" )
+![The whole model](Schema_complet.png "The whole model" )
 
 This model can also be expressed as a system of differential equations:
 
@@ -847,7 +847,7 @@ IV. Markov chain
 
 A- the Markov Chain
 
-![Changement de colonie](/Schema_suricates.png)
+![Changement de colonie](Schema_suricates.png)
 
 After this latest blow and epidemic, the survivors of our meerkat family are once again forced to look for a habitat and join a new colony. There are several options and colonies to choose from, each with a different probability of being reached depending on the difficulty of the journey and the resources it contains. In other words, the arrows linking the habitats represent the probability of reaching them. When the habitats are reached, a new arrow comes into play to determine the probability of being accepted into the colony; when this is the case, the meerkats settle permanently and stop moving. On the other hand, if they are not accepted in a colony, they can try their luck in a new one or try again to be accepted in a previous colony. This information is used to construct the diagram above. 
 
