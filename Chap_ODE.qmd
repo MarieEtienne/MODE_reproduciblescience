@@ -810,7 +810,7 @@ ggplot(LV, aes(x = prey, y = predator)) +
 ### Adding a parameter to make in more realistic
 
 At that point, the model doesn't contain a lot of terms. It is a great
-mathematical setting, we can understand how it works and what is it's
+mathematical setting, we can understand how it works and what is its
 point. However, in nature, there are a lot more parameters controlling
 our populations. Adding some of these parameters would allow the model
 to be more realistic.\
@@ -924,7 +924,7 @@ picture and turn it!
 
 We will now make the system more complex by adding an additional
 equation. To solve these systems, two methods are possible. If we are in
-the case of a closed population then we can remove an equation: see
+the case of a closed population, then we can remove an equation: see
 example SIR model. If we are in the case of an open population: see
 example of the Lotka-Volterra model with 3 species.
 
@@ -1131,10 +1131,10 @@ bother us when we work. Then we load the 3 packages we will use.
     very special tools but able us to transform easily our table
 
 As we talk about programmation we have to talk about technical issues
-you can have. To prevent you from committing this we put during the
+you can have. To prevent you from committing this, we put during the
 presentation some technical issues to think of before coding. If you
-want to do the same things as us you will probably find yourself in some
-problems don't be afraid R is widely used you will easily find people
+want to do the same things as us, you will probably find yourself in some
+problems: don't be afraid R is widely used and you will easily find people
 who have defeated the same problem. Don't be ashamed to search for help!
 
 ```{r message=F, warning=FALSE}
@@ -1165,7 +1165,7 @@ parameter value because the ODE function want you to do this!
 
 ```{r}
 mod_SIR <- function(t , dy , parameters){
-#we take our population and give give to to diffirent variable
+#we take our population and give give to to different variable
   S <- dy[1]
   I <- dy[2]
 
