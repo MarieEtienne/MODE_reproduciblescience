@@ -155,50 +155,24 @@ When the areal data consist in a partition of the entire territory, the concept 
 ::: callout-note
 ##### Example - Ambiguity of the notion of distance between centroids
 
-Ambiguity of the notion of distance between centroids. Let R1, R2, R3 be three distinct zones. It can be considered that since R2 and R3 are separated in space, but both are adjacent to R1, they are both closer to R1 than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
+Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
 ![**Figure** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
 :::
 
 **Types of contiguity :**
 
-```{r}
-#Application with R
+-   **Rook contiguity** 
+In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
 
-library(rgdal) #To import MIF/MID files 
-library(maptools) #To import files Shapefile 
-library(tripack) #To calculate neighbours based on distance 
-library(spdep) 
+![**Figure :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
 
-#Spatial File Import 
-arr75 <- readOGR("~/ArmF.TAB", "ArmF") 
+-   **Queen contiguity** 
+For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
 
-#Neighbours based on the concept of graph
- #The input file is a matrix with geographical coordinates 
-#or an object from type SpatialPoints 
-coords <- coordinates(arr75) IDs <- row.names(as(arr75,"data.frame")) 
+![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
+-   **Bishop contiguity**
 
-#Delaunay Triangulation 
-Sy4_nb <- tri2nb(coords, row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy4_nb,coordinates(arr75),add=TRUE,col=’red’) 
-
-#Sphere-of-influence based graph 
-Sy5_nb <- graph2nb(soi.graph(Sy4_nb,coords),row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy5_nb,coordinates(arr75),add=TRUE,col=’red’) 
-
-#Gabriel Graph 
-Sy6_nb <- graph2nb(gabrielneigh(coords), row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy6_nb,coordinates(arr75),add=TRUE,col=’red’) 
-
-#Relative neighbours graph 
-Sy7_nb <- graph2nb(relativeneigh(coords), row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy7_nb,coordinates(arr75),add=TRUE,col=’red’)
-
-```
 
 We can return to our previous dataset to investigate the configuration of the points :
 
@@ -269,41 +243,7 @@ Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
 
 ##Correlation indices
 
-```{r}
-#Application
 
-library(spdep) 
-############################### 
-# Data preparation ########### 
-############################### 
-
-#Extraction of list of neighbours (defined by default with Queen contiguity )
- iris75.nb <- poly2nb(iris75) 
-
-#Creation of weight matrix 
-iris75.lw <- nb2listw(iris75.nb,zero.policy=TRUE) 
-
-#Calculation of standardised median income 
-iris75.data <- as.data.frame(iris75) 
-iris75.data$med_revenu_std <- scale(iris75.data$med_revenu) 
-
-##################### 
-# Moran’s diagram #
-####################
-moran.plot(iris75.data$med_revenu_std, iris75.lw, labels=FALSE, xlab=’observed distribution of standardised median income by IRIS’, ylab=’ Spatially lagged standardised median incomes’) 
-
-###################### 
-# Moran’s I test #
-#################### 
-moran.test(iris75.data$med_revenu_std,iris75.lw, zero.policy=TRUE, randomisation=FALSE) 
-
-#Calculation of the range of Moran’s I 
-moran.range <- function(lw) { 
-wmat <- listw2mat(lw) 
-return(range(eigen((wmat+t(wmat))/2)$values)) } 
-moran.range(iris75.lw)
-
-```
 
 ------------------------------------------------------------------------
 
