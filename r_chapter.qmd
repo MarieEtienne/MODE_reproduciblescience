@@ -1,5 +1,8 @@
 ---
-title: "A simple chapter using R"
+
+title: "Modèles matriciels et applications"
+group: "Quentin,	Alexie, Jeanne,	Laurane" 
+
 bibliography: references.bib
 execute: 
   freeze: auto
@@ -9,9 +12,7 @@ output:
    toc_float: true
 ---
 
-## 3 - Saptial modeling
-
-Once the structure of the spatial correlation has be estimated, it can then be included in the model.
+This chapter is a simple example using R
 
 Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
 

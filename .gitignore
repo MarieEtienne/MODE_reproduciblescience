@@ -4,3 +4,6 @@
 .Ruserdata
 
 /.quarto/
+_site
+_freeze
+ AMV_chapter_files
