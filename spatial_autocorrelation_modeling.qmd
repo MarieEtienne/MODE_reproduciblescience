@@ -205,14 +205,11 @@ The model will take the form of :
 ###### Application in R
 
 ```{r}
-lmsarD=spatialreg::sacsarlm(rich_ois~rich_pp,data=div35,pond8.stand)
-summary(lmsarD)
+lagsarlm(rich_ois~rich_pp, div35, pond8.stand)
 ```
-From here, we can replace in the formula : 
+Using the values obtained here, the final model would be: 
 
-$Bird\:Richness = 0.64WY + 0.53X - 0.65$
-
-*For exemple purpose, the lambda was implemented in the model. However it was not necessary here as the associated value was not significant**
+$Bird\:Richness = 0.37\:WY +0.53\:X + \epsilon$
 
 ##### 3.1.2.3. Error models
 
@@ -224,17 +221,20 @@ When dealing with such model, an interpretation may be that some spatially corre
 
 this model takes the form of :
 
-**Y = X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
+**Y = X**$\beta$ + $\lambda$**WY** + $\epsilon$
 
 The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient.
-$\mu$ is the spatially dependant error term.
+$\gamma$ is the spatially dependant error term.
 
 ###### Application in R
 
 ```{r}
-
+errorsarlm(rich_ois~rich_pp, data = div35, pond8.stand)
 ```
 
+Using the values obtained here, the final model would be: 
+
+$Bird\:Richness =0.52\:X + 0.33\:WY  + \epsilon$
 
 ##### 3.1.2.4. Mixed models
 
@@ -243,11 +243,24 @@ $\mu$ is the spatially dependant error term.
 If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used.
 This model include all the parameter added above, and it is the most inclusive model.
 
-It can be noted that this model can also be used in both situation described previously, as the coeffiscient will cancel themselves out if either one is not present.
+It can be noted that this model can also be used in both situation described previously, as the coefficient will cancel themselves out if either one is not present.
 
-**Y =** $\rho$**WY +X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
+**Y =** $\rho$**WY +X**$\beta$ + $\lambda$**WY** + $\epsilon$
 
 ###### Application in R
+
+```{r}
+lmsarD=spatialreg::sacsarlm(rich_ois~rich_pp,data=div35,pond8.stand)
+summary(lmsarD)
+```
+
+From here, we can replace in the formula : 
+
+$Bird\:Richness = 0.64WY + 0.53X - 0.65$
+
+*For exemple purpose, the lambda was implemented in the model. However it was not necessary here as the associated value was not significant*
+
+Even though three  commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more informations than the others. 
 
 ### 3.2. - Non stationary process
 
