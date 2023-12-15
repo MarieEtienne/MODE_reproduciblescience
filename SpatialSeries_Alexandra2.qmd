@@ -96,7 +96,7 @@ plot(div35[,3:4])
 #The spatial configuration of the points is regular.
 ```
 
-Let's also start the analysis of second dataset dealing with chemical measures in a set of ponds, "mares".
+Let's also start the analysis of second dataset dealing with chemical measures in a set of ponds, "*mares*".
 
 ```{r}
 #Spatial series analysis : dataset mares
@@ -363,6 +363,30 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 
 **c) Defining neighbours based on the optimisation of a trajectory**
 
+Some methods such as spatial sampling require prior data sorting. When the latter are characterised by two variables (i.e. their geographical coordinates in the plan), how to choose a sorting method becomes a complex theoretical problem.
+
+One solution consists in running a path along all the points, and sorting them by their order of appearance when the path is taken. The neighbours of a given point are then the points located just before or just after along the path. Out of the set of possible paths, some have characteristics that are better suited to the desired objectives, such as, for instance, reducing sampling variance.
+
+-   **Shortest path (Hamilton path)**
+
+    This is the case of the **shortest path**. It minimises the sum of the distances between two consecutive points. This path, which does not set any particular constraints on the starting or arrival point, is known in the literature as the **Hamilton path** (*Figure 2.13b*).
+
+-   **Hamiltonian cycle**
+
+    A particular and well-known case of shortest path is that of the travelling salesman. It represents the path which a travelling salesman must take to visit all his customers, minimising the distance travelled and managing to return home in the evenings. Such a path corresponds to a **Hamiltonian cycle** (*Figure 2.13c*).
+
+    The `TSP` package in R allows to compute this thanks to the function `insert-dummy` and the `concorde` program.
+
+-   **General randomized tessellation stratified method (GRTS)**
+
+The ***general randomized tessellation stratified method*** (GRTS, Stevens Jr et al. 2004) is popular in spatial sampling, as it makes it possible to get a spatially-balanced sample for a finite population of individuals (distinct and identifiable units of dimension 0 of a discrete population, e.g. trees in a forest), a linear population (continuous units of dimension 1, e.g. rivers) or a population of surfaces (continuous units of dimension 2, e.g. forests).
+
+The idea of the method is to project the coordinates on a unit square, then cut this square into four cells, each of which is cut again into four sub-cells, etc. To each cell, a value is assigned, resulting from the order in which the division was carried out, ultimately making it possible for the units to be placed on the path going through the two-dimensional space.
+
+This method can be implemented with package `spsurvey` in R (Kincaid et al. 2016). However, with the GRTS method, *large jumps* (*Figures 2.13d*) are created along the paths, which can affect the accuracy of the estimates.
+
+![Figure 2.13 : Looking for paths that cross through all the neighbourhoods of Paris](images/image-1294038395.png)
+
 ### **1.2 Neighborhood weights**
 
 #### **1.2.1) From a list of neighbours to a weight matrix**
@@ -378,7 +402,7 @@ Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.13
 
 > ![](images/image-562063019.png){width="431"}
 
-![**Figure 2.13 :** Binary weight matrix](images/image-497770688.png){width="592"}
+![**Figure 2.14 :** Binary weight matrix](images/image-497770688.png){width="592"}
 
 The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
@@ -490,7 +514,7 @@ summary(invd.weights)
 invd.weights$weights[1]
 ```
 
-Let's see what it looks like in the second dataset, "mares" :
+Let's see what it looks like in the second dataset, "*mares*" :
 
 ```{r}
 #Spatial series analysis : dataset mares
@@ -499,7 +523,7 @@ Let's see what it looks like in the second dataset, "mares" :
 
 #      2 - Define the spatial weight matrix =========================
 
-# EXAMPLE : BINARY CRITERION
+# Example : BINARY criterion
 pondmaretri.bin <- nb2listw(mare.tri, style="B",zero.policy=TRUE)
 pondmaregab.bin <- nb2listw(graph2nb(mare.gab), style="B", zero.policy=TRUE)
 pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
@@ -572,7 +596,9 @@ Two approaches are used to estimate the significance of these indices --- an ana
 
 > #### Monte Carlo approach to estimating significance
 >
-> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution. ![Figure 2.14 : Output of the Monte Carlo test](images/image-318830441.png){width="380"}
+> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution.
+
+![**Figure 2.15 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
 
 Let's explore Moran Global Index in the *mares* dataset :
 
@@ -677,7 +703,7 @@ $Ii < 0$ indicates a combination of dissimilar values (e.g. high values surround
 
 For example, with Parisian districts :
 
-![**Figure 2.15 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
+![**Figure 2.16 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
 
 **2.3.3 Significance of the local Moran's I**
 
