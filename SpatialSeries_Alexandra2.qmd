@@ -102,7 +102,7 @@ In order to identify points in close proximity, it is imperative to establish sp
 
 **1.2.1 Neighborhood criterion**
 
-**a) Distance**
+**a) Defining neighbours based on distance**
 
 Once we have a set of points spread across the territory, we can calculate the distance between them. These points may be specific locations where the information has been observed, or points representative of each zone, for example their centroid. In this case, the underlying assumption is that the distribution of the variable within each zone is sufficiently homogeneous to approximate it to a single point.
 
@@ -130,7 +130,37 @@ For example, here's the application of these geometric concepts to Parisian dist
 
 ![**Figure :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
 
-**a.2) Neighbourhood graphs based on nearest neighbours** A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality. The choice can also be made to keep only the points located at a certain distance.
+**a.2) Neighbourhood graphs based on nearest neighbours**
+
+A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality. The choice can also be made to keep only the points located at a certain distance.
+
+For example :
+
+-   Nearest neighbour
+
+-   Two nearest neighbour
+
+-   Three nearest neighbour
+
+-   Neighbours at a minimum distance
+
+    etc
+
+Still using the example of Parisian districts, here's the nearest neighbour application: ![Figure : Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
+
+**b) Defining neighbours based on contiguity**
+
+When the areal data consist in a partition of the entire territory, the concept of "distance between observations" can become quite ambiguous. The example below illustrates the limits of using the distance between centroids to define the notion of neighbourhood.
+
+::: callout-note
+##### Example - Ambiguity of the notion of distance between centroids
+
+Ambiguity of the notion of distance between centroids. Let R1, R2, R3 be three distinct zones. It can be considered that since R2 and R3 are separated in space, but both are adjacent to R1, they are both closer to R1 than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
+
+![**Figure** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
+:::
+
+**Types of contiguity :**
 
 ```{r}
 #Application with R
