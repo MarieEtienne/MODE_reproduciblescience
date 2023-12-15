@@ -15,12 +15,7 @@ Spatial relationships are multidirectional and multilateral. They are distinct, 
 
 **Mathematical definition of spatial relationships :**
 
-Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ 
-ℝ
-²,  j ∈ 
-ℝ
-
-²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
 
 Figure 2 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
@@ -31,44 +26,82 @@ First, the study zone is divided into mutually exclusive areas. Each area contai
 The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
 
 $$w_ij = 
-\{1 if i and j are spatially linked to each other -
-0 otherwise\}
-$$
+\{1 if i and j are spatially linked to each other 
+-
+0 otherwise\}$$
 
+```{r}
+#Application with R
 
+library(rgdal) #To import MIF/MID files 
+library(maptools) #To import files Shapefile 
+library(tripack) #To calculate neighbours based on distance 
+library(spdep) 
 
+#Spatial File Import 
+arr75 <- readOGR("~/ArmF.TAB", "ArmF") 
 
+#Neighbours based on the concept of graph
+ #The input file is a matrix with geographical coordinates 
+#or an object from type SpatialPoints 
+coords <- coordinates(arr75) IDs <- row.names(as(arr75,"data.frame")) 
 
+#Delaunay Triangulation 
+Sy4_nb <- tri2nb(coords, row.names=IDs) 
+plot(arr75, border=’lightgray’) 
+plot(Sy4_nb,coordinates(arr75),add=TRUE,col=’red’) 
 
+#Sphere-of-influence based graph 
+Sy5_nb <- graph2nb(soi.graph(Sy4_nb,coords),row.names=IDs) 
+plot(arr75, border=’lightgray’) 
+plot(Sy5_nb,coordinates(arr75),add=TRUE,col=’red’) 
 
+#Gabriel Graph 
+Sy6_nb <- graph2nb(gabrielneigh(coords), row.names=IDs) 
+plot(arr75, border=’lightgray’) 
+plot(Sy6_nb,coordinates(arr75),add=TRUE,col=’red’) 
 
+#Relative neighbours graph 
+Sy7_nb <- graph2nb(relativeneigh(coords), row.names=IDs) 
+plot(arr75, border=’lightgray’) 
+plot(Sy7_nb,coordinates(arr75),add=TRUE,col=’red’)
 
+```
 
+##Correlation indices
 
+```{r}
+#Application
 
+library(spdep) 
+############################### 
+# Data preparation ########### 
+############################### 
 
+#Extraction of list of neighbours (defined by default with Queen contiguity )
+ iris75.nb <- poly2nb(iris75) 
 
+#Creation of weight matrix 
+iris75.lw <- nb2listw(iris75.nb,zero.policy=TRUE) 
 
+#Calculation of standardised median income 
+iris75.data <- as.data.frame(iris75) 
+iris75.data$med_revenu_std <- scale(iris75.data$med_revenu) 
 
+##################### 
+# Moran’s diagram #
+####################
+moran.plot(iris75.data$med_revenu_std, iris75.lw, labels=FALSE, xlab=’observed distribution of standardised median income by IRIS’, ylab=’ Spatially lagged standardised median incomes’) 
 
+###################### 
+# Moran’s I test #
+#################### 
+moran.test(iris75.data$med_revenu_std,iris75.lw, zero.policy=TRUE, randomisation=FALSE) 
 
+#Calculation of the range of Moran’s I 
+moran.range <- function(lw) { 
+wmat <- listw2mat(lw) 
+return(range(eigen((wmat+t(wmat))/2)$values)) } 
+moran.range(iris75.lw)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
