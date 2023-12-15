@@ -162,17 +162,23 @@ Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since
 
 **Types of contiguity :**
 
--   **Rook contiguity** 
-In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
+-   **Rook contiguity**
+
+    In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
 
 ![**Figure :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
 
--   **Queen contiguity** 
-For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
+-   **Queen contiguity**
+
+    For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
 
 ![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
+
 -   **Bishop contiguity**
 
+![](images/image-2117709373.png){width="177"}
+
+This matches the movement of the Bishop in chess
 
 We can return to our previous dataset to investigate the configuration of the points :
 
@@ -214,7 +220,10 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 
 #### **1.2.1) From a list of neighbours to a weight matrix**
 
-Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_ij$ of the weight matrix$W$. The weight matrix $W$ is the "formal expression of spatialdependency between observations" (Anselin et al. 1988)
+Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_{ij}$ of the weight matrix $W$. The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
+Formally, the weights express the neighbor structure between the observations as a $n\times n$ matrix $W$ in which the elements $w_{ij}$ of the matrix are the spatial weights:
+
+![](images/image-672436714.png){width="392"}
 
 **Defining the weight matrix**
 
@@ -240,10 +249,6 @@ Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
     str(w2)                     # we have as much list as points
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
-
-##Correlation indices
-
-
 
 ------------------------------------------------------------------------
 
