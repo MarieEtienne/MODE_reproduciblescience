@@ -157,13 +157,8 @@ When the areal data consist in a partition of the entire territory, the concept 
 
 Ambiguity of the notion of distance between centroids. Let R1, R2, R3 be three distinct zones. It can be considered that since R2 and R3 are separated in space, but both are adjacent to R1, they are both closer to R1 than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
-![Figure – Left: three zones - Right: distance between centroids
-(Source: Smith, 2016)](images/image-2131022957.png){width="579"}
+![**Figure** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
 :::
-
-Example --- Ambiguity of the notion of distance between centroids. Let R1, R2, R3 be three distinct zones. It can be considered that since R2 and R3 are separated in space, but both are adjacent to R1, they are both closer to R1 than to one another. However, the centroids in these zones are equidistant from each other (see Figure 2.7). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
-
-![](images/image-2131022957.png){width="579"}
 
 **Types of contiguity :**
 
