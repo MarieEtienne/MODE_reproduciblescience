@@ -260,7 +260,7 @@ $Bird\:Richness = 0.64WY + 0.53X - 0.65$
 
 *For exemple purpose, the lambda was implemented in the model. However it was not necessary here as the associated value was not significant*
 
-Even though three  commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more informations than the others. 
+Even though three  commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more information than the others. 
 
 ### 3.2. - Non stationary process
 
