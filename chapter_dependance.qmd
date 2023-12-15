@@ -7,7 +7,17 @@ output:
   html_document:
    toc: true
    toc_float: true
+editor: 
+  markdown: 
+    wrap: sentence
 ---
+
+
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
 
 ```{r}
 library(tidyverse)
@@ -72,6 +82,9 @@ Autocorrelation checking is an essential process in statistics to guarantee the 
 # Time dependence
 
 For example a basic summary of a dataset is given by
+and then describe the purpose of your chapter as well as executing R command.
+
+
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
@@ -85,10 +98,28 @@ df %>% ggplot() +
 	geom_boxplot()  
 ```
 
+
 # Space dependence
+
+# II - Spatial series
+
+Spatial relationships are multidirectional and multilateral.
+They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
+
+#2.1) Defining neighbours 
+#2.1.1) Characteristics of the relationships between spatial objects 
+Consider a surface ℜ. This surface can be divided into n mutually exclusive zones.
+Two adjacent zones are separated by a common boundary.
+
+    Mathematical definition of spatial relationships : Spatial relationships B are a subset of the Cartesian product R² × R² = [(i, j) : i ∈ R² , j ∈ R²] of couples (i, j) of spatial objects, i.e. all couples (i, j) such that i and j are both spatial objects identified by their geographical coordinates, and such that (i, j) is different from (j,i). A spatial object cannot be linked to itself: (i,i) \* B. Moreover, if (i, j) ⊆ B and (j,i) ⊆ B for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+
+Figure 2 illustrates the codifying process of spatial relationships.
+This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
+
 
 # Summary
 
-# Bibliography
+# References
 
 A citation @bauer2023writing
+
