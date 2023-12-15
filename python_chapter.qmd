@@ -1,5 +1,5 @@
 ---
-title: "A simple chapter using Python"
+title: "Chapter : statistical tests with dependent data"
 execute: 
   freeze: auto
 output: 
@@ -11,7 +11,7 @@ output:
 
 This chapter is a simple example using python
 
-You can import python librairies using the code
+You can import python libraries using the code
 
 ```{python}
 import pandas as pd
