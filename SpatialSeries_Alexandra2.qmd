@@ -790,4 +790,18 @@ It is not unusual for a geolocalised database to have observations raised at dif
 
 ### **References**
 
-Anselin, Luc (2013). Spatial econometrics: methods and models. Vol. 4. Springer Science & Business Media. Anselin, Luc and Daniel A Griffith (1988). « Do spatial effects really matter in regression analysis? » Papers in Regional Science 65.1, pp. 11--34. Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b). « Spatial Neighbors ». Applied Spatial Data Analysis with R. Springer, pp. 83--125. Toussaint & (2014). « The sphere of influence graph: Theory and applications ». International Journal of Information Thechnology and Computer Science 14.2. Smith, Tony E. (2016). Notebook on Spatial Data Analysis. http://www.seas.upenn.edu/ ese502/notebo Tiefelsdorf, Michael (1998). « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ». PhD thesis. Université Wilfrid Laurier.
+Anselin, Luc (2013). Spatial econometrics: methods and models. Vol. 4. Springer Science & Business Media. 
+
+Anselin, Luc and Daniel A Griffith (1988). « Do spatial effects really matter in regression analysis? » Papers in Regional Science 65.1, pp. 11--34. 
+
+Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b). « Spatial Neighbors ». Applied Spatial Data Analysis with R. Springer, pp. 83--125. 
+
+Toussaint & Emirates (2014). « The sphere of influence graph: Theory and applications ». International Journal of Information Thechnology and Computer Science 14.2. Smith, Tony E. (2016). Notebook on Spatial Data Analysis. http://www.seas.upenn.edu/ ese502/notebook. 
+
+Tiefelsdorf, Michael (1998). « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ». PhD thesis. Université Wilfrid Laurier.
+
+Kincaid, Thomas M. and Anthony R. Olsen (2016). spsurvey: Spatial Survey Design and Analysis.R package version 3.3
+
+Stevens Jr, Don L and Anthony R Olsen (2004). « Spatially balanced sampling of natural resources ».
+Journal of the American Statistical Association 99.465, pp. 262–278
+
