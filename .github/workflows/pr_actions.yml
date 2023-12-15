@@ -17,5 +17,8 @@ jobs:
           Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa', 'factoextra'))" 
           Rscript -e "install.packages(c('draw', 'phaseR', 'rgl', 'bootstrap', 'latex2exp', 'datasets', 'popbio'))"
           Rscript -e "install.packages(c('gwrr', 'spatialreg', 'spdep'))"
+          Rscript -e "devtools::install_version('TSA', version = '1.2.1', repos = 'http://cran.us.r-project.org')"
+
+          
       - name: Generate slides
         run: "quarto render"

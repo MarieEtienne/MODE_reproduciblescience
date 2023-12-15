@@ -23,9 +23,10 @@ library(nlme)      # glm and gls
 library(car)       # Type II anova.
 
 #To install older version of a package to use the arimax function.
-require(devtools)
-install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
-install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
+## why requiring old version ?
+# require(devtools)
+# install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
+# install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
 library(TSA)       # Time series analysis (autocorrelation tests)
 ```
 
@@ -35,7 +36,8 @@ To understand better how to handle time series, data are used to illustrate the 
 
 ```{r}
 ## Load the data
-setwd("C:/Users/User/Onedrive/Bureau/MODE/M2/ASA/Le Gouar")
+## cette commande ne fonctionne qu'en local !!!
+## setwd("C:/Users/User/Onedrive/Bureau/MODE/M2/ASA/Le Gouar")
 dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
 
 head(dataT)       # What are the data
