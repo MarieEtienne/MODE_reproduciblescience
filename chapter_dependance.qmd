@@ -116,10 +116,292 @@ Two adjacent zones are separated by a common boundary.
 Figure 2 illustrates the codifying process of spatial relationships.
 This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
+## 3 - Saptial modeling
+
+Once the structure of the spatial correlation has be estimated, it can then be included in the model.
+
+Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
+
+For the analysis under R, it will be important to import the package **spatialreg**, **spdep** as well as **gwrr**
+
+```{r}
+library(spatialreg)
+library(spdep)
+library(gwrr)
+```
+
+### 3.1.Stationary process
+
+For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
+
+All the models showed here will be based on the general linear model modified to take the spatial autocorrelation into account :
+
+**Y = X**$\beta$ + $\epsilon$
+
+#### 3.1.1. Spatially lagged X model
+
+##### Theory
+
+This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
+
+The idea behind this analysis is that the state of a neighbor region will affect our region.
+
+This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
+
+An extra parameter : WX$\theta$, called the autocovariate is added to the general linear model's formula. It is a distance-weighted function of the neighboring response value.
+
+**Y = X**$\beta$ + **WX**$\theta$ + $\epsilon$
+
+The argument WX$\theta$ is the average of the neighboring Xs.
+
+##### Application in R
+
+*(For the purpose of the example, we will assume that the analysis is the right one even though other would be more fitted)*
+
+As this analysis is quite simple the average value of the neighboring regions can be calculated by hand and then added to the general linear formula.
+
+However, there are commands in R in the package sdpep that allows to do the same analysis ans to go a little further, as well as giving the R-squared value and the p value.
+
+Our exemple here will be the study of plants and bird richness in Ile & Vilaine.
+
+*(The dataset "div35" set can be found in the doc called "Spatial autocorrelation\_ modelisation")*
+
+*(To see how to create weighted matrix, see the previous parts)*
+
+```{r}
+div35=read.table("MODE_reproduciblescience\Spatial autocorrelation_ modelisation\div35.txt", header=T, dec=",")
+
+xy=div35[,3:4] #Extract the coordinates x and y of each points
+plot(div35[,3:4])
+#For a rook connection
+div.knear4<-knearneigh(as.matrix(xy),4) #extract the neighbour points
+knn2nb(div.knear4) # convert the object of type knn into a type nb # transformation to get as many lists than points/observation
+plot(knn2nb(div.knear4), xy, add=TRUE)
+
+#For a Queen conection
+div.knear8<-knearneigh(as.matrix(xy),8)
+knn2nb(div.knear8)
+plot(knn2nb(div.knear8), xy, add=TRUE)
+
+#Spatial weighted matrix
+pond4.stan<- nb2listw(knn2nb(div.knear4), style="W", zero.policy=TRUE)
+pond8.stan<- nb2listw(knn2nb(div.knear8), style="W", zero.policy=TRUE)
+
+#The argument "style = "w"" allows to determine the weight given to each link. 
+# "W" for standardized = 1/nb of connections
+#if you want to give the same weight to each link, then use the argument "B" instead of "w".
+
+```
+
+*(to be able to use the weighted matrix in the analysis, the items must be a class "listw", hence the argument "nb2listw")*
+
+The function used for spatially weighted matrix is "lmslx". In the argument :
+
+-   First the equation tested in shape of : Y \~ X1+X2+X3 ...
+
+-   the data set (here div35)
+
+-   The weighted matrix ( here pond8.stan)
+
+```{r}
+lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stan)
+summary(lmsSLX)
+```
+
+Here, 2 coefficients are given as well as their p-value. The first one (rich_pp) correspond to the argument X$\beta$ of our original function. The second one (lag.rich_pp) correspond to WX$\theta$.
+
+*Here there is only one X, and therefore only 2 coefficients, but with a bigger model to test, the coefficients corresponding to the X will be named just like the original Xs, and the coefficients for the autocorrelation will be named "lag.X".*
+
+As always, we only keep the coefficients that have a significant p-value. Here they all do. Our final model here would be :
+
+$Bird\:Richness = -7.40 + 0.47X + 1.19WY + \epsilon$
+
+An interpretation of those results here is that the more plants there is in a place, the more bird will be present as well. As for the lag value, we can expect that the more plants there will in the neighboring regions, the more birds there will in our region.
+
+*This model works at small scale only*
+
+The first estimate, that regards the response variable is called the **direct effect**, wherease the factor impacting the autocorrelation is called the **indirect factor**. However we can have an idea of the general effect on the whole region by combining the two effects int the **total effect**.
+
+```{r}
+impacts(lmsSLX)
+summary(impacts(lmsSLX, R=500),zstats=TRUE)
+```
+
+The function impact only gives the total effect as the sum of the direct and indirect effect. Putting the function into a summary allows to show standard error, and the p-values. The total effect represent the overall impact of the variable when applied to the whole map.
+
+*Sometimes, non-significant direct and indirect effect may become significant when looking at the total effect*
+
+#### 3.1.2. - Simultaneous autoregressive models (SAR)
+
+To be able to study an autocorrelation at a larger scale, other models must be used.
+
+The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location.
+
+The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows). The null hypothesis for the general SAR model is that the Ys are mutually independent.
+
+The autoregressif process can be found in either the residuals of the data or in the response value. Depending on where this process is thought to be,three models are available :
+
+-   The **Error model**
+-   The **Lag model**
+-   The **Mix model**
+
+A specific diagnostic can be made to chose between either one.
+
+##### 3.1.2.1. Lagrange Multiplier diagnostic
+
+###### Theory
+
+The idea for this test is to statistically check which of the SAR model would best fit to our equation.
+
+The lagrange multiplier diagnostic tests the fit of the model under the null hypothesis and looks for evidence of departures in the direction of interest. In summary, it will examine the residuals of a model and look for specific types of non-randomness.
+
+###### Application in R
+
+The command lm.LMtests() allows to get the lagrange multiplier for a set model.
+
+```{r}
+lmO=lm(div35$rich_ois~div35$rich_pp)
+lm.LMtests(lmO,pond8.stan, test="all")
+```
+
+The arguments are :
+
+-   The dataset (here lm0)
+
+-   The weight matrix (here pond8.stan)
+
+-   test = the type of test that will be made (here, "all" means that the fives tests will be conducted : LMerr, LMlag, RLMerr, RLMlag, SARMA)
+
+The firsts p-values to look at are for the normal tests. The significant one will be the analysis conducted later. If non of them are significant, we look at the robust tests.
+
+##### 3.1.2.2. Lag models
+
+###### Theory
+
+In this model, we assume that the autoregressif process is in the response variable. As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
+
+It would for exemple be liked a stone thrown in a lake. This creates waves that propagate to the whole lake.
+
+The lag model is used to take into account a autoregressif process only occuring in the response variable. Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
+
+The model will take the form of :
+
+**Y =**$\rho$**Wx +X**$\beta$ + $\epsilon$
+
+**ρ** is the autoregression parameter **W** is the spatial weights matrix
+
+###### Application in R
+
+```{r}
+lagsarlm(rich_ois~rich_pp, div35, pond8.stan)
+```
+
+Using the values obtained here, the final model would be:
+
+$Bird\:Richness = 0.37\:WX +0.53\:X + \epsilon$
+
+##### 3.1.2.3. Error models
+
+###### Theory
+
+When using the error model, we assume that the autoregressif process is only in the residuals.
+
+When dealing with such model, an interpretation may be that some spatially correlated variable are missing in the dataset.
+
+this model takes the form of :
+
+**Y = X**$\beta$ + $\lambda$**WY** + $\epsilon$
+
+The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. $\gamma$ is the spatially dependant error term.
+
+###### Application in R
+
+```{r}
+errorsarlm(rich_ois~rich_pp, data = div35, pond8.stan)
+```
+
+Using the values obtained here, the final model would be:
+
+$Bird\:Richness =0.52\:X + 0.33\:WY + \epsilon$
+
+##### 3.1.2.4. Mixed models
+
+###### Theory
+
+If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used. This model include all the parameter added above, and it is the most inclusive model.
+
+It can be noted that this model can also be used in both situation described previously, as the coefficient will cancel themselves out if either one is not present.
+
+**Y =** $\rho$**WX +X**$\beta$ + $\lambda$**WY** + $\epsilon$
+
+###### Application in R
+
+```{r}
+lmsarD=spatialreg::sacsarlm(rich_ois~rich_pp,data=div35,pond8.stan)
+summary(lmsarD)
+```
+
+From here, we can replace in the formula :
+
+$Bird\:Richness = 0.64WX + 0.53X - 0.65$
+
+*For exemple purpose, the lambda was implemented in the model. However it was not necessary here as the associated value was not significant*
+
+Even though three commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more information than the others.
+
+![](Spatial autocorrelation_ modelisation\SAR_function_summary.png)
+
+*(If the image doesn't load, it is available in the Spatial autocorrelation\_ modelisation doc)*
+
+### 3.2. - Non stationary process
+
+**Graphically weighted models (GWM)**
+
+###### Theory
+
+In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling, and will therefore require to perform a regression for each points and its neighbors.
+
+The model here is locally linear in the mean : 
+
+$$Y_i = \beta_{0i}\:+\:\sum_k\beta_{ki}x_{ki}\:+\epsilon_i$$
+The $\beta$ here now correspond to the coefficient at the location i.
+
+It applies a geographical weight to the data used in each model, meaning that the further away a point will be from the regression point, the less weight they will have.
+
+###### Application in R
+
+```{r}
+lmgwrD=gwr.est(rich_ois~rich_pp,data=div35,locs=xy)
+summary(lmgwrD)
+```
+
+**Phi**: kernel bandwidth 
+
+**RMSPE**: root square of error of the prediction based on bandwidth estimated
+
+**Beta**: matrix with the coefficients for each point (intercept line \[1,\] and regression coefficient line \[2,\]) 
+
+**Yhat**: model estimate 
+
+**RMSE**: root square of error estimation 
+
+**Rsquare**: model fitting
+
 
 # Summary
 
 # References
 
-A citation @bauer2023writing
+F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ». Ecography 30, nᵒ 5 (2007): 609‑28. https://doi.org/10.1111/j.2007.0906-7590.05171.x.
 
+Smith, P. A. (1994). Autocorrelation in Logistic Regression Modelling of Species' Distributions. Global Ecology and Biogeography Letters, 4(2), 47--. doi:10.2307/2997753
+
+Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010.  https://doi.org/10.1007/978-3-642-03647-7_14.
+
+https://www.youtube.com/watch?v=b3HtV2Mhmvk
+
+Engle, Robert F. « A general approach to lagrange multiplier model diagnostics ». Journal of Econometrics 20, nᵒ 1 (1 octobre 1982): 83‑104. https://doi.org/10.1016/0304-4076(82)90104-X.
+
+Class and powerpoint made by Mrs. Le Gouar Pascaline
+
+GWR informations : https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-geographicallyweightedregression-works.htm
