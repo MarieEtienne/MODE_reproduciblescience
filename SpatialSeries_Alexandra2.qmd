@@ -35,15 +35,11 @@ First, the study zone is divided into mutually exclusive areas. Each area contai
 
 The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
 
-$$w_{ij} = 
-\{1 if i and j are spatially linked to each other 
--
-0 otherwise\}$$
+![](images/image-232123009.png){width="470" height="59"}
 
 Conversely, the distance matrix measures dissimilarity between zones. The higher $d_{ij}$ , the more different the zones. With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:
 
 -   Genetic proximity between families
--   
 
 **The "list of neighbours" object in R**
 
@@ -174,13 +170,13 @@ Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since
 
 ![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
 
--   **Bishop contiguity** In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess. 
+-   **Bishop contiguity** In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess.
 
-![Figure : Bishop configuration](images/image-2117709373.png){width="177"}
+![**Figure :** Bishop configuration](images/image-2117709373.png){width="177"}
 
-Still using the example of the Paris districts, here's an example of how continuity can be applied:
+Still using the example of Paris districts, here's an example of how continuity can be applied:
 
-![Figure : Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
+![**Figure :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
 
 We can return to our previous dataset to investigate the configuration of the points :
 
@@ -219,6 +215,8 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 #Be careful, the distance between points is not always 10km !
 ```
 
+**c) Defining neighbours based on the optimisation of a trajectory**
+
 ### **1.2 Neighborhood weights**
 
 #### **1.2.1) From a list of neighbours to a weight matrix**
@@ -226,19 +224,17 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_{ij}$ of the weight matrix $W$. The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
 Formally, the weights express the neighbor structure between the observations as a $n\times n$ matrix $W$ in which the elements $w_{ij}$ of the matrix are the spatial weights:
 
-![](images/image-672436714.png){width="392"}
+![](images/image-672436714.png){width="285"}
 
 **Defining the weight matrix**
 
 Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
 
-![](images/image-522223787.png){width="299"}
+> ![](images/image-562063019.png){width="431"}
 
-• The weight matrices can also take into account the distance between the geographical zones, as relationships becoming smaller with distance: 1 if d \< d0 - 0 otherwise, 1 d α , or e −αd with α an estimated or predetermined parameter. Using a maximum distance beyond which wi j = 0 makes it possible to limit the number of components with a value different from zero. As described in 2.1.2, when the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
+![Figure – Binary weight matrix](images/image-497770688.png)
 
-• Lastly, certain matrices take the strength of relations between the zones into account. For example, weight can be defined by b α i j d β i j with bi j a measure of the strength of relationships between zones i and j (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and di j the distance between the zones. Some econometric studies are aimed at endogenising the weight matrices, but they are considered to be exogenous in most spatial econometric applications (Anselin 2013). In general, therefore, the neighbourhood weights must not be a function of the phenomenon which we are trying to explain.
-
-![](images/image-497770688.png)
+Let's go back to our previous data set :
 
     ```{r}
     #Spatial series analysis : weight matrix
@@ -252,6 +248,16 @@ Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
     str(w2)                     # we have as much list as points
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
+
+The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
+
+Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
+
+
+
+
+
+
 
 ------------------------------------------------------------------------
 
@@ -335,7 +341,7 @@ Global statistics are based on the assumption of a spatial stationary process: s
 
 **3.3.2 Local spatial autocorrelation indicators**
 
-Anselin (Anselin 1995) develops the concepts introduced by Getis and Ord by defining *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
+Anselin (Anselin 1995) defines *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
 
 --- detect significant groupings of identical values around a particular location (clusters);
 
