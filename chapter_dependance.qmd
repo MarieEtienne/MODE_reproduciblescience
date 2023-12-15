@@ -66,12 +66,6 @@ Spatial autocorrelation can be due to various factors, such as :
 
 * Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
 
-- Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
-
-* Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
-
-* Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
-
 #### Example of spatial dependence
 An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar. <br />
 
