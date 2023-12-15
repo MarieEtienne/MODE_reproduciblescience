@@ -92,6 +92,18 @@ With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}
 
 In other words, the values are compared to their neighbors to conclude if they are correlated or not.
 
+The autocorrelation can be detected in a **non-stationnary process**.
+
+**Stationnarity** is the constistency of the statistical parameters of a series such as the mean and the variance (Figure). 
+
+- In non-stationnary processes, these parameters vary in time.
+- In stationnary processes, the values gravitate around a mean value within the same range. 
+
+![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
+
+Given the precedent plots displayed, one would think there are both stationnary and non-stationnary processes within the different variables.
+Tests wil allow us to know with more details if there is a dependency. 
+
 On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package. 
 
 **Important note:** In order for the afc() function to work, the data have to be sorted according to time with one value per time step. To do so, *NA* or mean values can be added if necessary to fill the dataset accordingly. The package lubridate can be useful to manage dates data.
@@ -117,7 +129,7 @@ These plots allow us to know if the time dependency exists and what profile it f
 For the following analyses, we will focus on the Density of the O colony.
 The time is considered an **autocovariable**.
 
-### Time dependency model
+### Models
 
 Now that the time dependency have been proved to be true thanks to autocorrelation test, it is possible to proceed with adapted statistical tests. 
 
@@ -147,52 +159,85 @@ $$Y\sim\alpha.X + time$$
 
 A useful package on R to manage glm and gls is be nlme.
 
+```{r}
+par(mfrow=c(1,2))
+hist(O$denstot, main = paste("Histogram of total density", "\n" ,"of O colony "), xlab = "Density")
+hist(log(O$denstot), main = paste("Histogram of total density", "\n" ,"of colony O (log transformation)"), xlab = "Log(Density)")
+```
+The plots indicates that a log transformation could help better manage the data.
+
+A simple lme model can be used (Linear Mixed-Effects Model) with X = log(total density) and Y the ressource availability.
+
+We can check if the model is satisfactory if the residuals are not significant.
+
+```{r}
+## Model construction
+modlme=lme(log(denstot) ~ ratio, data=O, random=~1|year) 
+## Residuals
+par(mfrow=c(1,1))
+acf(modlme$residuals[,1], main = "Residuals of the lme model")
+```
+
+```{r}
+## Residuals
+summary(modlme)
+```
 
 
---------------------------------------
+The plot shows there is still a time dependency in this kind of model. 
+The correlation value is too strong, the model is not adapted to this case. 
 
-Plan pour se repérer. 
+### Medium to strong time dependency
 
-# 1. Time series
+If a medium or a strong time dependency are proven, adding time as a random effect will not be effective enough. 
+It will be necessary to use **Time Models**.
 
+#### Stationnary process
 
+To deal with stationnary processes, it is possible to use GLS (Generalized Leat Square) models. 
+Three major GLS models can be used. 
 
-## What to do if we don't know if the series has a time dependency?
-Quand est-ce qu'on sait si on a une série temporelle ou non ? 
-  Stationnarité (changement des paramètres au cours du temps : moyenne et variance). Mesure de l'autocorrélation. Si on a un processus stationnaire on arrive vite à une autocorrélation de 0. 
+- **AR** or **Autoregressive Model** states that a value $Y_{(t)}$ will depend on the values $Y$ at $p$ the precedent times. The model adds a an autoregressive coefficient $\phi_p$ to each $Y_{(t-1)}$ value. In summary, this model explains the current value as a linear combination of the precedent values with $\epsilon_t$ the random component or white noise. 
+$$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)}$$
 
-## Why is it important to know if there is a dependency when doing statistical tests? 
-Pourquoi c'est important de savoir si les données sont indépendantes ou non et si non selon quoi ? 
-  La plupart des tests statistiques nécessitent l'indépendance des données (donner des raisons concrètes, ANOVA...). 
-  
-Evaluation du risque alpha et beta 
+- **MA** or **Moving Average model** functions in the same way as the AR model. However, it will consider that the current value of a series is the weighted linear combination of the previous $q$ errors. 
 
-Having a variable with dependant data can create cases of **pseudoreplication**. 
+$$Y_{(t)}= \mu+ \theta_1 \times \epsilon_{(t-1)}+\theta_2 \times \epsilon_{(t-2)}) + ...+\theta_q \times \epsilon_{(t-q)} $$
 
-## What tests can we do? 
-- AR
-- MA
-- ARIMA
+- **ARMA** is a combination of **AR** and **MA** models and is a linear combination of the $p$ past values and $q$ past residual errors.
 
-#### AR
-AR stands for 'Autoregression'
-
-#### MA
-MA stands for 'Moving Average'. 
-
-#### ARIMA
-ARIMA is a combination of both AR and MA.
-It has 3 parameters: p, d and q. 
-
-## What conditions needs to be verified? 
-
-# 2. Stationarity
-
-Stationary processes are characterized by a conservation of the same mean and variance throughout time. *A contrario*, non-stationary processes have a mean and variance that differs with time.
-
-The
-
-![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
+$$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)} + \theta_1 \times \epsilon_{(t-1)}+\theta_2 \times \epsilon_{(t-2)}) + ...+\theta_q \times \epsilon_{(t-q)} $$
+The gls() function covers the three types of model depending on the correlation structure of the data. 
 
 
+```{r}
+## Model construction
+modgls=gls(log(denstot) ~  year + ratio, data=O, correlation = corAR1(value=0.9,form = ~ year))
+acf(modgls$residuals, main = "Residuals of the gls model")
+```
+
+```{r}
+summary(modgls)
+```
+
+The autoregressive coefficient Psi is equal to 0.72.
+
+The use of this model appears to have diminished the effect of time dependency.
+We can compare the two previous models thanks to an analysis of their variance (anova).
+
+```{r}
+anova(modgls,modlme)
+Anova(modgls)
+Anova(modlme)
+```
+
+```{r}
+modgls2=gls(log(denstot) ~   ratio, O, correlation = corAR1(value=0.9,form = ~ year))
+anova(modgls2,modlme)
+anova(modgls2,modgls)
+
+anova(modgls2)
+```
+
+#### Non-stationnary process
 
