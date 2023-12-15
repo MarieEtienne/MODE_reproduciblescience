@@ -81,7 +81,7 @@ Let's then begin the analysis of first dataset dealing with richness of birds fr
 #Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
 
 #Import dataset
-div35=read.table("~/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/div35.txt", header=T, dec=",")
+div35=read.table("https://github.com/cPerou/MODE_reproduciblescience/blob/master/Spatial%20autocorrelation_%20modelisation/div35.txt", header=T, dec=",")
 
 #Summary
 summary(div35)
@@ -107,7 +107,7 @@ Let's also start the analysis of second dataset dealing with chemical measures i
 #The data set is issued from a study that analysed several physiocochemical properties of several ponds. each pond is geolocalized
 
 #Import the dataset
-mare=read.table("~/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/mares.txt",header=TRUE)
+mare=read.table("https://github.com/cPerou/MODE_reproduciblescience/blob/master/Spatial%20autocorrelation_%20modelisation/mares.txt",header=TRUE)
 
 #Summary
 summary(mare)
@@ -788,6 +788,6 @@ s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xl
 
 It is not unusual for a geolocalised database to have observations raised at different points in time. It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it. In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time. On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models. Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies. By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations. This can also be done on the basis of spatial-temporal risk weighting matrices.
 
-**References**
+### **References**
 
 Anselin, Luc (2013). Spatial econometrics: methods and models. Vol. 4. Springer Science & Business Media. Anselin, Luc and Daniel A Griffith (1988). « Do spatial effects really matter in regression analysis? » Papers in Regional Science 65.1, pp. 11--34. Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b). « Spatial Neighbors ». Applied Spatial Data Analysis with R. Springer, pp. 83--125. Toussaint & (2014). « The sphere of influence graph: Theory and applications ». International Journal of Information Thechnology and Computer Science 14.2. Smith, Tony E. (2016). Notebook on Spatial Data Analysis. http://www.seas.upenn.edu/ ese502/notebo Tiefelsdorf, Michael (1998). « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ». PhD thesis. Université Wilfrid Laurier.
