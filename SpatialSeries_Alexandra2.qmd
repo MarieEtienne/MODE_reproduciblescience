@@ -440,7 +440,7 @@ The sum of the weights of the neighbours of a zone is called its *degree of conn
 
 --- **Standardisation by variance stabilisation** (*"S" coding scheme*): let **q** be the vector defined by : **q** = $(\sqrt{∑^n_{j=1}w^2_{1j}}, \sqrt{∑^n_{j=1}w^2_{2j}},...., \sqrt{∑^n_{j=1}w^2_{nj}})^T$. Let matrix $S^∗$ = $[diag(q)]^{−1}W.^4$ From $S^*$, we calculate $Q = ∑^n_{j=1}∑^n_{i=1} s^∗_{ij}$ from which we deduce the standardised weight matrix: $S = \frac{n}{Q} S^∗$.
 
-#### **1.3.3 Importance of the choice of weight matrix** 
+#### **1.3.3 Importance of the choice of weight matrix**
 
 When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
 
