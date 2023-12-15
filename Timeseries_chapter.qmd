@@ -35,7 +35,7 @@ To understand better how to handle time series, data are used to illustrate the 
 
 ```{r}
 ## Load the data
-setwd("C:/Users/User/Onedrive/Bureau/MODE/M2/ASA/Le Gouar")
+setwd("C:/Users/User/Documents/GitHub/MODE_reproduciblescience")
 dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
 
 head(dataT)       # What are the data
@@ -92,17 +92,17 @@ With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}
 
 In other words, the values are compared to their neighbors to conclude if they are correlated or not.
 
-The autocorrelation can be detected in a **non-stationnary process**.
+The autocorrelation can be detected in a **non-stationary process**.
 
 **Stationnarity** is the constistency of the statistical parameters of a series such as the mean and the variance (Figure). 
 
-- In non-stationnary processes, these parameters vary in time.
-- In stationnary processes, the values gravitate around a mean value within the same range. 
+- In non-stationary processes, these parameters vary in time.
+- In stationary processes, the values gravitate around a mean value within the same range. 
 
 ![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
 
-Given the precedent plots displayed, one would think there are both stationnary and non-stationnary processes within the different variables.
-Tests wil allow us to know with more details if there is a dependency. 
+Given the precedent plots displayed, one would think there are both stationary and non-stationary processes within the different variables.
+Tests will allow us to know with more details if there is a dependency. 
 
 On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package. 
 
@@ -192,9 +192,9 @@ The correlation value is too strong, the model is not adapted to this case.
 If a medium or a strong time dependency are proven, adding time as a random effect will not be effective enough. 
 It will be necessary to use **Time Models**.
 
-#### Stationnary process
+#### Stationary process
 
-To deal with stationnary processes, it is possible to use GLS (Generalized Leat Square) models. 
+To deal with stationary processes, it is possible to use GLS (Generalized Leat Square) models. 
 Three major GLS models can be used. 
 
 - **AR** or **Autoregressive Model** states that a value $Y_{(t)}$ will depend on the values $Y$ at $p$ the precedent times. The model adds a an autoregressive coefficient $\phi_p$ to each $Y_{(t-1)}$ value. In summary, this model explains the current value as a linear combination of the precedent values with $\epsilon_t$ the random component or white noise. 
@@ -220,9 +220,9 @@ acf(modgls$residuals, main = "Residuals of the gls model")
 summary(modgls)
 ```
 
-The autoregressive coefficient Psi is equal to 0.72.
+The autoregressive coefficient Psi is equal to 0.72. The autocorrelation is not completely removed. Still, the variable 'ratio' does not have a significant effect on $Y$ anymore.
 
-The use of this model appears to have diminished the effect of time dependency.
+
 We can compare the two previous models thanks to an analysis of their variance (anova).
 
 ```{r}
@@ -239,5 +239,58 @@ anova(modgls2,modgls)
 anova(modgls2)
 ```
 
-#### Non-stationnary process
+The second models fits the data better than the first. We can conclude that the autocorrelation made the ratio variable effect wrongly significant.
+
+In order to chose the range of application of the parameters $p$ and $q$, it is possible to use a **partial correlation function** that will display the direct correlation link between the time steps. 
+
+```{r}
+par(mfrow=c(1,2))
+acf(log(O$denstot), main="Density for O")
+pacf(log(O$denstot), main="Density for O")
+```
+So, the order $p$ (AR) is generally chosen based on significant lags in the PACF, and the order $q$ (MA) is generally chosen based on significant lags in the ACF.
+
+
+#### Non-stationary process
+
+To manage non-stationary processes, another model called **ARIMA** is used. A new parameter $d$ is introduced with $p$ and $q$. 
+
+ **ARIMA(p,d,q)** models are a combination of **AR** models with $p$, **MA** models with $q$, and finally includes difference of order $d$. 
+
+This difference helps make the series stationary by subtracting from the current value the values from the previous $d$ time points.
+
+In general, we will choose an order $d=1$ when the series shows a **constant trend**, and an order $d=2$ when the series shows a **fluctuating trend**.
+
+On R, ARIMA models can be used with the function arima(). The argument 'order'contains the values of $p$, $d$ and $q$, in that order. 
+
+```{r}
+arima1=stats::arima(log(O$denstot),order=c(1,1,1),xreg=O$ratio)
+arima1
+```
+Different values of these parameters can be tested to find the best model with the AIC criteria displayed in the results. $d$ must always be equal to 1. 
+
+The ARIMA function can help make **predictions**.
+
+- prediction: now we will use this statistical model to make prediction under a specific scenario
+- scenario: constant and maximum availability in resource (ratio=1) during 20 years
+
+```{r}
+newxreg=data.frame(O.ratio=rep(1,20))
+predict(arima1, n.ahead = 20,newxreg)
+pred=predict(arima1, n.ahead = 20,newxreg)
+par(mfrow=c(1,1))
+obspred=rbind (data.frame(denstot=O$denstot), data.frame(denstot=exp(predict(arima1, n.ahead = 20,newxreg)$pred)))
+plot(obspred$denstot, main = "Prediction on a 20 years scenario", ylab ="Predicted observations for the total density of O")
+lines(obspred$denstot)
+```
+
+
+### To go further
+
+The **ARIMAX** model, which stands for **AutoRegressive Integrated Moving Average with eXogenous inputs**, is an extension of the ARIMA model that incorporates additional exogenous (external) variables. The ARIMAX model is particularly useful when there are external factors that can influence the time series to model.
+
+The eXogenous (X) Inputs are additional external variables that are not part of the time series being modeled but may influence it.
+These variables are included in the model to capture their impact on the dependent variable.
+
+The ARIMAX model allows to account for the influence of external factors when modeling time series data, making it more flexible and potentially improving the accuracy of predictions. 
 
