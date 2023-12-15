@@ -21,14 +21,14 @@ Statistical analyses, including many regression methods, often assume that obser
 In statistics, autocorrelation is a measure of the linear dependence between the values of one variable itself, at different times or locations. Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series. In other words, this means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if the data at time 2 can be predicted with what we know about the data at time 1, if they are close in space or time. <br />
 
 Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be:<br />
-     - positive: indicating that the observations tend to be similar, <br />
-     - negative: indicating that the observations tend to be opposite to each other.
+* positive: indicating that the observations tend to be similar, <br />
+* negative: indicating that the observations tend to be opposite to each other.
 <br />
 
 ## What types of autocorrelation ?
 Autocorrelation is commonly used to analyze data for which the order or location of observations has an important significance, such as:<br />
-     - time series: data taken at the same location at several points in time, <br />
-     - spatial data: data taken at a given point in time at several locations in the same geographical area, and therefore close in space. 
+* time series: data taken at the same location at several points in time, <br />
+* spatial data: data taken at a given point in time at several locations in the same geographical area, and therefore close in space. 
 
 ### Time series
 A typical example of autocorrelation in a time series is a seasonal autocorrelation, where values are observed at a same time each year (seasons), and are therefore correlated with each other. <br />
@@ -50,11 +50,11 @@ It shows temporal similarities that depend on the scale used. Spatial autocorrel
 
 Spatial autocorrelation can be due to various factors, such as :
 
-- Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
+* Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
 
-- Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
+* Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
 
-- Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
+* Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
 
 #### Example of spatial dependence
 An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar. <br />
