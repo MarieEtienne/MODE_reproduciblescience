@@ -112,13 +112,30 @@ Neighbourhood graphs materialise the links between the various entities. They ar
 
 • **Delaunay's Triangulation** Delaunay's Triangulation is a geometric method that connects points into triangles such that the minimum angle of all triangles is maximised.
 
-![Figure : Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="208"}
+![**Figure :** Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="190"}
 
 • **Sphere-of-influence based graph** The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap. The "circle of the nearest neighbour" of point P is the largest circle centred in P and that contains no other points than P. All points in the study set are not necessarily interconnected.
 
-![Figure : The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles](images/image-1767308128.png){width="361"}
+![**Figure :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](images/image-1767308128.png){width="361"}
 
-• **Gabriel's graph** Gabriel's graph links two points pi and pj if and only if all other points are outside the circle with diameter $[pi, pj ]$.
+• **Gabriel's graph** Gabriel's graph links two points $pi$ and $pj$ if and only if all other points are outside the circle with diameter $[pi, pj ]$.
+
+![**Figure :** Gabriel graph (source : Pascaline Le Gouar)](images/image-1231590752.png){width="227"}
+
+• **Graph of relative neighbours** The graph of relative neighbours considers that two points $pi$ and $pj$ are neighbours if $$d(p_i,p_j) ≤ max [d(p_i,p_k),d(p_j,p_k)] \,\,\,\,\,\,∀k = 1,..., n k\ne i,j$$ with $d(p_i, p_j)$ the distance between $p_i$ and $p_j$.
+
+![**Figure :** Graph of relative neighbours (source : J. O'Rourke, 1982)](images/image-1901385633.png){width="304"}
+
+For example, here's the application of these geometric concepts to Parisian districts :
+
+![**Figure :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
+
+
+**a.2) Neighbourhood graphs based on nearest neighbours**
+A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality.
+The choice can also be made to keep only the points located at a certain distance.
+
+
 
 ```{r}
 #Application with R
