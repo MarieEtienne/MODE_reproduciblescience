@@ -130,12 +130,7 @@ For example, here's the application of these geometric concepts to Parisian dist
 
 ![**Figure :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
 
-
-**a.2) Neighbourhood graphs based on nearest neighbours**
-A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality.
-The choice can also be made to keep only the points located at a certain distance.
-
-
+**a.2) Neighbourhood graphs based on nearest neighbours** A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality. The choice can also be made to keep only the points located at a certain distance.
 
 ```{r}
 #Application with R
