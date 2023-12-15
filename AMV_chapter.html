@@ -8,7 +8,7 @@
 
 <meta name="author" content="ANSALDI Lucile, BARREAU Julie, BONGIBAULT Baptiste, GUINEBRETIERE Aldric, MOREAU Cyrielle">
 
-<title>The Companion book a M1 MODE student should have! - Multivariate analysis</title>
+<title>The Companion book a M1 MODE student should have! - Multivariate Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -203,8 +203,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction-to-multivariates-analysis" id="toc-introduction-to-multivariates-analysis" class="nav-link active" data-scroll-target="#introduction-to-multivariates-analysis">Introduction to Multivariates Analysis</a></li>
-  <li><a href="#part-1-pca" id="toc-part-1-pca" class="nav-link" data-scroll-target="#part-1-pca">PART 1: PCA</a>
+  <li><a href="#introduction-to-multivariate-analysis" id="toc-introduction-to-multivariate-analysis" class="nav-link active" data-scroll-target="#introduction-to-multivariate-analysis">Introduction to Multivariate Analysis</a></li>
+  <li><a href="#part-1-principal-component-analysis-pca" id="toc-part-1-principal-component-analysis-pca" class="nav-link" data-scroll-target="#part-1-principal-component-analysis-pca">PART 1: Principal Component Analysis (PCA)</a>
   <ul class="collapse">
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#mathematics" id="toc-mathematics" class="nav-link" data-scroll-target="#mathematics">Mathematics</a></li>
@@ -217,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#e-biological-conclusion" id="toc-e-biological-conclusion" class="nav-link" data-scroll-target="#e-biological-conclusion">e) Biological conclusion :</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#part-2-ca" id="toc-part-2-ca" class="nav-link" data-scroll-target="#part-2-ca">PART 2: CA</a>
+  <li><a href="#part-2-correspondence-analysis-ca" id="toc-part-2-correspondence-analysis-ca" class="nav-link" data-scroll-target="#part-2-correspondence-analysis-ca">PART 2: Correspondence Analysis (CA)</a>
   <ul class="collapse">
   <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1">Introduction</a></li>
   <li><a href="#mathematics-1" id="toc-mathematics-1" class="nav-link" data-scroll-target="#mathematics-1">Mathematics</a>
@@ -235,13 +235,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#c-biological-conclusion" id="toc-c-biological-conclusion" class="nav-link" data-scroll-target="#c-biological-conclusion">c) Biological conclusion :</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#part-3-mca" id="toc-part-3-mca" class="nav-link" data-scroll-target="#part-3-mca">PART 3: MCA</a>
+  <li><a href="#part-3-multiple-correspondance-analysis-mca" id="toc-part-3-multiple-correspondance-analysis-mca" class="nav-link" data-scroll-target="#part-3-multiple-correspondance-analysis-mca">PART 3: Multiple Correspondance Analysis (MCA)</a>
   <ul class="collapse">
   <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2">Introduction</a></li>
   <li><a href="#mathematics-2" id="toc-mathematics-2" class="nav-link" data-scroll-target="#mathematics-2">Mathematics</a></li>
   <li><a href="#interpretation-2" id="toc-interpretation-2" class="nav-link" data-scroll-target="#interpretation-2">Interpretation</a></li>
   </ul></li>
-  <li><a href="#part-4-cca" id="toc-part-4-cca" class="nav-link" data-scroll-target="#part-4-cca">PART 4: CCA</a>
+  <li><a href="#part-4-canonical-correspondence-analysis-cca" id="toc-part-4-canonical-correspondence-analysis-cca" class="nav-link" data-scroll-target="#part-4-canonical-correspondence-analysis-cca">PART 4: Canonical Correspondence Analysis (CCA)</a>
   <ul class="collapse">
   <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3">Introduction</a></li>
   <li><a href="#interpretation-3" id="toc-interpretation-3" class="nav-link" data-scroll-target="#interpretation-3">Interpretation</a></li>
@@ -260,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Multivariate analysis</h1>
+<h1 class="title">Multivariate Analysis</h1>
 </div>
 
 
@@ -281,8 +281,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="introduction-to-multivariates-analysis" class="level1">
-<h1>Introduction to Multivariates Analysis</h1>
+<section id="introduction-to-multivariate-analysis" class="level1">
+<h1>Introduction to Multivariate Analysis</h1>
 <p>Biologists’ data, whether on individuals, populations or communities, are usually presented in the form of rectangular tables, with observations (n) in the rows and variables (p) in the columns.</p>
 <p>The graphical representation of these n observations and p variables is easily achieved when there are only 2 or 3 variables (dimension). However, when the number of variables increases, the graphical representation becomes complicated, and Multivariate Analyses come into their own!</p>
 <p>The aim of these analyses is to reduce the number of dimensions and examine the structure of the data by answering the following questions:</p>
@@ -294,8 +294,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Multivariate analysis methods are therefore used to describe the data and generate hypotheses that can then be tested.</p>
 </section>
-<section id="part-1-pca" class="level1">
-<h1>PART 1: PCA</h1>
+<section id="part-1-principal-component-analysis-pca" class="level1">
+<h1>PART 1: Principal Component Analysis (PCA)</h1>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>PCA can be used to process a measurement table with :</p>
@@ -649,8 +649,8 @@ Drews      0.53811419 2.784934e-01 0.1528997775 1.306683e-02 0.0056915740</code>
 </section>
 </section>
 </section>
-<section id="part-2-ca" class="level1">
-<h1>PART 2: CA</h1>
+<section id="part-2-correspondence-analysis-ca" class="level1">
+<h1>PART 2: Correspondence Analysis (CA)</h1>
 <section id="introduction-1" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-1">Introduction</h2>
 <p>CA deals with <strong>tables that cross two categorical variables with several modalities</strong>, such as contingency tables, frequency tables, …</p>
@@ -973,8 +973,8 @@ Pink     0.78192585 0.000285946 0.02156349 0.195417315 8.073975e-04</code></pre>
 </section>
 </section>
 </section>
-<section id="part-3-mca" class="level1">
-<h1>PART 3: MCA</h1>
+<section id="part-3-multiple-correspondance-analysis-mca" class="level1">
+<h1>PART 3: Multiple Correspondance Analysis (MCA)</h1>
 <section id="introduction-2" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-2">Introduction</h2>
 <p>MCA is a statistical method adapted to table of type “individuals x quatitative variable”. Eingen Values correspond to means of squared correlation ratios. It could be used a pre-processing before a classification or a coinertia analysis on tables with quantitative.</p>
@@ -1119,8 +1119,8 @@ G3        0.0004019773 0.480314347 0.510741640 0.008542035</code></pre>
 <p>Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitative, they would not participate to the creation of axis but they may be ploted on the final graph.</p>
 </section>
 </section>
-<section id="part-4-cca" class="level1">
-<h1>PART 4: CCA</h1>
+<section id="part-4-canonical-correspondence-analysis-cca" class="level1">
+<h1>PART 4: Canonical Correspondence Analysis (CCA)</h1>
 <section id="introduction-3" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-3">Introduction</h2>
 <p>Two table analysis is used when the scientist possesses two data set with expecting the second to explain the first. The first one is called Y, the response variable and the second one is called X, the explanatory variable. For example :</p>
@@ -1225,7 +1225,7 @@ Simulated p-value: 0.01
 Alternative hypothesis: greater 
 
      Std.Obs  Expectation     Variance 
-3.3172958794 0.0867766201 0.0001477243 </code></pre>
+3.0506887804 0.0891079403 0.0001550567 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randtest</span>(ccaoak))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -1868,8 +1868,8 @@ Number of tests:   2
 Adjustment method for multiple comparisons:   none 
 Permutation number:   999 
      Test        Obs  Std.Obs   Alter Pvalue
-1 Model 2 0.01602442 9.398198 greater  0.001
-2 Model 4 0.01602442 2.365998 greater  0.018</code></pre>
+1 Model 2 0.01602442 9.281943 greater  0.001
+2 Model 4 0.01602442 2.349033 greater  0.025</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randtest</span>(rlq))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
