@@ -158,8 +158,6 @@ Once the neighbourhood graph has been defined and codified into a list of neighb
 
 ![](images/image-497770688.png)
 
-
-
     ```{r}
     #Spatial series analysis : weight matrix
 
@@ -210,3 +208,8 @@ return(range(eigen((wmat+t(wmat))/2)$values)) }
 moran.range(iris75.lw)
 
 ```
+
+**Local Moran's I** $$I_i = (y_i −\bar{y})\sum \limits_{\underset{}{j}}w_{ij}(y_j −\bar{y})$$ $$I_W = constante ∗\sum \limits_{\underset{}i}I_i$$
+
+$Ii > 0$ indicates a grouping of similar values (higher or lower than average). 
+$Ii < 0$ indicates a combination of dissimilar values (e.g. high values surrounded by low values).
