@@ -1,0 +1,198 @@
+---
+title: "Timeseries"
+bibliography: references.bib
+execute: 
+  freeze: auto
+output: 
+  html_document:
+   toc: true
+   toc_float: true
+---
+
+Temporal dependency means that values sampled at a given time can be related to the value sampled before. Therefore, the variable can be correlated to itself and create **pseudoreplication**. 
+
+
+Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
+```{r, echo = F, error=FALSE}
+## Install and load the packages required
+
+library(tidyverse) # Data cleaning, ordering, etc.
+library(lubridate) # Helps manage the date format data
+library(ade4)      # Study ecological data
+library(nlme)      # glm and gls
+library(car)       # Type II anova.
+
+#To install older version of a package to use the arimax function.
+require(devtools)
+install_version("TSA", version = "1.2.1", repos = "http://cran.us.r-project.org")
+install_version("TSA", version = "1.2.1", repos = "https://pbil.univ-lyon1.fr/CRAN/")
+library(TSA)       # Time series analysis (autocorrelation tests)
+```
+
+### The dataset
+
+To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures in time. 
+
+```{r}
+## Load the data
+setwd("C:/Users/User/Onedrive/Bureau/MODE/M2/ASA/Le Gouar")
+dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
+
+head(dataT)       # What are the data
+summary(dataT)    # Summary of the spread of each variable
+```
+
+Two colonies 'C' and 'O' are studied from 1972 to 2003. In particular, the reproductive success (success), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies. 
+
+```{r}
+## Arrange the dataset
+dataT_ordered=dataT %>% arrange(col,year)
+## Create 2 sub-datasets for the 2 colonies
+C=dataT[dataT$col=="C",]
+O=dataT[dataT$col=="O",]
+```
+
+### Data exploration
+
+```{r}
+## Data representation
+# Window size
+par(mfrow=c(2,3),mar=c(2,4,2.5,0),oma=c(2,2,2,4)) 
+
+## Colony C
+plot(C[,2],C[,3], xlab="year", ylab="mean reproductive success")
+lines(C[,2],C[,3])
+plot(C[,2],C[,4], pch=17, xlab="year", ylab="Colony growth rate")
+lines(C[,2],C[,4])
+plot(C[,2],C[,5],pch=16, xlab="year", ylab="Number of pairs")
+lines(C[,2],C[,5])
+mtext(text="Parameter for Colony C",side=3,line=-1,outer=TRUE)
+
+## Colony O
+plot(O[,2],O[,3],  xlab="year", ylab="mean reproductive success")
+lines(O[,2],O[,3])
+plot(O[,2],O[,4],pch=17, xlab="year", ylab="Colony growth rate")
+lines(O[,2],O[,4])
+plot(O[,2],O[,5], pch=16, xlab="year", ylab="Number of pairs")
+lines(O[,2],O[,5])
+mtext(text="Parameter for Colony O",side=1,line=-14.5,outer=TRUE)
+```
+Through time, all the variables do not have the same behaviour for both of the colonies. 
+Some variables fluctuate in time like the O colony growth rate, or can evolve gradually, like the number of pairs for the O colony.
+
+The irregularity in time of the variables can mean that the data are correlated to the precedent ones.
+A key parameter to know if there really is a correlation of the variable to itself is **autocorrelation**.
+
+
+### Autocorrelation
+
+Autocorrelation is given by the expression: $$\rho(k) = \frac{E(X_tX_{t+1}) - E(X_t)E(X{t+1})}{\sqrt{E(X_t^2)E(X_{t+1}^2)}}$$
+
+With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$. 
+
+In other words, the values are compared to their neighbors to conclude if they are correlated or not.
+
+On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package. 
+
+**Important note:** In order for the afc() function to work, the data have to be sorted according to time with one value per time step. To do so, *NA* or mean values can be added if necessary to fill the dataset accordingly. The package lubridate can be useful to manage dates data.
+
+```{r}
+par(mfrow=c(2,3),mar=c(2,4,4,2))
+acf(C[,3], main="Reproductive success for C")
+acf(C[,4], main="Growth rate for C")
+acf(C[,5], main="Density for C")
+acf(O[,3], main="Reproductive success for O")
+acf(O[,4], main="Growth rate for O")
+acf(O[,5], main="Density for O")
+```
+The plots display the correlation coefficient at the associated time step with the neighbors (lag). The blue dotted lines represent the significance threshold of correlation. 
+
+These plots allow us to know if the time dependency exists and what profile it follows.
+
+- Growth rate of O and reproductive success of C : **White noise**. There is no significant value and particular pattern. Therefore, no time dependency.
+- Density of C and reproductive success of O : **Short positive dependency**. Some values are significantly positively correlated and a pattern emerges (cyclic here). 
+- Growth rate of C : **Short negative dependency**. Some values are significantly negatively correlated and a pattern emerges (cyclic here).
+- Density of O : **Long term dependency**. Several values are significantly correlated and a pattern appears (linear here).
+
+For the following analyses, we will focus on the Density of the O colony.
+The time is considered an **autocovariable**.
+
+### Time dependency model
+
+Now that the time dependency have been proved to be true thanks to autocorrelation test, it is possible to proceed with adapted statistical tests. 
+
+Different models can be used according to the type of dependency found in the data. 
+The goal will be to apply the model and verify that there is no time dependency left on the **residuals**.
+
+#### Least square ordinary regression
+
+Least square ordinary regression methods are used during the process of selection of the model.
+
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_nX_n + \epsilon$$
+- $Y$ is the dependent variable
+- $X_n$ are the explanatory variables 
+- $\beta_n$ are the coefficients of $X$
+- $\epsilon$ is the random error term or **residuals**
+
+To select a relevant model is the same as selecting a model that maximizes **likelihood** and minimize the **number of parameters**. 
+
+
+#### Weak time dependency
+
+If the data display a weak time dependency, it is possible to simply add the time as a random variable to the model. 
+
+$$Y\sim\alpha.X + time$$ 
+
+**Important note:** If the variance of $Y$ increases beforehand, you will need to perform a **logarithmic** transformation. If the variance of $Y$ decreases beforehand, one would use an **exponential** transformation. Here, the variance increases. 
+
+A useful package on R to manage glm and gls is be nlme.
+
+
+
+--------------------------------------
+
+Plan pour se repérer. 
+
+# 1. Time series
+
+
+
+## What to do if we don't know if the series has a time dependency?
+Quand est-ce qu'on sait si on a une série temporelle ou non ? 
+  Stationnarité (changement des paramètres au cours du temps : moyenne et variance). Mesure de l'autocorrélation. Si on a un processus stationnaire on arrive vite à une autocorrélation de 0. 
+
+## Why is it important to know if there is a dependency when doing statistical tests? 
+Pourquoi c'est important de savoir si les données sont indépendantes ou non et si non selon quoi ? 
+  La plupart des tests statistiques nécessitent l'indépendance des données (donner des raisons concrètes, ANOVA...). 
+  
+Evaluation du risque alpha et beta 
+
+Having a variable with dependant data can create cases of **pseudoreplication**. 
+
+## What tests can we do? 
+- AR
+- MA
+- ARIMA
+
+#### AR
+AR stands for 'Autoregression'
+
+#### MA
+MA stands for 'Moving Average'. 
+
+#### ARIMA
+ARIMA is a combination of both AR and MA.
+It has 3 parameters: p, d and q. 
+
+## What conditions needs to be verified? 
+
+# 2. Stationarity
+
+Stationary processes are characterized by a conservation of the same mean and variance throughout time. *A contrario*, non-stationary processes have a mean and variance that differs with time.
+
+The
+
+![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
+
+
+
