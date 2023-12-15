@@ -9,7 +9,8 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-These are the steps that will be followed here : **Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
+These are the steps that will be followed here : 
+**Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
 
 **Transform Information into Numerical Value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
 
@@ -19,7 +20,7 @@ These are the steps that will be followed here : **Define Connection Criteria**:
 
 ------------------------------------------------------------------------
 
-## **I - Codyfing the neighbour structure**
+## **1 - Codyfing the neighbour structure**
 
 ------------------------------------------------------------------------
 
@@ -129,7 +130,7 @@ Neighbourhood graphs materialise the links between the various entities. They ar
 
 **Application in R**
 
-Let's see what it looks like with the "mares" dataset :
+Let's see what it looks like with the "*mares*" dataset :
 
 ```{r}
 #Spatial series analysis : dataset "mares"
@@ -155,6 +156,7 @@ marexy=mare[,11:12]
 # to compute a neighbor relationship using a distance criteria you should use this function 
 # using directly the coordinates as a matrix and indicating the min and max of distance.
 # the max of distance is defined depending on your knowledge of the system or for different hypothesis you want to test:
+
 mare.dnear<-dnearneigh(as.matrix(marexy),0,30) #here we specify that ponds are connected if they are appart from less than 30m
 
 # Graphic representation:
@@ -237,7 +239,7 @@ mare.tri
 
 ```
 
-Let's then compare the current criterions in the mares dataset:
+Let's then compare the current criterions in the *mares* dataset:
 
 ```{r}
 #Spatial series analysis : dataset "mares"
@@ -271,7 +273,7 @@ For example :
 
 -   Neighbours at a minimum distance
 
-    etc
+    etc.
 
 Still using the example of Parisian districts, here's the nearest neighbour application: ![Figure : Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
 
@@ -332,6 +334,7 @@ knn2nb(div.knear4) #knn2nb convert the object returned by the function knearneig
 # The information printed corresponds to all the links that have been created compared to all those that could have been created (272)
 
 knn2nb(div.knear4)  # transformation to get as many lists than points/observation
+plot.new()
 plot(knn2nb(div.knear4), xy, add=TRUE)
 
 
@@ -385,9 +388,10 @@ Let's go back to our previous data set, div35, to see the transormation into a b
 
     # about the code : 
     # nb2neig(knn2nb()) transform the matrix to subsequently use it is ade4
-    # neig= define the connection matrix between points
+    # neig = define the connection matrix between points
 
     #             Transform the list of the names of the neighbors to a 2 by 2 matrix of neighboors with "0" and "1" -----
+    
     w2<-knn2nb(div.knear4)
     str(w2)                     # we have as much list as points
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
@@ -505,7 +509,7 @@ pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
 
 ------------------------------------------------------------------------
 
-## **II - Spatial autocorrelation indices**
+## **2 - Spatial autocorrelation indices**
 
 ------------------------------------------------------------------------
 
@@ -692,6 +696,66 @@ The LISAs make it possible to identify areas where similar values are significan
 **In the presence of global spatial autocorrelation**
 
 LISAs indicate areas that have a **particular impact on the global process** (local autocorrelation more pronounced than global autocorrelation), **or, on the contrary, which stand out from it** (lower autocorrelation).
+
+**Application with R**
+
+Let's investigate this in the *div35* dataset :
+
+```{r}
+#Spatial series analysis : dataset div35
+    #Local Moran Index
+    #For a REGULAR configuration of points
+
+
+#             2 - The Local Moran Index                                           ----
+# Due to the large extend of the dataset (scale of Brittany), we might expect non stationary issue
+#We will investigate this via the Local Moran Index. The autocorrelaton is computed for each point taking into account their neighbours.
+# Let's start with plant diversity:
+
+# For the PLANTS
+localI.pp1=spdep::localmoran(div35[,1], pond4.bin)
+localI.pp1
+
+#Instead of 1 index, there are 68.
+#For plants: 6 points where we have a significant index
+
+# the five columns correspond respectively to:
+# first column without header: the atlas square number (point i)
+# Ii: the Moran index at point i
+# E.Ii: the expected value of the Moran index at point i under H0
+# Var.Ii: the variance of the index
+# ZIi the variable of the test
+# Pr(Z>0) p value of the test adjusted with bonferonni correction
+
+# We can isolate the significant points like this:
+localI.pp1[localI.pp1[,5]<0.05,]
+
+
+# for the BIRDS
+localI.oi1=localmoran(div35[,2], pond8.bin)
+localI.oi1
+localI.oi1[localI.oi1[,5]<0.05,]
+
+#There are more significant values for the birds
+
+#With inverse distance
+localI.oi1=localmoran(div35[,2], invd.weights)
+?localmoran
+localI.oi1
+localI.oi1[localI.oi1[,5]<0.05,]
+
+#We can also represent the Local Index value using this code lines:
+x11()
+par(mfrow=c(2,1))
+s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")
+s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")
+
+#Clusters of values that look alike and outliers (values that don't look alike)
+#Sometimes close values are similar, sometimes not
+
+
+```
+
 
 **3.4 Spatio-temporal indices**
 
