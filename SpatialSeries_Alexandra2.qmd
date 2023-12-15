@@ -53,7 +53,7 @@ Conversely, the distance matrix measures dissimilarity between zones. The higher
 -   Cultural exchanges
 -   Migratory flows
 
-**1.1.2) The "list of neighbours" object in R**
+#### **1.1.2 The "list of neighbours" object in R**
 
 | Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. `neighbours_nb` is a list of length n. Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. If `[i]` does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
 
@@ -119,11 +119,11 @@ par(mfrow=c(1,1))
 plot(mare$x,mare$y)
 ```
 
-**1.2 Connection among neighbours**
+### **1.2 Connection among neighbours**
 
 In order to identify points in close proximity, it is imperative to establish specific criteria beyond merely considering distance along the x-axis. This approach will enable us to clearly define the parameters that determine proximity between points in our analysis.
 
-**1.2.1 Neighbourhood criterion**
+#### **1.2.1 Neighbourhood criterion**
 
 **a) Defining neighbours based on distance**
 
@@ -196,7 +196,7 @@ For example, here's the application of these geometric concepts to Parisian dist
 
 **Application in R :**
 
-Coming back to our "mares" dataset, we can explore these geometric concepts :
+Coming back to our "*mares*" dataset, we can explore these geometric concepts :
 
 ```{r}
 #Spatial series analysis : dataset "mares"
@@ -428,7 +428,7 @@ Let's go back to our previous data set, div35, to see the transormation into a b
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
 
-**1.3.2 Weight matrix standardisation**
+#### **1.3.2 Weight matrix standardisation**
 
 The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf (1998), four types of standardisation can be distinguished:
 
@@ -440,7 +440,9 @@ The sum of the weights of the neighbours of a zone is called its *degree of conn
 
 --- **Standardisation by variance stabilisation** (*"S" coding scheme*): let **q** be the vector defined by : **q** = $(\sqrt{∑^n_{j=1}w^2_{1j}}, \sqrt{∑^n_{j=1}w^2_{2j}},...., \sqrt{∑^n_{j=1}w^2_{nj}})^T$. Let matrix $S^∗$ = $[diag(q)]^{−1}W.^4$ From $S^*$, we calculate $Q = ∑^n_{j=1}∑^n_{i=1} s^∗_{ij}$ from which we deduce the standardised weight matrix: $S = \frac{n}{Q} S^∗$.
 
-**1.3.3 Importance of the choice of weight matrix** When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
+#### **1.3.3 Importance of the choice of weight matrix** 
+
+When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
 
 **The "weight list" object in R**
 
@@ -542,9 +544,9 @@ pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
 Spatial autocorrelation indices measure the spatial dependence between values of the same variable in different places in space. The more the observation values are influenced by observation values that are geographically close to them, the greater the spatial correlation.
 :::
 
-**2.1 Global measures of spatial autocorrelation**
+### **2.1 Global measures of spatial autocorrelation**
 
-**2.1.1 Spatial autocorrelation indices**
+#### **2.1.1 Spatial autocorrelation indices**
 
 Calculating the spatial autocorrelation indices is used to answer two questions:
 
@@ -598,7 +600,7 @@ Two approaches are used to estimate the significance of these indices --- an ana
 >
 > In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution.
 
-![**Figure 2.15 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
+> ![**Figure 2.15 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
 
 Let's explore Moran Global Index in the *mares* dataset :
 
@@ -667,7 +669,7 @@ plot(r1, main = "Mantel's test")
 #Spatial dependence
 ```
 
-**2.1.2 Spatial autocorrelation of categorical variables**
+#### **2.1.2 Spatial autocorrelation of categorical variables**
 
 When the variable of interest is not continuous but categorical, the degree of local association is measured by analysing the statistics of the join count (Zhukov 2010). To illustrate the calculation of these statistics, we consider a binary variable representing two colours, White (B) and Black (N) so that a relation can be called White-White, Black-Black or White-Black. It can be seen that:
 
@@ -677,12 +679,11 @@ When the variable of interest is not continuous but categorical, the degree of l
 
 --- no positive spatial autocorrelation occurs if the number of White-Black links is approximately identical to what would have occurred with random spatial distribution;
 
-
-**2.2 Local measures of spatial autocorrelation**
+### **2.2 Local measures of spatial autocorrelation**
 
 Global statistics are based on the assumption of a spatial stationary process: spatial autocorrelation would be the same throughout space. However, this assumption is all the less realistic as the number of observations is high.
 
-**2.2.1 Local spatial autocorrelation indicators**
+#### **2.2.1 Local spatial autocorrelation indicators**
 
 Anselin (Anselin 1995) defines *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
 
@@ -706,7 +707,7 @@ For example, with Parisian districts :
 
 ![**Figure 2.16 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
 
-**2.2.2 Significance of the local Moran's I**
+#### **2.2.2 Significance of the local Moran's I**
 
 Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution. The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis. If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
 
@@ -714,7 +715,7 @@ To test the validity of the normality assumption of the LISAs under the null hyp
 
 Several adjustments methods can be used : "bonferroni", "holm", etc.
 
-**2.2.3 Interpretation of local indices**
+#### **2.2.3 Interpretation of local indices**
 
 **In the absence of global spatial autocorrelation**
 
@@ -783,7 +784,7 @@ s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xl
 
 ```
 
-**2.3 Spatio-temporal indices**
+### **2.3 Spatio-temporal indices**
 
 It is not unusual for a geolocalised database to have observations raised at different points in time. It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it. In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time. On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models. Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies. By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations. This can also be done on the basis of spatial-temporal risk weighting matrices.
 
