@@ -280,11 +280,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="spatial-dependence">Spatial dependence</h3>
 <p>Spatial autocorrelation refers to the correlation between observations in close spatial locations. <br> It shows temporal similarities that depend on the scale used. Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales. <br></p>
 <p>Spatial autocorrelation can be due to various factors, such as :</p>
-<pre><code> - Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
-
- - Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
-
- - Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.</code></pre>
+<ul>
+<li><p>Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,</p></li>
+<li><p>Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,</p></li>
+<li><p>Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.</p></li>
+</ul>
 <section id="example-of-spatial-dependence" class="level4">
 <h4 class="anchored" data-anchor-id="example-of-spatial-dependence">Example of spatial dependence</h4>
 <p>An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let’s imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e.&nbsp;they tend to be similar. <br></p>
@@ -303,13 +303,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Time dependence</h1>
 <p>For example a basic summary of a dataset is given by and then describe the purpose of your chapter as well as executing R command.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"</span>, <span class="at">sep =</span> <span class="st">","</span> , <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"</span>, <span class="at">sep =</span> <span class="st">","</span> , <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>and produce a graph</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y =</span> body_mass_g) <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y =</span> body_mass_g) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 2 rows containing non-finite values (`stat_boxplot()`).</code></pre>
 </div>
