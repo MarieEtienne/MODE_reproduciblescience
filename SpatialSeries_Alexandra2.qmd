@@ -174,11 +174,13 @@ Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since
 
 ![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
 
--   **Bishop contiguity**
+-   **Bishop contiguity** In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess. 
 
-![](images/image-2117709373.png){width="177"}
+![Figure : Bishop configuration](images/image-2117709373.png){width="177"}
 
-This matches the movement of the Bishop in chess
+Still using the example of the Paris districts, here's an example of how continuity can be applied:
+
+![Figure : Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
 
 We can return to our previous dataset to investigate the configuration of the points :
 
@@ -187,6 +189,7 @@ We can return to our previous dataset to investigate the configuration of the po
 #For a regular configuration of points
 
 #      1 - Examine the connection between points ====================
+
 # To investigate the various criteria of connection between points we need to
 # extract the coordinates in a separate object
 xy=div35[,3:4]
