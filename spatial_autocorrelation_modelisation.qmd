@@ -260,7 +260,7 @@ F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine 
 
 Smith, P. A. (1994). Autocorrelation in Logistic Regression Modelling of Species' Distributions. Global Ecology and Biogeography Letters, 4(2), 47--. doi:10.2307/2997753
 
-Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010. https://doi.org/10.1007/978-3-642-03647-7_14.
+Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010.  https://doi.org/10.1007/978-3-642-03647-7_14.
 
 https://www.youtube.com/watch?v=b3HtV2Mhmvk
 
