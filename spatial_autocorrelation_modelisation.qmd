@@ -243,6 +243,11 @@ Even though three commands are available for each type of SAR model, it is best 
 
 In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling, and will therefore require to perform a regression for each points and its neighbors.
 
+The model here is locally linear in the mean : 
+
+$$Y_i = \beta_{0i}\:+\:\sum_k\beta_{ki}x_{ki}\:+\epsilon_i$$
+The $\beta$ here now correspond to the coefficient at the location i.
+
 It applies a geographical weight to the data used in each model, meaning that the further away a point will be from the regression point, the less weight they will have.
 
 ###### Application in R
@@ -252,7 +257,17 @@ lmgwrD=gwr.est(rich_ois~rich_pp,data=div35,locs=xy)
 summary(lmgwrD)
 ```
 
-**Phi**: kernel bandwidth **RMSPE**: root square of error of the prediction based on bandwidth estimated **Beta**: matrix with the coefficients for each point (intercept line \[1,\] and regression coefficient line \[2,\]) **Yhat**: model estimate **RMSE**: root square of error estimation **Rsquare**: model fitting
+**Phi**: kernel bandwidth 
+
+**RMSPE**: root square of error of the prediction based on bandwidth estimated
+
+**Beta**: matrix with the coefficients for each point (intercept line \[1,\] and regression coefficient line \[2,\]) 
+
+**Yhat**: model estimate 
+
+**RMSE**: root square of error estimation 
+
+**Rsquare**: model fitting
 
 Bibliography :
 
