@@ -69,7 +69,7 @@ $$Where :
 
 The process begins with a matrix $Y$, where each row represents an observation and each column represents a continuous variable.
 
-![](images/table-inds-vars.png){fig-align="center" width="230"}
+![](table-inds-vars.png){fig-align="center" width="230"}
 
 First, we normalize the observations as follows :
 
@@ -285,7 +285,7 @@ Unlike PCA, for a CA, we're not interested in the distances between points, but 
 
 Correspondence Analysis (CA) represents a statistical method aimed at exploring the relationship between two sets of categories. In contrast to PCA, which applies to continuous variables, CA is designed for categorical variables, allowing the analysis of the structure of a contingency table.
 
-![](images/Table_de_contingence.png){fig-align="center" width="261"}
+![](Table_de_contingence.png){fig-align="center" width="261"}
 
 In essence, Correspondence Analysis (CA) seeks to graphically represent associations between rows and columns in a contingency table. It helps reveal trends, groupings, or oppositions within categories, providing insight into the structure of dependence between variables.
 
