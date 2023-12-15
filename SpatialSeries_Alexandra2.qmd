@@ -27,7 +27,7 @@ First, the study zone is divided into mutually exclusive areas. Each area contai
 
 The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
 
-$$w_ij = 
+$$w_{ij} = 
 \{1 if i and j are spatially linked to each other 
 -
 0 otherwise\}$$
@@ -209,7 +209,42 @@ moran.range(iris75.lw)
 
 ```
 
+**3.3.2 Local spatial autocorrelation indicators**
+
+Anselin (Anselin 1995) develops the concepts introduced by Getis and Ord by defining *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
+
+--- detect significant groupings of identical values around a particular location (clusters);
+
+--- identify spatial non-stationarity zones, which do not follow the global process.
+
+The Getis and Ord indicators serve only the first of these two objectives. To be considered as local spatial association measures -- (LISA; *Local Indicators of Spatial Association*) -- as defined by Anselin, these indicators must verify the following two properties:
+
+--- for each observation, they indicate the intensity of the grouping of similar -- or opposite in trend -- values around this observation;
+
+--- the sum of local indices on all observations is proportional to the corresponding global index. One of the most used LISA is the local Moran's I.
+
 **Local Moran's I** $$I_i = (y_i −\bar{y})\sum \limits_{\underset{}{j}}w_{ij}(y_j −\bar{y})$$ $$I_W = constante ∗\sum \limits_{\underset{}i}I_i$$
 
-$Ii > 0$ indicates a grouping of similar values (higher or lower than average). 
+$Ii > 0$ indicates a grouping of similar values (higher or lower than average).
+
 $Ii < 0$ indicates a combination of dissimilar values (e.g. high values surrounded by low values).
+
+For example, with Parisian districts :
+
+![**Figure :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
+
+**3.3.3 Significance of the local Moran's I**
+
+Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution. The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis. If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
+
+To test the validity of the normality assumption of the LISAs under the null hypothesis, several random distributions are simulated in the space of the variable of interest and the local indicators associated with these simulations are calculated.
+
+**3.3.4 Interpretation of local indices**
+
+**In the absence of global spatial autocorrelation**
+
+The LISAs make it possible to identify areas where similar values are significantly grouped. These are areas where the local spatial structure is such that the relations between neighbours are particularly strong.
+
+**In the presence of global spatial autocorrelation**
+
+LISAs indicate areas that have a **particular impact on the global process** (local autocorrelation more pronounced than global autocorrelation), **or, on the contrary, which stand out from it** (lower autocorrelation).
