@@ -359,20 +359,34 @@ Even though three commands are available for each type of SAR model, it is best 
 
 ###### Theory
 
-In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling, and will therefore require to perform a regression for each points and its neighbors.
+In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling.
 
-The model here is locally linear in the mean : 
+
+The model is fitted to be locally linear : 
 
 $$Y_i = \beta_{0i}\:+\:\sum_k\beta_{ki}x_{ki}\:+\epsilon_i$$
+
 The $\beta$ here now correspond to the coefficient at the location i.
 
 It applies a geographical weight to the data used in each model, meaning that the further away a point will be from the regression point, the less weight they will have.
+This model require the use of a function called the **Kernel function**. 
+It consists in an equation giving the weights $w_ij$ relating the focal point $i$ to each observation $j$. This means it places a "window" over the observation.
+
+To define the "window" or **bandwidth**, a local regression is made with a set bandwidth and then used to predict the values of the dependant variables. The residuals obtained are compared to other residuals from other regressions made with different bandwidth and the smallest local residuals are kept. 
+
+Once the bandwidth is defined, the regression is made for each points and the result can be mapped.
 
 ###### Application in R
+
+The function gwr.est will define the optimal bandwidth.
 
 ```{r}
 lmgwrD=gwr.est(rich_ois~rich_pp,data=div35,locs=xy)
 summary(lmgwrD)
+
+#The value for each parameters are obtained by directly fetching the parameters from the list :
+lmgwrD$phi #gives the bandwidth
+lmgwrD$RMSPE #gives the root-square of the bandwidth
 ```
 
 **Phi**: kernel bandwidth 
@@ -387,6 +401,13 @@ summary(lmgwrD)
 
 **Rsquare**: model fitting
 
+```{r}
+plot(xy)
+s.value(xy,lmgwrD$beta[2,],add.plot=T)
+
+```
+
+The result can finally be plotted for each point.
 
 # Summary
 
@@ -405,3 +426,7 @@ Engle, Robert F. « A general approach to lagrange multiplier model diagnostics
 Class and powerpoint made by Mrs. Le Gouar Pascaline
 
 GWR informations : https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-geographicallyweightedregression-works.htm
+
+Páez, A., et D. C. Wheeler. « Geographically Weighted Regression ». In International Encyclopedia of Human Geography, édité par Rob Kitchin et Nigel Thrift, 407‑14. Oxford: Elsevier, 2009. https://doi.org/10.1016/B978-008044910-4.00447-8.
+
+https://gdsl-ul.github.io/san/09-gwr.html
