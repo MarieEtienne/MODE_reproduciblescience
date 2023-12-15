@@ -40,9 +40,14 @@ $$w_{ij} =
 -
 0 otherwise\}$$
 
+Conversely, the distance matrix measures dissimilarity between zones. The higher $d_{ij}$ , the more different the zones. With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:
+
+-   Genetic proximity between families
+-   
+
 **The "list of neighbours" object in R**
 
-Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. `neighbours_nb` is a list of length n. Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. If `[i]` does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
+| Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. `neighbours_nb` is a list of length n. Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. If `[i]` does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
 
 Let's load a few packages useful for analysis :
 
@@ -63,20 +68,57 @@ Let's then begin the analysis of a dataset dealing with richness of birds from a
 #Spatial series analysis : dataset div35
 #For a REGULAR configuration of points 
 
-#      0 - Exporing the data set 
-#investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
+#      0 - Exporing the dataset 
+
+#Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
+
+#Import dataset
 div35=read.table("C:/Users/alexa/OneDrive/Documents/3A ingé agro - M2 EFCE/ASA/Séries temporelles & spatiales/script and data for lecture-20230925/div35.txt", header=T, dec=",")
+
+#Summary
 summary(div35)
 
 #Plot the spatial distribution of the points
 par(mfrow=c(1,1))
 plot(div35[,3:4])
 
-#This map is a map of Ille-et-Vilaine. We can point St-Malo in the North and Rennes in the center for example.
+#This is a map of Ille-et-Vilaine department.
+#We can point St-Malo in the North and Rennes in the center for of the map, for example.
 
 #The spatial configuration of the points is regular.
-
 ```
+
+**1.2. Connection among neighbours**
+
+In order to identify points in close proximity, it is imperative to establish specific criteria beyond merely considering distance along the x-axis. This approach will enable us to clearly define the parameters that determine proximity between points in our analysis.
+
+**Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
+
+**Transform Information into Numerical Value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
+
+**Calculate Autocorrelation Coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighboring points.
+
+**Integrating Spatial Autocorrelation into Analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
+
+**1.2.1 Neighborhood criterion**
+
+**a) Distance**
+
+Once we have a set of points spread across the territory, we can calculate the distance between them. These points may be specific locations where the information has been observed, or points representative of each zone, for example their centroid. In this case, the underlying assumption is that the distribution of the variable within each zone is sufficiently homogeneous to approximate it to a single point.
+
+Neighbourhood graphs materialise the links between the various entities. They are defined in such a way that they represent the underlying spatial structure as closely as possible. There exists many different types of neighbourhood graphs.
+
+**a.1) Neighbourhood graphs based on geometric concepts :**
+
+• **Delaunay's Triangulation** Delaunay's Triangulation is a geometric method that connects points into triangles such that the minimum angle of all triangles is maximised.
+
+![Figure : Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="208"}
+
+• **Sphere-of-influence based graph** The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap. The "circle of the nearest neighbour" of point P is the largest circle centred in P and that contains no other points than P. All points in the study set are not necessarily interconnected.
+
+![Figure : The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles](images/image-1767308128.png){width="361"}
+
+• **Gabriel's graph** Gabriel's graph links two points pi and pj if and only if all other points are outside the circle with diameter $[pi, pj ]$.
 
 ```{r}
 #Application with R
