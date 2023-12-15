@@ -243,6 +243,8 @@ Even though three commands are available for each type of SAR model, it is best 
 
 In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling, and will therefore require to perform a regression for each points and its neighbors.
 
+It applies a geographical weight to the data used in each model, meaning that the further away a point will be from the regression point, the less weight they will have.
+
 ###### Application in R
 
 ```{r}
@@ -265,3 +267,5 @@ https://www.youtube.com/watch?v=b3HtV2Mhmvk
 Engle, Robert F. « A general approach to lagrange multiplier model diagnostics ». Journal of Econometrics 20, nᵒ 1 (1 octobre 1982): 83‑104. https://doi.org/10.1016/0304-4076(82)90104-X.
 
 Class and powerpoint made by Mrs. Le Gouar Pascaline
+
+GWR informations : https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-geographicallyweightedregression-works.htm
