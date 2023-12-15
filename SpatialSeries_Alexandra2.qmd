@@ -9,9 +9,13 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-#2.1) Defining neighbours
+**\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
 
-#2.1.1) Characteristics of the relationships between spatial objects
+**I - Codyfing the neighbour structure**
+
+**2.1) Defining neighbours**
+
+**2.1.1) Characteristics of the relationships between spatial objects**
 
 Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
 
@@ -47,7 +51,7 @@ library(gwrr)  #to run geographically weighted regression
 #these two libraries (spdep and ade4 also provive function that make object compatibles between library)
 ```
 
-Let's then begin the analysis of a dataset about plant and bird richness at the scale of Ille-et-Vilaine, "div35".
+Let's then begin the analysis of a dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille et Vilaine, "div35".
 
 ```{r}
 #Spatial series analysis : dataset div35
@@ -209,6 +213,59 @@ moran.range(iris75.lw)
 
 ```
 
+**\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
+
+**II - Spatial autocorrelation indices**
+
+**3.2 Global measures of spatial autocorrelation**
+
+**3.2.1 Spatial autocorrelation indices**
+
+Calculating the spatial autocorrelation indices is used to answer two questions:
+
+--- Could the values taken by the neighbouring observations have been comparable (or also dissimilar) by mere chance?
+
+--- If not, then we are dealing with a case of spatial autocorrelation. How is this denoted and what is the strength of the said autocorrelation?
+
+To answer the first question, we must test the hypothesis of absence of spatial autocorrelation for a gross variable y.
+
+--- $H_0$: no spatial autocorrelation --- $H_1$: spatial autocorrelation
+
+To carry out this test, it is necessary to specify the distribution of the variable of interest y, in the absence of spatial autocorrelation (under $H_0$). In this context, statistical inference is generally conducted considering either of the following assumptions:
+
+**Normality hypothesis:** each of the values of the variable, or $yi$, is the result of an independent draw in the normal distribution specific to each geographical area $i$ on which this variable is measured.
+
+**Randomisation hypothesis** The inference over Moran's I is usually conducted under the randomisation hypothesis. The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations. The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable. The data observed are then only one of the many outcomes possible. In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic. If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation. *This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.*
+
+Very generally speaking, spatial autocorrelation indices are used to characterise the correlation between measures that are geographically similar to a measured phenomenon. If $WY$ is the vector of means of variable $Y$ (where $W$ is the spatial weights matrix) in the neighbourhood of each spatial unit, spatial autocorrelation indices occur as:
+
+$$Corr(Y,WY) = \frac{Cov(Y,WY)}{\sqrt{Var(Y).Var(WY)}}$$
+
+Based on this very general formulation, for quantitative variables, a main indice is used to test for spatial autocorrelation --- the Moran index. The Moran index considers the variances and covariances taking into account the difference between each observation and the average of all observations.
+
+**Moran index**
+
+$$I_W =
+\frac{n}{∑_i∑_jw_{ij}}\frac{∑_i∑_jw_{ij}(y_i −\bar{y})(y_j − \bar{y})}{∑_i(y_i −\bar{y})²} \,\,\,\,\,\,\,\,\,\,i\ne{j}$$
+
+--- $H_0$: The neighbours do not **co-vary** in any particular way.
+
+--- $I_W > 0$ =\> positive spatial autocorrelation
+
+**3.2.2 Spatial autocorrelation of categorical variables**
+
+When the variable of interest is not continuous but categorical, the degree of local association is measured by analysing the statistics of the join count (Zhukov 2010). To illustrate the calculation of these statistics, we consider a binary variable representing two colours, White (B) and Black (N) so that a relation can be called White-White, Black-Black or White-Black. It can be seen that:
+
+--- positive spatial autocorrelation occurs if the number of White-Black relations is significantly lower than what would have occurred with random spatial distribution;
+
+--- negative spatial autocorrelation occurs if the number of White-Black relations is significant greater than what would have occurred with random spatial distribution;
+
+--- no positive spatial autocorrelation occurs if the number of White-Black links is approximately identical to what would have occurred with random spatial distribution;
+
+**3.3 Local measures of spatial autocorrelation**
+
+Global statistics are based on the assumption of a spatial stationary process: spatial autocorrelation would be the same throughout space. However, this assumption is all the less realistic as the number of observations is high.
+
 **3.3.2 Local spatial autocorrelation indicators**
 
 Anselin (Anselin 1995) develops the concepts introduced by Getis and Ord by defining *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
@@ -248,3 +305,7 @@ The LISAs make it possible to identify areas where similar values are significan
 **In the presence of global spatial autocorrelation**
 
 LISAs indicate areas that have a **particular impact on the global process** (local autocorrelation more pronounced than global autocorrelation), **or, on the contrary, which stand out from it** (lower autocorrelation).
+
+**3.4 Spatio-temporal indices**
+
+It is not unusual for a geolocalised database to have observations raised at different points in time. It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it. In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time. On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models. Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies. By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations. This can also be done on the basis of spatial-temporal risk weighting matrices.
