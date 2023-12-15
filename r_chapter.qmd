@@ -1,5 +1,4 @@
 ---
-
 title: "Modèles matriciels et applications"
 group: "Quentin,	Alexie, Jeanne,	Laurane" 
 
@@ -14,163 +13,29 @@ output:
 
 This chapter is a simple example using R
 
-Depending on the structure of the autocorrelation and especially if the process is or is not stationary,and of the structure of the residuals, the analysis required will be different and more or less difficult.
-
-For the analysis under R, it will be important to import the package **spatialreg**, **sdpep** as well as **gwrr**
+You can import R package using the code
 
 ```{r}
-library(spatialreg)
-library(sdpep)
-library(gwrr)
-```
-
-### 3.1.Stationary process
-
-For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
-
-All the models showed here will be based on the genralized linear model modified to take the spatial autocorrelation into account :
-
-**Y = X**$\beta$ + $\epsilon$
-
-#### 3.1.1. Spatially lagged X model
-
-##### Theory
-
-This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
-
-The idea behind this analysis is that the state of a neighbor region will affect our region.
-
-This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
-
-An extra parameter : WX$\theta$, called the autocovariate is added to the generalized linear model's formula. It is a distance-weighted function of the neighboring response value.
-
-**Y = X**$\beta$ + **WX**$\theta$ + $\epsilon$
-
-The argument WX$\theta$ is the average of the neigbouring Xs. 
-
-##### Application in R
-
-As this analysis is quite simple the average value of the neighbouring regions can be calculated by hand and then added to the generalized linear formula.
-
-However, there are commands in R in the package sdpep that allows to do the same analysis ans to go a little further, as well as giving the R-squared value and the p value. 
-
-Our exemple here will be the study of plants and bird richness in Ile & Vilaine. 
-
-*(The dataset "div35" set can be found in the doc called "Saptial autocorrelation_modelisation")*
-
-*(To see how to create weighted matrix, see the previous parts)*
-
-
-```{r}
-div35=read.table("div35.txt", header=T, dec=",")
-
-xy=div35[,3:4] #Extract the coordinates x and y of each points
-
-#For a rook connection
-div.knear4<-knearneigh(as.matrix(xy),4) #extract the neighbour points
-knn2nb(div.knear4) # convert the object of type knn into a type nb # transformation to get as many lists than points/observation
-plot(knn2nb(div.knear4), xy, add=TRUE)
-
-#For a Queen conection
-div.knear8<-knearneigh(as.matrix(xy),8)
-knn2nb(div.knear8)
-
-
-```
-
-The spatial matrix must then be created. Any type of spatial connection can be used, depending on the study you want to conduct, your field conditions and your data themselves. 
-
-```{r}
-lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stand)
-summary(lmsSLX)
-impacts(lmsSLX)
-summary(impacts(lmsSLX, R=500),zstats=TRUE)
+library(tidyverse)
 ```
 
 
-#### 3.1.2. - Simultaneous autoregressive models (SAR)
+and then describe the purpose of your chapter as well as executing R command.
 
 
-To be able to study an autocorrelation at a larger scale, other models must be used.
+For example a basic summary of a dataset is given by 
 
-The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location.
+```{r}
+df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
+```
 
-The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows).
+and produce a graph
 
-The autoregressif process can be found in either the residuals of the data or in the response value. Depending on where this process is thought to be,three models are availble :
+```{r}
+df %>% ggplot() +
+	aes(x=species, y = body_mass_g) +
+	geom_boxplot()  
+```
 
--   The **Error model**
--   The **Lag model**
--   The **Mix model**
 
-A specific diagnostic can be made to chose between either one.
-
-##### 3.1.2.1. Lagrange Multiplier diagnostic
-
-###### Theory
-
-###### Application in R
-
-##### 3.1.2.2. Lag models
-
-###### Theory
-
-In this model, we assume that the autoregressif process is in the response variable. As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
-
-It would for exemple be liked a stone thrown in a lake. This creates waves that propagate to the whole lake.
-
-The lag model is used to take into account a autoregressif process only occuring in the response variable. Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
-
-The model will take the form of :
-
-**Y =**$\rho$**WY +X**$\beta$ + $\epsilon$
-
-**ρ** is the autoregression parameter **W** is the spatial weights matrix
-
-###### Application in R
-
-##### 3.1.2.3. Error models
-
-###### Theory
-
-When using the error model, we assume that the autoregressif process is only in the residuals.
-
-When dealing with such model, an interpretation may be that some spatially correlated variable are missing in the dataset.
-
-this model takes the form of :
-
-**Y = X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
-
-The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. $\mu$ is the spatially dependant error term.
-
-###### Application in R
-
-##### 3.1.2.4. Mixed models
-
-###### Theory
-
-If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used. This model include all the parameter added above, and it is the most inclusive model.
-
-It can be noted that this model can also be used in both situation described previously, as the coeffiscient will cancel themselves out if either one is not present.
-
-**Y =** $\rho$**WY +X**$\beta$ + $\lambda$**W**$\gamma$ + $\epsilon$
-
-###### Application in R
-
-### 3.2. - Non stationary process
-
-**Graphically weighted models (GWM)**
-
-###### Theory
-
-Few methods exist to deal with non stationary processes
-
-###### Application in R
-
-Bibliography :
-
-F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ». Ecography 30, nᵒ 5 (2007): 609‑28. https://doi.org/10.1111/j.2007.0906-7590.05171.x.
-
-Smith, P. A. (1994). Autocorrelation in Logistic Regression Modelling of Species' Distributions. Global Ecology and Biogeography Letters, 4(2), 47--. doi:10.2307/2997753
-
-Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010. https://doi.org/10.1007/978-3-642-03647-7_14.
+A citation @bauer2023writing
