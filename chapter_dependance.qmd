@@ -12,6 +12,13 @@ editor:
     wrap: sentence
 ---
 
+
+
+This chapter is a simple example using R
+
+You can import R package using the code
+
+
 ```{r}
 library(tidyverse)
 ```
@@ -59,6 +66,12 @@ Spatial autocorrelation can be due to various factors, such as :
 
 * Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
 
+- Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
+
+* Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
+
+* Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
+
 #### Example of spatial dependence
 An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar. <br />
 
@@ -75,6 +88,9 @@ Autocorrelation checking is an essential process in statistics to guarantee the 
 # Time dependence
 
 For example a basic summary of a dataset is given by
+and then describe the purpose of your chapter as well as executing R command.
+
+
 
 ```{r}
 df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
@@ -87,6 +103,9 @@ df %>% ggplot() +
 	aes(x=species, y = body_mass_g) +
 	geom_boxplot()  
 ```
+
+
+# Space dependence
 
 # II - Spatial series
 
@@ -103,8 +122,10 @@ Two adjacent zones are separated by a common boundary.
 Figure 2 illustrates the codifying process of spatial relationships.
 This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
+
 # Summary
 
 # References
 
 A citation @bauer2023writing
+
