@@ -163,7 +163,7 @@ Here's another way of visualizing correlations between variables: (useful when y
 abs(cor(data))>0.9
 ```
 
-If TRUE (outside the diagonal), then both variables are correlated If two variables are correlated, one must be removed. The choice of deleting one of the two correct variables is arbitrary and depends on the question being asked.
+If TRUE (outside the diagonal), then both variables are correlated. If two variables are correlated, one must be removed. The choice of deleting one of the two correct variables is arbitrary and depends on the question being asked.
 
 To remove a variable from the data set, use the following function: **data=data\[,-(column_of_the_variable_to_remove)}\]**
 
@@ -561,7 +561,7 @@ The lines explaining the second axis are :
 
 -   Chestnut, White
 
-#### 3) Interpretation of relatives contributions :
+#### 3) Interpretation of relative contributions :
 
 Relative contributions represent the quality of representation of the column/row by the axis.
 
@@ -587,7 +587,7 @@ This verifies that the modalities that contribute most to the formation of the f
 
 For the question of links between modalities in rows or columns, you need to know that :
 
--   If we have a positive sclaire product, i.e. less than 90 degree difference between the arrows of two different modalities. Then we have a conjunction representing an affinity between these two modalities.
+-   If we have a positive scalar product, i.e. less than 90 degree difference between the arrows of two different modalities. Then we have a conjunction representing an affinity between these two modalities.
 
 -   If we have a negative scalar product, i.e. more than 90? difference between the arrows of two different modalities. Then we have an opposition of these two modalities. They reject each other.
 
@@ -635,7 +635,7 @@ The inertia of the point cloud : $N = \frac{K}{J} – 1$. $η^2(x,y)$ is the cor
 
 ## Interpretation
 
-This part is a simple example of MCA using R. You can import R package using the code. Let's have to look to fictive the data set we will be working on :
+This part is a simple example of MCA using R. You can import R package using the code. Let's have a look to fictive the data set we will be working on :
 
 ```{r}
 library(tidyverse)
@@ -660,7 +660,7 @@ res.mca$eig
 fviz_eig(res.mca, addlabels = TRUE)
 ```
 
-The total variance of the data set is divided between four dimensions. The first dimension concentrate 32.6% of the total variance. The first plan gather 58% of the variance. You can better visualize the repartition of variance with the plot.
+The total variance of the data set is divided between four dimensions. The first dimension concentrates 32.6% of the total variance. The first plan gathers 58% of the variance. You can better visualize the repartition of variance with the plot.
 
 Here, you can see the results for the individuals, their coordinates ($coord$), absolute contributions ($contrib$), and the quality of their projection ($cos2$).
 
@@ -670,7 +670,7 @@ head(res.mca$ind$cos2)
 head(res.mca$ind$contrib)
 ```
 
-Coordonates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contribute to the creation of different axis.
+Coordinates of the individuals are their position on the first plan. $cos2$ represents the quality of the representation of the individuals on the first plan. Contribution is how the point contributes to the creation of different axis.
 
 You can access the same information for the variable (instead of the individuals):
 
@@ -692,9 +692,9 @@ As this is a factice data set, some individuals are overlapping. We will not foc
 
 ***General description*** : The individuals are in black. The variables are in red. The percentage of variance of the first two axis is written on them. Individuals in the center of the cloud are individuals taking a mean value for all of their caracteristics, unlikely individuals far from the middle which are specific individuals, very different from others. Close individuals present close characteristics.
 
-***Interpretation***: Here, we can see that the first axis separates individuals drinking regularly from individuals drinking rarely. The second axis separates individuals drinking at G2 from individuals drinking at G3. Male and female seamed to be separated by the first axis. As we can gather individuals sharing close properties, females seams to drink regularly and male more rarely. It is a bit less clear but male are drinking preferably in pound 1.
+***Interpretation***: Here, we can see that the first axis separates individuals drinking regularly from individuals drinking rarely. The second axis separates individuals drinking at G2 from individuals drinking at G3. Male and female seem to be separated by the first axis. As we can gather individuals sharing close properties, females seems to drink regularly and male more rarely. It is a bit less clear but male are drinking preferably in pound 1.
 
-Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitatives, they would not participate to the creation of axis but they may be ploted on the final graph.
+Note that supplementary quantitaive data could be added to the analysis to help interpretation. As they are quantitative, they would not participate to the creation of axis but they may be ploted on the final graph.
 
 # PART 4: CCA
 
@@ -740,7 +740,7 @@ head(Topo)
 
 So here, the first table ("Oak_sp") represents a table of plant abundance for 47 sites (47 rows). We have 56 differents species. The second table ("Topo") corresponds to 4 topographics variables (Latitute, Longitute of sites, the elevation and the slope). As it is not the same unit for each variable we have centred-reduced these four variables.
 
-As explained above, the CCA objective is to link the abundance of plant by the topographics variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the plants.
+As explained above, the CCA objective is to link the abundance of plant by the topographic variables. Here, we have *a priori* hypothesis on the effect of these environmental variables on the plants.
 
 We have seen in introduction of the part 3 that CCA was used when the respond have a non-linear distribution but rather a gaussian relationship.
 
@@ -764,7 +764,7 @@ ccavegan=cca(Oak_sp,Topo,scan=F)
 
 It is important to use the two methods because each allows us to have different information during the analyse of the result
 
-An we already have completed our analyse, it was no difficult! But now, we need analyse the result and test the significant.
+And we already have completed our analyse, it was no difficult! But now, we need to analyse the result and test the significant.
 
 To test the significant, we use a bootstrapping test thank you the **ADE4** package.It is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
 
@@ -773,13 +773,13 @@ randtest(ccaoak)#with ADE4
 plot(randtest(ccaoak))
 ```
 
-The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+The outputs above correspond to the permutation test. We see that the number of permutations of columns and rows was to 999 (default value).
 
-The results of this test shows that our result is significatively different to the permutation result with a threshold of 5% (p-value = 0.02)
+The results of this test show that our result is significatively different to the permutation result with a threshold of 5% (p-value = 0.02)
 
 Finally, the results of the CCA are plot in the distribution law calculated by the permutation. So we can conclude that our environmental variables explain a part of the plant distribution.
 
-We have now to look the collinearity between the environmental variable. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF).
+We have now to look the collinearity between the environmental variables. It corresponds to the correlation between them. For that, we use the Variance Inflation Factor (VIF).
 
 ```{r}
 test=vif.cca(ccavegan) 
@@ -885,7 +885,7 @@ The use of RLQ analysis is important in ecology to integrate the traits of speci
 
 -   trait values by species (Q)
 
-To perform the RLQ, we need to decompose the analyse by three type of analyses already done in this chapter:
+To perform the RLQ, we need to decompose the analyse by three types of analyses already done in this chapter:
 
 -   we will use a CA analyse on the abundance of species
 
@@ -893,7 +893,7 @@ To perform the RLQ, we need to decompose the analyse by three type of analyses a
 
 -   we will use a MCA on the trait table by taking the species weight on the CA
 
-Here, we use MCA for R and Q because our variables are factors but you can perform a PCA if your variables are quantitatives. Warning, for R and Q you have the obligation to weight by the L table (see below).
+Here, we use MCA for R and Q because our variables are factors but you can perform a PCA if your variables are quantitative. Warning, for R and Q you have the obligation to weight by the L table (see below).
 
 You can import R package using the code
 
@@ -973,7 +973,7 @@ Here, the output of the RLQ is complex but only few information are, at this poi
 
 Nevertheless, we can calculate the contribution of each axis of the RLQ by performing the formule below: $$\frac{rlq$eig}{\sum{rlq$eig}}.100$$
 
-After that, and before to plot and analyse the result, it is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between are different tables. To produce this, we perform a permutation test with the function *randtest*.
+After that, and before to plot and analyse the result, it is important to test if the result of the RLQ is not only due to random combination of values but that we have a real correlation between the different tables. To produce this, we perform a permutation test with the function *randtest*.
 
 ```{r}
 randtest(rlq)
@@ -982,7 +982,7 @@ plot(randtest(rlq))
 
 ```
 
-The outputs above corresponds to the permutation test. We see that the number of permutation of columns and rows was to 999 (default value).
+The outputs above correspond to the permutation test. We see that the number of permutations of columns and rows was to 999 (default value).
 
 The results of this test shows that the permutation of sites (rows) is the first result (p_value=0.1%) and the permutation of species (columns) is the second result (p_value=1.9%) So each result is significant (5% threshold) and we can conclude that our RLQ result is not linked to random effect.
 
@@ -1015,7 +1015,7 @@ abscoiE
 
 The table corresponds to the position of each modality for each environmental variables on the two first axis. You can link this table to the plot. For example, "veg.cover.R100" seems to stand out from the other modalities. In the table, we can see that the position on the first axis is 4.35 and -4.95 on the second axis. Closer to the center of the cloud, we can talk about "veg.cover.R98" that have position of 1.74 on the first axis and -1.64 on the second axis. In addition, we can observe the contribution of this two variables. On the second table we have the absolute contribution of the modalities for each variable. The contribution of the "veg.cover.R100" of the first axis is 17% and 22% on the second axis. This is a high value if we take the threshold to 1/N with N the number of modalities (28 here so 3%). The contribution of "veg.cover.R98" is 4.6% for the first axis and 4.1% for the second axis.
 
-We can therefore conclude that this two variables are correlated. This seems to be biologically coherent since these two variables are part of a plant cover gradient and are the two highest values.
+We can therefore conclude that these two variables are correlated. This seems to be biologically coherent since these two variables are part of a plant cover gradient and are the two highest values.
 
 We can also see that the variable negatively correlated with the first axis are modalities explaining the urbanization ()
 
@@ -1045,7 +1045,7 @@ s.label(rlq$lQ,boxes=FALSE)
 s.label(rlq$lQ, label=aviurba$species.names.fr,boxes=FALSE)
 ```
 
-Here, is to see that we seems to have a gradient of response along the first axis (i.e. Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Alouette des champs/Sp9 \[coord=0.99; 1.17\]) and along the second axis (i.e. Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Fauvette des jardins/Sp21 \[coord=0.99; 1.17\]). We will see that we need to link this to the others variables (trait and environment) For species and sites, we do not have contribution because these variables do not contribute of the axis creation.
+Here, is to see that we seem to have a gradient of response along the first axis (i.e. Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Alouette des champs/Sp9 \[coord=0.99; 1.17\]) and along the second axis (i.e. Loriot Jaune/Sp37 \[coord=1.18; -1.33\] and Fauvette des jardins/Sp21 \[coord=0.99; 1.17\]). We will see that we need to link this to the other variables (trait and environment) For species and sites, we do not have contribution because these variables do not contribute of the axis creation.
 
 To conclude on this analysis, the two first axes explain 86.2% of the total variation with respectively 66.7%, and 19.5% of the total inertia.
 
