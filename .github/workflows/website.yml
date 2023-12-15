@@ -8,11 +8,15 @@ jobs:
   build:
     name: Build website with rmarkdown
     runs-on: ubuntu-latest
-    container: mpetienne/mode2023:0.1
+    container: mpetienne/mode2023:0.3
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install R packages
+        run: |
+          Rscript -e "install.packages(c('deSolve', 'ggmcmc', 'sm', 'gridExtra', 'DHARMa', 'factoextra'))" 
+          Rscript -e "install.packages(c('draw', 'phaseR', 'rgl', 'bootstrap', 'latex2exp', 'datasets', 'popbio'))"
       - name: Generate slides
         run: "quarto render"
       - name: GitHub Pages action
