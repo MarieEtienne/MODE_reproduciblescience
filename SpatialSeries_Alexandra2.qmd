@@ -35,15 +35,11 @@ First, the study zone is divided into mutually exclusive areas. Each area contai
 
 The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
 
-$$w_{ij} = 
-\{1 if i and j are spatially linked to each other 
--
-0 otherwise\}$$
+![](images/image-232123009.png){width="470" height="59"}
 
 Conversely, the distance matrix measures dissimilarity between zones. The higher $d_{ij}$ , the more different the zones. With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:
 
 -   Genetic proximity between families
--   
 
 **The "list of neighbours" object in R**
 
@@ -155,50 +151,32 @@ When the areal data consist in a partition of the entire territory, the concept 
 ::: callout-note
 ##### Example - Ambiguity of the notion of distance between centroids
 
-Ambiguity of the notion of distance between centroids. Let R1, R2, R3 be three distinct zones. It can be considered that since R2 and R3 are separated in space, but both are adjacent to R1, they are both closer to R1 than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
+Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
 ![**Figure** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
 :::
 
 **Types of contiguity :**
 
-```{r}
-#Application with R
+-   **Rook contiguity**
 
-library(rgdal) #To import MIF/MID files 
-library(maptools) #To import files Shapefile 
-library(tripack) #To calculate neighbours based on distance 
-library(spdep) 
+    In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
 
-#Spatial File Import 
-arr75 <- readOGR("~/ArmF.TAB", "ArmF") 
+![**Figure :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
 
-#Neighbours based on the concept of graph
- #The input file is a matrix with geographical coordinates 
-#or an object from type SpatialPoints 
-coords <- coordinates(arr75) IDs <- row.names(as(arr75,"data.frame")) 
+-   **Queen contiguity**
 
-#Delaunay Triangulation 
-Sy4_nb <- tri2nb(coords, row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy4_nb,coordinates(arr75),add=TRUE,col=’red’) 
+    For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
 
-#Sphere-of-influence based graph 
-Sy5_nb <- graph2nb(soi.graph(Sy4_nb,coords),row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy5_nb,coordinates(arr75),add=TRUE,col=’red’) 
+![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
 
-#Gabriel Graph 
-Sy6_nb <- graph2nb(gabrielneigh(coords), row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy6_nb,coordinates(arr75),add=TRUE,col=’red’) 
+-   **Bishop contiguity** In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess.
 
-#Relative neighbours graph 
-Sy7_nb <- graph2nb(relativeneigh(coords), row.names=IDs) 
-plot(arr75, border=’lightgray’) 
-plot(Sy7_nb,coordinates(arr75),add=TRUE,col=’red’)
+![**Figure :** Bishop configuration](images/image-2117709373.png){width="177"}
 
-```
+Still using the example of Paris districts, here's an example of how continuity can be applied:
+
+![**Figure :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
 
 We can return to our previous dataset to investigate the configuration of the points :
 
@@ -207,6 +185,7 @@ We can return to our previous dataset to investigate the configuration of the po
 #For a regular configuration of points
 
 #      1 - Examine the connection between points ====================
+
 # To investigate the various criteria of connection between points we need to
 # extract the coordinates in a separate object
 xy=div35[,3:4]
@@ -236,23 +215,26 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 #Be careful, the distance between points is not always 10km !
 ```
 
+**c) Defining neighbours based on the optimisation of a trajectory**
+
 ### **1.2 Neighborhood weights**
 
 #### **1.2.1) From a list of neighbours to a weight matrix**
 
-Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_ij$ of the weight matrix$W$. The weight matrix $W$ is the "formal expression of spatialdependency between observations" (Anselin et al. 1988)
+Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_{ij}$ of the weight matrix $W$. The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
+Formally, the weights express the neighbor structure between the observations as a $n\times n$ matrix $W$ in which the elements $w_{ij}$ of the matrix are the spatial weights:
+
+![](images/image-672436714.png){width="285"}
 
 **Defining the weight matrix**
 
 Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
 
-![](images/image-522223787.png){width="299"}
+> ![](images/image-562063019.png){width="431"}
 
-• The weight matrices can also take into account the distance between the geographical zones, as relationships becoming smaller with distance: 1 if d \< d0 - 0 otherwise, 1 d α , or e −αd with α an estimated or predetermined parameter. Using a maximum distance beyond which wi j = 0 makes it possible to limit the number of components with a value different from zero. As described in 2.1.2, when the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
+![Figure – Binary weight matrix](images/image-497770688.png)
 
-• Lastly, certain matrices take the strength of relations between the zones into account. For example, weight can be defined by b α i j d β i j with bi j a measure of the strength of relationships between zones i and j (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and di j the distance between the zones. Some econometric studies are aimed at endogenising the weight matrices, but they are considered to be exogenous in most spatial econometric applications (Anselin 2013). In general, therefore, the neighbourhood weights must not be a function of the phenomenon which we are trying to explain.
-
-![](images/image-497770688.png)
+Let's go back to our previous data set :
 
     ```{r}
     #Spatial series analysis : weight matrix
@@ -267,43 +249,15 @@ Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
 
-##Correlation indices
+The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
-```{r}
-#Application
+Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
 
-library(spdep) 
-############################### 
-# Data preparation ########### 
-############################### 
 
-#Extraction of list of neighbours (defined by default with Queen contiguity )
- iris75.nb <- poly2nb(iris75) 
 
-#Creation of weight matrix 
-iris75.lw <- nb2listw(iris75.nb,zero.policy=TRUE) 
 
-#Calculation of standardised median income 
-iris75.data <- as.data.frame(iris75) 
-iris75.data$med_revenu_std <- scale(iris75.data$med_revenu) 
 
-##################### 
-# Moran’s diagram #
-####################
-moran.plot(iris75.data$med_revenu_std, iris75.lw, labels=FALSE, xlab=’observed distribution of standardised median income by IRIS’, ylab=’ Spatially lagged standardised median incomes’) 
 
-###################### 
-# Moran’s I test #
-#################### 
-moran.test(iris75.data$med_revenu_std,iris75.lw, zero.policy=TRUE, randomisation=FALSE) 
-
-#Calculation of the range of Moran’s I 
-moran.range <- function(lw) { 
-wmat <- listw2mat(lw) 
-return(range(eigen((wmat+t(wmat))/2)$values)) } 
-moran.range(iris75.lw)
-
-```
 
 ------------------------------------------------------------------------
 
@@ -387,7 +341,7 @@ Global statistics are based on the assumption of a spatial stationary process: s
 
 **3.3.2 Local spatial autocorrelation indicators**
 
-Anselin (Anselin 1995) develops the concepts introduced by Getis and Ord by defining *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
+Anselin (Anselin 1995) defines *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
 
 --- detect significant groupings of identical values around a particular location (clusters);
 
