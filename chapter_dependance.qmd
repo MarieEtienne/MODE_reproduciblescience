@@ -31,7 +31,7 @@ Autocorrelation is commonly used to analyze data for which the order or location
 ### Time series
 A typical example of autocorrelation in a time series is a seasonal autocorrelation, where values are observed at a same time each year (seasons), and are therefore correlated with each other. <br />
 Temporal autocorrelation shows spatial similarities that depend on the scale used.<br />
-(Intro_dependance.jpg)
+(Intro_dependance.jpg) (from P. LeGouar)
 <br />
 Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes. 
 
