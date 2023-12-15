@@ -58,11 +58,11 @@ Suppose the data show positive temporal autocorrelation for a migratory bird spe
 Spatial autocorrelation refers to the correlation between observations in close spatial locations. <br />
 It shows temporal similarities that depend on the scale used. Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales. <br />
 
-Spatial autocorrelation can be due to various factors, such as : <br />
+Spatial autocorrelation can be due to various factors, such as :
 
-     - Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale, <br />
+     - Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
 
-     - Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation, <br />
+     - Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
 
      - Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
 
