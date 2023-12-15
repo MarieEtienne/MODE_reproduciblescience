@@ -9,14 +9,15 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-These are the steps that will be followed here : 
-**Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
+These are the steps that will be followed here :
 
-**Transform Information into Numerical Value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
+**Define connection criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
 
-**Calculate Autocorrelation Coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighboring points.
+**Transform information into numerical value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
 
-**Integrating Spatial Autocorrelation into Analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
+**Calculate autocorrelation coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighbouring points.
+
+**Integrating spatial autocorrelation into analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
 
 ------------------------------------------------------------------------
 
@@ -33,12 +34,12 @@ Consider a surface ℜ. This surface can be divided into n mutually exclusive zo
 ::: callout-note
 ## Mathematical definition of spatial relationships
 
-Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf, 1998).
 :::
 
-Figure 1 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
+*Figure 2.1* illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analyzable by a computer.
 
-![**Figure 1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](C:/Users%5Calexa%5Cgit%5CMODE_reproduciblescience%5CSpatial%20autocorrelation_%20modelisation%5CFigure%201.png)
+![**Figure 2.1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](images/image-1363470329.png){width="517"}
 
 First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.
 
@@ -49,6 +50,8 @@ The neighborhood matrix measures the similarity between observations. A value gr
 Conversely, the distance matrix measures dissimilarity between zones. The higher $d_{ij}$ , the more different the zones. With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:
 
 -   Genetic proximity between families
+-   Cultural exchanges
+-   Migratory flows
 
 **The "list of neighbours" object in R**
 
@@ -67,7 +70,7 @@ library(gwrr)  #to run geographically weighted regression
 #these two libraries (spdep and ade4 also provive function that make object compatibles between library)
 ```
 
-Let's then begin the analysis of first dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "div35".
+Let's then begin the analysis of first dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "*div35*".
 
 ```{r}
 #Spatial series analysis : dataset div35
@@ -171,23 +174,25 @@ mare.dnear #in that specific case: the ponds 4 and 31 are not connected to any o
 
 • **Delaunay's Triangulation** Delaunay's Triangulation is a geometric method that connects points into triangles such that the minimum angle of all triangles is maximised.
 
-![**Figure :** Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="190"}
+![**Figure 2.2 :** Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="190"}
 
-• **Sphere-of-influence based graph** The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap. The "circle of the nearest neighbour" of point P is the largest circle centred in P and that contains no other points than P. All points in the study set are not necessarily interconnected.
+• **Sphere-of-influence based graph**
 
-![**Figure :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](images/image-1767308128.png){width="361"}
+The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap. The "circle of the nearest neighbour" of point P is the largest circle centred in P and that contains no other points than P. All points in the study set are not necessarily interconnected.
+
+![**Figure 2.3 :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](images/image-1767308128.png){width="361"}
 
 • **Gabriel's graph** Gabriel's graph links two points $pi$ and $pj$ if and only if all other points are outside the circle with diameter $[pi, pj ]$.
 
-![**Figure :** Gabriel graph (source : Pascaline Le Gouar)](images/image-1231590752.png){width="227"}
+![**Figure 2.4 :** Gabriel graph (source : Pascaline Le Gouar)](images/image-1231590752.png){width="227"}
 
 • **Graph of relative neighbours** The graph of relative neighbours considers that two points $pi$ and $pj$ are neighbours if $$d(p_i,p_j) ≤ max [d(p_i,p_k),d(p_j,p_k)] \,\,\,\,\,\,∀k = 1,..., n k\ne i,j$$ with $d(p_i, p_j)$ the distance between $p_i$ and $p_j$.
 
-![**Figure :** Graph of relative neighbours (source : J. O'Rourke, 1982)](images/image-1901385633.png){width="304"}
+![**Figure 2.5 :** Graph of relative neighbours (source : J. O'Rourke, 1982)](images/image-1901385633.png){width="304"}
 
 For example, here's the application of these geometric concepts to Parisian districts :
 
-![**Figure :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
+![**Figure 2.6 :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
 
 **Application in R :**
 
@@ -275,7 +280,9 @@ For example :
 
     etc.
 
-Still using the example of Parisian districts, here's the nearest neighbour application: ![Figure : Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
+Still using the example of Parisian districts, here's the nearest neighbour application:
+
+![**Figure 2.7 :** Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
 
 **b) Defining neighbours based on contiguity**
 
@@ -284,9 +291,9 @@ When the areal data consist in a partition of the entire territory, the concept 
 ::: callout-note
 ##### Example - Ambiguity of the notion of distance between centroids
 
-Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another. However, the centroids in these zones are equidistant from each other (see Figure ). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
+Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another. However, the centroids in these zones are equidistant from each other (see *Figure 2.8*). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
-![**Figure** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
+![**Figure** **2.8** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
 :::
 
 **Types of contiguity :**
@@ -295,21 +302,23 @@ Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since
 
     In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
 
-![**Figure :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
+![**Figure 2.9 :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
 
 -   **Queen contiguity**
 
     For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
 
-![Figure : Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
+![**Figure 2.10 :** Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
 
--   **Bishop contiguity** In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess.
+-   **Bishop contiguity**
 
-![**Figure :** Bishop configuration](images/image-2117709373.png){width="177"}
+    In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess.
+
+![**Figure 2.11 :** Bishop configuration](images/image-2117709373.png){width="177"}
 
 Still using the example of Paris districts, here's an example of how continuity can be applied:
 
-![**Figure :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
+![**Figure 2.12 :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
 
 **Application in R**
 
@@ -365,17 +374,15 @@ Formally, the weights express the neighbor structure between the observations as
 
 **Defining the weight matrix**
 
-Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
+Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.13*):
 
 > ![](images/image-562063019.png){width="431"}
 
-![Figure -- Binary weight matrix](images/image-497770688.png)
+![**Figure 2.13 :** Binary weight matrix](images/image-497770688.png){width="592"}
 
 The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
 Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
-
-
 
 **Application in R**
 
@@ -391,24 +398,23 @@ Let's go back to our previous data set, div35, to see the transormation into a b
     # neig = define the connection matrix between points
 
     #             Transform the list of the names of the neighbors to a 2 by 2 matrix of neighboors with "0" and "1" -----
-    
+
     w2<-knn2nb(div.knear4)
     str(w2)                     # we have as much list as points
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
 
-
 **Weight matrix standardisation**
 
-The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf 1998, four types of standardisation can be distinguished:
+The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf (1998), four types of standardisation can be distinguished:
 
---- **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours: $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because ∑ n j=1wi jxj represents the average of variable x on all neighbours of observation i. Each weight $w_{ij}$ can be interpreted as the fraction of spatial influence on observation i ascribable to j. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret.
+--- **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours : $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because $∑^n_{j=1}w_{ij}x_j$ represents the average of variable $x$ on all neighbours of observation $i$. Each weight $w_{ij}$ can be interpreted as the fraction of spatial influence on observation $i$ ascribable to $j$. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret.
 
---- **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n ∑ n j=1 ∑ n i=1 wi j$.
+--- **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n}{∑^n_{j=1}∑^n_{i=1}w_{ij}}$.
 
---- **Uniform standardisation** (*"U" coding scheme*): weights are standardised so that the sum of all weights equals 1: ∑ n j=1 ∑ n i=1wi j = 1.
+--- **Uniform standardisation** (*"U" coding scheme*): weights are standardised so that the sum of all weights equals $1$ : $∑^n_{j=1}∑^n_{i=1}w_{ij} = 1$.
 
---- **Standardisation by variance stabilisation** ("S" coding scheme): let q be the vector defined by: q = (q ∑ n j=1w 2 1 j , q ∑ n j=1w 2 2 j ,....,q ∑ n j=1w 2 n j) T . Let matrix S ∗ = \[diag(q)\]−1W. 4 From S ∗ , we calculate Q = ∑ n j=1 ∑ n i=1 s ∗ i j from which we deduce the standardised weight matrix: S = n Q S ∗ .
+--- **Standardisation by variance stabilisation** (*"S" coding scheme*): let **q** be the vector defined by : **q** = $(\sqrt{∑^n_{j=1}w^2_{1j}}, \sqrt{∑^n_{j=1}w^2_{2j}},...., \sqrt{∑^n_{j=1}w^2_{nj}})^T$. Let matrix $S^∗$ = $[diag(q)]^{−1}W.^4$ From $S^*$, we calculate $Q = ∑^n_{j=1}∑^n_{i=1} s^∗_{ij}$ from which we deduce the standardised weight matrix: $S = \frac{n}{Q} S^∗$.
 
 **Importance of the choice of weight matrix** When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
 
@@ -439,7 +445,7 @@ pond4.bin<- nb2listw(knn2nb(div.knear4), style="B",zero.policy=TRUE)
 # "B" for binary = all connections have the same weight
 
 pond4.stan<- nb2listw(knn2nb(div.knear4), style="W", zero.policy=TRUE)
-# "W" for standardized = 1/nb of connections
+# "W" for standardized (line standardisation) = 1/nb of connections
 
 pond4.bin
 pond4.stan
@@ -455,7 +461,7 @@ pond4.stan$weights
 #             B - In the case in which points are connected to their 8th nearest neighbors (the "queen connection") ----
 
 #compare spatial weighted matrix with  queen connection
-#but different weight formulation (binary B vs standardized W)
+#but different weight formulation (binary B vs standardized [line standardisation] W)
 
 pond8.bin<- nb2listw(knn2nb(div.knear8), style="B",zero.policy=TRUE)
 pond8.stan<- nb2listw(knn2nb(div.knear8), style="W", zero.policy=TRUE)
@@ -484,7 +490,6 @@ summary(invd.weights)
 invd.weights$weights[1]
 ```
 
-
 Let's see what it looks like in the second dataset, "mares" :
 
 ```{r}
@@ -502,10 +507,6 @@ pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
 #There are points without neighbours
 
 ```
-
-
-
-
 
 ------------------------------------------------------------------------
 
@@ -537,7 +538,7 @@ To carry out this test, it is necessary to specify the distribution of the varia
 
 **Normality hypothesis:** each of the values of the variable, or $y_i$, is the result of an independent draw in the normal distribution specific to each geographical area $i$ on which this variable is measured.
 
-**Randomisation hypothesis** The inference over Moran's I is usually conducted under the randomisation hypothesis. The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations. The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable. The data observed are then only one of the many outcomes possible. In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic. If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation. *This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.*
+**Randomisation hypothesis:** The inference over Moran's I is usually conducted under the randomisation hypothesis. The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations. The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable. The data observed are then only one of the many outcomes possible. In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic. If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation. This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.
 
 Very generally speaking, spatial autocorrelation indices are used to characterise the correlation between measures that are geographically similar to a measured phenomenon. If $WY$ is the vector of means of variable $Y$ (where $W$ is the spatial weights matrix) in the neighbourhood of each spatial unit, spatial autocorrelation indices occur as:
 
@@ -571,9 +572,9 @@ Two approaches are used to estimate the significance of these indices --- an ana
 
 > #### Monte Carlo approach to estimating significance
 >
-> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution. ![](images/image-318830441.png){width="380"}
+> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution. ![Figure 2.14 : Output of the Monte Carlo test](images/image-318830441.png){width="380"}
 
-Let's explore Moran Global Index in the mares dataset :
+Let's explore Moran Global Index in the *mares* dataset :
 
 ```{r}
 #Spatial series analysis : dataset mares
@@ -592,6 +593,7 @@ moran.test(mare$Carbonate, pondmarednear.bin, zero.policy=TRUE)
 #Only for the 2nd one (triangulation). For carbonate, we have something significant - for Gabriel and distance, not significant.
 #Rather, large-scale processes determine the distribution of carbonate concentration.
 ```
+
 ```{r}
 # We could also look at spatial autocorrelation with other variables to see if we reach the same conclusion
 moran.test(mare$Nitrate, pondmaregab.bin, zero.policy=TRUE)
@@ -639,8 +641,6 @@ plot(r1, main = "Mantel's test")
 #Spatial dependence
 ```
 
-
-
 **3.2.2 Spatial autocorrelation of categorical variables**
 
 When the variable of interest is not continuous but categorical, the degree of local association is measured by analysing the statistics of the join count (Zhukov 2010). To illustrate the calculation of these statistics, we consider a binary variable representing two colours, White (B) and Black (N) so that a relation can be called White-White, Black-Black or White-Black. It can be seen that:
@@ -677,9 +677,9 @@ $Ii < 0$ indicates a combination of dissimilar values (e.g. high values surround
 
 For example, with Parisian districts :
 
-![**Figure :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
+![**Figure 2.15 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
 
-**3.3.3 Significance of the local Moran's I**
+**2.3.3 Significance of the local Moran's I**
 
 Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution. The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis. If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
 
@@ -687,7 +687,7 @@ To test the validity of the normality assumption of the LISAs under the null hyp
 
 Several adjustments methods can be used : "bonferroni", "holm", etc.
 
-**3.3.4 Interpretation of local indices**
+**2.3.4 Interpretation of local indices**
 
 **In the absence of global spatial autocorrelation**
 
@@ -756,7 +756,10 @@ s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xl
 
 ```
 
-
 **3.4 Spatio-temporal indices**
 
 It is not unusual for a geolocalised database to have observations raised at different points in time. It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it. In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time. On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models. Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies. By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations. This can also be done on the basis of spatial-temporal risk weighting matrices.
+
+**References**
+
+Anselin, Luc (2013). Spatial econometrics: methods and models. Vol. 4. Springer Science & Business Media. Anselin, Luc and Daniel A Griffith (1988). « Do spatial effects really matter in regression analysis? » Papers in Regional Science 65.1, pp. 11--34. Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b). « Spatial Neighbors ». Applied Spatial Data Analysis with R. Springer, pp. 83--125. Toussaint & (2014). « The sphere of influence graph: Theory and applications ». International Journal of Information Thechnology and Computer Science 14.2. Smith, Tony E. (2016). Notebook on Spatial Data Analysis. http://www.seas.upenn.edu/ ese502/notebo Tiefelsdorf, Michael (1998). « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ». PhD thesis. Université Wilfrid Laurier.
