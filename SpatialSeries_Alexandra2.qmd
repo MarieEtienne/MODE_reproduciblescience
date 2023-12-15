@@ -58,7 +58,7 @@ library(gwrr)  #to run geographically weighted regression
 #these two libraries (spdep and ade4 also provive function that make object compatibles between library)
 ```
 
-Let's then begin the analysis of a dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "div35".
+Let's then begin the analysis of first dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "div35".
 
 ```{r}
 #Spatial series analysis : dataset div35
@@ -83,6 +83,30 @@ plot(div35[,3:4])
 
 #The spatial configuration of the points is regular.
 ```
+
+Let's also start the analysis of second dataset dealing with chemical measures in a set of ponds, "mares".
+
+```{r}
+#Spatial series analysis : dataset mares
+#For an IRREGULAR configuration of points
+
+#      0 - Exporing the data set  
+
+#The data set is issued from a study that analysed several physiocochemical properties of several ponds. each pond is geolocalized
+
+#Import the dataset
+mare=read.table("C:/Users/alexa/OneDrive/Documents/3A ingé agro - M2 EFCE/ASA/Séries temporelles & spatiales/script and data for lecture-20230925/mares.txt",header=TRUE)
+
+#Summary
+summary(mare)
+row.names(mare)<-seq(1,31,1) #we name the ponds from 1 to 31.
+
+#We can plot the ponds on a map according to their coordinates
+#We can see that the configuration of the ponds is not regular over space
+par(mfrow=c(1,1))
+plot(mare$x,mare$y)
+```
+
 
 **1.2. Connection among neighbours**
 
@@ -254,6 +278,21 @@ The weight matrices can also take into account the **distance** between the geog
 Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
 
 
+**Weight matrix standardisation** 
+The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("B" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf 1998, four types of standardisation can be distinguished: 
+
+— **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours: $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because ∑ n j=1wi jxj represents the average of variable x on all neighbours of observation i. Each weight wij can be interpreted as the fraction of spatial influence on observation i ascribable to j. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret. 
+
+— **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n ∑ n j=1 ∑ n i=1 wi j$. 
+
+— **Uniform standardisation** ("U" coding scheme): weights are standardised so that the sum of all weights equals 1: ∑ n j=1 ∑ n i=1wi j = 1. 
+
+— **Standardisation by variance stabilisation** ("S" coding scheme): let q be the vector defined by: q = (q ∑ n j=1w 2 1 j , q ∑ n j=1w 2 2 j ,....,q ∑ n j=1w 2 n j) T . Let matrix S ∗ = [diag(q)]−1W. 4 From S ∗ , we calculate Q = ∑ n j=1 ∑ n i=1 s ∗ i j from which we deduce the standardised weight matrix: S = n Q S ∗ .
+
+
+
+**Importance of the choice of weight matrix**
+When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix W. 
 
 
 
@@ -287,7 +326,7 @@ To answer the first question, we must test the hypothesis of absence of spatial 
 
 To carry out this test, it is necessary to specify the distribution of the variable of interest y, in the absence of spatial autocorrelation (under $H_0$). In this context, statistical inference is generally conducted considering either of the following assumptions:
 
-**Normality hypothesis:** each of the values of the variable, or $yi$, is the result of an independent draw in the normal distribution specific to each geographical area $i$ on which this variable is measured.
+**Normality hypothesis:** each of the values of the variable, or $y_i$, is the result of an independent draw in the normal distribution specific to each geographical area $i$ on which this variable is measured.
 
 **Randomisation hypothesis** The inference over Moran's I is usually conducted under the randomisation hypothesis. The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations. The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable. The data observed are then only one of the many outcomes possible. In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic. If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation. *This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.*
 
