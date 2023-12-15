@@ -19,7 +19,7 @@ Another assumption is that the spatial autocorrelation is isotropic.
 This means that the cause of the autocorrelation act the same way in every direction.
 Anisotropy may be caused for example by environmental factors like the wind or water currents.
 
-All the models showed here will be based on the genralized linear model modified to take the spatial autocorrelation into account :
+All the models showed here will be based on the general linear model modified to take the spatial autocorrelation into account :
 
 **Y = X**$\beta$ + $\epsilon$
 
@@ -34,24 +34,24 @@ The idea behind this analysis is that the state of a neighbor region will affect
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
 
-An extra parameter : WX$\theta$, called the autocovariate is added to the generalized linear model's formula.
+An extra parameter : WX$\theta$, called the autocovariate is added to the general linear model's formula.
 It is a distance-weighted function of the neighboring response value.
 
 **Y = X**$\beta$ + **WX**$\theta$ + $\epsilon$
 
-The argument WX$\theta$ is the average of the neigbouring Xs.
+The argument WX$\theta$ is the average of the neighboring Xs.
 
 ##### Application in R
 
-*(For the purpose of the exemple, we will assume that the analysis is the right one even though other would be more fitted)*
+*(For the purpose of the example, we will assume that the analysis is the right one even though other would be more fitted)*
 
-As this analysis is quite simple the average value of the neighbouring regions can be calculated by hand and then added to the generalized linear formula.
+As this analysis is quite simple the average value of the neighboring regions can be calculated by hand and then added to the general linear formula.
 
 However, there are commands in R in the package sdpep that allows to do the same analysis ans to go a little further, as well as giving the R-squared value and the p value.
 
 Our exemple here will be the study of plants and bird richness in Ile & Vilaine.
 
-*(The dataset "div35" set can be found in the doc called "Saptial autocorrelation_modelisation")*
+*(The dataset "div35" set can be found in the doc called "Spatial autocorrelation_ modelisation")*
 
 *(To see how to create weighted matrix, see the previous parts)*
 
@@ -134,9 +134,10 @@ To be able to study an autocorrelation at a larger scale, other models must be u
 The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location.
 
 The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows).
+The null hypothesis for the general SAR model is that the Ys are mutually independent.
 
 The autoregressif process can be found in either the residuals of the data or in the response value.
-Depending on where this process is thought to be,three models are availble :
+Depending on where this process is thought to be,three models are available :
 
 -   The **Error model**
 -   The **Lag model**
@@ -147,6 +148,10 @@ A specific diagnostic can be made to chose between either one.
 ##### 3.1.2.1. Lagrange Multiplier diagnostic
 
 ###### Theory
+
+The idea for this test is to statistically check which of the SAR model would best fit to our equation. 
+
+The lagrange multiplier diagnostic tests the fit of the model under the null hypothesis and looks for evidence of departures in the direction of interest. In summary, it will examine the residuals of a model and look for specific types of non-randomness.
 
 ###### Application in R
 
@@ -184,7 +189,7 @@ Therefore, the responsable variable argument in the model will include a term fo
 
 The model will take the form of :
 
-**Y =**$\rho$**WY +X**$\beta$ + $\epsilon$
+**Y =**$\rho$**Wx +X**$\beta$ + $\epsilon$
 
 **ρ** is the autoregression parameter **W** is the spatial weights matrix
 
@@ -195,7 +200,7 @@ lagsarlm(rich_ois~rich_pp, div35, pond8.stand)
 ```
 Using the values obtained here, the final model would be: 
 
-$Bird\:Richness = 0.37\:WY +0.53\:X + \epsilon$
+$Bird\:Richness = 0.37\:WX +0.53\:X + \epsilon$
 
 ##### 3.1.2.3. Error models
 
@@ -231,7 +236,7 @@ This model include all the parameter added above, and it is the most inclusive m
 
 It can be noted that this model can also be used in both situation described previously, as the coefficient will cancel themselves out if either one is not present.
 
-**Y =** $\rho$**WY +X**$\beta$ + $\lambda$**WY** + $\epsilon$
+**Y =** $\rho$**WX +X**$\beta$ + $\lambda$**WY** + $\epsilon$
 
 ###### Application in R
 
@@ -242,11 +247,15 @@ summary(lmsarD)
 
 From here, we can replace in the formula : 
 
-$Bird\:Richness = 0.64WY + 0.53X - 0.65$
+$Bird\:Richness = 0.64WX + 0.53X - 0.65$
 
 *For exemple purpose, the lambda was implemented in the model. However it was not necessary here as the associated value was not significant*
 
 Even though three  commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more information than the others. 
+
+![](Spatial autocorrelation_ modelisation\SAR_function_summary.png)
+
+*(If the image doesn't load, it is available in the Spatial autocorrelation_ modelisation doc)*
 
 ### 3.2. - Non stationary process
 
@@ -254,7 +263,9 @@ Even though three  commands are available for each type of SAR model, it is best
 
 ###### Theory
 
-Few methods exist to deal with non stationary processes
+In ecology, a lot of processes are non stationary.
+This model is one of the few that allow to deal with non-stationarity. 
+It is a local modeling, and will therefore require to perform a regression for each points and its neighbors.
 
 ###### Application in R
 
@@ -288,3 +299,7 @@ Berlin, Heidelberg: Springer, 2010.
 https://doi.org/10.1007/978-3-642-03647-7_14.
 
 https://www.youtube.com/watch?v=b3HtV2Mhmvk
+
+Engle, Robert F. « A general approach to lagrange multiplier model diagnostics ». Journal of Econometrics 20, nᵒ 1 (1 octobre 1982): 83‑104. https://doi.org/10.1016/0304-4076(82)90104-X.
+
+Class and powerpoint made by Mrs. Le Gouar Pascaline

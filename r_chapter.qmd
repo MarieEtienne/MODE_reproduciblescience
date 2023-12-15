@@ -58,7 +58,7 @@ Our exemple here will be the study of plants and bird richness in Ile & Vilaine.
 
 *(The dataset "div35" set can be found in the doc called "Saptial autocorrelation_modelisation")*
 
-*(To see how to create weighted matrix, see the previous parts)
+*(To see how to create weighted matrix, see the previous parts)*
 
 
 ```{r}
