@@ -1,17 +1,3 @@
----
-title: "A simple chapter using R"
-bibliography: references.bib
-execute: 
-  freeze: auto
-output: 
-  html_document:
-   toc: true
-   toc_float: true
-editor: 
-  markdown: 
-    wrap: sentence
----
-
 ## 3 - Saptial modeling
 
 Once the structure of the spatial correlation has be estimated, it can then be included in the model.
