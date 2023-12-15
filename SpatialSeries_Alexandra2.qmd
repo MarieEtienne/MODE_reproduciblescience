@@ -9,23 +9,27 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
-**\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
+------------------------------------------------------------------------
 
-**I - Codyfing the neighbour structure**
+## **I - Codyfing the neighbour structure**
 
-**2.1) Defining neighbours**
+------------------------------------------------------------------------
 
-**2.1.1) Characteristics of the relationships between spatial objects**
+### **1.1) Defining neighbours**
+
+#### **1.1.1) Characteristics of the relationships between spatial objects**
 
 Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
 
-**Mathematical definition of spatial relationships :**
+::: callout-note
+## Mathematical definition of spatial relationships
 
 Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf 1998).
+:::
 
 Figure 1 illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analysable by a computer.
 
-![Figure 1 : Codifying spatial correlation (Tiefelsdorf, 1998)](C:/Users%5Calexa%5Cgit%5CMODE_reproduciblescience%5CSpatial%20autocorrelation_%20modelisation%5CFigure%201.png)
+![**Figure 1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](C:/Users%5Calexa%5Cgit%5CMODE_reproduciblescience%5CSpatial%20autocorrelation_%20modelisation%5CFigure%201.png)
 
 First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.
 
@@ -36,7 +40,9 @@ $$w_{ij} =
 -
 0 otherwise\}$$
 
-**The "list of neighbours" object in R** Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and neighbours_nb the spatial object containing the associated neighbourhood relationships. neighbours_nb is a list of length n. Each element \[i\] of the list contains a vector with the index of the neighbours of the item indexed i. If \[i\] does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2.2). The main information about the object neighbours_nb can be derived using the function: summary(neighbours_nb)
+**The "list of neighbours" object in R**
+
+Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. `neighbours_nb` is a list of length n. Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. If `[i]` does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
 
 Let's load a few packages useful for analysis :
 
@@ -51,7 +57,7 @@ library(gwrr)  #to run geographically weighted regression
 #these two libraries (spdep and ade4 also provive function that make object compatibles between library)
 ```
 
-Let's then begin the analysis of a dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille et Vilaine, "div35".
+Let's then begin the analysis of a dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "div35".
 
 ```{r}
 #Spatial series analysis : dataset div35
@@ -146,15 +152,17 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 #Be careful, the distance between points is not always 10km !
 ```
 
-**1.2 Neighborhood weights**
+### **1.2 Neighborhood weights**
 
-**1.2.1) From a list of neighbours to a weight matrix**
+#### **1.2.1) From a list of neighbours to a weight matrix**
 
 Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_ij$ of the weight matrix$W$. The weight matrix $W$ is the "formal expression of spatialdependency between observations" (Anselin et al. 1988)
 
--   **Defining the weight matrix** Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
+**Defining the weight matrix**
 
-    ![](images/image-522223787.png){width="299"}
+Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
+
+![](images/image-522223787.png){width="299"}
 
 • The weight matrices can also take into account the distance between the geographical zones, as relationships becoming smaller with distance: 1 if d \< d0 - 0 otherwise, 1 d α , or e −αd with α an estimated or predetermined parameter. Using a maximum distance beyond which wi j = 0 makes it possible to limit the number of components with a value different from zero. As described in 2.1.2, when the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
@@ -213,9 +221,15 @@ moran.range(iris75.lw)
 
 ```
 
-**\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
+------------------------------------------------------------------------
 
-**II - Spatial autocorrelation indices**
+## **II - Spatial autocorrelation indices**
+
+------------------------------------------------------------------------
+
+::: callout-note
+Spatial autocorrelation indices measure the spatial dependence between values of the same variable in different places in space. The more the observation values are influenced by observation values that are geographically close to them, the greater the spatial correlation.
+:::
 
 **3.2 Global measures of spatial autocorrelation**
 
@@ -229,7 +243,9 @@ Calculating the spatial autocorrelation indices is used to answer two questions:
 
 To answer the first question, we must test the hypothesis of absence of spatial autocorrelation for a gross variable y.
 
---- $H_0$: no spatial autocorrelation --- $H_1$: spatial autocorrelation
+--- $H_0$: no spatial autocorrelation
+
+--- $H_1$: spatial autocorrelation
 
 To carry out this test, it is necessary to specify the distribution of the variable of interest y, in the absence of spatial autocorrelation (under $H_0$). In this context, statistical inference is generally conducted considering either of the following assumptions:
 
@@ -251,6 +267,25 @@ $$I_W =
 --- $H_0$: The neighbours do not **co-vary** in any particular way.
 
 --- $I_W > 0$ =\> positive spatial autocorrelation
+
+As spatial autocorrelation is measured based on a comparison of the value of an individual variable with that of its neighbours, the definition of the neighbourhood will have a significant impact on the measurement of spatial autocorrelation. The larger the planned neighbourhood, the greater the number of neighbours considered, and the greater the probability that their average will be closer to the population's average, which may lead to a relatively low value for spatial autocorrelation.
+
+**Application with R**
+
+| The *spdep* package is used to calculate spatial autocorrelation indices and their significance using function `moran.test`.
+| By default, the distribution of the variable of interest under the null hypothesis is derived by randomisation. The `randomisation = FALSE` argument makes it possible to assume that this is a normal distribution.
+
+::: {.callout-warning appearance="simple"}
+## If certain entities do not have neighbours
+
+\|In order for the package functions spdep to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: `zero.policy=TRUE`. By default, the size of the matrix is reduced to exclude observations without neighbours. The opposite can be specified with the option: `adjust.n=FALSE`. In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al. 2013a).
+:::
+
+Two approaches are used to estimate the significance of these indices --- an analytical solution based on the normality hypothesis and a Monte Carlo solution based on the randomisation hypothesis. The analytical solution, used by the `moran.test` function, is based on the assumption that the test statistic asymptotically follows a normal distribution with mean 0 and variance 1. This is not always the most accurate measure of significance as convergence towards this distribution may depend on the arrangement of the polygons. Instead, the `moran.mc` function can be used, allowing to choose the number of permutations to calculate the simulated distribution of Moran's I. Comparing the significance levels calculated from functions `moran.mc` and `moran.test` makes it possible to ensure the robustness of the conclusions.
+
+> #### Monte Carlo approach to estimating significance
+>
+> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution. ![](images/image-318830441.png){width="380"}
 
 **3.2.2 Spatial autocorrelation of categorical variables**
 
@@ -295,6 +330,8 @@ For example, with Parisian districts :
 Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution. The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis. If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
 
 To test the validity of the normality assumption of the LISAs under the null hypothesis, several random distributions are simulated in the space of the variable of interest and the local indicators associated with these simulations are calculated.
+
+Several adjustments methods can be used : "bonferroni", "holm", etc.
 
 **3.3.4 Interpretation of local indices**
 
