@@ -9,6 +9,14 @@ editor: visual
 
 Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
+These are the steps that will be followed here : **Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
+
+**Transform Information into Numerical Value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
+
+**Calculate Autocorrelation Coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighboring points.
+
+**Integrating Spatial Autocorrelation into Analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
+
 ------------------------------------------------------------------------
 
 ## **I - Codyfing the neighbour structure**
@@ -69,7 +77,7 @@ Let's then begin the analysis of first dataset dealing with richness of birds fr
 #Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
 
 #Import dataset
-div35=read.table("C:/Users/alexa/OneDrive/Documents/3A ingé agro - M2 EFCE/ASA/Séries temporelles & spatiales/script and data for lecture-20230925/div35.txt", header=T, dec=",")
+div35=read.table("C:/Users/alexa/git/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/div35.txt", header=T, dec=",")
 
 #Summary
 summary(div35)
@@ -107,18 +115,9 @@ par(mfrow=c(1,1))
 plot(mare$x,mare$y)
 ```
 
-
 **1.2. Connection among neighbours**
 
 In order to identify points in close proximity, it is imperative to establish specific criteria beyond merely considering distance along the x-axis. This approach will enable us to clearly define the parameters that determine proximity between points in our analysis.
-
-**Define Connection Criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
-
-**Transform Information into Numerical Value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
-
-**Calculate Autocorrelation Coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighboring points.
-
-**Integrating Spatial Autocorrelation into Analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
 
 **1.2.1 Neighborhood criterion**
 
@@ -127,6 +126,44 @@ In order to identify points in close proximity, it is imperative to establish sp
 Once we have a set of points spread across the territory, we can calculate the distance between them. These points may be specific locations where the information has been observed, or points representative of each zone, for example their centroid. In this case, the underlying assumption is that the distribution of the variable within each zone is sufficiently homogeneous to approximate it to a single point.
 
 Neighbourhood graphs materialise the links between the various entities. They are defined in such a way that they represent the underlying spatial structure as closely as possible. There exists many different types of neighbourhood graphs.
+
+**Application in R**
+
+Let's see what it looks like with the "mares" dataset :
+
+```{r}
+#Spatial series analysis : dataset "mares"
+#Connexions among neighbours
+#For an IRREGULAR configuration of points
+
+#Several criteria exist to connect points that are irregularly distributed.
+# It is necessary to tests several criteria to test different hypothesis and different scale of the phenomena.
+
+#Criteria are determined when we have an a priori idea of the processes involved.
+#For example, may be due to eutrophication (lots of nutrients added, lots of organisms making excrements), heterogeneity in the pond - pond animal and plant communities may have an influence
+#Two ponds should look alike because they're on the same soil
+#Animals and plants: depending on the dispersal abilities of these species, will influence a pattern in water quality.
+#Ponds supposed to be in a specific landscape will look alike.
+#Larger-scale phenomena (flooding): if ponds are distributed in a valley, all the ponds will be homogenized.
+
+
+#      1 - Examine the connection between points ====================
+# for first step extract the coordinate 
+marexy=mare[,11:12]
+
+#A - The Distance criterion ----------------------------
+# to compute a neighbor relationship using a distance criteria you should use this function 
+# using directly the coordinates as a matrix and indicating the min and max of distance.
+# the max of distance is defined depending on your knowledge of the system or for different hypothesis you want to test:
+mare.dnear<-dnearneigh(as.matrix(marexy),0,30) #here we specify that ponds are connected if they are appart from less than 30m
+
+# Graphic representation:
+s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear))
+
+# Synthetic view:
+mare.dnear #in that specific case: the ponds 4 and 31 are not connected to any other pond
+
+```
 
 **a.1) Neighbourhood graphs based on geometric concepts :**
 
@@ -149,6 +186,76 @@ Neighbourhood graphs materialise the links between the various entities. They ar
 For example, here's the application of these geometric concepts to Parisian districts :
 
 ![**Figure :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
+
+**Application in R :**
+
+Coming back to our "mares" dataset, we can explore these geometric concepts :
+
+```{r}
+#Spatial series analysis : dataset "mares"
+#Connexions among neighbours
+#For an IRREGULAR configuration of points
+
+#      1 - Examine the connection between points ====================
+# for first step extract the coordinate
+marexy=mare[,11:12]
+
+#             B - The gabriel graph method ---------------------------
+
+#Note that for this function, the coordinates should be in a matrix:
+mare.gab<-gabrielneigh(as.matrix(marexy))
+
+# We can represent it spatially with this function:
+s.label(marexy,clabel=.5, cpoint=.1,neig=nb2neig(graph2nb(mare.gab)))
+
+# the part nb2neig(graph2nb(mare.gab)) is necessary to translate the object from one package to another 
+# s.label is a function from ade4 and we need to translate our object from tripack->spdep->ade4
+
+# if we want a synthetic view of the neighbor relationship we can use this function:
+graph2nb(mare.gab)
+
+#31 pools, 47 links, each point will have an average of 1.5 neighbors, 3 regions have no links (31, 13, 28) = considered as non-neighbors
+
+gab=graph2nb(mare.gab)
+#note: the ponds 13, 28 and 31 seems to have no link. This is just because they do not appear
+#in the $from object but only in the $to (this is a bug in the function - we would assume)
+
+#             C - The Delaunay triangulation graph method -----------
+
+#to compute a neighbor relationship using the delaunay triangulation method 
+#We should use this function using directly the coordinates:
+
+mare.tri<-tri2nb(marexy)
+
+# graphic representation:
+s.label(marexy,clabel=0.6,cpoint=1,neig=nb2neig(mare.tri))
+
+# synthetic view:
+mare.tri
+
+#With this connection criterion, ponds have an average of 5.2 neighbors: more connections are created
+
+```
+
+Let's then compare the current criterions in the mares dataset:
+
+```{r}
+#Spatial series analysis : dataset "mares"
+#Connexions among neighbours
+#For an IRREGULAR configuration of points
+
+par(mfrow=c(1,3))
+s.label(marexy,clabel=.5, cpoint=.1,neig=nb2neig(graph2nb(mare.gab))) #Gabriel
+s.label(marexy,clabel=0.6,cpoint=1,neig=nb2neig(mare.tri))  #Triangulation
+s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear)) #Distance
+
+#When comparing gabriel, triangulation and distance results, we observe different connexions.
+
+#We can think of several biological processes according to the different critera :
+#Gabriel: we can imagine gradients in relation to the ground - we can also imagine a small hydro network that connects the two.
+#Triangular: Flooding in a valley would make a connection on a larger scale
+#Distance: composition of plant and animal communities, dispersion
+```
 
 **a.2) Neighbourhood graphs based on nearest neighbours**
 
@@ -202,11 +309,14 @@ Still using the example of Paris districts, here's an example of how continuity 
 
 ![**Figure :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
 
-We can return to our previous dataset to investigate the configuration of the points :
+**Application in R**
+
+We can return to the first dataset to investigate the configuration of the points :
 
 ```{r}
-#Spatial series analysis : connexion between points
-#For a regular configuration of points
+#Spatial series analysis : dataset div35
+#Connexion between points
+#For a REGULAR configuration of points
 
 #      1 - Examine the connection between points ====================
 
@@ -256,12 +366,22 @@ Most commonly, the weight matrix is a binary contiguity matrix (see Figure ):
 
 > ![](images/image-562063019.png){width="431"}
 
-![Figure – Binary weight matrix](images/image-497770688.png)
+![Figure -- Binary weight matrix](images/image-497770688.png)
 
-Let's go back to our previous data set :
+The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
+
+Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
+
+
+
+**Application in R**
+
+Let's go back to our previous data set, div35, to see the transormation into a binary matrix :
 
     ```{r}
-    #Spatial series analysis : weight matrix
+    #Spatial series analysis : dataset div35
+    #Weight matrix
+    #For a REGULAR configuration of points
 
     # about the code : 
     # nb2neig(knn2nb()) transform the matrix to subsequently use it is ade4
@@ -273,26 +393,111 @@ Let's go back to our previous data set :
     nb2neig(knn2nb(div.knear4)) # these lists are transformed in a 2D matrix with 0 or 1.
     ```
 
-The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
-Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
+**Weight matrix standardisation**
+
+The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf 1998, four types of standardisation can be distinguished:
+
+--- **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours: $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because ∑ n j=1wi jxj represents the average of variable x on all neighbours of observation i. Each weight $w_{ij}$ can be interpreted as the fraction of spatial influence on observation i ascribable to j. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret.
+
+--- **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n ∑ n j=1 ∑ n i=1 wi j$.
+
+--- **Uniform standardisation** (*"U" coding scheme*): weights are standardised so that the sum of all weights equals 1: ∑ n j=1 ∑ n i=1wi j = 1.
+
+--- **Standardisation by variance stabilisation** ("S" coding scheme): let q be the vector defined by: q = (q ∑ n j=1w 2 1 j , q ∑ n j=1w 2 2 j ,....,q ∑ n j=1w 2 n j) T . Let matrix S ∗ = \[diag(q)\]−1W. 4 From S ∗ , we calculate Q = ∑ n j=1 ∑ n i=1 s ∗ i j from which we deduce the standardised weight matrix: S = n Q S ∗ .
+
+**Importance of the choice of weight matrix** When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
+
+**The "weight list" object in R**
+
+The function `nb2listw` of package *spdep* makes it possible to convert a "list of neighbours" object into a "weight list" object. It is important to note that the "weight list" object, which corresponds to the weight matrix described above, is not a matrix n×n as represented in theory. It is a list containing the standardisation style and then for each observation: its attribute, the list of observation numbers of its neighbours, the list of the attributes of its neighbours and the list of the weights of its neighbours. Reference is often made to sparse matrices. When a zone has no neighbours, the option `zero.policy=TRUE` makes it possible to generate a list of weights which takes value 'zero' for observations without neighbours (if the option is `FALSE`, an error message is generated).
+
+**Application in R**
+
+In the dataset "div35" :
+
+```{r}
+#Spatial series analysis : dataset div35
+#Weight matrix
+#For a REGULAR configuration of points
+
+#      2 - Define the spatial weight matrix
+
+#Note that spatial weight matrix is always associated to a neighborhood matrix (if two points are not considered as connected,
+#their spatial weight is of "0")
+
+#             A - In the case in which points are connected to their 4th nearest neighbors (the "rook connection") ----
+
+#compare spatial weighted matrix with rook connection (that is with the 4th nearest neighbors)
+#but different weight formulation (binary B vs standardized W)
+
+pond4.bin<- nb2listw(knn2nb(div.knear4), style="B",zero.policy=TRUE)
+# "B" for binary = all connections have the same weight
+
+pond4.stan<- nb2listw(knn2nb(div.knear4), style="W", zero.policy=TRUE)
+# "W" for standardized = 1/nb of connections
+
+pond4.bin
+pond4.stan
+
+pond4.bin$weights
+#List of created weights associated with the neighbor relationship
+#when points are neighbors = 1, otherwise = 0. Translated into list, numerical value put into calculation
+#Here : constant criterion for all points
+
+pond4.stan$weights
 
 
-**Weight matrix standardisation** 
-The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("B" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf 1998, four types of standardisation can be distinguished: 
+#             B - In the case in which points are connected to their 8th nearest neighbors (the "queen connection") ----
 
-— **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours: $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because ∑ n j=1wi jxj represents the average of variable x on all neighbours of observation i. Each weight wij can be interpreted as the fraction of spatial influence on observation i ascribable to j. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret. 
+#compare spatial weighted matrix with  queen connection
+#but different weight formulation (binary B vs standardized W)
 
-— **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n ∑ n j=1 ∑ n i=1 wi j$. 
-
-— **Uniform standardisation** ("U" coding scheme): weights are standardised so that the sum of all weights equals 1: ∑ n j=1 ∑ n i=1wi j = 1. 
-
-— **Standardisation by variance stabilisation** ("S" coding scheme): let q be the vector defined by: q = (q ∑ n j=1w 2 1 j , q ∑ n j=1w 2 2 j ,....,q ∑ n j=1w 2 n j) T . Let matrix S ∗ = [diag(q)]−1W. 4 From S ∗ , we calculate Q = ∑ n j=1 ∑ n i=1 s ∗ i j from which we deduce the standardised weight matrix: S = n Q S ∗ .
-
+pond8.bin<- nb2listw(knn2nb(div.knear8), style="B",zero.policy=TRUE)
+pond8.stan<- nb2listw(knn2nb(div.knear8), style="W", zero.policy=TRUE)
+pond8.bin$weights
+pond8.stan$weights
 
 
-**Importance of the choice of weight matrix**
-When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix W. 
+#             C - In the case in which points are connected to their 4th nearest neighbors but the weight is inversely proportional to the distance (weight = 1/distance)
+#To get inverse distance, we need to calculate the distances between all of the neighbors. 
+#for this we will use nbdists, which gives us the distances in a similar structure to our
+#input neighbors list. To use this function we need to input the neighbors list and the coordinates.
+
+coords <- cbind(div35$x,div35$y)
+distances <- nbdists(knn2nb(div.knear4),coords)
+distances[1]
+
+distances[34] 
+
+#Calculating the inverse distances (the 1/distance gives very small values so we make an adjustement)
+invd1 <- lapply(distances, function(x) (1/x))
+length(invd1)
+invd1[1]
+
+invd.weights <- nb2listw(knn2nb(div.knear4),glist = invd1,style = "B")
+summary(invd.weights)
+invd.weights$weights[1]
+```
+
+
+Let's see what it looks like in the second dataset, "mares" :
+
+```{r}
+#Spatial series analysis : dataset mares
+#Weight matrix
+#For a IRREGULAR configuration of points
+
+#      2 - Define the spatial weight matrix =========================
+
+# EXAMPLE : BINARY CRITERION
+pondmaretri.bin <- nb2listw(mare.tri, style="B",zero.policy=TRUE)
+pondmaregab.bin <- nb2listw(graph2nb(mare.gab), style="B", zero.policy=TRUE)
+pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
+
+#There are points without neighbours
+
+```
 
 
 
@@ -363,6 +568,74 @@ Two approaches are used to estimate the significance of these indices --- an ana
 > #### Monte Carlo approach to estimating significance
 >
 > In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution. ![](images/image-318830441.png){width="380"}
+
+Let's explore Moran Global Index in the mares dataset :
+
+```{r}
+#Spatial series analysis : dataset mares
+    #Moran Global Index
+    #For a REGULAR configuration of points
+
+#      3 - The Moran Global Index  ==================================
+
+# Let's test the global spatial autocorrelation for carbonates and each criterion using the Moran test (possible because the carbonate is a quantitative variable)
+
+moran.test(mare$Carbonate, pondmaregab.bin, zero.policy=TRUE)
+moran.test(mare$Carbonate, pondmaretri.bin, zero.policy=TRUE)
+moran.test(mare$Carbonate, pondmarednear.bin, zero.policy=TRUE)
+
+#No significant autocorrelation for all tests:
+#Only for the 2nd one (triangulation). For carbonate, we have something significant - for Gabriel and distance, not significant.
+#Rather, large-scale processes determine the distribution of carbonate concentration.
+```
+```{r}
+# We could also look at spatial autocorrelation with other variables to see if we reach the same conclusion
+moran.test(mare$Nitrate, pondmaregab.bin, zero.policy=TRUE)
+moran.test(mare$Nitrate, pondmaretri.bin, zero.policy=TRUE)
+moran.test(mare$Nitrate, pondmarednear.bin, zero.policy=TRUE)
+
+#--> No spatial structure with the 3 criteria
+```
+
+**Spatial autocorrelation in multivariate data**
+
+```{r}
+#Spatial series analysis : dataset mares
+    #The Mantel test
+    #For a REGULAR configuration of points
+
+############SPATIAL AUTOCORRELATION IN MULTIVARIATE DATA##############
+
+#The Mantel test
+#In case of multivariate data it can be useful to have a test that sum up the spatial autocorrelation for  all characteristics/variables
+#In that case, we need to test the correlation between a matrix of geographical distance and a matrix of distance of the characteristics between objects 
+#To compute a geographical distance matrix you can use the function dist that 
+#compute an euclidian distance
+geo = dist(marexy)
+
+#To compute the matrix of distance of the characteristics between objects, 
+#we can have our own measure (genetic distance, similarity etc...) 
+# or compute an euclidean distance between the object 
+# it is usually advice to scale the data if they are not measure on the same scale (ie to divide by the standard
+#deviation)
+chim = dist(scale(mare[,1:10]),method = "euclidian")
+
+# the test used to correlate those two matrix is a Mantel test, it uses randomization of the values 
+#to have the expected distribution under H0
+# H0: the correlation between teh two matrix is null : there is no spatial autocorrelation
+r1 = mantel.rtest(geo,chim,nrepet=1000)
+#nrepet = to specify the number of permutations
+# or r1 = mantel.randtest(geo,chim,nrepet=1000)
+r1 
+plot(r1, main = "Mantel's test")
+
+#Significant
+#Indicator far from what is expected if permutations are involved
+#Ponds that are close will look alike
+#Spatial dependence
+```
+
+
 
 **3.2.2 Spatial autocorrelation of categorical variables**
 
