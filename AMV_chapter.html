@@ -332,7 +332,7 @@ Z_p=\Sigma^p_{j=1}ø_j\times X_j
 <p>The process begins with a matrix <span class="math inline">\(Y\)</span>, where each row represents an observation and each column represents a continuous variable.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/table-inds-vars.png" class="img-fluid figure-img" width="230"></p>
+<p><img src="table-inds-vars.png" class="img-fluid figure-img" width="230"></p>
 </figure>
 </div>
 <p>First, we normalize the observations as follows :</p>
@@ -663,7 +663,7 @@ Drews      0.53811419 2.784934e-01 0.1528997775 1.306683e-02 0.0056915740</code>
 <p>Correspondence Analysis (CA) represents a statistical method aimed at exploring the relationship between two sets of categories. In contrast to PCA, which applies to continuous variables, CA is designed for categorical variables, allowing the analysis of the structure of a contingency table.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Table_de_contingence.png" class="img-fluid figure-img" width="261"></p>
+<p><img src="Table_de_contingence.png" class="img-fluid figure-img" width="261"></p>
 </figure>
 </div>
 <p>In essence, Correspondence Analysis (CA) seeks to graphically represent associations between rows and columns in a contingency table. It helps reveal trends, groupings, or oppositions within categories, providing insight into the structure of dependence between variables.</p>
@@ -1221,11 +1221,11 @@ Call: randtest.pcaiv(xtest = ccaoak)
 Observation: 0.1270957 
 
 Based on 99 replicates
-Simulated p-value: 0.02 
+Simulated p-value: 0.01 
 Alternative hypothesis: greater 
 
      Std.Obs  Expectation     Variance 
-2.5186419120 0.0885374773 0.0002343691 </code></pre>
+3.3273097300 0.0852729286 0.0001579932 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randtest</span>(ccaoak))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -1868,8 +1868,8 @@ Number of tests:   2
 Adjustment method for multiple comparisons:   none 
 Permutation number:   999 
      Test        Obs  Std.Obs   Alter Pvalue
-1 Model 2 0.01602442 9.310036 greater  0.001
-2 Model 4 0.01602442 2.476785 greater  0.022</code></pre>
+1 Model 2 0.01602442 9.151203 greater  0.001
+2 Model 4 0.01602442 2.293103 greater  0.032</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randtest</span>(rlq))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
