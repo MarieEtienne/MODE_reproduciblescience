@@ -81,7 +81,7 @@ Let's then begin the analysis of first dataset dealing with richness of birds fr
 #Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
 
 #Import dataset
-div35=read.table("C:/Users/alexa/git/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/div35.txt", header=T, dec=",")
+div35=read.table("~/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/div35.txt", header=T, dec=",")
 
 #Summary
 summary(div35)
@@ -107,7 +107,7 @@ Let's also start the analysis of second dataset dealing with chemical measures i
 #The data set is issued from a study that analysed several physiocochemical properties of several ponds. each pond is geolocalized
 
 #Import the dataset
-mare=read.table("C:/Users/alexa/OneDrive/Documents/3A ingé agro - M2 EFCE/ASA/Séries temporelles & spatiales/script and data for lecture-20230925/mares.txt",header=TRUE)
+mare=read.table("~/MODE_reproduciblescience/Spatial autocorrelation_ modelisation/mares.txt",header=TRUE)
 
 #Summary
 summary(mare)
