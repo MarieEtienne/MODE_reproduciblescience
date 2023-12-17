@@ -130,7 +130,7 @@ library(TSA)       # Time series analysis (autocorrelation tests)
 To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures in time.
 
 ```{r}
-## Load the data
+# Load the data
 dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
 head(dataT)       # What are the data
 summary(dataT)    # Summary of the spread of each variable
@@ -794,7 +794,6 @@ div.knear8
 knn2nb(div.knear8)
 
 # Plotting the connection between points for each criterion
-x11()
 par(mfrow=c(1,2))
 
 ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000),  clabel=0.6, cpoint=1,neig=nb2neig(knn2nb(div.knear4)))
@@ -1277,7 +1276,6 @@ localI.oi1
 localI.oi1[localI.oi1[,5]<0.05,]
 
 #We can also represent the Local Index value using this code lines:
-x11()
 par(mfrow=c(2,1))
 s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")
 s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")
