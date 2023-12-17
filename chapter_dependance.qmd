@@ -163,7 +163,7 @@ Our exemple here will be the study of plants and bird richness in Ile & Vilaine.
 *(To see how to create weighted matrix, see the previous parts)*
 
 ```{r}
-div35=read.table("MODE_reproduciblescience\Spatial autocorrelation_ modelisation\div35.txt", header=T, dec=",")
+div35=read.table("Spatial_autocorrelation_modelisation/div35.txt", header=T, dec=",")
 
 xy=div35[,3:4] #Extract the coordinates x and y of each points
 plot(div35[,3:4])
@@ -397,7 +397,7 @@ lmgwrD$RMSPE #gives the root-square of the bandwidth
 
 ```{r}
 plot(xy)
-s.value(xy,lmgwrD$beta[2,],add.plot=T)
+#s.value(xy,lmgwrD$beta[2,],add.plot=T)
 
 ```
 
