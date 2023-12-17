@@ -794,12 +794,14 @@ div.knear8
 knn2nb(div.knear8)
 
 # Plotting the connection between points for each criterion
-x11()
+## MPE this in an intercative command, can not be used with a markodon document.
+#x11()
 par(mfrow=c(1,2))
 
 ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000),  clabel=0.6, cpoint=1,neig=nb2neig(knn2nb(div.knear4)))
 ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000),  clabel=0.4, cpoint=1,neig=nb2neig(knn2nb(div.knear8)))
 #Be careful, the distance between points is not always 10km !
+par(mfrow=c(1,1))
 ```
 
 **c) Defining neighbours based on the optimisation of a trajectory**
