@@ -23,6 +23,7 @@ library(tidyverse)
 
 and then describe the purpose of your chapter as well as executing R command.
 
+
 For example a basic summary of a dataset is given by 
 
 ```{r}
