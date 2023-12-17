@@ -500,7 +500,7 @@ Let's then begin the analysis of a first dataset dealing with richness of birds 
 #Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
 
 #Import dataset
-div35=read.table("https://github.com/MarieEtienne/MODE_reproduciblescience/blob/master/div35.txt", header=T, dec=",")
+div35=read.table("div35.txt", header=T, dec=",")
 
 #Summary
 summary(div35)
@@ -523,10 +523,10 @@ Let's also start the analysis of second dataset dealing with chemical measures i
 
 #      0 - Exploring the data set  
 
-#The data set is issued from a study that analysed several physiocochemical properties of several ponds. each pond is geolocalized
+#The data set is issued from a study that analysed several physico-chemical properties of several ponds. each pond is geolocalised
 
 #Import the dataset
-mare=read.table("https://github.com/MarieEtienne/MODE_reproduciblescience/blob/master/mares.txt",header=TRUE)
+mare=read.table("mares.txt",header=TRUE)
 
 #Summary
 summary(mare)
