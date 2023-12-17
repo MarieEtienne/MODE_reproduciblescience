@@ -830,7 +830,7 @@ Mathematical definition of spatial relationships
 </div>
 <p>First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.</p>
 <p>The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :</p>
-<p><img src="images/image-232123009.png" width="470" height="59"></p>
+<p><img src="image-232123009.png" width="470" height="59"></p>
 <p>Conversely, the distance matrix measures dissimilarity between zones. The higher <span class="math inline">\(d_{ij}\)</span> , the more different the zones. With, if an Euclidian distance is used : <span class="math inline">\(d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}\)</span>, <span class="math inline">\(α\)</span> and <span class="math inline">\(β\)</span> being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:</p>
 <ul>
 <li>Genetic proximity between families</li>
@@ -1684,9 +1684,9 @@ Non-symmetric neighbours list</code></pre>
 <h4 class="anchored" data-anchor-id="from-a-list-of-neighbours-to-a-weight-matrix"><strong>1.3.1 From a list of neighbours to a weight matrix</strong></h4>
 <p>Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is transformed into the element <span class="math inline">\(w_{ij}\)</span> of the weight matrix <span class="math inline">\(W\)</span>. The weight matrix <span class="math inline">\(W\)</span> is the “formal expression of spatial dependency between observations” (Anselin et al.&nbsp;1988)<br>
 Formally, the weights express the neighbor structure between the observations as a <span class="math inline">\(n\times n\)</span> matrix <span class="math inline">\(W\)</span> in which the elements <span class="math inline">\(w_{ij}\)</span> of the matrix are the spatial weights:</p>
-<p><img src="images/image-672436714.png" class="img-fluid" width="285"></p>
+<p><img src="image-672436714.png" class="img-fluid" width="285"></p>
 <p><strong>Defining the weight matrix</strong></p>
-<p>Most commonly, the weight matrix is a binary contiguity matrix (see <em>Figure 2.13</em>):</p>
+<p>Most commonly, the weight matrix is a binary contiguity matrix (see <em>Figure 2.14</em>):</p>
 <blockquote class="blockquote">
 <p><img src="image-562063019.png" class="img-fluid" width="431"></p>
 </blockquote>
@@ -3093,11 +3093,11 @@ Call: mantel.rtest(m1 = geo, m2 = chim, nrepet = 1000)
 Observation: 0.2437815 
 
 Based on 1000 replicates
-Simulated p-value: 0.004995005 
+Simulated p-value: 0.000999001 
 Alternative hypothesis: greater 
 
-      Std.Obs   Expectation      Variance 
- 2.9053461286 -0.0004236926  0.0070650325 </code></pre>
+    Std.Obs Expectation    Variance 
+2.917597501 0.001414053 0.006900776 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
