@@ -1621,8 +1621,6 @@ s.value(xy,lmgwrD$beta[2,],add.plot=T)
 
 The result can finally be plotted for each point.
 
-# Summary
-
 # References
 
 F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ».
@@ -1662,8 +1660,6 @@ https://doi.org/10.1016/B978-008044910-4.00447-8.
 
 https://gdsl-ul.github.io/san/09-gwr.html
 
-### **References**
-
 Anselin, Luc (2013).
 Spatial econometrics: methods and models.
 Vol.
@@ -1692,3 +1688,4 @@ Tiefelsdorf, Michael (1998).
 « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ».
 PhD thesis.
 Université Wilfrid Laurier.
+
