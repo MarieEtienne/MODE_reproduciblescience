@@ -12,6 +12,7 @@ editor:
     wrap: sentence
 ---
 
+
 ```{r}
 library(tidyverse)
 ```
@@ -99,6 +100,7 @@ It enables appropriate statistical methods to be applied, biases to be corrected
 It is also essential for understanding patterns of variation in biological data.
 
 <br />
+
 
 # I. Time dependence
 
@@ -1002,6 +1004,7 @@ pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
 ```
 
 ------------------------------------------------------------------------
+
 
 ## **2 - Spatial autocorrelation indices**
 
