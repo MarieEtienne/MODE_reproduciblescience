@@ -12,7 +12,6 @@ editor:
     wrap: sentence
 ---
 
-
 ```{r}
 library(tidyverse)
 ```
@@ -20,77 +19,94 @@ library(tidyverse)
 # Introduction
 
 ### 1. What is autocorrelation ?
-Statistical analyses, including many regression methods, often assume that observations are independent of each other. Most of the time, it seems natural to analyse two different datas, X and Y, assuming their independence. But there may still be a dependency intrinsic to each of them: this is known as autocorrelation. Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power.
 
-In statistics, autocorrelation is a measure of the linear dependence between the values of one variable itself, at different times or locations. Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series. In other words, this means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if the data at time 2 can be predicted with what we know about the data at time 1, if they are close in space or time.
+Statistical analyses, including many regression methods, often assume that observations are independent of each other.
+Most of the time, it seems natural to analyse two different datas, X and Y, assuming their independence.
+But there may still be a dependency intrinsic to each of them: this is known as autocorrelation.
+Autocorrelation indicates that the independence assumption is not satisfied, which can lead to biased parameter estimates, incorrect confidence intervals and a loss of statistical power.
 
-Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient. Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be:
+In statistics, autocorrelation is a measure of the linear dependence between the values of one variable itself, at different times or locations.
+Checking for autocorrelation in a variable means analyzing the relationship between an observation and other previous observations in the series.
+In other words, this means analyzing the possible link between what is measured at time 1 and what is measured at time 2, to see if the data at time 2 can be predicted with what we know about the data at time 1, if they are close in space or time.
 
-* positive: indicating that the observations tend to be similar,
+Correlation between two observations is often expressed as a correlation coefficient, such as Pearson's correlation coefficient.
+Values are correlated with an offset function in time or space, giving an autocorrelation coefficient which may be:
 
-* negative: indicating that the observations tend to be opposite to each other.
+-   positive: indicating that the observations tend to be similar,
 
+-   negative: indicating that the observations tend to be opposite to each other.
 
 ### 2. What types of autocorrelation ?
+
 Autocorrelation is commonly used to analyze data for which the order or location of observations has an important significance, such as:
 
-* Time series: data taken at the same location at several points in time,
+-   Time series: data taken at the same location at several points in time,
 
-* Spatial data: data taken at a given point in time at several locations in the same geographical area, and therefore close in space. 
+-   Spatial data: data taken at a given point in time at several locations in the same geographical area, and therefore close in space.
 
 #### 2.1. Time series
+
 A typical example of autocorrelation in a time series is a seasonal autocorrelation, where values are observed at a same time each year (seasons), and are therefore correlated with each other.
 
 Temporal autocorrelation shows spatial similarities that depend on the scale used.
 
-
 ![**(from P. LeGouar)**](Intro_dependance.jpg)
 
-
-Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes. 
+Temporal autocorrelation in ecology is important for understanding the processes of reproduction, migration, population dispersal and species responses to seasonal environmental changes.
 
 ##### Example of temporal autocorrelation
-An example of temporal autocorrelation in ecology concerns populations of animal or plant species, particularly when studying seasonal variations. Let's imagine a study of annual fluctuations in the population of migratory birds in a given region. Temporal autocorrelation means that the number of birds observed at a given time of the year is correlated with the number of birds observed at the same time of the previous year.
 
-Suppose the data show positive temporal autocorrelation for a migratory bird species. This would mean that if, for example, in April of the current year, a large number of these birds are observed, it is highly likely that in April of the previous year, a large number of these same birds were also observed. This temporal dependence may be due to seasonal bird migrations, the availability of food resources or other cyclical environmental factors.
+An example of temporal autocorrelation in ecology concerns populations of animal or plant species, particularly when studying seasonal variations.
+Let's imagine a study of annual fluctuations in the population of migratory birds in a given region.
+Temporal autocorrelation means that the number of birds observed at a given time of the year is correlated with the number of birds observed at the same time of the previous year.
+
+Suppose the data show positive temporal autocorrelation for a migratory bird species.
+This would mean that if, for example, in April of the current year, a large number of these birds are observed, it is highly likely that in April of the previous year, a large number of these same birds were also observed.
+This temporal dependence may be due to seasonal bird migrations, the availability of food resources or other cyclical environmental factors.
 
 #### 2.2. Spatial dependence
-Spatial autocorrelation refers to the correlation between observations in close spatial locations.
-It shows temporal similarities that depend on the scale used. Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales.
 
+Spatial autocorrelation refers to the correlation between observations in close spatial locations.
+It shows temporal similarities that depend on the scale used.
+Spatial autocorrelation is important for understanding patterns of species distribution, population dispersal, biotic interactions and ecological processes at different spatial scales.
 
 Spatial autocorrelation can be due to various factors, such as :
 
-* Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
+-   Microclimate effects: local characteristics of terrain, vegetation or topography can influence temperature on a small scale,
 
-* Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
+-   Dispersion phenomena: the propagation of heat, wind, humidity or other environmental factors can cause spatial autocorrelation,
 
-* Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
-
+-   Biotic interactions: interactions between plant, animal and micro-organism species in an ecosystem can also influence the spatial distribution of variables such as temperature.
 
 ##### Example of spatial dependence
-An example of spatial autocorrelation is the observation of temperature distribution in a large forest. Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations. Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar.
 
-Suppose the data show positive spatial autocorrelation. This would mean that, if you have two weather stations located close to each other (say, a few meters apart), the temperatures measured at these two stations at any given time are highly positively correlated. In other words, when one of the stations records a high temperature, the other station will also tend to record a high temperature, and vice versa.
+An example of spatial autocorrelation is the observation of temperature distribution in a large forest.
+Let's imagine a large, dense forest with many weather stations measuring temperatures at different locations.
+Spatial autocorrelation would manifest itself in the fact that temperatures recorded at nearby locations in the forest are correlated, i.e. they tend to be similar.
 
+Suppose the data show positive spatial autocorrelation.
+This would mean that, if you have two weather stations located close to each other (say, a few meters apart), the temperatures measured at these two stations at any given time are highly positively correlated.
+In other words, when one of the stations records a high temperature, the other station will also tend to record a high temperature, and vice versa.
 
 ### 3. Why is this important?
-Autocorrelation is an essential concept in statistics, as it can have a significant impact on data analysis. In the presence of pseudoreplications, meaning that several different values are thought to be taken when in fact they are dependent on each other, it may appear that one variable has a significant effect on another, when in reality this effect is biased due to the temporal or spatial dependence of the data. It can therefore have a significant impact on statistical analysis, and often requires adjustments to ensure that results are reliable and unbiased.
 
+Autocorrelation is an essential concept in statistics, as it can have a significant impact on data analysis.
+In the presence of pseudoreplications, meaning that several different values are thought to be taken when in fact they are dependent on each other, it may appear that one variable has a significant effect on another, when in reality this effect is biased due to the temporal or spatial dependence of the data.
+It can therefore have a significant impact on statistical analysis, and often requires adjustments to ensure that results are reliable and unbiased.
 
-Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses. It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made. It is also essential for understanding patterns of variation in biological data.
+Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses.
+It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made.
+It is also essential for understanding patterns of variation in biological data.
 
 <br />
 
-
-
-
 # I. Time dependence
 
-Temporal dependency means that values sampled at a given time can be related to the value sampled before. Therefore, the variable can be correlated to itself and create **pseudoreplication**. 
+Temporal dependency means that values sampled at a given time can be related to the value sampled before.
+Therefore, the variable can be correlated to itself and create **pseudoreplication**.
 
+Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis).
 
-Diverse packages on R are useful to manage time series, such as TSA (Time Series Analysis). 
 ```{r, echo = F, error=FALSE}
 ## Install and load the packages required
 
@@ -109,7 +125,7 @@ library(TSA)       # Time series analysis (autocorrelation tests)
 
 ### 1. The dataset
 
-To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures in time. 
+To understand better how to handle time series, data are used to illustrate the process from an experiment on vultures in time.
 
 ```{r}
 ## Load the data
@@ -119,7 +135,8 @@ head(dataT)       # What are the data
 summary(dataT)    # Summary of the spread of each variable
 ```
 
-Two colonies 'C' and 'O' are studied from 1972 to 2003. In particular, the reproductive success (success), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies. 
+Two colonies 'C' and 'O' are studied from 1972 to 2003.
+In particular, the reproductive success (success), the growth rate (growth), the density of population (denstot) and the resource availability (ratio) of the colonies.
 
 ```{r}
 ## Arrange the dataset
@@ -154,36 +171,38 @@ plot(O[,2],O[,5], pch=16, xlab="year", ylab="Number of pairs")
 lines(O[,2],O[,5])
 mtext(text="Parameter for Colony O",side=1,line=-14.5,outer=TRUE)
 ```
-Through time, all the variables do not have the same behaviour for both of the colonies. 
+
+Through time, all the variables do not have the same behaviour for both of the colonies.
 Some variables fluctuate in time like the O colony growth rate, or can evolve gradually, like the number of pairs for the O colony.
 
 The irregularity in time of the variables can mean that the data are correlated to the precedent ones.
 A key parameter to know if there really is a correlation of the variable to itself is **autocorrelation**.
 
-
 ### 3. Autocorrelation
 
 Autocorrelation is given by the expression: $$\rho(k) = \frac{E(X_tX_{t+1}) - E(X_t)E(X{t+1})}{\sqrt{E(X_t^2)E(X_{t+1}^2)}}$$
 
-With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$. 
+With the discrete sequence $\{X_1, ... X_T\}$ with $X = \{X_t\}_{t\in\mathbb{N}}$ as $E[X_t^2] < \infty$ for $t\in\mathbb{Z}$.
 
 In other words, the values are compared to their neighbors to conclude if they are correlated or not.
 
 The autocorrelation can be detected in a **non-stationary process**.
 
-**Stationnarity** is the constistency of the statistical parameters of a series such as the mean and the variance (Figure). 
+**Stationnarity** is the constistency of the statistical parameters of a series such as the mean and the variance (Figure).
 
-- In non-stationary processes, these parameters vary in time.
-- In stationary processes, the values gravitate around a mean value within the same range. 
+-   In non-stationary processes, these parameters vary in time.
+-   In stationary processes, the values gravitate around a mean value within the same range.
 
-![Stationary and non-stationary processes](C:/Users\User\OneDrive\Bureau\MODE\M2\OCR\Stationarycomparison.png)
+![Stationary and non-stationary processes](C:/Users%5CUser%5COneDrive%5CBureau%5CMODE%5CM2%5COCR%5CStationarycomparison.png)
 
 Given the precedent plots displayed, one would think there are both stationary and non-stationary processes within the different variables.
-Tests will allow us to know with more details if there is a dependency. 
+Tests will allow us to know with more details if there is a dependency.
 
-On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package. 
+On R, autocorrelation can be known thanks to the function acf (Auto- and Cross- Covariance and -Correlation Function Estimation) of the TSA package.
 
-**Important note:** In order for the afc() function to work, the data have to be sorted according to time with one value per time step. To do so, *NA* or mean values can be added if necessary to fill the dataset accordingly. The package lubridate can be useful to manage dates data.
+**Important note:** In order for the acf() function to work, the data have to be sorted according to time with one value per time step.
+To do so, *NA* or mean values can be added if necessary to fill the dataset accordingly.
+The package lubridate can be useful to manage dates data.
 
 ```{r}
 par(mfrow=c(2,3),mar=c(2,4,4,2))
@@ -194,45 +213,44 @@ acf(O[,3], main="Reproductive success for O")
 acf(O[,4], main="Growth rate for O")
 acf(O[,5], main="Density for O")
 ```
-The plots display the correlation coefficient at the associated time step with the neighbors (lag). The blue dotted lines represent the significance threshold of correlation. 
+
+The plots display the correlation coefficient at the associated time step with the neighbors (lag).
+The blue dotted lines represent the significance threshold of correlation.
 
 These plots allow us to know if the time dependency exists and what profile it follows.
 
-- Growth rate of O and reproductive success of C : **White noise**. There is no significant value and particular pattern. Therefore, no time dependency.
-- Density of C and reproductive success of O : **Short positive dependency**. Some values are significantly positively correlated and a pattern emerges (cyclic here). 
-- Growth rate of C : **Short negative dependency**. Some values are significantly negatively correlated and a pattern emerges (cyclic here).
-- Density of O : **Long term dependency**. Several values are significantly correlated and a pattern appears (linear here).
+-   Growth rate of O and reproductive success of C : **White noise**. There is no significant value and particular pattern. Therefore, no time dependency.
+-   Density of C and reproductive success of O : **Short positive dependency**. Some values are significantly positively correlated and a pattern emerges (cyclic here).
+-   Growth rate of C : **Short negative dependency**. Some values are significantly negatively correlated and a pattern emerges (cyclic here).
+-   Density of O : **Long term dependency**. Several values are significantly correlated and a pattern appears (linear here).
 
 For the following analyses, we will focus on the Density of the O colony.
 The time is considered an **autocovariable**.
 
 ### 4. Models
 
-Now that the time dependency have been proved to be true thanks to autocorrelation test, it is possible to proceed with adapted statistical tests. 
+Now that the time dependency have been proved to be true thanks to autocorrelation test, it is possible to proceed with adapted statistical tests.
 
-Different models can be used according to the type of dependency found in the data. 
+Different models can be used according to the type of dependency found in the data.
 The goal will be to apply the model and verify that there is no time dependency left on the **residuals**.
 
 #### 5. Least square ordinary regression
 
 Least square ordinary regression methods are used during the process of selection of the model.
 
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_nX_n + \epsilon$$
-- $Y$ is the dependent variable
-- $X_n$ are the explanatory variables 
-- $\beta_n$ are the coefficients of $X$
-- $\epsilon$ is the random error term or **residuals**
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_nX_n + \epsilon$$ - $Y$ is the dependent variable - $X_n$ are the explanatory variables - $\beta_n$ are the coefficients of $X$ - $\epsilon$ is the random error term or **residuals**
 
-To select a relevant model is the same as selecting a model that maximizes **likelihood** and minimize the **number of parameters**. 
-
+To select a relevant model is the same as selecting a model that maximizes **likelihood** and minimize the **number of parameters**.
 
 #### 6. Weak time dependency
 
-If the data display a weak time dependency, it is possible to simply add the time as a random variable to the model. 
+If the data display a weak time dependency, it is possible to simply add the time as a random variable to the model.
 
-$$Y\sim\alpha.X + time$$ 
+$$Y\sim\alpha.X + time$$
 
-**Important note:** If the variance of $Y$ increases beforehand, you will need to perform a **logarithmic** transformation. If the variance of $Y$ decreases beforehand, one would use an **exponential** transformation. Here, the variance increases. 
+**Important note:** If the variance of $Y$ increases beforehand, you will need to perform a **logarithmic** transformation.
+If the variance of $Y$ decreases beforehand, one would use an **exponential** transformation.
+Here, the variance increases.
 
 A useful package on R to manage glm and gls is be nlme.
 
@@ -241,6 +259,7 @@ par(mfrow=c(1,2))
 hist(O$denstot, main = paste("Histogram of total density", "\n" ,"of O colony "), xlab = "Density")
 hist(log(O$denstot), main = paste("Histogram of total density", "\n" ,"of colony O (log transformation)"), xlab = "Log(Density)")
 ```
+
 The plots indicates that a log transformation could help better manage the data.
 
 A simple lme model can be used (Linear Mixed-Effects Model) with X = log(total density) and Y the ressource availability.
@@ -260,32 +279,32 @@ acf(modlme$residuals[,1], main = "Residuals of the lme model")
 summary(modlme)
 ```
 
-
-The plot shows there is still a time dependency in this kind of model. 
-The correlation value is too strong, the model is not adapted to this case. 
+The plot shows there is still a time dependency in this kind of model.
+The correlation value is too strong, the model is not adapted to this case.
 
 ### 7. Medium to strong time dependency
 
-If a medium or a strong time dependency are proven, adding time as a random effect will not be effective enough. 
+If a medium or a strong time dependency are proven, adding time as a random effect will not be effective enough.
 It will be necessary to use **Time Models**.
 
 #### 7.1 Stationary process
 
-To deal with stationary processes, it is possible to use GLS (Generalized Leat Square) models. 
-Three major GLS models can be used. 
+To deal with stationary processes, it is possible to use GLS (Generalized Leat Square) models.
+Three major GLS models can be used.
 
-- **AR** or **Autoregressive Model** states that a value $Y_{(t)}$ will depend on the values $Y$ at $p$ the precedent times. The model adds a an autoregressive coefficient $\phi_p$ to each $Y_{(t-1)}$ value. In summary, this model explains the current value as a linear combination of the precedent values with $\epsilon_t$ the random component or white noise. 
-$$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)}$$
+-   **AR** or **Autoregressive Model** states that a value $Y_{(t)}$ will depend on the values $Y$ at $p$ the precedent times.
+    The model adds a an autoregressive coefficient $\phi_p$ to each $Y_{(t-1)}$ value.
+    In summary, this model explains the current value as a linear combination of the precedent values with $\epsilon_t$ the random component or white noise.
+    $$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)}$$
 
-- **MA** or **Moving Average model** functions in the same way as the AR model. However, it will consider that the current value of a series is the weighted linear combination of the previous $q$ errors. 
+-   **MA** or **Moving Average model** functions in the same way as the AR model.
+    However, it will consider that the current value of a series is the weighted linear combination of the previous $q$ errors.
 
 $$Y_{(t)}= \mu+ \theta_1 \times \epsilon_{(t-1)}+\theta_2 \times \epsilon_{(t-2)}) + ...+\theta_q \times \epsilon_{(t-q)} $$
 
-- **ARMA** is a combination of **AR** and **MA** models and is a linear combination of the $p$ past values and $q$ past residual errors.
+-   **ARMA** is a combination of **AR** and **MA** models and is a linear combination of the $p$ past values and $q$ past residual errors.
 
-$$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)} + \theta_1 \times \epsilon_{(t-1)}+\theta_2 \times \epsilon_{(t-2)}) + ...+\theta_q \times \epsilon_{(t-q)} $$
-The gls() function covers the three types of model depending on the correlation structure of the data. 
-
+$$Y_{(t)}=\mu+\phi_1 \times Y_{(t-1)}+\phi_2 \times Y_{(t-2)} + ...+\phi_q \times Y_{(t-p)}+\epsilon_{(t)} + \theta_1 \times \epsilon_{(t-1)}+\theta_2 \times \epsilon_{(t-2)}) + ...+\theta_q \times \epsilon_{(t-q)} $$ The gls() function covers the three types of model depending on the correlation structure of the data.
 
 ```{r}
 ## Model construction
@@ -297,8 +316,9 @@ acf(modgls$residuals, main = "Residuals of the gls model")
 summary(modgls)
 ```
 
-The autoregressive coefficient Psi is equal to 0.72. The autocorrelation is not completely removed. Still, the variable 'ratio' does not have a significant effect on $Y$ anymore.
-
+The autoregressive coefficient Psi is equal to 0.72.
+The autocorrelation is not completely removed.
+Still, the variable 'ratio' does not have a significant effect on $Y$ anymore.
 
 We can compare the two previous models thanks to an analysis of their variance (anova).
 
@@ -316,40 +336,45 @@ anova(modgls2,modgls)
 anova(modgls2)
 ```
 
-The second models fits the data better than the first. We can conclude that the autocorrelation made the ratio variable effect wrongly significant.
+The second models fits the data better than the first.
+We can conclude that the autocorrelation made the ratio variable effect wrongly significant.
 
-In order to chose the range of application of the parameters $p$ and $q$, it is possible to use a **partial correlation function** that will display the direct correlation link between the time steps. 
+In order to chose the range of application of the parameters $p$ and $q$, it is possible to use a **partial correlation function** that will display the direct correlation link between the time steps.
 
 ```{r}
 par(mfrow=c(1,2))
 acf(log(O$denstot), main="Density for O")
 pacf(log(O$denstot), main="Density for O")
 ```
-So, the order $p$ (AR) is generally chosen based on significant lags in the PACF, and the order $q$ (MA) is generally chosen based on significant lags in the ACF.
 
+So, the order $p$ (AR) is generally chosen based on significant lags in the PACF, and the order $q$ (MA) is generally chosen based on significant lags in the ACF.
 
 #### 7.2 Non-stationary process
 
-To manage non-stationary processes, another model called **ARIMA** is used. A new parameter $d$ is introduced with $p$ and $q$. 
+To manage non-stationary processes, another model called **ARIMA** is used.
+A new parameter $d$ is introduced with $p$ and $q$.
 
- **ARIMA(p,d,q)** models are a combination of **AR** models with $p$, **MA** models with $q$, and finally includes difference of order $d$. 
+**ARIMA(p,d,q)** models are a combination of **AR** models with $p$, **MA** models with $q$, and finally includes difference of order $d$.
 
 This difference helps make the series stationary by subtracting from the current value the values from the previous $d$ time points.
 
 In general, we will choose an order $d=1$ when the series shows a **constant trend**, and an order $d=2$ when the series shows a **fluctuating trend**.
 
-On R, ARIMA models can be used with the function arima(). The argument 'order'contains the values of $p$, $d$ and $q$, in that order. 
+On R, ARIMA models can be used with the function arima().
+The argument 'order'contains the values of $p$, $d$ and $q$, in that order.
 
 ```{r}
 arima1=stats::arima(log(O$denstot),order=c(1,1,1),xreg=O$ratio)
 arima1
 ```
-Different values of these parameters can be tested to find the best model with the AIC criteria displayed in the results. $d$ must always be equal to 1. 
+
+Different values of these parameters can be tested to find the best model with the AIC criteria displayed in the results.
+$d$ must always be equal to 1.
 
 The ARIMA function can help make **predictions**.
 
-- prediction: now we will use this statistical model to make prediction under a specific scenario
-- scenario: constant and maximum availability in resource (ratio=1) during 20 years
+-   prediction: now we will use this statistical model to make prediction under a specific scenario
+-   scenario: constant and maximum availability in resource (ratio=1) during 20 years
 
 ```{r}
 newxreg=data.frame(O.ratio=rep(1,20))
@@ -361,32 +386,34 @@ plot(obspred$denstot, main = "Prediction on a 20 years scenario", ylab ="Predict
 lines(obspred$denstot)
 ```
 
-
 ### 8. To go further
 
-The **ARIMAX** model, which stands for **AutoRegressive Integrated Moving Average with eXogenous inputs**, is an extension of the ARIMA model that incorporates additional exogenous (external) variables. The ARIMAX model is particularly useful when there are external factors that can influence the time series to model.
+The **ARIMAX** model, which stands for **AutoRegressive Integrated Moving Average with eXogenous inputs**, is an extension of the ARIMA model that incorporates additional exogenous (external) variables.
+The ARIMAX model is particularly useful when there are external factors that can influence the time series to model.
 
 The eXogenous (X) Inputs are additional external variables that are not part of the time series being modeled but may influence it.
 These variables are included in the model to capture their impact on the dependent variable.
 
-The ARIMAX model allows to account for the influence of external factors when modeling time series data, making it more flexible and potentially improving the accuracy of predictions. 
+The ARIMAX model allows to account for the influence of external factors when modeling time series data, making it more flexible and potentially improving the accuracy of predictions.
 
+# II. Spatial dependance
 
-
-
-# II - Spatial series
-
-Spatial relationships are multidirectional and multilateral. They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
+Spatial relationships are multidirectional and multilateral.
+They are distinct, in this sense, from temporal relationships, which allow only sequential relationships along the past-present-future axis.
 
 These are the steps that will be followed here :
 
-**Define connection criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth. This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
+**Define connection criteria**: We establish criteria for connections, determining that point A is connected to point B, which in turn is connected to point C, and so forth.
+This linkage needs to be translated into a numerical value, providing a quantitative measure of connectivity.
 
-**Transform information into numerical value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points. This numerical transformation is crucial for subsequent analyses.
+**Transform information into numerical value:** The established connection criteria are converted into numerical values, creating a quantifiable representation of the relationships between points.
+This numerical transformation is crucial for subsequent analyses.
 
-**Calculate autocorrelation coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighbouring points.
+**Calculate autocorrelation coefficient:** Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient.
+This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighbouring points.
 
-**Integrating spatial autocorrelation into analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.
+**Integrating spatial autocorrelation into analyses:** Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes.
+This will be discussed later in this chapter.
 
 ------------------------------------------------------------------------
 
@@ -398,25 +425,40 @@ These are the steps that will be followed here :
 
 #### **1.1.1 Characteristics of the relationships between spatial objects**
 
-Consider a surface ℜ. This surface can be divided into n mutually exclusive zones. Two adjacent zones are separated by a common boundary.
+Consider a surface ℜ.
+This surface can be divided into n mutually exclusive zones.
+Two adjacent zones are separated by a common boundary.
 
 ::: callout-note
 ## Mathematical definition of spatial relationships
 
-Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$. A spatial object cannot be linked to itself: $(i,i) ⊈ B$. Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf, 1998).
+Spatial relationships $B$ are a subset of the Cartesian product $ℝ²× ℝ² = {(i, j) : i ∈ ℝ ², j ∈ ℝ²}$ of couples $(i, j)$ of spatial objects, i.e. all couples $(i, j)$ such that $i$ and $j$ are both spatial objects identified by their geographical coordinates, and such that $(i, j)$ is different from $(j,i)$.
+A spatial object cannot be linked to itself: $(i,i) ⊈ B$.
+Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects, the spatial relationships are said to be symmetrical (Tiefelsdorf, 1998).
 :::
 
-*Figure 2.1* illustrates the codifying process of spatial relationships. This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analyzable by a computer.
+*Figure 2.1* illustrates the codifying process of spatial relationships.
+This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analyzable by a computer.
 
 ![**Figure 2.1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](images/image-1363470329.png){width="517"}
 
-First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.
+First, the study zone is divided into mutually exclusive areas.
+Each area contains a reference point (often its centroid).
+Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points.
+The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.
 
-The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :
+The neighborhood matrix measures the similarity between observations.
+A value greater than zero indicates that the observations are considered neighbors.
+For example, in the case of the binary matrix shown in figure 1 :
 
 ![](images/image-232123009.png){width="470" height="59"}
 
-Conversely, the distance matrix measures dissimilarity between zones. The higher $d_{ij}$ , the more different the zones. With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:
+Conversely, the distance matrix measures dissimilarity between zones.
+The higher $d_{ij}$ , the more different the zones.
+With, if an Euclidian distance is used : $d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}$, $α$ and $β$ being the geographical coordinates of the observations.
+The spatial dependence structure may not be geographical.
+Any relevant dual relationship may be used to define a neighbourhood graph.
+For instance:
 
 -   Genetic proximity between families
 -   Cultural exchanges
@@ -424,7 +466,15 @@ Conversely, the distance matrix measures dissimilarity between zones. The higher
 
 #### **1.1.2 The "list of neighbours" object in R**
 
-| Package *spdep* makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. `neighbours_nb` is a list of length n. Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. If `[i]` does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
+| Package *spdep* makes it possible to define the relationships between spatial objects. 
+  In R, the class of an object defines all its properties and how the statistician can use it. 
+  Neighbourhood relationships are recorded in an object of class nb. 
+  Assume n spatial observations and `neighbours_nb` the spatial object containing the associated neighbourhood relationships. 
+  `neighbours_nb` is a list of length n. 
+  Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. 
+  If `[i]` does not have neighbours, the list contains only 0. 
+  The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). 
+  The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
 
 Let's load a few packages useful for analysis :
 
@@ -439,18 +489,18 @@ library(gwrr)  #to run geographically weighted regression
 #these two libraries (spdep and ade4 also provive function that make object compatibles between library)
 ```
 
-Let's then begin the analysis of first dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "*div35*".
+Let's then begin the analysis of a first dataset dealing with richness of birds from agricultural habitats and of plant species from permanent pastures at the scale of Ille-et-Vilaine, "*div35*".
 
 ```{r}
 #Spatial series analysis : dataset div35
 #For a REGULAR configuration of points 
 
-#      0 - Exporing the dataset 
+#      0 - Exploring the dataset 
 
 #Investigate the data set of plant and bird richness at the scale of Ille-et-Vilaine
 
 #Import dataset
-div35=read.table("https://github.com/cPerou/MODE_reproduciblescience/blob/master/Spatial%20autocorrelation_%20modelisation/div35.txt", header=T, dec=",")
+div35=read.table("https://github.com/MarieEtienne/MODE_reproduciblescience/blob/master/div35.txt", header=T, dec=",")
 
 #Summary
 summary(div35)
@@ -471,12 +521,12 @@ Let's also start the analysis of second dataset dealing with chemical measures i
 #Spatial series analysis : dataset mares
 #For an IRREGULAR configuration of points
 
-#      0 - Exporing the data set  
+#      0 - Exploring the data set  
 
 #The data set is issued from a study that analysed several physiocochemical properties of several ponds. each pond is geolocalized
 
 #Import the dataset
-mare=read.table("https://github.com/cPerou/MODE_reproduciblescience/blob/master/Spatial%20autocorrelation_%20modelisation/mares.txt",header=TRUE)
+mare=read.table("https://github.com/MarieEtienne/MODE_reproduciblescience/blob/master/mares.txt",header=TRUE)
 
 #Summary
 summary(mare)
@@ -490,54 +540,20 @@ plot(mare$x,mare$y)
 
 ### **1.2 Connection among neighbours**
 
-In order to identify points in close proximity, it is imperative to establish specific criteria beyond merely considering distance along the x-axis. This approach will enable us to clearly define the parameters that determine proximity between points in our analysis.
+In order to identify points in close proximity, it is imperative to establish specific criteria beyond merely considering distance along the x-axis.
+This approach will enable us to clearly define the parameters that determine proximity between points in our analysis.
 
 #### **1.2.1 Neighbourhood criterion**
 
 **a) Defining neighbours based on distance**
 
-Once we have a set of points spread across the territory, we can calculate the distance between them. These points may be specific locations where the information has been observed, or points representative of each zone, for example their centroid. In this case, the underlying assumption is that the distribution of the variable within each zone is sufficiently homogeneous to approximate it to a single point.
+Once we have a set of points spread across the territory, we can calculate the distance between them.
+These points may be specific locations where the information has been observed, or points representative of each zone, for example their centroid.
+In this case, the underlying assumption is that the distribution of the variable within each zone is sufficiently homogeneous to approximate it to a single point.
 
-Neighbourhood graphs materialise the links between the various entities. They are defined in such a way that they represent the underlying spatial structure as closely as possible. There exists many different types of neighbourhood graphs.
-
-**Application in R**
-
-Let's see what it looks like with the "*mares*" dataset :
-
-```{r}
-#Spatial series analysis : dataset "mares"
-#Connexions among neighbours
-#For an IRREGULAR configuration of points
-
-#Several criteria exist to connect points that are irregularly distributed.
-# It is necessary to tests several criteria to test different hypothesis and different scale of the phenomena.
-
-#Criteria are determined when we have an a priori idea of the processes involved.
-#For example, may be due to eutrophication (lots of nutrients added, lots of organisms making excrements), heterogeneity in the pond - pond animal and plant communities may have an influence
-#Two ponds should look alike because they're on the same soil
-#Animals and plants: depending on the dispersal abilities of these species, will influence a pattern in water quality.
-#Ponds supposed to be in a specific landscape will look alike.
-#Larger-scale phenomena (flooding): if ponds are distributed in a valley, all the ponds will be homogenized.
-
-
-#      1 - Examine the connection between points ====================
-# for first step extract the coordinate 
-marexy=mare[,11:12]
-
-#A - The Distance criterion ----------------------------
-# to compute a neighbor relationship using a distance criteria you should use this function 
-# using directly the coordinates as a matrix and indicating the min and max of distance.
-# the max of distance is defined depending on your knowledge of the system or for different hypothesis you want to test:
-
-mare.dnear<-dnearneigh(as.matrix(marexy),0,30) #here we specify that ponds are connected if they are appart from less than 30m
-
-# Graphic representation:
-s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear))
-
-# Synthetic view:
-mare.dnear #in that specific case: the ponds 4 and 31 are not connected to any other pond
-
-```
+Neighbourhood graphs materialise the links between the various entities.
+They are defined in such a way that they represent the underlying spatial structure as closely as possible.
+There exists many different types of neighbourhood graphs.
 
 **a.1) Neighbourhood graphs based on geometric concepts :**
 
@@ -547,15 +563,21 @@ mare.dnear #in that specific case: the ponds 4 and 31 are not connected to any o
 
 • **Sphere-of-influence based graph**
 
-The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap. The "circle of the nearest neighbour" of point P is the largest circle centred in P and that contains no other points than P. All points in the study set are not necessarily interconnected.
+The sphere-of-influence based graph links two points if their "circles from the nearest neighbour" overlap.
+The "circle of the nearest neighbour" of point $P$ is the largest circle centred in $P$ and that contains no other points than $P$.
+All points in the study set are not necessarily interconnected.
 
 ![**Figure 2.3 :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](images/image-1767308128.png){width="361"}
 
-• **Gabriel's graph** Gabriel's graph links two points $pi$ and $pj$ if and only if all other points are outside the circle with diameter $[pi, pj ]$.
+• **Gabriel's graph**
+
+Gabriel's graph links two points $p_i$ and $p_j$ if and only if all other points are outside the circle with diameter $[p_i, p_j]$.
 
 ![**Figure 2.4 :** Gabriel graph (source : Pascaline Le Gouar)](images/image-1231590752.png){width="227"}
 
-• **Graph of relative neighbours** The graph of relative neighbours considers that two points $pi$ and $pj$ are neighbours if $$d(p_i,p_j) ≤ max [d(p_i,p_k),d(p_j,p_k)] \,\,\,\,\,\,∀k = 1,..., n k\ne i,j$$ with $d(p_i, p_j)$ the distance between $p_i$ and $p_j$.
+• **Graph of relative neighbours**
+
+The graph of relative neighbours considers that two points $pi$ and $pj$ are neighbours if $$d(p_i,p_j) ≤ max [d(p_i,p_k),d(p_j,p_k)] \,\,\,\,\,\,∀k = 1,..., n k\ne i,j$$ with $d(p_i, p_j)$ the distance between $p_i$ and $p_j$.
 
 ![**Figure 2.5 :** Graph of relative neighbours (source : J. O'Rourke, 1982)](images/image-1901385633.png){width="304"}
 
@@ -572,11 +594,21 @@ Coming back to our "*mares*" dataset, we can explore these geometric concepts :
 #Connexions among neighbours
 #For an IRREGULAR configuration of points
 
+#Several criteria exist to connect points that are irregularly distributed.
+# It is necessary to tests several criteria to test different hypothesis and different scale of the phenomena.
+
+#Criteria are determined when we have an a priori idea of the processes involved.
+#For example, may be due to eutrophication (lots of nutrients added, lots of organisms making excrements), heterogeneity in the pond - pond animal and plant communities may have an influence
+#Two ponds should look alike because they're on the same soil
+#Animals and plants: depending on the dispersal abilities of these species, will influence a pattern in water quality.
+#Ponds supposed to be in a specific landscape will look alike.
+#Larger-scale phenomena (flooding): if ponds are distributed in a valley, all the ponds will be homogenized.
+
 #      1 - Examine the connection between points ====================
 # for first step extract the coordinate
 marexy=mare[,11:12]
 
-#             B - The gabriel graph method ---------------------------
+#           A - The gabriel graph method ---------------------------
 
 #Note that for this function, the coordinates should be in a matrix:
 mare.gab<-gabrielneigh(as.matrix(marexy))
@@ -596,7 +628,7 @@ gab=graph2nb(mare.gab)
 #note: the ponds 13, 28 and 31 seems to have no link. This is just because they do not appear
 #in the $from object but only in the $to (this is a bug in the function - we would assume)
 
-#             C - The Delaunay triangulation graph method -----------
+#         B - The Delaunay triangulation graph method -----------
 
 #to compute a neighbor relationship using the delaunay triangulation method 
 #We should use this function using directly the coordinates:
@@ -613,29 +645,11 @@ mare.tri
 
 ```
 
-Let's then compare the current criterions in the *mares* dataset:
-
-```{r}
-#Spatial series analysis : dataset "mares"
-#Connexions among neighbours
-#For an IRREGULAR configuration of points
-
-par(mfrow=c(1,3))
-s.label(marexy,clabel=.5, cpoint=.1,neig=nb2neig(graph2nb(mare.gab))) #Gabriel
-s.label(marexy,clabel=0.6,cpoint=1,neig=nb2neig(mare.tri))  #Triangulation
-s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear)) #Distance
-
-#When comparing gabriel, triangulation and distance results, we observe different connexions.
-
-#We can think of several biological processes according to the different critera :
-#Gabriel: we can imagine gradients in relation to the ground - we can also imagine a small hydro network that connects the two.
-#Triangular: Flooding in a valley would make a connection on a larger scale
-#Distance: composition of plant and animal communities, dispersion
-```
-
 **a.2) Neighbourhood graphs based on nearest neighbours**
 
-A second method consists in selecting the k closest points as neighbours. This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality. The choice can also be made to keep only the points located at a certain distance.
+A second method consists in selecting the k closest points as neighbours.
+This method has the advantage that it leaves no point without a neighbour, which is not required when conducting a spatial analysis, but generally offers a better reflection of reality.
+The choice can also be made to keep only the points located at a certain distance.
 
 For example :
 
@@ -653,14 +667,68 @@ Still using the example of Parisian districts, here's the nearest neighbour appl
 
 ![**Figure 2.7 :** Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
 
+The `nbdists` function of R can be used to calculate the vector of distances between neighbours.
+It makes it possible to determine the minimum distance $d_{min}$ above which all points have at least one neighbour, then the `dnearneighb` function allows to keep as neighbours only the points between distances $0$ and $d_{min}$.
+
+**Application in R**
+
+Let's see what it looks like with the "*mares*" dataset with the criterion of neighbours at a minimum distance (30 km) :
+
+```{r}
+#Spatial series analysis : dataset "mares"
+#Connexions among neighbours
+#For an IRREGULAR configuration of points
+
+#      1 - Examine the connection between points ====================
+# for first step extract the coordinate 
+marexy=mare[,11:12]
+
+#  C - The neighbours at a minimum distance criterion --------------------------
+# to compute a neighbor relationship using a distance criteria we should use this function using directly the coordinates as a matrix and indicating the min and max of distance.
+# the max of distance is defined depending on our knowledge of the system or for different hypothesis we want to test:
+
+mare.dnear<-dnearneigh(as.matrix(marexy),0,30) #here we specify that ponds are connected if they are appart from less than 30m
+
+# Graphic representation:
+s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear))
+
+# Synthetic view:
+mare.dnear #in that specific case: the ponds 4 and 31 are not connected to any other pond
+
+```
+
+Let's then compare the current criterions in the *mares* dataset:
+
+```{r}
+#Spatial series analysis : dataset "mares"
+#Connexions among neighbours
+#For an IRREGULAR configuration of points
+
+par(mfrow=c(1,3))
+s.label(marexy,clabel=.5, cpoint=.1,neig=nb2neig(graph2nb(mare.gab))) #Gabriel
+s.label(marexy,clabel=0.6,cpoint=1,neig=nb2neig(mare.tri))  #Triangulation
+s.label(marexy,clabel=0.6, cpoint=1,neig=nb2neig(mare.dnear)) #Neighbour at a min distance
+
+#When comparing gabriel, triangulation and distance results, we observe different connexions.
+
+#We can think of several biological processes according to the different critera :
+#Gabriel: we can imagine gradients in relation to the ground - we can also imagine a small hydro network that connects the two.
+#Triangular: Flooding in a valley would make a connection on a larger scale
+#Neighbour at a min distance: composition of plant and animal communities, dispersion
+```
+
 **b) Defining neighbours based on contiguity**
 
-When the areal data consist in a partition of the entire territory, the concept of "distance between observations" can become quite ambiguous. The example below illustrates the limits of using the distance between centroids to define the notion of neighbourhood.
+When the areal data consist in a partition of the entire territory, the concept of "distance between observations" can become quite ambiguous.
+The example below illustrates the limits of using the distance between centroids to define the notion of neighbourhood.
 
 ::: callout-note
 ##### Example - Ambiguity of the notion of distance between centroids
 
-Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another. However, the centroids in these zones are equidistant from each other (see *Figure 2.8*). Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
+Let $R_1$, $R_2$, $R_3$ be three distinct zones.
+It can be considered that since $R_2$ and $R_3$ are separated in space, but both are adjacent to $R_1$, they are both closer to $R_1$ than to one another.
+However, the centroids in these zones are equidistant from each other (see *Figure 2.8*).
+Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
 ![**Figure** **2.8** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
 :::
@@ -669,19 +737,22 @@ Let $R_1$, $R_2$, $R_3$ be three distinct zones. It can be considered that since
 
 -   **Rook contiguity**
 
-    In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment). This matches the movement of the Rook in chess.
+    In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment).
+    This matches the movement of the Rook in chess.
 
 ![**Figure 2.9 :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
 
 -   **Queen contiguity**
 
-    For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point. This matches the movement of the Queen in chess.
+    For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point.
+    This matches the movement of the Queen in chess.
 
 ![**Figure 2.10 :** Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
 
 -   **Bishop contiguity**
 
-    In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units. This matches the movement of the Bishop in chess.
+    In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units.
+    This matches the movement of the Bishop in chess.
 
 ![**Figure 2.11 :** Bishop configuration](images/image-2117709373.png){width="177"}
 
@@ -732,17 +803,24 @@ ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(
 
 **c) Defining neighbours based on the optimisation of a trajectory**
 
-Some methods such as spatial sampling require prior data sorting. When the latter are characterised by two variables (i.e. their geographical coordinates in the plan), how to choose a sorting method becomes a complex theoretical problem.
+Some methods such as spatial sampling require prior data sorting.
+When the latter are characterised by two variables (i.e. their geographical coordinates in the plan), how to choose a sorting method becomes a complex theoretical problem.
 
-One solution consists in running a path along all the points, and sorting them by their order of appearance when the path is taken. The neighbours of a given point are then the points located just before or just after along the path. Out of the set of possible paths, some have characteristics that are better suited to the desired objectives, such as, for instance, reducing sampling variance.
+One solution consists in running a path along all the points, and sorting them by their order of appearance when the path is taken.
+The neighbours of a given point are then the points located just before or just after along the path.
+Out of the set of possible paths, some have characteristics that are better suited to the desired objectives, such as, for instance, reducing sampling variance.
 
 -   **Shortest path (Hamilton path)**
 
-    This is the case of the **shortest path**. It minimises the sum of the distances between two consecutive points. This path, which does not set any particular constraints on the starting or arrival point, is known in the literature as the **Hamilton path** (*Figure 2.13b*).
+    This is the case of the **shortest path**.
+    It minimises the sum of the distances between two consecutive points.
+    This path, which does not set any particular constraints on the starting or arrival point, is known in the literature as the **Hamilton path** (*Figure 2.13b*).
 
 -   **Hamiltonian cycle**
 
-    A particular and well-known case of shortest path is that of the travelling salesman. It represents the path which a travelling salesman must take to visit all his customers, minimising the distance travelled and managing to return home in the evenings. Such a path corresponds to a **Hamiltonian cycle** (*Figure 2.13c*).
+    A particular and well-known case of shortest path is that of the travelling salesman.
+    It represents the path which a travelling salesman must take to visit all his customers, minimising the distance travelled and managing to return home in the evenings.
+    Such a path corresponds to a **Hamiltonian cycle** (*Figure 2.13c*).
 
     The `TSP` package in R allows to compute this thanks to the function `insert-dummy` and the `concorde` program.
 
@@ -750,9 +828,11 @@ One solution consists in running a path along all the points, and sorting them b
 
 The ***general randomized tessellation stratified method*** (GRTS, Stevens Jr et al. 2004) is popular in spatial sampling, as it makes it possible to get a spatially-balanced sample for a finite population of individuals (distinct and identifiable units of dimension 0 of a discrete population, e.g. trees in a forest), a linear population (continuous units of dimension 1, e.g. rivers) or a population of surfaces (continuous units of dimension 2, e.g. forests).
 
-The idea of the method is to project the coordinates on a unit square, then cut this square into four cells, each of which is cut again into four sub-cells, etc. To each cell, a value is assigned, resulting from the order in which the division was carried out, ultimately making it possible for the units to be placed on the path going through the two-dimensional space.
+The idea of the method is to project the coordinates on a unit square, then cut this square into four cells, each of which is cut again into four sub-cells, etc.
+To each cell, a value is assigned, resulting from the order in which the division was carried out, ultimately making it possible for the units to be placed on the path going through the two-dimensional space.
 
-This method can be implemented with package `spsurvey` in R (Kincaid et al. 2016). However, with the GRTS method, *large jumps* (*Figures 2.13d*) are created along the paths, which can affect the accuracy of the estimates.
+This method can be implemented with package `spsurvey` in R (Kincaid et al. 2016).
+However, with the GRTS method, *large jumps* (*Figures 2.13d*) are created along the paths, which can affect the accuracy of the estimates.
 
 ![Figure 2.13 : Looking for paths that cross through all the neighbourhoods of Paris](images/image-1294038395.png)
 
@@ -760,7 +840,8 @@ This method can be implemented with package `spsurvey` in R (Kincaid et al. 2016
 
 #### **1.3.1 From a list of neighbours to a weight matrix**
 
-Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_{ij}$ of the weight matrix $W$. The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
+Once the neighbourhood graph has been defined and codified into a list of neighbours, the link between points $i$ and $j$ is transformed into the element $w_{ij}$ of the weight matrix $W$.
+The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
 Formally, the weights express the neighbor structure between the observations as a $n\times n$ matrix $W$ in which the elements $w_{ij}$ of the matrix are the spatial weights:
 
 ![](images/image-672436714.png){width="285"}
@@ -773,13 +854,16 @@ Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.13
 
 ![**Figure 2.14 :** Binary weight matrix](images/image-497770688.png){width="592"}
 
-The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter. Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero. When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
+The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter.
+Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero.
+When the size of the zones is heterogeneous, this method increases the risk of a considerable variability in the number of neighbours.
 
-Lastly, certain matrices take the **strength of relations** between the zones into account. For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
+Lastly, certain matrices take the **strength of relations** between the zones into account.
+For example, weight can be defined by $\frac{b^α_{ij}}{d^β_{ij}}$ with $b_{ij}$ a measure of the strength of relationships between zones $i$ and $j$ (which is not necessarily symmetrical), such as the percentage of common boundaries, the total population, the wealth and $d_{ij}$ the distance between the zones.
 
 **Application in R**
 
-Let's go back to our previous data set, div35, to see the transormation into a binary matrix :
+Let's go back to our previous data set, *div35*, to see the transformation into a binary matrix :
 
     ```{r}
     #Spatial series analysis : dataset div35
@@ -799,27 +883,41 @@ Let's go back to our previous data set, div35, to see the transormation into a b
 
 #### **1.3.2 Weight matrix standardisation**
 
-The sum of the weights of the neighbours of a zone is called its *degree of connection*. If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones. According to Tiefelsdorf (1998), four types of standardisation can be distinguished:
+The sum of the weights of the neighbours of a zone is called its *degree of connection*.
+If the weight matrix is not standardised ("$B$" coding scheme), the degree of connection will depend on the number of its neighbours, which creates heterogeneity between the zones.
+According to Tiefelsdorf (1998), four types of standardisation can be distinguished:
 
---- **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours : $∑^n_{j=1}w_{ij} = 1$. This standardisation makes the interpretation of the weight matrix easier, because $∑^n_{j=1}w_{ij}x_j$ represents the average of variable $x$ on all neighbours of observation $i$. Each weight $w_{ij}$ can be interpreted as the fraction of spatial influence on observation $i$ ascribable to $j$. In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight. Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret.
+--- **Line standardisation** (*"W" coding scheme*): for a given zone, the weight ascribed to each neighbour is divided by the sum of the weights of its neighbours : $∑^n_{j=1}w_{ij} = 1$.
+This standardisation makes the interpretation of the weight matrix easier, because $∑^n_{j=1}w_{ij}x_j$ represents the average of variable $x$ on all neighbours of observation $i$.
+Each weight $w_{ij}$ can be interpreted as the fraction of spatial influence on observation $i$ ascribable to $j$.
+In contrast, such standardisation implies a certain degree of competition between neighbours: the fewer neighbours a zone has, the greater their weight.
+Moreover, when weights are inversely proportional to the distance between the zones, row standardisation makes them difficult to interpret.
 
---- **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities. All weights are multiplied by $\frac{n}{∑^n_{j=1}∑^n_{i=1}w_{ij}}$.
+--- **Global standardisation** *("C" coding scheme)*: weights are standardised so that the sum of all weights is equal to the total number of entities.
+All weights are multiplied by $\frac{n}{∑^n_{j=1}∑^n_{i=1}w_{ij}}$.
 
 --- **Uniform standardisation** (*"U" coding scheme*): weights are standardised so that the sum of all weights equals $1$ : $∑^n_{j=1}∑^n_{i=1}w_{ij} = 1$.
 
---- **Standardisation by variance stabilisation** (*"S" coding scheme*): let **q** be the vector defined by : **q** = $(\sqrt{∑^n_{j=1}w^2_{1j}}, \sqrt{∑^n_{j=1}w^2_{2j}},...., \sqrt{∑^n_{j=1}w^2_{nj}})^T$. Let matrix $S^∗$ = $[diag(q)]^{−1}W.^4$ From $S^*$, we calculate $Q = ∑^n_{j=1}∑^n_{i=1} s^∗_{ij}$ from which we deduce the standardised weight matrix: $S = \frac{n}{Q} S^∗$.
+--- **Standardisation by variance stabilisation** (*"S" coding scheme*): let **q** be the vector defined by : **q** = $(\sqrt{∑^n_{j=1}w^2_{1j}}, \sqrt{∑^n_{j=1}w^2_{2j}},...., \sqrt{∑^n_{j=1}w^2_{nj}})^T$.
+Let matrix $S^∗$ = $[diag(q)]^{−1}W.^4$ From $S^*$, we calculate $Q = ∑^n_{j=1}∑^n_{i=1} s^∗_{ij}$ from which we deduce the standardised weight matrix: $S = \frac{n}{Q} S^∗$.
 
 #### **1.3.3 Importance of the choice of weight matrix**
 
-When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter. First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another. Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
+When trying to test the importance of economic or social relationships between certain variables, the geographical location of the observations is a key parameter.
+First of all, observations in the same geographical zone are subject to the same external parameters (climate, pollution, etc.) Secondly, neighbouring observations mutually influence one another.
+Spatial models take these various interactions into account ; these models use neighbourhood specification via weight matrix $W$.
 
 **The "weight list" object in R**
 
-The function `nb2listw` of package *spdep* makes it possible to convert a "list of neighbours" object into a "weight list" object. It is important to note that the "weight list" object, which corresponds to the weight matrix described above, is not a matrix n×n as represented in theory. It is a list containing the standardisation style and then for each observation: its attribute, the list of observation numbers of its neighbours, the list of the attributes of its neighbours and the list of the weights of its neighbours. Reference is often made to sparse matrices. When a zone has no neighbours, the option `zero.policy=TRUE` makes it possible to generate a list of weights which takes value 'zero' for observations without neighbours (if the option is `FALSE`, an error message is generated).
+The function `nb2listw` of package *spdep* makes it possible to convert a "list of neighbours" object into a "weight list" object.
+It is important to note that the "weight list" object, which corresponds to the weight matrix described above, is not a matrix n×n as represented in theory.
+It is a list containing the standardisation style and then for each observation: its attribute, the list of observation numbers of its neighbours, the list of the attributes of its neighbours and the list of the weights of its neighbours.
+Reference is often made to sparse matrices.
+When a zone has no neighbours, the option `zero.policy=TRUE` makes it possible to generate a list of weights which takes value 'zero' for observations without neighbours (if the option is `FALSE`, an error message is generated).
 
 **Application in R**
 
-In the dataset "div35" :
+In the dataset "*div35*" :
 
 ```{r}
 #Spatial series analysis : dataset div35
@@ -831,7 +929,7 @@ In the dataset "div35" :
 #Note that spatial weight matrix is always associated to a neighborhood matrix (if two points are not considered as connected,
 #their spatial weight is of "0")
 
-#             A - In the case in which points are connected to their 4th nearest neighbors (the "rook connection") ----
+#             A - In the case in which points are connected to their 4th nearest neighbours (the "rook connection") ----
 
 #compare spatial weighted matrix with rook connection (that is with the 4th nearest neighbors)
 #but different weight formulation (binary B vs standardized W)
@@ -865,9 +963,8 @@ pond8.stan$weights
 
 
 #             C - In the case in which points are connected to their 4th nearest neighbors but the weight is inversely proportional to the distance (weight = 1/distance)
-#To get inverse distance, we need to calculate the distances between all of the neighbors. 
-#for this we will use nbdists, which gives us the distances in a similar structure to our
-#input neighbors list. To use this function we need to input the neighbors list and the coordinates.
+#To get inverse distance, we need to calculate the distances between all of the neighbours. 
+#for this we will use nbdists, which gives us the distances in a similar structure to our input neighbors list. To use this function we need to input the neighbours list and the coordinates.
 
 coords <- cbind(div35$x,div35$y)
 distances <- nbdists(knn2nb(div.knear4),coords)
@@ -910,7 +1007,8 @@ pondmarednear.bin <- nb2listw(mare.dnear, style="B",zero.policy=TRUE)
 ------------------------------------------------------------------------
 
 ::: callout-note
-Spatial autocorrelation indices measure the spatial dependence between values of the same variable in different places in space. The more the observation values are influenced by observation values that are geographically close to them, the greater the spatial correlation.
+Spatial autocorrelation indices measure the spatial dependence between values of the same variable in different places in space.
+The more the observation values are influenced by observation values that are geographically close to them, the greater the spatial correlation.
 :::
 
 ### **2.1 Global measures of spatial autocorrelation**
@@ -921,7 +1019,8 @@ Calculating the spatial autocorrelation indices is used to answer two questions:
 
 --- Could the values taken by the neighbouring observations have been comparable (or also dissimilar) by mere chance?
 
---- If not, then we are dealing with a case of spatial autocorrelation. How is this denoted and what is the strength of the said autocorrelation?
+--- If not, then we are dealing with a case of spatial autocorrelation.
+How is this denoted and what is the strength of the said autocorrelation?
 
 To answer the first question, we must test the hypothesis of absence of spatial autocorrelation for a gross variable y.
 
@@ -929,17 +1028,30 @@ To answer the first question, we must test the hypothesis of absence of spatial 
 
 --- $H_1$: spatial autocorrelation
 
-To carry out this test, it is necessary to specify the distribution of the variable of interest y, in the absence of spatial autocorrelation (under $H_0$). In this context, statistical inference is generally conducted considering either of the following assumptions:
+To carry out this test, it is necessary to specify the distribution of the variable of interest y, in the absence of spatial autocorrelation (under $H_0$).
+In this context, statistical inference is generally conducted considering either of the following assumptions:
 
 **Normality hypothesis:** each of the values of the variable, or $y_i$, is the result of an independent draw in the normal distribution specific to each geographical area $i$ on which this variable is measured.
 
-**Randomisation hypothesis:** The inference over Moran's I is usually conducted under the randomisation hypothesis. The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations. The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable. The data observed are then only one of the many outcomes possible. In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic. If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation. This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.
+**Randomisation hypothesis:** The inference over Moran's I is usually conducted under the randomisation hypothesis.
+The estimated statistic calculated from data is compared with the distribution of the data derived by randomly re-ordering the data -- permutations.
+The idea is simply that if the null hypothesis is true, then all possible combinations of data are equiprobable.
+The data observed are then only one of the many outcomes possible.
+In the case of spatial autocorrelation, the null hypothesis is always that there is no spatial association and the values of the variable are randomly assigned to the spatial units in order to calculate the test statistic.
+If the null hypothesis is rejected, i.e. if spatial autocorrelation is found, we can then calculate the range of values that governs the spatial autocorrelation index and thus answer the question as to the signals and strength of the spatial autocorrelation: the closest this index is to 1 in absolute value, the greater is the correlation.
+This interval depends on the weight matrix and can sometimes vary outside the interval \[−1; 1\], hence the importance of calculating the limits of this interval.
 
-Very generally speaking, spatial autocorrelation indices are used to characterise the correlation between measures that are geographically similar to a measured phenomenon. If $WY$ is the vector of means of variable $Y$ (where $W$ is the spatial weights matrix) in the neighbourhood of each spatial unit, spatial autocorrelation indices occur as:
+For example, here is the difference between a simulated random distribution and the real distribution in the case of the median income earned by Parisians in the different Parisian districts :
+
+![**Figure 2.15 :** Illustration, on Parisian census districts (IRIS), of the gap between random distribution and spatially autocorrelated distribution - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-1092496314.png)
+
+Very generally speaking, spatial autocorrelation indices are used to characterise the correlation between measures that are geographically similar to a measured phenomenon.
+If $WY$ is the vector of means of variable $Y$ (where $W$ is the spatial weights matrix) in the neighbourhood of each spatial unit, spatial autocorrelation indices occur as:
 
 $$Corr(Y,WY) = \frac{Cov(Y,WY)}{\sqrt{Var(Y).Var(WY)}}$$
 
-Based on this very general formulation, for quantitative variables, a main indice is used to test for spatial autocorrelation --- the Moran index. The Moran index considers the variances and covariances taking into account the difference between each observation and the average of all observations.
+Based on this very general formulation, for quantitative variables, a main indice is used to test for spatial autocorrelation --- the Moran index.
+The Moran index considers the variances and covariances taking into account the difference between each observation and the average of all observations.
 
 **Moran index**
 
@@ -950,28 +1062,40 @@ $$I_W =
 
 --- $I_W > 0$ =\> positive spatial autocorrelation
 
-As spatial autocorrelation is measured based on a comparison of the value of an individual variable with that of its neighbours, the definition of the neighbourhood will have a significant impact on the measurement of spatial autocorrelation. The larger the planned neighbourhood, the greater the number of neighbours considered, and the greater the probability that their average will be closer to the population's average, which may lead to a relatively low value for spatial autocorrelation.
+As spatial autocorrelation is measured based on a comparison of the value of an individual variable with that of its neighbours, the definition of the neighbourhood will have a significant impact on the measurement of spatial autocorrelation.
+The larger the planned neighbourhood, the greater the number of neighbours considered, and the greater the probability that their average will be closer to the population's average, which may lead to a relatively low value for spatial autocorrelation.
 
 **Application with R**
 
 | The *spdep* package is used to calculate spatial autocorrelation indices and their significance using function `moran.test`.
-| By default, the distribution of the variable of interest under the null hypothesis is derived by randomisation. The `randomisation = FALSE` argument makes it possible to assume that this is a normal distribution.
+| 
+| By default, the distribution of the variable of interest under the null hypothesis is derived by randomisation. 
+  The `randomisation = FALSE` argument makes it possible to assume that this is a normal distribution.
+| 
 
 ::: {.callout-warning appearance="simple"}
 ## If certain entities do not have neighbours
 
-\|In order for the package functions spdep to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: `zero.policy=TRUE`. By default, the size of the matrix is reduced to exclude observations without neighbours. The opposite can be specified with the option: `adjust.n=FALSE`. In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al. 2013a).
+\|In order for the package functions *spdep* to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: `zero.policy=TRUE`.
+By default, the size of the matrix is reduced to exclude observations without neighbours.
+The opposite can be specified with the option: `adjust.n=FALSE`.
+In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al. 2013a).
 :::
 
-Two approaches are used to estimate the significance of these indices --- an analytical solution based on the normality hypothesis and a Monte Carlo solution based on the randomisation hypothesis. The analytical solution, used by the `moran.test` function, is based on the assumption that the test statistic asymptotically follows a normal distribution with mean 0 and variance 1. This is not always the most accurate measure of significance as convergence towards this distribution may depend on the arrangement of the polygons. Instead, the `moran.mc` function can be used, allowing to choose the number of permutations to calculate the simulated distribution of Moran's I. Comparing the significance levels calculated from functions `moran.mc` and `moran.test` makes it possible to ensure the robustness of the conclusions.
+Two approaches are used to estimate the significance of these indices --- an analytical solution based on the normality hypothesis and a Monte Carlo solution based on the randomisation hypothesis.
+The analytical solution, used by the `moran.test` function, is based on the assumption that the test statistic asymptotically follows a normal distribution with mean 0 and variance 1.
+This is not always the most accurate measure of significance as convergence towards this distribution may depend on the arrangement of the polygons.
+Instead, the `moran.mc` function can be used, allowing to choose the number of permutations to calculate the simulated distribution of Moran's I. Comparing the significance levels calculated from functions `moran.mc` and `moran.test` makes it possible to ensure the robustness of the conclusions.
 
 > #### Monte Carlo approach to estimating significance
 >
-> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed. The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area. We then compare our observed Moran's I value to this sampling distribution.
+> In a Monte Carlo test (a permutation bootstrap test), the attribute values are randomly assigned to polygons in the data set and, for each permutation of the attribute values, a Moran's I value is computed.
+> The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area.
+> We then compare our observed Moran's I value to this sampling distribution.
 
-> ![**Figure 2.15 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
+> ![**Figure 2.16 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
 
-Let's explore Moran Global Index in the *mares* dataset :
+Let's explore the **Moran Global Index** in the *mares* dataset :
 
 ```{r}
 #Spatial series analysis : dataset mares
@@ -1040,31 +1164,37 @@ plot(r1, main = "Mantel's test")
 
 #### **2.1.2 Spatial autocorrelation of categorical variables**
 
-When the variable of interest is not continuous but categorical, the degree of local association is measured by analysing the statistics of the join count (Zhukov 2010). To illustrate the calculation of these statistics, we consider a binary variable representing two colours, White (B) and Black (N) so that a relation can be called White-White, Black-Black or White-Black. It can be seen that:
+When the variable of interest is not continuous but categorical, the degree of local association is measured by analysing the statistics of the join count (Zhukov 2010).
+To illustrate the calculation of these statistics, we consider a binary variable representing two colours, White (B) and Black (N) so that a relation can be called White-White, Black-Black or White-Black.
+It can be seen that:
 
---- positive spatial autocorrelation occurs if the number of White-Black relations is significantly lower than what would have occurred with random spatial distribution;
+--- **positive spatial autocorrelation** occurs if the number of White-Black relations is **significantly lower** than what would have occurred with random spatial distribution;
 
---- negative spatial autocorrelation occurs if the number of White-Black relations is significant greater than what would have occurred with random spatial distribution;
+--- **negative spatial autocorrelation** occurs if the number of White-Black relations is **significantly greater** than what would have occurred with random spatial distribution;
 
---- no positive spatial autocorrelation occurs if the number of White-Black links is approximately identical to what would have occurred with random spatial distribution;
+--- **no positive spatial autocorrelation** occurs if the number of White-Black links is **approximately identical** to what would have occurred with random spatial distribution;
 
 ### **2.2 Local measures of spatial autocorrelation**
 
-Global statistics are based on the assumption of a spatial stationary process: spatial autocorrelation would be the same throughout space. However, this assumption is all the less realistic as the number of observations is high.
+Global statistics are based on the **assumption of a spatial stationary process**: spatial autocorrelation would be the same throughout space.
+However, this assumption is all the less realistic as the number of observations is high.
 
 #### **2.2.1 Local spatial autocorrelation indicators**
 
-Anselin (Anselin 1995) defines *local spatial autocorrelation indicators*. These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units. More specifically, these indicators make it possible to:
+Anselin (Anselin 1995) defines *local spatial autocorrelation indicators*.
+These must measure the intensity and significance of local autocorrelation between the value of a variable in a spatial unit and the value of the same variable in the surrounding spatial units.
+More specifically, these indicators make it possible to:
 
 --- detect significant groupings of identical values around a particular location (clusters);
 
 --- identify spatial non-stationarity zones, which do not follow the global process.
 
-The Getis and Ord indicators serve only the first of these two objectives. To be considered as local spatial association measures -- (LISA; *Local Indicators of Spatial Association*) -- as defined by Anselin, these indicators must verify the following two properties:
+To be considered as local spatial association measures -- (LISA; *Local Indicators of Spatial Association*) -- as defined by Anselin, these indicators must verify the following two properties:
 
 --- for each observation, they indicate the intensity of the grouping of similar -- or opposite in trend -- values around this observation;
 
---- the sum of local indices on all observations is proportional to the corresponding global index. One of the most used LISA is the local Moran's I.
+--- the sum of local indices on all observations is proportional to the corresponding global index.
+One of the most used LISA is the local Moran's I.
 
 **Local Moran's I** $$I_i = (y_i −\bar{y})\sum \limits_{\underset{}{j}}w_{ij}(y_j −\bar{y})$$ $$I_W = constante ∗\sum \limits_{\underset{}i}I_i$$
 
@@ -1072,23 +1202,26 @@ $Ii > 0$ indicates a grouping of similar values (higher or lower than average).
 
 $Ii < 0$ indicates a combination of dissimilar values (e.g. high values surrounded by low values).
 
-For example, with Parisian districts :
+Here is an example with the median income in the different Parisian districts :
 
-![**Figure 2.16 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
+![**Figure 2.17 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
 
 #### **2.2.2 Significance of the local Moran's I**
 
-Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution. The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis. If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
+Significant LISAs are combinations of similar or dissimilar values more marked than what might have been observed based on random spatial distribution.
+The significance test of each local association indicator is based on a statistic assumed to asymptotically follow a normal distribution under the null hypothesis.
+If the assumption of normality holds, $z(I_i) = \frac{I−E(I_i)}{\sqrt{Var(I_i)}}∼ N (0,1)$.
 
 To test the validity of the normality assumption of the LISAs under the null hypothesis, several random distributions are simulated in the space of the variable of interest and the local indicators associated with these simulations are calculated.
 
-Several adjustments methods can be used : "bonferroni", "holm", etc.
+Several adjustments methods can then be used : "*bonferroni*", "*holm*", etc.
 
 #### **2.2.3 Interpretation of local indices**
 
 **In the absence of global spatial autocorrelation**
 
-The LISAs make it possible to identify areas where similar values are significantly grouped. These are areas where the local spatial structure is such that the relations between neighbours are particularly strong.
+The LISAs make it possible to identify areas where similar values are significantly grouped.
+These are areas where the local spatial structure is such that the relations between neighbours are particularly strong.
 
 **In the presence of global spatial autocorrelation**
 
@@ -1155,7 +1288,13 @@ s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xl
 
 ### **2.3 Spatio-temporal indices**
 
-It is not unusual for a geolocalised database to have observations raised at different points in time. It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it. In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time. On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models. Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies. By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations. This can also be done on the basis of spatial-temporal risk weighting matrices.
+It is not unusual for a geolocalised database to have observations raised at different points in time.
+It may be interesting to understand how a localised phenomenon has spread and evolved in space and time and how it can be linked to the conditions of the environment surrounding it.
+In this case, it is important to be able to assess how the underlying spatial structures change over different periods of time.
+On spatiotemporal data, prior graphical exploration of cross-section data (standard Moran's I) can be used to study the existence and change in grouping or dispersion trends that are statistically significantly different from random models.
+Many recent developments show a growing interest in analysing spatio-temporal data in many areas of research such as physics, meteorology, economics and environmental studies.
+By extending the Moran index to include time attributes, it becomes possible to calculate global and localized indices that concurrently take into account spatial and temporal auto-correlations.
+This can also be done on the basis of spatial-temporal risk weighting matrices.
 
 ## 3 - Spatial modeling
 
@@ -1173,7 +1312,10 @@ library(gwrr)
 
 ### 3.1.Stationary process
 
-For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions. Another assumption is that the spatial autocorrelation is isotropic. This means that the cause of the autocorrelation act the same way in every direction. Anisotropy may be caused for example by environmental factors like the wind or water currents.
+For the models described here, it is required for the processes to be stationary, meaning that the process is constant across regions.
+Another assumption is that the spatial autocorrelation is isotropic.
+This means that the cause of the autocorrelation act the same way in every direction.
+Anisotropy may be caused for example by environmental factors like the wind or water currents.
 
 All the models showed here will be based on the general linear model modified to take the spatial autocorrelation into account :
 
@@ -1183,13 +1325,15 @@ All the models showed here will be based on the general linear model modified to
 
 ##### Theory
 
-This analysis best perform on local analysis. If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
+This analysis best perform on local analysis.
+If the scale is to big, it may be wiser to use another analysis as this one will lack precision.
 
 The idea behind this analysis is that the state of a neighbor region will affect our region.
 
 This model estimate how well the response variable at one site reflect the response values at its surrounding sites.
 
-An extra parameter : WX$\theta$, called the autocovariate is added to the general linear model's formula. It is a distance-weighted function of the neighboring response value.
+An extra parameter : WX$\theta$, called the autocovariate is added to the general linear model's formula.
+It is a distance-weighted function of the neighboring response value.
 
 **Y = X**$\beta$ + **WX**$\theta$ + $\epsilon$
 
@@ -1236,7 +1380,8 @@ pond8.stan<- nb2listw(knn2nb(div.knear8), style="W", zero.policy=TRUE)
 
 *(to be able to use the weighted matrix in the analysis, the items must be a class "listw", hence the argument "nb2listw")*
 
-The function used for spatially weighted matrix is "lmslx". In the argument :
+The function used for spatially weighted matrix is "lmslx".
+In the argument :
 
 -   First the equation tested in shape of : Y \~ X1+X2+X3 ...
 
@@ -1249,26 +1394,34 @@ lmsSLX=spatialreg::lmSLX(rich_ois~rich_pp,data=div35,pond8.stan)
 summary(lmsSLX)
 ```
 
-Here, 2 coefficients are given as well as their p-value. The first one (rich_pp) correspond to the argument X$\beta$ of our original function. The second one (lag.rich_pp) correspond to WX$\theta$.
+Here, 2 coefficients are given as well as their p-value.
+The first one (rich_pp) correspond to the argument X$\beta$ of our original function.
+The second one (lag.rich_pp) correspond to WX$\theta$.
 
 *Here there is only one X, and therefore only 2 coefficients, but with a bigger model to test, the coefficients corresponding to the X will be named just like the original Xs, and the coefficients for the autocorrelation will be named "lag.X".*
 
-As always, we only keep the coefficients that have a significant p-value. Here they all do. Our final model here would be :
+As always, we only keep the coefficients that have a significant p-value.
+Here they all do.
+Our final model here would be :
 
 $Bird\:Richness = -7.40 + 0.47X + 1.19WY + \epsilon$
 
-An interpretation of those results here is that the more plants there is in a place, the more bird will be present as well. As for the lag value, we can expect that the more plants there will in the neighboring regions, the more birds there will in our region.
+An interpretation of those results here is that the more plants there is in a place, the more bird will be present as well.
+As for the lag value, we can expect that the more plants there will in the neighboring regions, the more birds there will in our region.
 
 *This model works at small scale only*
 
-The first estimate, that regards the response variable is called the **direct effect**, wherease the factor impacting the autocorrelation is called the **indirect factor**. However we can have an idea of the general effect on the whole region by combining the two effects int the **total effect**.
+The first estimate, that regards the response variable is called the **direct effect**, wherease the factor impacting the autocorrelation is called the **indirect factor**.
+However we can have an idea of the general effect on the whole region by combining the two effects int the **total effect**.
 
 ```{r}
 impacts(lmsSLX)
 summary(impacts(lmsSLX, R=500),zstats=TRUE)
 ```
 
-The function impact only gives the total effect as the sum of the direct and indirect effect. Putting the function into a summary allows to show standard error, and the p-values. The total effect represent the overall impact of the variable when applied to the whole map.
+The function impact only gives the total effect as the sum of the direct and indirect effect.
+Putting the function into a summary allows to show standard error, and the p-values.
+The total effect represent the overall impact of the variable when applied to the whole map.
 
 *Sometimes, non-significant direct and indirect effect may become significant when looking at the total effect*
 
@@ -1278,9 +1431,11 @@ To be able to study an autocorrelation at a larger scale, other models must be u
 
 The SAR model is an autoregressive model.These models take spatial autocorrelation into account by using a neighborhood matrix specifying the relationship between the residuals at each location.
 
-The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows). The null hypothesis for the general SAR model is that the Ys are mutually independent.
+The SAR model allows to study directional processes, which, in ecology, are quite common ( ex : wind dispersal or stream flows).
+The null hypothesis for the general SAR model is that the Ys are mutually independent.
 
-The autoregressif process can be found in either the residuals of the data or in the response value. Depending on where this process is thought to be,three models are available :
+The autoregressif process can be found in either the residuals of the data or in the response value.
+Depending on where this process is thought to be,three models are available :
 
 -   The **Error model**
 -   The **Lag model**
@@ -1294,7 +1449,8 @@ A specific diagnostic can be made to chose between either one.
 
 The idea for this test is to statistically check which of the SAR model would best fit to our equation.
 
-The lagrange multiplier diagnostic tests the fit of the model under the null hypothesis and looks for evidence of departures in the direction of interest. In summary, it will examine the residuals of a model and look for specific types of non-randomness.
+The lagrange multiplier diagnostic tests the fit of the model under the null hypothesis and looks for evidence of departures in the direction of interest.
+In summary, it will examine the residuals of a model and look for specific types of non-randomness.
 
 ###### Application in R
 
@@ -1313,17 +1469,23 @@ The arguments are :
 
 -   test = the type of test that will be made (here, "all" means that the fives tests will be conducted : LMerr, LMlag, RLMerr, RLMlag, SARMA)
 
-The firsts p-values to look at are for the normal tests. The significant one will be the analysis conducted later. If non of them are significant, we look at the robust tests.
+The firsts p-values to look at are for the normal tests.
+The significant one will be the analysis conducted later.
+If non of them are significant, we look at the robust tests.
 
 ##### 3.1.2.2. Lag models
 
 ###### Theory
 
-In this model, we assume that the autoregressif process is in the response variable. As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return. This creates a feedback effect.
+In this model, we assume that the autoregressif process is in the response variable.
+As this model is general, this means that anything affecting our Y, will also affect its neighbor in some way, affecting us in return.
+This creates a feedback effect.
 
-It would for exemple be liked a stone thrown in a lake. This creates waves that propagate to the whole lake.
+It would for exemple be liked a stone thrown in a lake.
+This creates waves that propagate to the whole lake.
 
-The lag model is used to take into account a autoregressif process only occuring in the response variable. Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
+The lag model is used to take into account a autoregressif process only occuring in the response variable.
+Therefore, the responsable variable argument in the model will include a term for the spatial autocorrelation : **ρW**
 
 The model will take the form of :
 
@@ -1353,7 +1515,8 @@ this model takes the form of :
 
 **Y = X**$\beta$ + $\lambda$**WY** + $\epsilon$
 
-The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient. $\gamma$ is the spatially dependant error term.
+The term $\lambda$W represent the spatial structure with $\lambda$ being the spatial autoregression coefiscient.
+$\gamma$ is the spatially dependant error term.
 
 ###### Application in R
 
@@ -1369,7 +1532,8 @@ $Bird\:Richness =0.52\:X + 0.33\:WY + \epsilon$
 
 ###### Theory
 
-If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used. This model include all the parameter added above, and it is the most inclusive model.
+If the spatial autocorrelation affect both the response variable and the residuals, the mix model is used.
+This model include all the parameter added above, and it is the most inclusive model.
 
 It can be noted that this model can also be used in both situation described previously, as the coefficient will cancel themselves out if either one is not present.
 
@@ -1390,7 +1554,7 @@ $Bird\:Richness = 0.64WX + 0.53X - 0.65$
 
 Even though three commands are available for each type of SAR model, it is best to only use the mixed model function sacsarlm, as the other ones don't provide p-values, and this one provides more information than the others.
 
-![](Spatial autocorrelation_ modelisation\SAR_function_summary.png)
+![](Spatial%20autocorrelation_%20modelisation%5CSAR_function_summary.png)
 
 *(If the image doesn't load, it is available in the Spatial autocorrelation\_ modelisation doc)*
 
@@ -1400,20 +1564,23 @@ Even though three commands are available for each type of SAR model, it is best 
 
 ###### Theory
 
-In ecology, a lot of processes are non stationary. This model is one of the few that allow to deal with non-stationarity. It is a local modeling.
+In ecology, a lot of processes are non stationary.
+This model is one of the few that allow to deal with non-stationarity.
+It is a local modeling.
 
-
-The model is fitted to be locally linear : 
+The model is fitted to be locally linear :
 
 $$Y_i = \beta_{0i}\:+\:\sum_k\beta_{ki}x_{ki}\:+\epsilon_i$$
 
 The $\beta$ here now correspond to the coefficient at the location i.
 
 It applies a geographical weight to the data used in each model, meaning that the further away a point will be from the regression point, the less weight they will have.
-This model require the use of a function called the **Kernel function**. 
-It consists in an equation giving the weights $w_ij$ relating the focal point $i$ to each observation $j$. This means it places a "window" over the observation.
+This model require the use of a function called the **Kernel function**.
+It consists in an equation giving the weights $w_ij$ relating the focal point $i$ to each observation $j$.
+This means it places a "window" over the observation.
 
-To define the "window" or **bandwidth**, a local regression is made with a set bandwidth and then used to predict the values of the dependant variables. The residuals obtained are compared to other residuals from other regressions made with different bandwidth and the smallest local residuals are kept. 
+To define the "window" or **bandwidth**, a local regression is made with a set bandwidth and then used to predict the values of the dependant variables.
+The residuals obtained are compared to other residuals from other regressions made with different bandwidth and the smallest local residuals are kept.
 
 Once the bandwidth is defined, the regression is made for each points and the result can be mapped.
 
@@ -1430,15 +1597,15 @@ lmgwrD$phi #gives the bandwidth
 lmgwrD$RMSPE #gives the root-square of the bandwidth
 ```
 
-**Phi**: kernel bandwidth 
+**Phi**: kernel bandwidth
 
 **RMSPE**: root square of error of the prediction based on bandwidth estimated
 
-**Beta**: matrix with the coefficients for each point (intercept line \[1,\] and regression coefficient line \[2,\]) 
+**Beta**: matrix with the coefficients for each point (intercept line \[1,\] and regression coefficient line \[2,\])
 
-**Yhat**: model estimate 
+**Yhat**: model estimate
 
-**RMSE**: root square of error estimation 
+**RMSE**: root square of error estimation
 
 **Rsquare**: model fitting
 
@@ -1454,34 +1621,70 @@ The result can finally be plotted for each point.
 
 # References
 
-F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ». Ecography 30, nᵒ 5 (2007): 609‑28. https://doi.org/10.1111/j.2007.0906-7590.05171.x.
+F. Dormann, Carsten, Jana M. McPherson, Miguel B. Araújo, Roger Bivand, Janine Bolliger, Gudrun Carl, Richard G. Davies, et al. « Methods to Account for Spatial Autocorrelation in the Analysis of Species Distributional Data: A Review ».
+Ecography 30, nᵒ 5 (2007): 609‑28.
+https://doi.org/10.1111/j.2007.0906-7590.05171.x.
 
-Smith, P. A. (1994). Autocorrelation in Logistic Regression Modelling of Species' Distributions. Global Ecology and Biogeography Letters, 4(2), 47--. doi:10.2307/2997753
+Smith, P. A.
+(1994).
+Autocorrelation in Logistic Regression Modelling of Species' Distributions.
+Global Ecology and Biogeography Letters, 4(2), 47--.
+doi:10.2307/2997753
 
-Getis, Arthur. «Spatial Autocorrelation». In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78. Berlin, Heidelberg: Springer, 2010.  https://doi.org/10.1007/978-3-642-03647-7_14.
+Getis, Arthur.
+«Spatial Autocorrelation».
+In Handbook of Applied Spatial Analysis: Software Tools, Methods and Applications, édité par Manfred M. Fischer et Arthur Getis, 255‑78.
+Berlin, Heidelberg: Springer, 2010.
+https://doi.org/10.1007/978-3-642-03647-7_14.
 
-https://www.youtube.com/watch?v=b3HtV2Mhmvk
+https://www.youtube.com/watch?v
+=b3HtV2Mhmvk
 
-Engle, Robert F. « A general approach to lagrange multiplier model diagnostics ». Journal of Econometrics 20, nᵒ 1 (1 octobre 1982): 83‑104. https://doi.org/10.1016/0304-4076(82)90104-X.
+Engle, Robert F.
+« A general approach to lagrange multiplier model diagnostics ».
+Journal of Econometrics 20, nᵒ 1 (1 octobre 1982): 83‑104.
+https://doi.org/10.1016/0304-4076(82)90104-X.
 
 Class and powerpoint made by Mrs. Le Gouar Pascaline
 
 GWR informations : https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-geographicallyweightedregression-works.htm
 
-Páez, A., et D. C. Wheeler. « Geographically Weighted Regression ». In International Encyclopedia of Human Geography, édité par Rob Kitchin et Nigel Thrift, 407‑14. Oxford: Elsevier, 2009. https://doi.org/10.1016/B978-008044910-4.00447-8.
+Páez, A., et D.
+C. Wheeler.
+« Geographically Weighted Regression ».
+In International Encyclopedia of Human Geography, édité par Rob Kitchin et Nigel Thrift, 407‑14.
+Oxford: Elsevier, 2009.
+https://doi.org/10.1016/B978-008044910-4.00447-8.
 
 https://gdsl-ul.github.io/san/09-gwr.html
 
 ### **References**
 
-Anselin, Luc (2013). Spatial econometrics: methods and models. Vol. 4. Springer Science & Business Media. 
+Anselin, Luc (2013).
+Spatial econometrics: methods and models.
+Vol.
+4.
+Springer Science & Business Media.
 
-Anselin, Luc and Daniel A Griffith (1988). « Do spatial effects really matter in regression analysis? » Papers in Regional Science 65.1, pp. 11--34. 
+Anselin, Luc and Daniel A Griffith (1988).
+« Do spatial effects really matter in regression analysis?
+» Papers in Regional Science 65.1, pp. 11--34.
 
-Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b). « Spatial Neighbors ». Applied Spatial Data Analysis with R. Springer, pp. 83--125. 
+Bivand, Roger S, Edzer Pebesma, and Virgilio Gomez-Rubio (2013b).
+« Spatial Neighbors ».
+Applied Spatial Data Analysis with R.
+Springer, pp. 83--125.
 
-Toussaint (2014). « The sphere of influence graph: Theory and applications ». International Journal of Information Thechnology and Computer Science 14.2. 
+Toussaint (2014).
+« The sphere of influence graph: Theory and applications ».
+International Journal of Information Thechnology and Computer Science 14.2.
 
-Smith, Tony E. (2016). Notebook on Spatial Data Analysis. http://www.seas.upenn.edu/ ese502/notebo 
+Smith, Tony E.
+(2016).
+Notebook on Spatial Data Analysis.
+http://www.seas.upenn.edu/ ese502/notebo
 
-Tiefelsdorf, Michael (1998). « Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ». PhD thesis. Université Wilfrid Laurier.
+Tiefelsdorf, Michael (1998).
+« Modelling spatial processes: The identification and analysis of spatial relationships in regression residuals by means of Moran's I (Germany) ».
+PhD thesis.
+Université Wilfrid Laurier.
