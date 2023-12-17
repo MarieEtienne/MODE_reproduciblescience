@@ -74,33 +74,3 @@ Autocorrelation is an essential concept in statistics, as it can have a signific
 Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses. It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made. It is also essential for understanding patterns of variation in biological data.
 
 <br />
-
-
-# Time dependence
-
-For example a basic summary of a dataset is given by
-and then describe the purpose of your chapter as well as executing R command.
-
-
-
-```{r}
-df <- read.table("https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv", sep = "," , header = TRUE)
-```
-
-and produce a graph
-
-```{r}
-df %>% ggplot() +
-	aes(x=species, y = body_mass_g) +
-	geom_boxplot()  
-```
-
-
-# Space dependence
-
-# Summary
-
-# Bibliography
-
-A citation @bauer2023writing
-
