@@ -210,10 +210,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#why-is-this-important" id="toc-why-is-this-important" class="nav-link" data-scroll-target="#why-is-this-important">Why is this important?</a></li>
   </ul></li>
-  <li><a href="#time-dependence" id="toc-time-dependence" class="nav-link" data-scroll-target="#time-dependence">Time dependence</a></li>
-  <li><a href="#space-dependence" id="toc-space-dependence" class="nav-link" data-scroll-target="#space-dependence">Space dependence</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
-  <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">Bibliography</a></li>
   </ul>
 </nav>
     </div>
@@ -297,38 +293,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Autocorrelation is an essential concept in statistics, as it can have a significant impact on data analysis. In the presence of pseudoreplications, meaning that several different values are thought to be taken when in fact they are dependent on each other, it may appear that one variable has a significant effect on another, when in reality this effect is biased due to the temporal or spatial dependence of the data. It can therefore have a significant impact on statistical analysis, and often requires adjustments to ensure that results are reliable and unbiased. <br></p>
 <p>Autocorrelation checking is an essential process in statistics to guarantee the accuracy, reliability and validity of analyses. It enables appropriate statistical methods to be applied, biases to be corrected and informed modeling and forecasting decisions to be made. It is also essential for understanding patterns of variation in biological data.</p>
 <p><br></p>
-</section>
-</section>
-<section id="time-dependence" class="level1">
-<h1>Time dependence</h1>
-<p>For example a basic summary of a dataset is given by and then describe the purpose of your chapter as well as executing R command.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"</span>, <span class="at">sep =</span> <span class="st">","</span> , <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>and produce a graph</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>species, <span class="at">y =</span> body_mass_g) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 2 rows containing non-finite values (`stat_boxplot()`).</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="chapter_dependance_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="space-dependence" class="level1">
-<h1>Space dependence</h1>
-</section>
-<section id="summary" class="level1">
-<h1>Summary</h1>
-</section>
-<section id="bibliography" class="level1">
-<h1>Bibliography</h1>
-<p>A citation <span class="citation" data-cites="bauer2023writing">(<a href="#ref-bauer2023writing" role="doc-biblioref"><strong>bauer2023writing?</strong></a>)</span></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
