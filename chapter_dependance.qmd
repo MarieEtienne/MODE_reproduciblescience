@@ -131,7 +131,7 @@ To understand better how to handle time series, data are used to illustrate the 
 
 ```{r}
 ## Load the data
-setwd("https://github.com/MarieEtienne/MODE_reproduciblescience")
+setwd("https://github.com/MarieEtienne/MODE_reproduciblescience/blob/master")
 dataT=read.table("vautour.txt",header=T,dec=",", stringsAsFactors = T)
 head(dataT)       # What are the data
 summary(dataT)    # Summary of the spread of each variable
