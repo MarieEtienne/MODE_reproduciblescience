@@ -1279,10 +1279,10 @@ localI.oi1
 localI.oi1[localI.oi1[,5]<0.05,]
 
 #We can also represent the Local Index value using this code lines:
-x11()
-par(mfrow=c(2,1))
-s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")
-s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")
+#x11()
+# par(mfrow=c(2,1))
+# s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")
+# s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")
 
 #Clusters of values that look alike and outliers (values that don't look alike)
 #Sometimes close values are similar, sometimes not
