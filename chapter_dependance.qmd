@@ -440,7 +440,7 @@ Moreover, if $(i, j) ⊆ B$ and $(j,i) ⊆ B$ for all couples of spatial objects
 *Figure 2.1* illustrates the codifying process of spatial relationships.
 This approach makes it possible to systematically transcribe the complexity of geographic space into a final set of data analyzable by a computer.
 
-![**Figure 2.1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](images/image-1363470329.png){width="517"}
+![**Figure 2.1 :** Codifying spatial correlation (Tiefelsdorf, 1998)](image-1363470329.png){width="517"}
 
 First, the study zone is divided into mutually exclusive areas.
 Each area contains a reference point (often its centroid).
@@ -559,7 +559,7 @@ There exists many different types of neighbourhood graphs.
 
 • **Delaunay's Triangulation** Delaunay's Triangulation is a geometric method that connects points into triangles such that the minimum angle of all triangles is maximised.
 
-![**Figure 2.2 :** Delaunay triangle (source : Pascaline Le Gouar)](images/image-1235549498.png){width="190"}
+![**Figure 2.2 :** Delaunay triangle (source : Pascaline Le Gouar)](image-1235549498.png){width="190"}
 
 • **Sphere-of-influence based graph**
 
@@ -567,23 +567,23 @@ The sphere-of-influence based graph links two points if their "circles from the 
 The "circle of the nearest neighbour" of point $P$ is the largest circle centred in $P$ and that contains no other points than $P$.
 All points in the study set are not necessarily interconnected.
 
-![**Figure 2.3 :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](images/image-1767308128.png){width="361"}
+![**Figure 2.3 :** The sphere of influence graph (edges) of a set of points, showing their nearest neighbour circles (source : Toussaint & Emirates, 2014)](image-1767308128.png){width="361"}
 
 • **Gabriel's graph**
 
 Gabriel's graph links two points $p_i$ and $p_j$ if and only if all other points are outside the circle with diameter $[p_i, p_j]$.
 
-![**Figure 2.4 :** Gabriel graph (source : Pascaline Le Gouar)](images/image-1231590752.png){width="227"}
+![**Figure 2.4 :** Gabriel graph (source : Pascaline Le Gouar)](image-1231590752.png){width="227"}
 
 • **Graph of relative neighbours**
 
 The graph of relative neighbours considers that two points $pi$ and $pj$ are neighbours if $$d(p_i,p_j) ≤ max [d(p_i,p_k),d(p_j,p_k)] \,\,\,\,\,\,∀k = 1,..., n k\ne i,j$$ with $d(p_i, p_j)$ the distance between $p_i$ and $p_j$.
 
-![**Figure 2.5 :** Graph of relative neighbours (source : J. O'Rourke, 1982)](images/image-1901385633.png){width="304"}
+![**Figure 2.5 :** Graph of relative neighbours (source : J. O'Rourke, 1982)](image-1901385633.png){width="304"}
 
 For example, here's the application of these geometric concepts to Parisian districts :
 
-![**Figure 2.6 :** Four neighbourhood graphs of Parisian districts based on geometric concepts](images/image-691203873.png){width="610"}
+![**Figure 2.6 :** Four neighbourhood graphs of Parisian districts based on geometric concepts](image-691203873.png){width="610"}
 
 **Application in R :**
 
@@ -665,7 +665,7 @@ For example :
 
 Still using the example of Parisian districts, here's the nearest neighbour application:
 
-![**Figure 2.7 :** Four graphs based on the nearest neighbours of Parisian districts](images/image-1634475889.png)
+![**Figure 2.7 :** Four graphs based on the nearest neighbours of Parisian districts](image-1634475889.png)
 
 The `nbdists` function of R can be used to calculate the vector of distances between neighbours.
 It makes it possible to determine the minimum distance $d_{min}$ above which all points have at least one neighbour, then the `dnearneighb` function allows to keep as neighbours only the points between distances $0$ and $d_{min}$.
@@ -730,7 +730,7 @@ It can be considered that since $R_2$ and $R_3$ are separated in space, but both
 However, the centroids in these zones are equidistant from each other (see *Figure 2.8*).
 Summarising the proximity between zones by the distance between the centroids results in a partial loss of the richness of the spatial relationships.
 
-![**Figure** **2.8** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](images/image-2131022957.png){width="579"}
+![**Figure** **2.8** - Left: three zones - Right: distance between centroids (Source: Smith, 2016)](image-2131022957.png){width="579"}
 :::
 
 **Types of contiguity :**
@@ -740,25 +740,25 @@ Summarising the proximity between zones by the distance between the centroids re
     In the sense of Rook contiguity, neighbours have at least two common boundary points (a segment).
     This matches the movement of the Rook in chess.
 
-![**Figure 2.9 :** Rook configuration (source : Pascaline Le Gouar)](images/image-1114536119.png){width="211"}
+![**Figure 2.9 :** Rook configuration (source : Pascaline Le Gouar)](image-1114536119.png){width="211"}
 
 -   **Queen contiguity**
 
     For two zones to be adjacent in the sense of Queen contiguity, they only need to share one common boundary point.
     This matches the movement of the Queen in chess.
 
-![**Figure 2.10 :** Queen configuration (source : Pascaline Le Gouar)](images/image-594369851.png)
+![**Figure 2.10 :** Queen configuration (source : Pascaline Le Gouar)](image-594369851.png)
 
 -   **Bishop contiguity**
 
     In the sense of bishop contiguity, two regions are considered as spatial neighbors if they meet at one point ;it is based on the existence of common vertices between two spatial units.
     This matches the movement of the Bishop in chess.
 
-![**Figure 2.11 :** Bishop configuration](images/image-2117709373.png){width="177"}
+![**Figure 2.11 :** Bishop configuration](image-2117709373.png){width="177"}
 
 Still using the example of Paris districts, here's an example of how continuity can be applied:
 
-![**Figure 2.12 :** Queen and Rook contiguity in Paris districts](images/image-351519621.png){width="474"}
+![**Figure 2.12 :** Queen and Rook contiguity in Paris districts](image-351519621.png){width="474"}
 
 **Application in R**
 
@@ -834,7 +834,7 @@ To each cell, a value is assigned, resulting from the order in which the divisio
 This method can be implemented with package `spsurvey` in R (Kincaid et al. 2016).
 However, with the GRTS method, *large jumps* (*Figures 2.13d*) are created along the paths, which can affect the accuracy of the estimates.
 
-![Figure 2.13 : Looking for paths that cross through all the neighbourhoods of Paris](images/image-1294038395.png)
+![Figure 2.13 : Looking for paths that cross through all the neighbourhoods of Paris](image-1294038395.png)
 
 ### **1.3 Neighborhood weights**
 
@@ -850,9 +850,9 @@ Formally, the weights express the neighbor structure between the observations as
 
 Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.13*):
 
-> ![](images/image-562063019.png){width="431"}
+> ![](image-562063019.png){width="431"}
 
-![**Figure 2.14 :** Binary weight matrix](images/image-497770688.png){width="592"}
+![**Figure 2.14 :** Binary weight matrix](image-497770688.png){width="592"}
 
 The weight matrices can also take into account the **distance** between the geographical zones, as relationships becoming smaller with distance: $1$ if $d < d_0 - 0$ otherwise, $\frac{1}{d^α}$ , or $e^{−αd}$ with $α$ an estimated or predetermined parameter.
 Using a maximum distance beyond which $w_{ij} = 0$ makes it possible to limit the number of components with a value different from zero.
@@ -1043,7 +1043,7 @@ This interval depends on the weight matrix and can sometimes vary outside the in
 
 For example, here is the difference between a simulated random distribution and the real distribution in the case of the median income earned by Parisians in the different Parisian districts :
 
-![**Figure 2.15 :** Illustration, on Parisian census districts (IRIS), of the gap between random distribution and spatially autocorrelated distribution - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-1092496314.png)
+![**Figure 2.15 :** Illustration, on Parisian census districts (IRIS), of the gap between random distribution and spatially autocorrelated distribution - Source: INSEE, Localised Tax Revenues System (RFL) 2010](image-1092496314.png)
 
 Very generally speaking, spatial autocorrelation indices are used to characterise the correlation between measures that are geographically similar to a measured phenomenon.
 If $WY$ is the vector of means of variable $Y$ (where $W$ is the spatial weights matrix) in the neighbourhood of each spatial unit, spatial autocorrelation indices occur as:
@@ -1093,7 +1093,7 @@ Instead, the `moran.mc` function can be used, allowing to choose the number of p
 > The output is a sampling distribution of Moran's I values under the (null) hypothesis that attribute values are randomly distributed across the study area.
 > We then compare our observed Moran's I value to this sampling distribution.
 
-> ![**Figure 2.16 :** Output of the Monte Carlo test](images/image-318830441.png){width="380"}
+> ![**Figure 2.16 :** Output of the Monte Carlo test](image-318830441.png){width="380"}
 
 Let's explore the **Moran Global Index** in the *mares* dataset :
 
@@ -1204,7 +1204,7 @@ $Ii < 0$ indicates a combination of dissimilar values (e.g. high values surround
 
 Here is an example with the median income in the different Parisian districts :
 
-![**Figure 2.17 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](images/image-979262065.png)
+![**Figure 2.17 :** Values of local Moran's I, on Parisian IRIS - Source: INSEE, Localised Tax Revenues System (RFL) 2010](image-979262065.png)
 
 #### **2.2.2 Significance of the local Moran's I**
 
