@@ -13,12 +13,6 @@ editor:
 ---
 
 
-
-This chapter is a simple example using R
-
-You can import R package using the code
-
-
 ```{r}
 library(tidyverse)
 ```
