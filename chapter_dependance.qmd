@@ -452,7 +452,7 @@ The neighborhood matrix measures the similarity between observations.
 A value greater than zero indicates that the observations are considered neighbors.
 For example, in the case of the binary matrix shown in figure 1 :
 
-![](images/image-232123009.png){width="470" height="59"}
+![](image-232123009.png){width="470" height="59"}
 
 Conversely, the distance matrix measures dissimilarity between zones.
 The higher $d_{ij}$ , the more different the zones.
@@ -844,11 +844,11 @@ Once the neighbourhood graph has been defined and codified into a list of neighb
 The weight matrix $W$ is the "formal expression of spatial dependency between observations" (Anselin et al. 1988)\
 Formally, the weights express the neighbor structure between the observations as a $n\times n$ matrix $W$ in which the elements $w_{ij}$ of the matrix are the spatial weights:
 
-![](images/image-672436714.png){width="285"}
+![](image-672436714.png){width="285"}
 
 **Defining the weight matrix**
 
-Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.13*):
+Most commonly, the weight matrix is a binary contiguity matrix (see *Figure 2.14*):
 
 > ![](image-562063019.png){width="431"}
 
