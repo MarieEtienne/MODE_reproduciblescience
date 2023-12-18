@@ -1069,7 +1069,7 @@ $$I_W =
 As spatial autocorrelation is measured based on a comparison of the value of an individual variable with that of its neighbours, the definition of the neighbourhood will have a significant impact on the measurement of spatial autocorrelation.
 The larger the planned neighbourhood, the greater the number of neighbours considered, and the greater the probability that their average will be closer to the population's average, which may lead to a relatively low value for spatial autocorrelation.
 
-**Application with R**
+**Application in R**
 
 | The *spdep* package is used to calculate spatial autocorrelation indices and their significance using function `moran.test`.
 | 
@@ -1080,7 +1080,7 @@ The larger the planned neighbourhood, the greater the number of neighbours consi
 ::: {.callout-warning appearance="simple"}
 ## If certain entities do not have neighbours
 
-\|In order for the package functions *spdep* to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: `zero.policy=TRUE`.
+\In order for the package functions *spdep* to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: `zero.policy=TRUE`.
 By default, the size of the matrix is reduced to exclude observations without neighbours.
 The opposite can be specified with the option: `adjust.n=FALSE`.
 In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al. 2013a).
@@ -1098,6 +1098,8 @@ Instead, the `moran.mc` function can be used, allowing to choose the number of p
 > We then compare our observed Moran's I value to this sampling distribution.
 
 > ![**Figure 2.16 :** Output of the Monte Carlo test](image-318830441.png){width="380"}
+
+For example, the **Mantel test** is using the Monte Carlo method.
 
 Let's explore the **Moran Global Index** in the *mares* dataset :
 
@@ -1132,12 +1134,12 @@ moran.test(mare$Nitrate, pondmarednear.bin, zero.policy=TRUE)
 
 ```{r}
 #Spatial series analysis : dataset mares
-    #The Mantel test
+    #The Mantel test (using the Monte Carlo method)
     #For a REGULAR configuration of points
 
 ############SPATIAL AUTOCORRELATION IN MULTIVARIATE DATA##############
 
-#The Mantel test
+#The Mantel test (using the Monte Carlo method)
 #In case of multivariate data it can be useful to have a test that sum up the spatial autocorrelation for  all characteristics/variables
 #In that case, we need to test the correlation between a matrix of geographical distance and a matrix of distance of the characteristics between objects 
 #To compute a geographical distance matrix you can use the function dist that 
