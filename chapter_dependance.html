@@ -846,7 +846,7 @@ Mathematical definition of spatial relationships
 </div>
 <p>First, the study zone is divided into mutually exclusive areas. Each area contains a reference point (often its centroid). Then, the spatial relationships can be specified by a neighbourhood graph connecting the areas considered to be neighbouring, or by a matrix containing the geographical coordinates of the reference points. The third step consists in coding the graph in a neighbourhood matrix, or transforming the geographic coordinates into a distance matrix.</p>
 <p>The neighborhood matrix measures the similarity between observations. A value greater than zero indicates that the observations are considered neighbors. For example, in the case of the binary matrix shown in figure 1 :</p>
-<p><img src="images/image-232123009.png" width="470" height="59"></p>
+<p><img src="image-232123009.png" width="470" height="59"></p>
 <p>Conversely, the distance matrix measures dissimilarity between zones. The higher <span class="math inline">\(d_{ij}\)</span> , the more different the zones. With, if an Euclidian distance is used : <span class="math inline">\(d_{ij}=\sqrt{(x_i-x_j )^2+(y_i-y_j )²}\)</span>, <span class="math inline">\(α\)</span> and <span class="math inline">\(β\)</span> being the geographical coordinates of the observations. The spatial dependence structure may not be geographical. Any relevant dual relationship may be used to define a neighbourhood graph. For instance:</p>
 <ul>
 <li>Genetic proximity between families</li>
@@ -856,7 +856,7 @@ Mathematical definition of spatial relationships
 </section>
 <section id="the-list-of-neighbours-object-in-r" class="level4">
 <h4 class="anchored" data-anchor-id="the-list-of-neighbours-object-in-r"><strong>1.1.2 The “list of neighbours” object in R</strong></h4>
-<p>Package <em>spdep</em> makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and <code>neighbours_nb</code> the spatial object containing the associated neighbourhood relationships. <code>neighbours_nb</code> is a list of length n.&nbsp;Each element <code>[i]</code> of the list contains a vector with the index of the neighbours of the item indexed i. If <code>[i]</code> does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). The main information about the object <code>neighbours_nb</code> can be derived using the function: <code>summary(neighbours_nb)</code></p>
+<p>Package <em>spdep</em> makes it possible to define the relationships between spatial objects. In R, the class of an object defines all its properties and how the statistician can use it. Neighbourhood relationships are recorded in an object of class nb. Assume n spatial observations and <code>neighbours_nb</code> the spatial object containing the associated neighbourhood relationships. <code>neighbours_nb</code> is a list of length n.&nbsp;Each element <code>[i]</code> of the list contains a vector with the index of the neighbours of the item indexed i. If <code>[i]</code> does not have neighbours, the list contains only 0. The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical. The main information about the object <code>neighbours_nb</code> can be derived using the function: <code>summary(neighbours_nb)</code></p>
 <p>Let’s load a few packages useful for analysis :</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Spatial series analysis : packages</span></span>
@@ -1664,11 +1664,10 @@ Non-symmetric neighbours list</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the connection between points for each criterion</span></span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="do">## MPE this in an intercative command, can not be used with a markodon document.</span></span>
-<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="co">#x11()</span></span>
-<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>ade4<span class="sc">::</span><span class="fu">s.label</span>(xy, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">4</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">4</span>])<span class="sc">+</span><span class="dv">10000</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">3</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">3</span>])<span class="sc">+</span><span class="dv">10000</span>),  <span class="at">clabel=</span><span class="fl">0.6</span>, <span class="at">cpoint=</span><span class="dv">1</span>,<span class="at">neig=</span><span class="fu">nb2neig</span>(<span class="fu">knn2nb</span>(div.knear4)))</span>
-<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a>ade4<span class="sc">::</span><span class="fu">s.label</span>(xy, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">4</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">4</span>])<span class="sc">+</span><span class="dv">10000</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">3</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">3</span>])<span class="sc">+</span><span class="dv">10000</span>),  <span class="at">clabel=</span><span class="fl">0.4</span>, <span class="at">cpoint=</span><span class="dv">1</span>,<span class="at">neig=</span><span class="fu">nb2neig</span>(<span class="fu">knn2nb</span>(div.knear8)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>ade4<span class="sc">::</span><span class="fu">s.label</span>(xy, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">4</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">4</span>])<span class="sc">+</span><span class="dv">10000</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">3</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">3</span>])<span class="sc">+</span><span class="dv">10000</span>),  <span class="at">clabel=</span><span class="fl">0.6</span>, <span class="at">cpoint=</span><span class="dv">1</span>,<span class="at">neig=</span><span class="fu">nb2neig</span>(<span class="fu">knn2nb</span>(div.knear4)))</span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>ade4<span class="sc">::</span><span class="fu">s.label</span>(xy, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">4</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">4</span>])<span class="sc">+</span><span class="dv">10000</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(div35[,<span class="dv">3</span>])<span class="sc">-</span><span class="dv">10000</span>,<span class="fu">max</span>(div35[,<span class="dv">3</span>])<span class="sc">+</span><span class="dv">10000</span>),  <span class="at">clabel=</span><span class="fl">0.4</span>, <span class="at">cpoint=</span><span class="dv">1</span>,<span class="at">neig=</span><span class="fu">nb2neig</span>(<span class="fu">knn2nb</span>(div.knear8)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="chapter_dependance_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="672"></p>
 </div>
@@ -3113,11 +3112,11 @@ Call: mantel.rtest(m1 = geo, m2 = chim, nrepet = 1000)
 Observation: 0.2437815 
 
 Based on 1000 replicates
-Simulated p-value: 0.004995005 
+Simulated p-value: 0.01098901 
 Alternative hypothesis: greater 
 
     Std.Obs Expectation    Variance 
-2.796109743 0.001885113 0.007484288 </code></pre>
+2.673135785 0.007275757 0.007827832 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -3679,13 +3678,12 @@ attr(,"quadr")
 68  0.0007969751 -5.284144e-06 2.904507e-08  4.707372   2.509307e-06</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We can also represent the Local Index value using this code lines:</span></span>
-<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="co">#x11()</span></span>
-<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(2,1))</span></span>
-<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a><span class="co"># s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")</span></span>
-<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a><span class="co"># s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")</span></span>
-<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb162-7"><a href="#cb162-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Clusters of values that look alike and outliers (values that don't look alike)</span></span>
-<span id="cb162-8"><a href="#cb162-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Sometimes close values are similar, sometimes not</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(2,1))</span></span>
+<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a><span class="co"># s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")</span></span>
+<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a><span class="co"># s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")</span></span>
+<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Clusters of values that look alike and outliers (values that don't look alike)</span></span>
+<span id="cb162-7"><a href="#cb162-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Sometimes close values are similar, sometimes not</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -6852,8 +6850,8 @@ Based on 1000 replicates
 Simulated p-value: 0.002997003 
 Alternative hypothesis: greater 
 
-     Std.Obs  Expectation     Variance 
- 2.858265122 -0.001198047  0.007346065 </code></pre>
+    Std.Obs Expectation    Variance 
+2.684208490 0.004848343 0.007923563 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb311"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
