@@ -219,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#ii.-spatial-dependance" id="toc-ii.-spatial-dependance" class="nav-link" data-scroll-target="#ii.-spatial-dependance">II. Spatial dependance</a>
   <ul class="collapse">
-  <li><a href="#codyfing-the-neighbour-structure" id="toc-codyfing-the-neighbour-structure" class="nav-link" data-scroll-target="#codyfing-the-neighbour-structure"><strong>1 - Codyfing the neighbour structure</strong></a>
+  <li><a href="#codifying-the-neighbour-structure" id="toc-codifying-the-neighbour-structure" class="nav-link" data-scroll-target="#codifying-the-neighbour-structure"><strong>1 - Codifying the neighbour structure</strong></a>
   <ul class="collapse">
   <li><a href="#defining-neighbours" id="toc-defining-neighbours" class="nav-link" data-scroll-target="#defining-neighbours"><strong>1.1 Defining neighbours</strong></a></li>
   <li><a href="#connection-among-neighbours" id="toc-connection-among-neighbours" class="nav-link" data-scroll-target="#connection-among-neighbours"><strong>1.2 Connection among neighbours</strong></a></li>
@@ -255,7 +255,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#ii.-spatial-dependance-1" id="toc-ii.-spatial-dependance-1" class="nav-link" data-scroll-target="#ii.-spatial-dependance-1">II. Spatial dependance</a>
   <ul class="collapse">
-  <li><a href="#codyfing-the-neighbour-structure-1" id="toc-codyfing-the-neighbour-structure-1" class="nav-link" data-scroll-target="#codyfing-the-neighbour-structure-1"><strong>1 - Codyfing the neighbour structure</strong></a>
+  <li><a href="#codyfing-the-neighbour-structure" id="toc-codyfing-the-neighbour-structure" class="nav-link" data-scroll-target="#codyfing-the-neighbour-structure"><strong>1 - Codyfing the neighbour structure</strong></a>
   <ul class="collapse">
   <li><a href="#defining-neighbours-1" id="toc-defining-neighbours-1" class="nav-link" data-scroll-target="#defining-neighbours-1"><strong>1.1 Defining neighbours</strong></a></li>
   <li><a href="#connection-among-neighbours-1" id="toc-connection-among-neighbours-1" class="nav-link" data-scroll-target="#connection-among-neighbours-1"><strong>1.2 Connection among neighbours</strong></a></li>
@@ -816,8 +816,8 @@ Frequency = 1
 <p><strong>Calculate autocorrelation coefficient:</strong> Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighbouring points.</p>
 <p><strong>Integrating spatial autocorrelation into analyses:</strong> Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.</p>
 <hr>
-<section id="codyfing-the-neighbour-structure" class="level2">
-<h2 class="anchored" data-anchor-id="codyfing-the-neighbour-structure"><strong>1 - Codyfing the neighbour structure</strong></h2>
+<section id="codifying-the-neighbour-structure" class="level2">
+<h2 class="anchored" data-anchor-id="codifying-the-neighbour-structure"><strong>1 - Codifying the neighbour structure</strong></h2>
 <hr>
 <section id="defining-neighbours" class="level3">
 <h3 class="anchored" data-anchor-id="defining-neighbours"><strong>1.1 Defining neighbours</strong></h3>
@@ -3113,11 +3113,11 @@ Call: mantel.rtest(m1 = geo, m2 = chim, nrepet = 1000)
 Observation: 0.2437815 
 
 Based on 1000 replicates
-Simulated p-value: 0.003996004 
+Simulated p-value: 0.004995005 
 Alternative hypothesis: greater 
 
-     Std.Obs  Expectation     Variance 
- 2.947511925 -0.004152253  0.007075552 </code></pre>
+    Std.Obs Expectation    Variance 
+2.796109743 0.001885113 0.007484288 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -4643,8 +4643,8 @@ Frequency = 1
 <p><strong>Calculate autocorrelation coefficient:</strong> Utilizing the numerical values derived from the connection criteria, we compute an autocorrelation coefficient. This statistical measure helps quantify the degree of spatial autocorrelation, providing insights into the patterns of similarity or dissimilarity among neighbouring points.</p>
 <p><strong>Integrating spatial autocorrelation into analyses:</strong> Upon detecting spatial autocorrelation, the next step involves seamlessly integrating this information into our analytical processes. This will be discussed later in this chapter.</p>
 <hr>
-<section id="codyfing-the-neighbour-structure-1" class="level2">
-<h2 class="anchored" data-anchor-id="codyfing-the-neighbour-structure-1"><strong>1 - Codyfing the neighbour structure</strong></h2>
+<section id="codyfing-the-neighbour-structure" class="level2">
+<h2 class="anchored" data-anchor-id="codyfing-the-neighbour-structure"><strong>1 - Codyfing the neighbour structure</strong></h2>
 <hr>
 <section id="defining-neighbours-1" class="level3">
 <h3 class="anchored" data-anchor-id="defining-neighbours-1"><strong>1.1 Defining neighbours</strong></h3>
@@ -6849,11 +6849,11 @@ Call: mantel.rtest(m1 = geo, m2 = chim, nrepet = 1000)
 Observation: 0.2437815 
 
 Based on 1000 replicates
-Simulated p-value: 0.003996004 
+Simulated p-value: 0.002997003 
 Alternative hypothesis: greater 
 
      Std.Obs  Expectation     Variance 
- 2.893997811 -0.000961295  0.007151935 </code></pre>
+ 2.858265122 -0.001198047  0.007346065 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb311"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
