@@ -452,7 +452,7 @@ The neighborhood matrix measures the similarity between observations.
 A value greater than zero indicates that the observations are considered neighbors.
 For example, in the case of the binary matrix shown in figure 1 :
 
-![](images/image-232123009.png){width="470" height="59"}
+![](image-232123009.png){width="470" height="59"}
 
 Conversely, the distance matrix measures dissimilarity between zones.
 The higher $d_{ij}$ , the more different the zones.
@@ -474,7 +474,7 @@ For instance:
   `neighbours_nb` is a list of length n. 
   Each element `[i]` of the list contains a vector with the index of the neighbours of the item indexed i. 
   If `[i]` does not have neighbours, the list contains only 0. 
-  The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical (see Figure 2). 
+  The list also contains a vector of characters corresponding to the attributes of each neighbourhood zone, as well as a logical value indicating whether the relationship is symmetrical. 
   The main information about the object `neighbours_nb` can be derived using the function: `summary(neighbours_nb)`
 
 Let's load a few packages useful for analysis :
@@ -795,7 +795,6 @@ knn2nb(div.knear8)
 
 # Plotting the connection between points for each criterion
 ## MPE this in an intercative command, can not be used with a markodon document.
-#x11()
 par(mfrow=c(1,2))
 
 ade4::s.label(xy, ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000),  clabel=0.6, cpoint=1,neig=nb2neig(knn2nb(div.knear4)))
@@ -1281,7 +1280,6 @@ localI.oi1
 localI.oi1[localI.oi1[,5]<0.05,]
 
 #We can also represent the Local Index value using this code lines:
-#x11()
 # par(mfrow=c(2,1))
 # s.value(xy,localI.pp1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (plant)")
 # s.value(xy,localI.oi1[,1], ylim=c(min(div35[,4])-10000,max(div35[,4])+10000), xlim=c(min(div35[,3])-10000,max(div35[,3])+10000), sub="local I (bird)")
