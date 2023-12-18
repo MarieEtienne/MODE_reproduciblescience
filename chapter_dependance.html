@@ -2944,7 +2944,7 @@ Note
 <p>— <span class="math inline">\(H_0\)</span>: The neighbours do not <strong>co-vary</strong> in any particular way.</p>
 <p>— <span class="math inline">\(I_W &gt; 0\)</span> =&gt; positive spatial autocorrelation</p>
 <p>As spatial autocorrelation is measured based on a comparison of the value of an individual variable with that of its neighbours, the definition of the neighbourhood will have a significant impact on the measurement of spatial autocorrelation. The larger the planned neighbourhood, the greater the number of neighbours considered, and the greater the probability that their average will be closer to the population’s average, which may lead to a relatively low value for spatial autocorrelation.</p>
-<p><strong>Application with R</strong></p>
+<p><strong>Application in R</strong></p>
 <p>The <em>spdep</em> package is used to calculate spatial autocorrelation indices and their significance using function <code>moran.test</code>.<br>
 <br>
 By default, the distribution of the variable of interest under the null hypothesis is derived by randomisation. The <code>randomisation = FALSE</code> argument makes it possible to assume that this is a normal distribution.<br>
@@ -2959,7 +2959,7 @@ If certain entities do not have neighbours
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>|In order for the package functions <em>spdep</em> to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: <code>zero.policy=TRUE</code>. By default, the size of the matrix is reduced to exclude observations without neighbours. The opposite can be specified with the option: <code>adjust.n=FALSE</code>. In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al.&nbsp;2013a).</p>
+<p>order for the package functions <em>spdep</em> to accept spatial weight matrices in which certain units do not have neighbours, it is necessary to specify the option: <code>zero.policy=TRUE</code>. By default, the size of the matrix is reduced to exclude observations without neighbours. The opposite can be specified with the option: <code>adjust.n=FALSE</code>. In this case, the absolute value of the test statistic increases, and the absolute value of its expected maturity and variance decreases (Bivand et al.&nbsp;2013a).</p>
 </div>
 </div>
 <p>Two approaches are used to estimate the significance of these indices — an analytical solution based on the normality hypothesis and a Monte Carlo solution based on the randomisation hypothesis. The analytical solution, used by the <code>moran.test</code> function, is based on the assumption that the test statistic asymptotically follows a normal distribution with mean 0 and variance 1. This is not always the most accurate measure of significance as convergence towards this distribution may depend on the arrangement of the polygons. Instead, the <code>moran.mc</code> function can be used, allowing to choose the number of permutations to calculate the simulated distribution of Moran’s I. Comparing the significance levels calculated from functions <code>moran.mc</code> and <code>moran.test</code> makes it possible to ensure the robustness of the conclusions.</p>
@@ -2970,6 +2970,7 @@ If certain entities do not have neighbours
 <blockquote class="blockquote">
 <img src="image-318830441.png" class="img-fluid" width="380" alt="Figure 2.16 : Output of the Monte Carlo test">
 </blockquote>
+<p>For example, the <strong>Mantel test</strong> is using the Monte Carlo method.</p>
 <p>Let’s explore the <strong>Moran Global Index</strong> in the <em>mares</em> dataset :</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Spatial series analysis : dataset mares</span></span>
@@ -3079,12 +3080,12 @@ Moran I statistic       Expectation          Variance
 <p><strong>Spatial autocorrelation in multivariate data</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Spatial series analysis : dataset mares</span></span>
-<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">#The Mantel test</span></span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">#The Mantel test (using the Monte Carlo method)</span></span>
 <span id="cb146-3"><a href="#cb146-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#For a REGULAR configuration of points</span></span>
 <span id="cb146-4"><a href="#cb146-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-5"><a href="#cb146-5" aria-hidden="true" tabindex="-1"></a><span class="do">############SPATIAL AUTOCORRELATION IN MULTIVARIATE DATA##############</span></span>
 <span id="cb146-6"><a href="#cb146-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb146-7"><a href="#cb146-7" aria-hidden="true" tabindex="-1"></a><span class="co">#The Mantel test</span></span>
+<span id="cb146-7"><a href="#cb146-7" aria-hidden="true" tabindex="-1"></a><span class="co">#The Mantel test (using the Monte Carlo method)</span></span>
 <span id="cb146-8"><a href="#cb146-8" aria-hidden="true" tabindex="-1"></a><span class="co">#In case of multivariate data it can be useful to have a test that sum up the spatial autocorrelation for  all characteristics/variables</span></span>
 <span id="cb146-9"><a href="#cb146-9" aria-hidden="true" tabindex="-1"></a><span class="co">#In that case, we need to test the correlation between a matrix of geographical distance and a matrix of distance of the characteristics between objects </span></span>
 <span id="cb146-10"><a href="#cb146-10" aria-hidden="true" tabindex="-1"></a><span class="co">#To compute a geographical distance matrix you can use the function dist that </span></span>
@@ -3112,11 +3113,11 @@ Call: mantel.rtest(m1 = geo, m2 = chim, nrepet = 1000)
 Observation: 0.2437815 
 
 Based on 1000 replicates
-Simulated p-value: 0.008991009 
+Simulated p-value: 0.003996004 
 Alternative hypothesis: greater 
 
-    Std.Obs Expectation    Variance 
-2.744874261 0.003416249 0.007668291 </code></pre>
+     Std.Obs  Expectation     Variance 
+ 2.947511925 -0.004152253  0.007075552 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -6852,7 +6853,7 @@ Simulated p-value: 0.003996004
 Alternative hypothesis: greater 
 
      Std.Obs  Expectation     Variance 
- 2.753817740 -0.002613867  0.008005617 </code></pre>
+ 2.893997811 -0.000961295  0.007151935 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb311"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r1, <span class="at">main =</span> <span class="st">"Mantel's test"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
