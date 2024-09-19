@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "The Companion book a M1 MODE student should have!"
+  title: "Open Collaborative Ressources"
   navbar:
     left:
       - icon: github
@@ -20,25 +20,12 @@ website:
 
         
     right:
-      - text: M1 MODE Survival book by the M2 students
+      - text: Students project 
         menu:
-        - text: Multivariate Analysis
-          href: AMV_chapter.qmd
-        - text: Linear modelling in ecology
-          href: linear_modelling.qmd
-        - text: Mixed models in Ecology
-          href: Mixed_models.qmd        
-        - text: Dependent data
-          href: chapter_dependance.qmd
-        - text: Matrix models and applications in ecology
-          href: Matrix.qmd
-        - text: Ordinary Differential Equations in Ecology
-          href: Chap_ODE.qmd
-        - text: Resampling methods
-          href: r_chapter_boostrapping_resampling.qmd
-        - text: Bayesian models in Ecology
-          href: bayesian_modeles.qmd
-        - href: simple_chapter.qmd
+        - text: Year 2023
+          href: https://marieetienne.github.io/2023_MODE_OCR/
+        - text: Year 2024
+          href: https://marieetienne.github.io/2024_MODE_OCR/
         aria-label: GitHub
 
 format:
