@@ -1,5 +1,5 @@
 ---
-title: "The book we dreamt we had"
+title: "OCR : Open Reproducible Ressources"
 subtitle: "At least, the one the M2 students wish they had"
 format: html
 toc: true
@@ -14,17 +14,10 @@ library(tidyverse)
 
 
 
-This website is produced by the M2 MODE student uring year 2023-2024 as part of their assignment in the Online Collaborative Ressources course.
+The OCR (Open Reproducible Resources) course, designed for Master's students in the EFCE and MODE tracks, aims to provide essential skills in using engineering tools that significantly enhance the reproducibility of analyses and improve collaborative work. In modern research and industry, ensuring that analyses are reproducible is a key challenge, especially when working in teams. This course introduces students to powerful tools such as Markdown, RMarkdown, and particularly Git, which are invaluable for documenting work, ensuring transparency, and managing complex version control.
 
-After a short introduction regarding the principles and the tools of a reproducible science, they have been collaborating to write a M1 companion book for the next student generation. 
+The use of Markdown and RMarkdown enables students to create clear, well-organized, and shareable reports that integrate code and narrative, ensuring their work can be easily understood and reproduced by others. Git, a widely-used version control system, is central to this course. Mastering Git allows students to efficiently track changes, manage multiple contributors, and avoid conflicts in collaborative projects.
 
-Table of Contents 
+A key feature of the course is the collaborative creation of a website by the students, where they apply the best practices learned. This hands-on project not only deepens their understanding but also gives them practical experience in using version control systems in a real-world setting. The website showcases the work of each cohort, accessible through a yearly tab at the top-right corner, offering  various examples of their production.
 
-* [Multivariate analysis](AMV_chapter.html)
-* [Linear modelling in ecology](linear_modelling.html)
-* [Mixed models in Ecology](Mixed_models.html)
-* [Dependent Data](chapter_dependance.html)
-* [Matrix models and applications in ecology](Matrix.html)
-* [Ordinary Differential Equations and their application in Ecology](Chap_ODE.html)
-* [Resampling methods](r_chapter_boostrapping_resampling.html)
-* [Bayesian models](bayesian_modeles.html)
+Students are encouraged to use the outputs from this course as a showcase of their Git proficiency, demonstrating their ability to work collaboratively and manage complex versioning systems to future employers or academic opportunities.
