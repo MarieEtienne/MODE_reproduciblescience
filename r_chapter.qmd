@@ -1,16 +1,13 @@
 ---
-
-title: "Modèles matriciels et applications"
-group: "Quentin,	Alexie, Jeanne,	Laurane" 
-
+title: "A simple chapter using R"
 bibliography: references.bib
-execute: 
-  freeze: auto
 output: 
   html_document:
    toc: true
    toc_float: true
 ---
+
+
 
 This chapter is a simple example using R
 
@@ -39,4 +36,4 @@ df %>% ggplot() +
 ```
 
 
-A citation @bauer2023writing
+When you need references, just cite them like @bauer2023writing
